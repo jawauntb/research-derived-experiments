@@ -1,0 +1,100 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "delete_repair_menu_blind",
+  "hypothesis": "Empirical repair gold is menu-relative: the same (task, screen) case has different gold under two disclosed menus. Therefore no menu-blind κ — a function of (Y, q) of any signature width — matches gold on both menus. The frozen five-field rule's collision and its correctness are themselves menu-relative. κ_screen, recomputed per menu, stays exact.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "cheap_frozen",
+      "description": "κ_cheap is Paper E's decide imported unmodified. No refit to the known miss, per the close-out prohibition."
+    },
+    {
+      "control_id": "specified_before_gold",
+      "description": "Menus, screens, tasks, and cases are written in core.py before gold_of_menu is evaluated."
+    },
+    {
+      "control_id": "base_consistency",
+      "description": "Base-menu gold for the 11 imported Paper E cases must equal Paper E's gold_of exactly."
+    },
+    {
+      "control_id": "two_layer_naturality",
+      "description": "Reversal relabel is checked at the action layer and the chosen-screen layer separately; a tie-break failure is recorded, not hidden."
+    },
+    {
+      "control_id": "kill_does_not_fail_ci",
+      "description": "menu_blind_dead, menu_blind_lives, no_function, and inconclusive are all valid passing runs."
+    }
+  ],
+  "seeds": [0],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/delete_repair_menu_blind/experiment.py"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "MB_SPECIFIED",
+      "criterion": "Menus, maps, tasks, and cases are specified in the module before the run."
+    },
+    {
+      "gate_id": "MB_ENUMERATION",
+      "criterion": "17 case specs, 34 (case, menu) rows, the 11 Paper E cases included unchanged."
+    },
+    {
+      "gate_id": "MB_MENUS",
+      "criterion": "MENU_BASE is a prefix of MENU_EXT and the extension is exactly {q_pair01, q_pair23}."
+    },
+    {
+      "gate_id": "MB_CHEAP_FROZEN",
+      "criterion": "Signatures are exactly the Paper E five fields on every row."
+    },
+    {
+      "gate_id": "MB_BASE_CONSISTENT",
+      "criterion": "Base-menu gold equals Paper E gold on the 11 registered cases."
+    },
+    {
+      "gate_id": "MB_FLIP_RECORDED",
+      "criterion": "The per-case gold flip table is recorded."
+    },
+    {
+      "gate_id": "MB_SCREEN_DEFINED",
+      "criterion": "κ_screen never returns broken on any row of either menu."
+    },
+    {
+      "gate_id": "MB_RELABEL_ACTION",
+      "criterion": "Reversal relabel preserves the action on every registered pair."
+    },
+    {
+      "gate_id": "MB_TIE_RECORDED",
+      "criterion": "Chosen-screen naturality is recorded; failures list their witnesses."
+    },
+    {
+      "gate_id": "MB_RANKING_RECORDED",
+      "criterion": "Verdict is menu_blind_dead, menu_blind_lives, no_function, or inconclusive."
+    },
+    {
+      "gate_id": "MB_CLAIM_BOUNDARY",
+      "criterion": "No new master object, no LLM eval, no cheap-rule refit, no text nomination."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/delete_repair_menu_blind/results/delete_repair_menu_blind_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/delete_repair_menu_blind/preregistration.json",
+      "public": true
+    },
+    {
+      "kind": "paper",
+      "path": "papers/delete_repair_menu_blind/paper.md",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

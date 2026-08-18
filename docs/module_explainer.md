@@ -122,6 +122,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_delete_repair_disanalogy.py` | Paper D diamond fibre: 196 embeddings, four s² values, PE quotient disclosed as prior |
 | `test_delete_repair_surgery.py` | Paper E name-blind surgery: construction 4/4, held-out 6/7, unused-symmetry miss, kill does not fail CI |
 | `test_delete_repair_kappa.py` | Paper F: cheap κ is not a function; screen κ hits 11/11; uniqueness fails; `calculus_is_sic` |
+| `test_delete_repair_menu_blind.py` | Door 1: gold flips between menus; cheap collision is menu-relative; screen 34/34; tie-break not relabel-natural |
 
 ```bash
 python3 scripts/run_quality_checks.py
@@ -261,6 +262,7 @@ Universal dispatcher: `python scripts/regen.py <name>`.
 | `delete_repair_disanalogy` | P R res | Paper D: 196 diamond embeddings; s²(e1,e2) takes -1/-3/-4/-8. Poset does not fix the metric. PE quotient fails. Verdict `disanalogy_holds` | `core.py`, `experiment.py` |
 | `delete_repair_surgery` | P R res | Paper E: name-blind one-shot rule. Construction 4/4, held-out 6/7. Miss is `pair_eq` on `q_id`. Verdict `surgery_killed` | `core.py`, `experiment.py` |
 | `delete_repair_kappa` | P R res | Paper F: κ_cheap collides; κ_screen 11/11; bag has 5 representing screens. Verdict `calculus_is_sic` | `core.py`, `experiment.py` |
+| `delete_repair_menu_blind` | P R res | Door 1: 17 cases × 2 menus; gold flips on `pair_eq`/`pair23`; cheap collision 1→0 across menus; κ_screen 34/34. Verdict `menu_blind_dead` | `core.py`, `experiment.py` |
 
 #### 3.1.1 `symbolic_weakness` modules
 
@@ -530,6 +532,7 @@ exhaustive counterexample search, and replayable MIDAS regression.
 | `papers/delete_repair_disanalogy/` | Paper D: shared cartoon is not a shared theorem; 196 diamonds, four intervals (`paper.md`); companion instrument `delete_repair_disanalogy` |
 | `papers/delete_repair_surgery/` | Paper E: taxonomy is not a one-shot agent rule; unused symmetry ≠ leftover privilege (`paper.md`); companion instrument `delete_repair_surgery` |
 | `papers/delete_repair_kappa/` | Paper F: the written function is Theorem 4 plus a total order (`paper.md`); companion instrument `delete_repair_kappa` |
+| `papers/delete_repair_menu_blind/` | Door 1: gold is menu-relative, so no menu-blind κ of any width; tie-break not relabel-natural on ties (`paper.md`); companion instrument `delete_repair_menu_blind` |
 | `papers/sic_dynamics/` | Close-out: A–F laid out; Possibility 5 is the house; not a better LLM; next method is Lea (`paper.md`). Cold-reader English: `for_readers.md` |
 | `papers/eml_access_geometry/` | Process-split synthesis: expressivity ≠ access, access is process-relative; LLM/SIC translation without a better-model claim |
 | `papers/sufficient_antecedents/` | Companion paper (Theorem SA-1): taxonomy of SIC-C-c positive resolutions — each of the four known identifiability escapes (linear ICA, sparse-linear ICA, iVAE, interventional CRL) is one way of populating Theorem 4's Markov-screen antecedent via local separation + cross-`u` coherence (`paper.md`, `paper.pdf`); companion instrument `antecedent_taxonomy_pair` |
@@ -1134,6 +1137,7 @@ Notable bundles:
 - `papers/delete_repair_disanalogy/` — Paper D: poset does not determine Minkowski interval; PE quotient still fails
 - `papers/delete_repair_surgery/` — Paper E: name-blind one-shot rule dies on unused symmetry
 - `papers/delete_repair_kappa/` — Paper F: written κ is SIC, not a new master object
+- `papers/delete_repair_menu_blind/` — Door 1: gold is menu-relative; no menu-blind κ
 - `papers/sic_dynamics/` — close-out paper, A–F in one place; `for_readers.md` for a cold reader; next method is Lea
 - `papers/eml_access_geometry/` — process-split synthesis and LLM/SIC translation
 - Synthesis: `metaphysics_synthesis`, `metric_stack_synthesis`, literature audits/reviews

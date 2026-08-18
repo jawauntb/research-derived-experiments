@@ -377,6 +377,12 @@ held-out 6/7; `surgery_killed`).
 Paper F is `experiments/delete_repair_kappa/`: κ_cheap is not
 a function; κ_screen hits 11/11 and is Theorem 4 plus a total
 order; verdict `calculus_is_sic`.
+Door 1 is `experiments/delete_repair_menu_blind/`: gold flips
+between two disclosed menus on `pair_eq`/`pair23`, so no
+menu-blind κ of any width is correct across menus; the cheap
+collision is menu-relative (1 bucket base, 0 extended, 17/17
+there); κ_screen is exact on all 34 rows; the name tie-break is
+not relabel-natural on ties. Verdict `menu_blind_dead`.
 The close-out is `papers/sic_dynamics/` (`paper.md` for the
 instruments; `for_readers.md` for a cold reader). Wave 2 P0/P1 lemmas are
 **verified** in `formal/structural-intelligence/` (`KappaCheap`,

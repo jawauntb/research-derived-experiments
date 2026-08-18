@@ -1,0 +1,888 @@
+{
+  "collisions": [
+    {
+      "case_ids": [
+        "bag_q_id",
+        "count_ge2_q_id",
+        "last_bit_q_id",
+        "or_q_id",
+        "pair23_q_id",
+        "pair_eq_q_id",
+        "parity_q_id"
+      ],
+      "golds": [
+        "noop",
+        "quotient"
+      ],
+      "menu": "base",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 16,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      }
+    }
+  ],
+  "experiment_id": "delete_repair_menu_blind",
+  "flips": [
+    {
+      "case_id": "pair23_q_id",
+      "gold_base": "noop",
+      "gold_ext": "quotient",
+      "screen_id": "q_id",
+      "task_id": "pair23"
+    },
+    {
+      "case_id": "pair_eq_q_id",
+      "gold_base": "noop",
+      "gold_ext": "quotient",
+      "screen_id": "q_id",
+      "task_id": "pair_eq"
+    }
+  ],
+  "gates": {
+    "MB_BASE_CONSISTENT": true,
+    "MB_CHEAP_FROZEN": true,
+    "MB_CLAIM_BOUNDARY": true,
+    "MB_ENUMERATION": true,
+    "MB_FLIP_RECORDED": true,
+    "MB_MENUS": true,
+    "MB_RANKING_RECORDED": true,
+    "MB_RELABEL_ACTION": true,
+    "MB_SCREEN_DEFINED": true,
+    "MB_SPECIFIED": true,
+    "MB_TIE_RECORDED": true
+  },
+  "menus": {
+    "base": [
+      "q_id",
+      "q_rot",
+      "q_perm",
+      "q_stab0",
+      "q_stab_last"
+    ],
+    "ext": [
+      "q_id",
+      "q_rot",
+      "q_perm",
+      "q_stab0",
+      "q_stab_last",
+      "q_pair01",
+      "q_pair23"
+    ]
+  },
+  "process_disclosure": "Menus, screens, tasks, and cases are specified before gold is computed.  \u03ba_cheap is Paper E's decide, imported frozen and never refit.  Gold is Paper E's empirical rule parameterized by the menu.  A gold flip between menus kills every menu-blind \u03ba at once, of any signature width.  Not an LLM.  Not Paper G.",
+  "producing_agent": {
+    "identity": "Claude Fable 5 (Cursor agent, under J. Brown direction)",
+    "session_ref": "4adbd42d-0e99-41df-b0be-7d9d5b7e3caa"
+  },
+  "ranking": {
+    "base_consistent_with_paper_e": true,
+    "cheap_collisions_base": 1,
+    "cheap_collisions_ext": 0,
+    "cheap_function_per_menu": {
+      "base": false,
+      "ext": true
+    },
+    "cheap_hits_base": 15,
+    "cheap_hits_ext": 17,
+    "flip_case_ids": [
+      "pair23_q_id",
+      "pair_eq_q_id"
+    ],
+    "n_flips": 2,
+    "n_rows": 34,
+    "n_specs": 17,
+    "relabel_action_natural": true,
+    "rule": "no_function if \u03ba_screen misses any row.  menu_blind_dead if gold flips on any case between the two menus while \u03ba_screen stays exact: a flip makes gold not a function of (Y, q), so no menu-blind \u03ba of any width matches both menus.  menu_blind_lives if there is no flip and the frozen five-field rule is exact and collision-free under both menus.  inconclusive otherwise.",
+    "screen_exact": true,
+    "screen_hits": 34,
+    "screen_n": 34,
+    "tie_break_screen_natural": false,
+    "tie_witnesses": [
+      "pair23->pair_eq",
+      "pair_eq->pair23"
+    ],
+    "verdict": "menu_blind_dead"
+  },
+  "relabels": [
+    {
+      "action_natural": true,
+      "image_action": "quotient",
+      "image_choice": "q_stab_last",
+      "image_task": "last_bit",
+      "menu": "base",
+      "screen_natural": true,
+      "source_action": "quotient",
+      "source_choice": "q_stab0",
+      "source_task": "first_bit"
+    },
+    {
+      "action_natural": true,
+      "image_action": "quotient",
+      "image_choice": "q_stab_last",
+      "image_task": "last_bit",
+      "menu": "ext",
+      "screen_natural": true,
+      "source_action": "quotient",
+      "source_choice": "q_stab0",
+      "source_task": "first_bit"
+    },
+    {
+      "action_natural": true,
+      "image_action": "quotient",
+      "image_choice": "q_pair01",
+      "image_task": "pair23",
+      "menu": "ext",
+      "screen_natural": false,
+      "source_action": "quotient",
+      "source_choice": "q_pair01",
+      "source_task": "pair_eq"
+    },
+    {
+      "action_natural": true,
+      "image_action": "quotient",
+      "image_choice": "q_pair01",
+      "image_task": "pair_eq",
+      "menu": "ext",
+      "screen_natural": false,
+      "source_action": "quotient",
+      "source_choice": "q_pair01",
+      "source_task": "pair23"
+    }
+  ],
+  "rows": [
+    {
+      "case_id": "first_bit_q_perm",
+      "cheap": "restore",
+      "cheap_hit": true,
+      "chosen_screen": "q_stab0",
+      "gold": "restore",
+      "menu": "base",
+      "n_representing": 2,
+      "screen": "restore",
+      "screen_hit": true,
+      "screen_id": "q_perm",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": true,
+        "n_fibres": 5,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "construction",
+      "task_id": "first_bit"
+    },
+    {
+      "case_id": "first_bit_q_perm",
+      "cheap": "restore",
+      "cheap_hit": true,
+      "chosen_screen": "q_stab0",
+      "gold": "restore",
+      "menu": "ext",
+      "n_representing": 3,
+      "screen": "restore",
+      "screen_hit": true,
+      "screen_id": "q_perm",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": true,
+        "n_fibres": 5,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "construction",
+      "task_id": "first_bit"
+    },
+    {
+      "case_id": "bag_q_id",
+      "cheap": "quotient",
+      "cheap_hit": true,
+      "chosen_screen": "q_perm",
+      "gold": "quotient",
+      "menu": "base",
+      "n_representing": 5,
+      "screen": "quotient",
+      "screen_hit": true,
+      "screen_id": "q_id",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 16,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "construction",
+      "task_id": "bag"
+    },
+    {
+      "case_id": "bag_q_id",
+      "cheap": "quotient",
+      "cheap_hit": true,
+      "chosen_screen": "q_perm",
+      "gold": "quotient",
+      "menu": "ext",
+      "n_representing": 7,
+      "screen": "quotient",
+      "screen_hit": true,
+      "screen_id": "q_id",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 16,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "construction",
+      "task_id": "bag"
+    },
+    {
+      "case_id": "bag_q_perm",
+      "cheap": "noop",
+      "cheap_hit": true,
+      "chosen_screen": "q_perm",
+      "gold": "noop",
+      "menu": "base",
+      "n_representing": 5,
+      "screen": "noop",
+      "screen_hit": true,
+      "screen_id": "q_perm",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 5,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "construction",
+      "task_id": "bag"
+    },
+    {
+      "case_id": "bag_q_perm",
+      "cheap": "noop",
+      "cheap_hit": true,
+      "chosen_screen": "q_perm",
+      "gold": "noop",
+      "menu": "ext",
+      "n_representing": 7,
+      "screen": "noop",
+      "screen_hit": true,
+      "screen_id": "q_perm",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 5,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "construction",
+      "task_id": "bag"
+    },
+    {
+      "case_id": "bag_q_perm_affine_a",
+      "cheap": "transport",
+      "cheap_hit": true,
+      "chosen_screen": "",
+      "gold": "transport",
+      "menu": "base",
+      "n_representing": 0,
+      "screen": "transport",
+      "screen_hit": true,
+      "screen_id": "q_perm",
+      "signature": {
+        "connection_mismatch": true,
+        "mixes": false,
+        "n_fibres": 5,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "construction",
+      "task_id": "bag"
+    },
+    {
+      "case_id": "bag_q_perm_affine_a",
+      "cheap": "transport",
+      "cheap_hit": true,
+      "chosen_screen": "",
+      "gold": "transport",
+      "menu": "ext",
+      "n_representing": 0,
+      "screen": "transport",
+      "screen_hit": true,
+      "screen_id": "q_perm",
+      "signature": {
+        "connection_mismatch": true,
+        "mixes": false,
+        "n_fibres": 5,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "construction",
+      "task_id": "bag"
+    },
+    {
+      "case_id": "last_bit_q_perm",
+      "cheap": "restore",
+      "cheap_hit": true,
+      "chosen_screen": "q_stab_last",
+      "gold": "restore",
+      "menu": "base",
+      "n_representing": 2,
+      "screen": "restore",
+      "screen_hit": true,
+      "screen_id": "q_perm",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": true,
+        "n_fibres": 5,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "last_bit"
+    },
+    {
+      "case_id": "last_bit_q_perm",
+      "cheap": "restore",
+      "cheap_hit": true,
+      "chosen_screen": "q_stab_last",
+      "gold": "restore",
+      "menu": "ext",
+      "n_representing": 3,
+      "screen": "restore",
+      "screen_hit": true,
+      "screen_id": "q_perm",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": true,
+        "n_fibres": 5,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "last_bit"
+    },
+    {
+      "case_id": "last_bit_q_id",
+      "cheap": "quotient",
+      "cheap_hit": true,
+      "chosen_screen": "q_stab_last",
+      "gold": "quotient",
+      "menu": "base",
+      "n_representing": 2,
+      "screen": "quotient",
+      "screen_hit": true,
+      "screen_id": "q_id",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 16,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "last_bit"
+    },
+    {
+      "case_id": "last_bit_q_id",
+      "cheap": "quotient",
+      "cheap_hit": true,
+      "chosen_screen": "q_stab_last",
+      "gold": "quotient",
+      "menu": "ext",
+      "n_representing": 3,
+      "screen": "quotient",
+      "screen_hit": true,
+      "screen_id": "q_id",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 16,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "last_bit"
+    },
+    {
+      "case_id": "parity_q_id",
+      "cheap": "quotient",
+      "cheap_hit": true,
+      "chosen_screen": "q_perm",
+      "gold": "quotient",
+      "menu": "base",
+      "n_representing": 5,
+      "screen": "quotient",
+      "screen_hit": true,
+      "screen_id": "q_id",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 16,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "parity"
+    },
+    {
+      "case_id": "parity_q_id",
+      "cheap": "quotient",
+      "cheap_hit": true,
+      "chosen_screen": "q_perm",
+      "gold": "quotient",
+      "menu": "ext",
+      "n_representing": 7,
+      "screen": "quotient",
+      "screen_hit": true,
+      "screen_id": "q_id",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 16,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "parity"
+    },
+    {
+      "case_id": "identity_q_id",
+      "cheap": "noop",
+      "cheap_hit": true,
+      "chosen_screen": "q_id",
+      "gold": "noop",
+      "menu": "base",
+      "n_representing": 1,
+      "screen": "noop",
+      "screen_hit": true,
+      "screen_id": "q_id",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 16,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": false
+      },
+      "split": "held_out",
+      "task_id": "identity"
+    },
+    {
+      "case_id": "identity_q_id",
+      "cheap": "noop",
+      "cheap_hit": true,
+      "chosen_screen": "q_id",
+      "gold": "noop",
+      "menu": "ext",
+      "n_representing": 1,
+      "screen": "noop",
+      "screen_hit": true,
+      "screen_id": "q_id",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 16,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": false
+      },
+      "split": "held_out",
+      "task_id": "identity"
+    },
+    {
+      "case_id": "pair_eq_q_perm",
+      "cheap": "restore",
+      "cheap_hit": true,
+      "chosen_screen": "q_id",
+      "gold": "restore",
+      "menu": "base",
+      "n_representing": 1,
+      "screen": "restore",
+      "screen_hit": true,
+      "screen_id": "q_perm",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": true,
+        "n_fibres": 5,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "pair_eq"
+    },
+    {
+      "case_id": "pair_eq_q_perm",
+      "cheap": "restore",
+      "cheap_hit": true,
+      "chosen_screen": "q_pair01",
+      "gold": "restore",
+      "menu": "ext",
+      "n_representing": 3,
+      "screen": "restore",
+      "screen_hit": true,
+      "screen_id": "q_perm",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": true,
+        "n_fibres": 5,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "pair_eq"
+    },
+    {
+      "case_id": "pair_eq_q_id",
+      "cheap": "quotient",
+      "cheap_hit": false,
+      "chosen_screen": "q_id",
+      "gold": "noop",
+      "menu": "base",
+      "n_representing": 1,
+      "screen": "noop",
+      "screen_hit": true,
+      "screen_id": "q_id",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 16,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "pair_eq"
+    },
+    {
+      "case_id": "pair_eq_q_id",
+      "cheap": "quotient",
+      "cheap_hit": true,
+      "chosen_screen": "q_pair01",
+      "gold": "quotient",
+      "menu": "ext",
+      "n_representing": 3,
+      "screen": "quotient",
+      "screen_hit": true,
+      "screen_id": "q_id",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 16,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "pair_eq"
+    },
+    {
+      "case_id": "bag_q_perm_affine_c",
+      "cheap": "transport",
+      "cheap_hit": true,
+      "chosen_screen": "",
+      "gold": "transport",
+      "menu": "base",
+      "n_representing": 0,
+      "screen": "transport",
+      "screen_hit": true,
+      "screen_id": "q_perm",
+      "signature": {
+        "connection_mismatch": true,
+        "mixes": false,
+        "n_fibres": 5,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "bag"
+    },
+    {
+      "case_id": "bag_q_perm_affine_c",
+      "cheap": "transport",
+      "cheap_hit": true,
+      "chosen_screen": "",
+      "gold": "transport",
+      "menu": "ext",
+      "n_representing": 0,
+      "screen": "transport",
+      "screen_hit": true,
+      "screen_id": "q_perm",
+      "signature": {
+        "connection_mismatch": true,
+        "mixes": false,
+        "n_fibres": 5,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "bag"
+    },
+    {
+      "case_id": "pair23_q_id",
+      "cheap": "quotient",
+      "cheap_hit": false,
+      "chosen_screen": "q_id",
+      "gold": "noop",
+      "menu": "base",
+      "n_representing": 1,
+      "screen": "noop",
+      "screen_hit": true,
+      "screen_id": "q_id",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 16,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "pair23"
+    },
+    {
+      "case_id": "pair23_q_id",
+      "cheap": "quotient",
+      "cheap_hit": true,
+      "chosen_screen": "q_pair01",
+      "gold": "quotient",
+      "menu": "ext",
+      "n_representing": 3,
+      "screen": "quotient",
+      "screen_hit": true,
+      "screen_id": "q_id",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 16,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "pair23"
+    },
+    {
+      "case_id": "or_q_id",
+      "cheap": "quotient",
+      "cheap_hit": true,
+      "chosen_screen": "q_perm",
+      "gold": "quotient",
+      "menu": "base",
+      "n_representing": 5,
+      "screen": "quotient",
+      "screen_hit": true,
+      "screen_id": "q_id",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 16,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "or"
+    },
+    {
+      "case_id": "or_q_id",
+      "cheap": "quotient",
+      "cheap_hit": true,
+      "chosen_screen": "q_perm",
+      "gold": "quotient",
+      "menu": "ext",
+      "n_representing": 7,
+      "screen": "quotient",
+      "screen_hit": true,
+      "screen_id": "q_id",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 16,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "or"
+    },
+    {
+      "case_id": "or_q_perm",
+      "cheap": "noop",
+      "cheap_hit": true,
+      "chosen_screen": "q_perm",
+      "gold": "noop",
+      "menu": "base",
+      "n_representing": 5,
+      "screen": "noop",
+      "screen_hit": true,
+      "screen_id": "q_perm",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 5,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "or"
+    },
+    {
+      "case_id": "or_q_perm",
+      "cheap": "noop",
+      "cheap_hit": true,
+      "chosen_screen": "q_perm",
+      "gold": "noop",
+      "menu": "ext",
+      "n_representing": 7,
+      "screen": "noop",
+      "screen_hit": true,
+      "screen_id": "q_perm",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 5,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "or"
+    },
+    {
+      "case_id": "count_ge2_q_id",
+      "cheap": "quotient",
+      "cheap_hit": true,
+      "chosen_screen": "q_perm",
+      "gold": "quotient",
+      "menu": "base",
+      "n_representing": 5,
+      "screen": "quotient",
+      "screen_hit": true,
+      "screen_id": "q_id",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 16,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "count_ge2"
+    },
+    {
+      "case_id": "count_ge2_q_id",
+      "cheap": "quotient",
+      "cheap_hit": true,
+      "chosen_screen": "q_perm",
+      "gold": "quotient",
+      "menu": "ext",
+      "n_representing": 7,
+      "screen": "quotient",
+      "screen_hit": true,
+      "screen_id": "q_id",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 16,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "count_ge2"
+    },
+    {
+      "case_id": "pair_eq_q_pair01",
+      "cheap": "noop",
+      "cheap_hit": true,
+      "chosen_screen": "q_id",
+      "gold": "noop",
+      "menu": "base",
+      "n_representing": 1,
+      "screen": "noop",
+      "screen_hit": true,
+      "screen_id": "q_pair01",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 12,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "pair_eq"
+    },
+    {
+      "case_id": "pair_eq_q_pair01",
+      "cheap": "noop",
+      "cheap_hit": true,
+      "chosen_screen": "q_pair01",
+      "gold": "noop",
+      "menu": "ext",
+      "n_representing": 3,
+      "screen": "noop",
+      "screen_hit": true,
+      "screen_id": "q_pair01",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 12,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "pair_eq"
+    },
+    {
+      "case_id": "pair23_q_pair23",
+      "cheap": "noop",
+      "cheap_hit": true,
+      "chosen_screen": "q_id",
+      "gold": "noop",
+      "menu": "base",
+      "n_representing": 1,
+      "screen": "noop",
+      "screen_hit": true,
+      "screen_id": "q_pair23",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 12,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "pair23"
+    },
+    {
+      "case_id": "pair23_q_pair23",
+      "cheap": "noop",
+      "cheap_hit": true,
+      "chosen_screen": "q_pair01",
+      "gold": "noop",
+      "menu": "ext",
+      "n_representing": 3,
+      "screen": "noop",
+      "screen_hit": true,
+      "screen_id": "q_pair23",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 12,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "pair23"
+    }
+  ],
+  "run_id": "delete_repair_menu_blind_2026_08_18",
+  "specification": {
+    "gold": "Paper E empirical gold with the menu as an explicit argument.  A flip between menus on a fixed case is the categorical kill of menu-blind \u03ba.",
+    "kappa_cheap": "Paper E decide, imported frozen: mismatch\u2192transport; mixes\u2192restore; symmetry and n_fibres=n_worlds\u2192quotient; else noop.  Never refit.",
+    "kappa_screen": "Kirchhoff mismatch\u2192transport; else coarsest representing screen in the *given* menu by fibre count then name; restore/quotient/noop from that choice.  Theorem 4 plus a total order, recomputed per menu.",
+    "menu_ext_new_screens": "q_pair01 (12 fibres), q_pair23 (12 fibres)",
+    "new_tasks": "pair23, or, count_ge2"
+  },
+  "status": "pass",
+  "withheld": [
+    "A new master object above SIC",
+    "A refit of the cheap signature",
+    "Text nomination / DR / DCR",
+    "LLM agent eval",
+    "A better language model",
+    "Valence / concern (door 3 is a separate instrument)"
+  ]
+}
