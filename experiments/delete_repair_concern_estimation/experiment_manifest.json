@@ -1,0 +1,88 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "delete_repair_concern_estimation",
+  "hypothesis": "Registered frequency counting is a sufficient estimator of concern at door 3's bound: on three registered literal 24-draw task sequences, the plug-in choice (kappa_concern of the empirical frequencies) equals the oracle choice for all prefixes n >= a registered minimal step (seq_bag 1, seq_mix 2, seq_pair 6), and the misspecification control (holding seq_mix's screen under seq_pair's true concern) costs exactly 4 more than the oracle screen.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "registered_sequences_only",
+      "description": "The three draw sequences are literal registered tuples; nothing is sampled at run time and there is no RNG."
+    },
+    {
+      "control_id": "registered_estimator",
+      "description": "The estimator is empirical frequency counting, written before the run; no SGD, no tuning, no learned representations."
+    },
+    {
+      "control_id": "exact_arithmetic",
+      "description": "All plug-in weights, expected costs, and gaps are Fractions; no floats."
+    },
+    {
+      "control_id": "oracle_anchor_door3",
+      "description": "Each sequence's oracle concern must reproduce door 3's banked choice (q_perm / q_stab0 / q_id) through the unchanged menu and cost rule."
+    },
+    {
+      "control_id": "kill_does_not_fail_ci",
+      "description": "estimation_works, estimation_fails, and inconclusive are all valid passing runs."
+    }
+  ],
+  "seeds": [0],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/delete_repair_concern_estimation/experiment.py"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "EST_SPECIFIED",
+      "criterion": "Estimator, sequences, oracle anchors, convergence steps, and verdict rule specified before the run."
+    },
+    {
+      "gate_id": "EST_SEQUENCES_REGISTERED",
+      "criterion": "Exactly three registered literal sequences of 24 draws each."
+    },
+    {
+      "gate_id": "EST_EXACT_ARITHMETIC",
+      "criterion": "Plug-in weights and misspecification numbers serialize as exact integers or fractions."
+    },
+    {
+      "gate_id": "EST_ORACLE_ANCHORS",
+      "criterion": "Oracle concerns reproduce door 3's banked choices q_perm / q_stab0 / q_id."
+    },
+    {
+      "gate_id": "EST_CONVERGENCE_RECORDED",
+      "criterion": "The full 24-row choice trace per sequence and the observed minimal steps are recorded."
+    },
+    {
+      "gate_id": "EST_MISSPEC_RECORDED",
+      "criterion": "The misspecification control (q_stab0 vs q_id under seq_pair's true concern) is recorded with exact costs."
+    },
+    {
+      "gate_id": "EST_RANKING_RECORDED",
+      "criterion": "Verdict is estimation_works, estimation_fails, or inconclusive."
+    },
+    {
+      "gate_id": "EST_CLAIM_BOUNDARY",
+      "criterion": "No valence, no learning beyond registered counting, no LLM, no new master object."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/delete_repair_concern_estimation/results/delete_repair_concern_estimation_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/delete_repair_concern_estimation/preregistration.json",
+      "public": true
+    },
+    {
+      "kind": "paper",
+      "path": "papers/delete_repair_concern_estimation/paper.md",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

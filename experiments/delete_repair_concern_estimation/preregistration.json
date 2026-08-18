@@ -1,0 +1,92 @@
+{
+  "experiment_id": "delete_repair_concern_estimation",
+  "schema_version": "1.0",
+  "run_id": "delete_repair_concern_estimation_2026_08_18",
+  "producing_agent": {
+    "identity": "Claude Fable 5 (Cursor agent, under J. Brown direction)",
+    "session_ref": "4adbd42d-0e99-41df-b0be-7d9d5b7e3caa"
+  },
+  "hypothesis": "Door 3 opened the third job with concern as a given weight vector and licensed exactly one next step: a registered instrument for estimated concern. This is that instrument. Concern is estimated by frequency counting on three registered literal 24-draw sequences; the plug-in choice is kappa_concern of the empirical frequencies on door 3's unchanged menu and cost rule. Registered predictions: the plug-in choice equals the oracle choice for all prefixes n >= a minimal step of 1 (SEQ_BAG), 2 (SEQ_MIX), and 6 (SEQ_PAIR, where the odd-prefix pair_eq frequency k/(2k+1) crosses the exact 11/27 boundary between n = 5 and n = 7); and holding SEQ_MIX's screen q_stab0 under SEQ_PAIR's true concern costs exactly 4 more than q_id (20 vs 16).",
+  "primary_metric": "ranking.verdict",
+  "decision": "Accept estimation_works if all three sequences converge to the oracle choice at exactly the registered minimal steps (1, 2, 6) and stay through n = 24. Accept estimation_fails if any final-prefix choice differs from oracle. Otherwise inconclusive. Any recorded verdict passes CI.",
+  "gates": {
+    "EST_SPECIFIED": "Estimator, sequences, anchors, steps, and verdict rule written before the run.",
+    "EST_SEQUENCES_REGISTERED": "Exactly three registered literal sequences, 24 draws each.",
+    "EST_EXACT_ARITHMETIC": "Fractions only; weights and gaps serialize exactly.",
+    "EST_ORACLE_ANCHORS": "Oracle concerns reproduce door 3's banked q_perm / q_stab0 / q_id.",
+    "EST_CONVERGENCE_RECORDED": "Full 24-row trace per sequence plus observed minimal steps recorded.",
+    "EST_MISSPEC_RECORDED": "Exact misspecification costs 20 vs 16 recorded.",
+    "EST_RANKING_RECORDED": "Verdict is one of the three registered outcomes.",
+    "EST_CLAIM_BOUNDARY": "No valence, no learning beyond registered counting, no LLM, no new master object."
+  },
+  "kill_criteria": {
+    "EST_SPECIFIED": "Kill the instrument if sequences, estimator, or steps are tuned after seeing the trace.",
+    "EST_ORACLE_ANCHORS": "Kill the instrument if any oracle concern fails to reproduce the banked door-3 choice.",
+    "counting_insufficient": "The counting-is-enough claim dies if any sequence fails to converge by n = 24 (estimation_fails).",
+    "step_registration": "The registered-steps claim dies if convergence happens but at different minimal steps (inconclusive).",
+    "misspec_gap": "The misspecification control dies if the q_stab0 vs q_id gap under seq_pair's concern is not exactly 4."
+  },
+  "audit_card": {
+    "target_object": "The licensed door-3 follow-up: does a registered plug-in estimator of concern recover the oracle choice at this bound, and at exactly the registered prefixes?",
+    "decision": "estimation_works / estimation_fails / inconclusive by the registered rule.",
+    "representation": "Door 3's five representing screens for bag on {0,1}^4, its two-case cost rule (fibre count on represent, 32 on miss), and Paper F's tie-break, all unchanged. Three registered literal 24-draw task sequences; plug-in weights are empirical frequencies as exact Fractions.",
+    "data_clock": "The prefix index n = 1..24 of each registered sequence. No sampling, no RNG, no learning, no LLM.",
+    "material_assumptions": [
+      "The estimator is empirical frequency counting and nothing else.",
+      "The menu, cost rule, and tie-break are door 3's, unchanged.",
+      "Draws are the registered literal tuples; there is no runtime randomness.",
+      "Oracle choices are door 3's banked q_perm / q_stab0 / q_id."
+    ],
+    "fatal_gates": [
+      "EST_SPECIFIED",
+      "EST_SEQUENCES_REGISTERED",
+      "EST_EXACT_ARITHMETIC",
+      "EST_ORACLE_ANCHORS",
+      "EST_CONVERGENCE_RECORDED",
+      "EST_MISSPEC_RECORDED",
+      "EST_RANKING_RECORDED",
+      "EST_CLAIM_BOUNDARY"
+    ],
+    "decisive_controls": [
+      "registered_sequences_only",
+      "registered_estimator",
+      "exact_arithmetic",
+      "oracle_anchor_door3",
+      "kill_does_not_fail_ci"
+    ],
+    "evidence_paths": [
+      "experiments/delete_repair_concern_estimation/results/delete_repair_concern_estimation_summary.json",
+      "experiments/delete_repair_concern_estimation/preregistration.json",
+      "tests/test_delete_repair_concern_estimation.py"
+    ]
+  },
+  "mathematical_claim": {
+    "objects": {
+      "sequences": "SEQ_BAG = (bag)^24; SEQ_MIX = (bag, first_bit)^12; SEQ_PAIR = (bag, pair_eq)^12",
+      "plugin_weights": "draws, n -> empirical frequency Concern (exact Fractions over tasks seen in the first n draws)",
+      "plugin_choice": "n -> kappa_concern(plugin_weights(draws, n), R(bag), worlds), door 3's argmin with Paper F's tie-break",
+      "convergence_step": "minimal n with plugin choice = oracle choice for every prefix >= n; 25 if the final prefix mismatches"
+    },
+    "types_domains_units": "Weights are exact rationals in [0, 1] summing to 1 over seen tasks. Costs are exact rationals (fibre counts 5/6/8/8/16 on represent, 32 on miss). Steps are integers in 1..25.",
+    "exact_claim": "SEQ_BAG: every prefix has weights delta_bag, so the choice is q_perm for all n >= 1; step 1. SEQ_MIX: n = 1 gives delta_bag -> q_perm != q_stab0; for n >= 2 the first_bit frequency f is in [1/3, 1/2], and cost(q_perm) = 5 + 27f >= 14 > 8 = cost(q_stab0), cost(q_rot) = 6 + 26f > 8, cost(q_stab_last) = 8 + 24f > 8, cost(q_id) = 16 > 8, so q_stab0 for all n >= 2; step 2. SEQ_PAIR: the choice is q_perm iff the pair_eq frequency f < 11/27 (f = 11/27 needs n divisible by 27, impossible at n <= 24); even prefixes have f = 1/2 > 11/27 -> q_id, odd prefixes n = 2k+1 have f = k/(2k+1) < 11/27 iff k <= 2, so the last mismatch is n = 5 (f = 2/5) and q_id holds from n = 6; step 6. Misspecification: E_{uniform(bag, pair_eq)} cost(q_stab0) = (8 + 32)/2 = 20 and cost(q_id) = 16; gap exactly 4.",
+    "quantifiers": "Universal over all 72 prefix evaluations (3 sequences x 24 prefixes). Existential for the minimality witnesses (the mismatches at n = 1 for SEQ_MIX and n = 5 for SEQ_PAIR).",
+    "assumptions": "Door 3's registered menu, cost rule, and tie-break; the three registered sequences; no other estimator.",
+    "identification_conditions": "The plug-in choice is identified as kappa_concern composed with the empirical-frequency map; it adds no new degrees of freedom beyond the registered draws, so convergence facts are theorems about door 3's exact geometry, not fits.",
+    "derivation_dependencies": "Door 3's cost matrix and banked choices (q_perm / q_stab0 / q_id); door 3's exact 11/27 boundary on the bag/pair_eq dial drives the SEQ_PAIR step; Paper F's representing set and tie-break.",
+    "coordinate_invariance": "None claimed here beyond door 3's banked reversal-naturality; the estimator itself is permutation-covariant in the draw order only through the counts, which is disclosed, not tested.",
+    "edge_limiting_null_cases": "n = 1 collapses every sequence to delta on its first draw (always bag here, choosing q_perm). If the horizon ended before n = 6, SEQ_PAIR would sit at inconclusive; 24 is the registered horizon. A tie with the 11/27 boundary never occurs because 27 does not divide any n <= 24."
+  },
+  "controls": [
+    "registered_sequences_only",
+    "registered_estimator",
+    "exact_arithmetic",
+    "oracle_anchor_door3",
+    "kill_does_not_fail_ci"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": "none",
+    "sampling": "None. Exact rational evaluation of 72 prefixes (3 sequences x 24 draws) over 5 screens plus one misspecification cell."
+  },
+  "claim_boundary": "Accepted only as: on door 3's menu and cost rule, with these three registered draw sequences, registered frequency counting recovers the oracle concern choice at exactly the registered minimal prefixes (1, 2, 6) and holding the wrong sequence's screen costs exactly 4. Frequency counting is the entire estimator. Not SGD, not valence, not learned representations, not an LLM, not a new master object, not Paper G."
+}

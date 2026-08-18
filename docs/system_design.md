@@ -411,6 +411,14 @@ is menu-stable, and the `bag`/`pair_eq` boundary is menu-relative
 enumerations licensed by the close-out's three doors are exhausted;
 remaining follow-ups are Lean banking via Lea and a registered
 instrument design for learned concern.
+That instrument is `experiments/delete_repair_concern_estimation/`:
+concern is estimated by registered frequency counting on three
+literal 24-draw task sequences, and the plug-in choice recovers the
+oracle choice at exactly the registered minimal prefixes 1 / 2 / 6
+(the last forced by the exact 11/27 boundary), with a
+misspecification gap of exactly 4 for holding the wrong sequence's
+screen. Verdict `estimation_works`; counting is the entire estimator
+— no SGD, no valence, no learned representations.
 The close-out is `papers/sic_dynamics/` (`paper.md` for the
 instruments; `for_readers.md` for a cold reader). Wave 2 P0/P1 lemmas are
 **verified** in `formal/structural-intelligence/` (`KappaCheap`,
