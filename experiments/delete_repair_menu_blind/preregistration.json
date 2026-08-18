@@ -1,0 +1,100 @@
+{
+  "experiment_id": "delete_repair_menu_blind",
+  "schema_version": "1.0",
+  "run_id": "delete_repair_menu_blind_2026_08_18",
+  "producing_agent": {
+    "identity": "Claude Fable 5 (Cursor agent, under J. Brown direction)",
+    "session_ref": "4adbd42d-0e99-41df-b0be-7d9d5b7e3caa"
+  },
+  "hypothesis": "Gold is menu-relative. On a fixed (task, screen) case, enlarging the menu flips gold from noop to quotient. Any menu-blind κ is a function of (Y, q) alone and is therefore constant across menus, so it cannot match gold on both. This closes the close-out's door 1 categorically rather than at five fields, without refitting the cheap rule.",
+  "primary_metric": "ranking.verdict",
+  "decision": "Accept menu_blind_dead if at least one gold flip exists between MENU_BASE and MENU_EXT and κ_screen (menu-relative) is exact on all 34 rows. Accept menu_blind_lives if no flip exists and the frozen five-field rule is exact and collision-free under both menus. Accept no_function if κ_screen misses a row. Otherwise inconclusive. Any recorded verdict passes CI.",
+  "gates": {
+    "MB_SPECIFIED": "Menus, screens, tasks, cases written before gold evaluation.",
+    "MB_ENUMERATION": "17 specs, 34 rows, 11 Paper E cases unchanged.",
+    "MB_MENUS": "Extension is exactly {q_pair01, q_pair23}.",
+    "MB_CHEAP_FROZEN": "Five-field signatures only; decide imported, not refit.",
+    "MB_BASE_CONSISTENT": "Base gold equals Paper E gold on the registered 11.",
+    "MB_FLIP_RECORDED": "Flip table recorded.",
+    "MB_SCREEN_DEFINED": "κ_screen never broken.",
+    "MB_RELABEL_ACTION": "Reversal preserves actions.",
+    "MB_TIE_RECORDED": "Chosen-screen naturality recorded with witnesses.",
+    "MB_RANKING_RECORDED": "Verdict is one of the four registered outcomes.",
+    "MB_CLAIM_BOUNDARY": "No master object, no LLM, no refit, no text nomination."
+  },
+  "kill_criteria": {
+    "MB_SPECIFIED": "Kill the instrument if any map is fitted after seeing gold.",
+    "MB_ENUMERATION": "Kill the instrument if the Paper E cases are altered.",
+    "MB_CHEAP_FROZEN": "Kill the instrument if decide is modified or widened.",
+    "MB_BASE_CONSISTENT": "Kill the instrument if base gold disagrees with Paper E.",
+    "menu_blind_kappa": "Kill every menu-blind κ if gold flips between menus on a fixed case.",
+    "possibility_1_reopening": "Reopen Possibility 1 (non-SIC κ) only if no flip exists and a menu-blind rule is exact and collision-free on both menus.",
+    "no_computable_kappa": "Reopen the no-function reading if κ_screen misses a row."
+  },
+  "audit_card": {
+    "target_object": "The door-1 question from the close-out: can a specified κ that does not look at the menu hit a larger held-out family?",
+    "decision": "menu_blind_dead / menu_blind_lives / no_function / inconclusive, decided by the registered rule before interpretation.",
+    "representation": "Paper E suite plus 6 new cases on {0,1}^4, two menus (5 and 7 screens), five-field signatures, menu-relative gold.",
+    "data_clock": "None. Finite enumeration, no sampling, no LLM. Maps and menus specified before the run.",
+    "material_assumptions": [
+      "Gold semantics is Paper E's empirical rule with the menu as an argument.",
+      "Menu-blind means: a function of (Y, q, edges) that never enumerates the menu.",
+      "κ_cheap is Paper E decide, frozen.",
+      "The tie-break is fewest fibres then lexicographic name, as in Paper F.",
+      "Reversal (3,2,1,0) is the disclosed relabel."
+    ],
+    "fatal_gates": [
+      "MB_SPECIFIED",
+      "MB_ENUMERATION",
+      "MB_MENUS",
+      "MB_CHEAP_FROZEN",
+      "MB_BASE_CONSISTENT",
+      "MB_SCREEN_DEFINED",
+      "MB_RELABEL_ACTION",
+      "MB_RANKING_RECORDED",
+      "MB_CLAIM_BOUNDARY"
+    ],
+    "decisive_controls": [
+      "cheap_frozen",
+      "specified_before_gold",
+      "base_consistency",
+      "two_layer_naturality",
+      "kill_does_not_fail_ci"
+    ],
+    "evidence_paths": [
+      "experiments/delete_repair_menu_blind/results/delete_repair_menu_blind_summary.json",
+      "experiments/delete_repair_menu_blind/preregistration.json",
+      "tests/test_delete_repair_menu_blind.py"
+    ]
+  },
+  "mathematical_claim": {
+    "objects": {
+      "MENU_BASE": "(q_id, q_rot, q_perm, q_stab0, q_stab_last)",
+      "MENU_EXT": "MENU_BASE + (q_pair01, q_pair23)",
+      "gold_of_menu": "(CaseSpec, worlds, Menu) → {restore, quotient, transport, noop, broken}",
+      "kappa_screen_menu": "(CaseSpec, worlds, Menu) → action × chosen screen",
+      "flip": "a case with gold_of_menu(-, MENU_BASE) ≠ gold_of_menu(-, MENU_EXT)"
+    },
+    "types_domains_units": "X = {0,1}^4, 16 worlds. Fibre counts are integers: q_pair01 and q_pair23 have 12 fibres. Menus are ordered tuples of screen ids.",
+    "exact_claim": "There exists a case c with gold_base(c) = noop and gold_ext(c) = quotient. Hence gold is not a function of (Y, q, edges), so for every function f of (Y, q, edges) there is a menu under which f mismatches gold on c. Also: the five-field signature partition has a mixed-gold bucket under MENU_BASE and no mixed-gold bucket under MENU_EXT on this suite.",
+    "quantifiers": "Existential for the flip and the base collision. Universal over all 34 rows for kappa_screen exactness. Universal over all menu-blind functions in the impossibility reading (a two-point separation argument, enumerated).",
+    "assumptions": "Gold semantics fixed as registered. Menus disclosed. No sampling.",
+    "identification_conditions": "kappa_screen_menu is identified as Theorem 4 plus the disclosed total order, per menu. It is not identified as a new primitive.",
+    "derivation_dependencies": "Paper E gold_of and decide. Paper F kappa_screen. CommonSuffScreen / Theorem 4. The impossibility step is the two-valued-function separation: one input, two required outputs.",
+    "coordinate_invariance": "Reversal (3,2,1,0) sends first_bit↔last_bit and pair_eq↔pair23, q_stab0↔q_stab_last, q_pair01↔q_pair23. Action-level naturality is required. Chosen-screen naturality is measured and may fail on ties broken by name; failures are recorded.",
+    "edge_limiting_null_cases": "If no flip occurs the categorical kill fails and the verdict must not claim it. If κ_screen misses, the no-function reading reopens and the verdict says so. broken never appears because q_id is in every menu."
+  },
+  "controls": [
+    "cheap_frozen",
+    "specified_before_gold",
+    "base_consistency",
+    "two_layer_naturality",
+    "kill_does_not_fail_ci"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": "none",
+    "sampling": "Finite {0,1}^4 enumeration, 17 cases, two menus. No sampling."
+  },
+  "claim_boundary": "Accepted only as: gold is menu-relative on this harness, so no menu-blind κ of any signature width is correct across menus; the five-field rule's collision and correctness are menu-relative; κ_screen stays exact per menu; the name tie-break is not relabel-natural on ties. Not a new master object. Not a refit. Not an LLM. Not Paper G."
+}
