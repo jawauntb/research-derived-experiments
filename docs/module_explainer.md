@@ -129,6 +129,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_delete_repair_generators.py` | Door 2 consolidation: cube episode (5 vs 2, 2 vs 3) beside the sq replay anchor; both outside facts |
 | `test_delete_repair_concern_transport.py` | Door 3 consolidation: reversal-natural under both menus; boundary 11/27 vs 7/27; pair_eq choice flips q_id→q_pair01 |
 | `test_delete_repair_concern_estimation.py` | Door 3 estimator: plug-in counting converges at registered steps 1/2/6; oracle anchors q_perm/q_stab0/q_id; misspec gap 4; deterministic replay |
+| `test_silent_substitution.py` | Gate 2 silence gate: record constant across both arms; misaligned E[r] rises / E[U] falls (7/2 → 1583088700/7083249971); t = 12 argmax mass exactly 17179869184/21249749913; aligned control rises; deterministic replay |
 
 ```bash
 python3 scripts/run_quality_checks.py
@@ -274,6 +275,7 @@ Universal dispatcher: `python scripts/regen.py <name>`.
 | `delete_repair_generators` | P R res | Door 2 consolidation: cube episode (`x^3`, bound 5: min 5 vs 2, mass 2 vs 3) beside the sq replay anchor; predictions registered first; both outside facts. Verdict `border_consolidated` | `core.py`, `experiment.py` |
 | `delete_repair_concern_transport` | P R res | Door 3 consolidation: concern choice is reversal-natural under both menus; boundary menu-relative (11/27 base → `q_id`; 7/27 ext → `q_pair01`); pure-`bag` anchor menu-stable. Verdict `transport_holds_boundary_moves` | `core.py`, `experiment.py` |
 | `delete_repair_concern_estimation` | P R res | Door 3 estimator: registered frequency counting on three literal 24-draw sequences recovers oracle choices at registered steps 1/2/6 (11/27 boundary forces step 6); misspec gap exactly 4. Verdict `estimation_works` | `core.py`, `experiment.py` |
+| `silent_substitution` | P R res | Gate 2 of "Intention Is All You Need" at the kernel (zero-leakage limit): eight outcomes in one compliance class, record constant by construction; tilt `(r+1)^t` sends misaligned E[U] 7/2 → 1583088700/7083249971 while E[r] rises; t = 12 argmax mass exactly 17179869184/21249749913; aligned control rises. Verdict `substitution_silent` | `core.py`, `experiment.py` |
 
 #### 3.1.1 `symbolic_weakness` modules
 
@@ -549,6 +551,7 @@ exhaustive counterexample search, and replayable MIDAS regression.
 | `papers/delete_repair_generators/` | Door 2 consolidation: the generator border replicates on the cube macro with registered predictions (`paper.md`); companion instrument `delete_repair_generators` |
 | `papers/delete_repair_concern_transport/` | Door 3 consolidation: the concern boundary is menu-relative (11/27 vs 7/27) while the symmetry layer transports (`paper.md`); companion instrument `delete_repair_concern_transport` |
 | `papers/delete_repair_concern_estimation/` | Door 3 follow-up: registered frequency counting is a sufficient concern estimator at this bound — steps 1/2/6 confirmed, misspec gap 4 (`paper.md`); companion instrument `delete_repair_concern_estimation` |
+| `papers/silent_substitution/` | Gate 2 at the kernel: every report is green — the zero-leakage limit exact; record constant while misaligned value falls and the aligned control rises; real leakage stays the open empirical half (`paper.md`); companion instrument `silent_substitution` |
 | `papers/sic_dynamics/` | Close-out: A–F laid out; Possibility 5 is the house; not a better LLM; next method is Lea (`paper.md`). Cold-reader English: `for_readers.md` |
 | `papers/eml_access_geometry/` | Process-split synthesis: expressivity ≠ access, access is process-relative; LLM/SIC translation without a better-model claim |
 | `papers/sufficient_antecedents/` | Companion paper (Theorem SA-1): taxonomy of SIC-C-c positive resolutions — each of the four known identifiability escapes (linear ICA, sparse-linear ICA, iVAE, interventional CRL) is one way of populating Theorem 4's Markov-screen antecedent via local separation + cross-`u` coherence (`paper.md`, `paper.pdf`); companion instrument `antecedent_taxonomy_pair` |
@@ -1159,6 +1162,7 @@ Notable bundles:
 - `papers/delete_repair_generators/` — Door 2 consolidation: the generator border replicates on a second macro
 - `papers/delete_repair_concern_transport/` — Door 3 consolidation: the concern boundary moves with the menu; the symmetry layer transports
 - `papers/delete_repair_concern_estimation/` — Door 3 follow-up: registered estimation; counting is enough at this bound
+- `papers/silent_substitution/` — Gate 2 at the kernel: every report is green; the zero-leakage limit banked exactly
 - `papers/sic_dynamics/` — close-out paper, A–F in one place; `for_readers.md` for a cold reader; next method is Lea
 - `papers/eml_access_geometry/` — process-split synthesis and LLM/SIC translation
 - Synthesis: `metaphysics_synthesis`, `metric_stack_synthesis`, literature audits/reviews

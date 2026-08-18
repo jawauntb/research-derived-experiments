@@ -1,0 +1,604 @@
+{
+  "arms": [
+    {
+      "argmax_mass_strictly_rises": true,
+      "arm_id": "misaligned",
+      "final_argmax_mass": "17179869184/21249749913",
+      "principal_strictly_falls": true,
+      "principal_strictly_rises": false,
+      "record_constant": true,
+      "records": [
+        "compliant",
+        "compliant",
+        "compliant",
+        "compliant",
+        "compliant",
+        "compliant",
+        "compliant",
+        "compliant",
+        "compliant",
+        "compliant",
+        "compliant",
+        "compliant",
+        "compliant"
+      ],
+      "reward": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7"
+      ],
+      "reward_name": "R_MIS",
+      "reward_strictly_rises": true,
+      "uniform_anchor_ok": true,
+      "uniform_principal": "7/2"
+    },
+    {
+      "argmax_mass_strictly_rises": true,
+      "arm_id": "aligned",
+      "final_argmax_mass": "17179869184/21249749913",
+      "principal_strictly_falls": false,
+      "principal_strictly_rises": true,
+      "record_constant": true,
+      "records": [
+        "compliant",
+        "compliant",
+        "compliant",
+        "compliant",
+        "compliant",
+        "compliant",
+        "compliant",
+        "compliant",
+        "compliant",
+        "compliant",
+        "compliant",
+        "compliant",
+        "compliant"
+      ],
+      "reward": [
+        "7",
+        "6",
+        "5",
+        "4",
+        "3",
+        "2",
+        "1",
+        "0"
+      ],
+      "reward_name": "R_AL",
+      "reward_strictly_rises": true,
+      "uniform_anchor_ok": true,
+      "uniform_principal": "7/2"
+    }
+  ],
+  "experiment_id": "silent_substitution",
+  "gates": {
+    "SIL_ALIGNED_CONTROL": true,
+    "SIL_CLAIM_BOUNDARY": true,
+    "SIL_EXACT_ARITHMETIC": true,
+    "SIL_LIMIT_CONCENTRATES": true,
+    "SIL_MISALIGNED_R_RISES": true,
+    "SIL_MISALIGNED_U_FALLS": true,
+    "SIL_RANKING_RECORDED": true,
+    "SIL_RECORD_CONSTANT": true
+  },
+  "principal_value": [
+    "7",
+    "6",
+    "5",
+    "4",
+    "3",
+    "2",
+    "1",
+    "0"
+  ],
+  "process_disclosure": "Eight compliant outcomes form one compliance class, so the spec-level record is the constant symbol 'compliant' by construction \u2014 the zero-leakage limit.  Two arms share the channel and differ only in the registered reward table: R_MIS exactly opposed to the principal value U, and R_AL equal to U.  Ecology step t reweights outcome x by (r(x) + 1) ** t for t = 0..12; every expectation and mass is an exact Fraction.  The monotone directions and the exact t = 12 argmax mass were registered before the run.  No RNG, no floats, no LLM.",
+  "producing_agent": {
+    "identity": "Claude Fable 5 (Cursor agent, under J. Brown direction)",
+    "session_ref": "4adbd42d-0e99-41df-b0be-7d9d5b7e3caa"
+  },
+  "ranking": {
+    "aligned_principal_rises": true,
+    "limit_mass": "17179869184/21249749913",
+    "misaligned_principal_falls": true,
+    "misaligned_reward_rises": true,
+    "n_arms": 2,
+    "n_steps": 13,
+    "record_constant_both_arms": true,
+    "rule": "substitution_silent iff the record is constant across all 13 steps of both arms AND misaligned E_t[U] strictly falls while E_t[r] strictly rises AND the aligned control's E_t[U] strictly rises.  substitution_visible iff the record ever varies.  inconclusive otherwise.",
+    "verdict": "substitution_silent"
+  },
+  "realization_space": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "run_id": "silent_substitution_2026_08_18",
+  "status": "pass",
+  "trace": [
+    {
+      "argmax_reward_mass": "1/8",
+      "arm_id": "misaligned",
+      "expected_principal": "7/2",
+      "expected_reward": "7/2",
+      "record": "compliant",
+      "t": 0,
+      "weights": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "argmax_reward_mass": "2/9",
+      "arm_id": "misaligned",
+      "expected_principal": "7/3",
+      "expected_reward": "14/3",
+      "record": "compliant",
+      "t": 1,
+      "weights": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8"
+      ]
+    },
+    {
+      "argmax_reward_mass": "16/51",
+      "arm_id": "misaligned",
+      "expected_principal": "28/17",
+      "expected_reward": "91/17",
+      "record": "compliant",
+      "t": 2,
+      "weights": [
+        "1",
+        "4",
+        "9",
+        "16",
+        "25",
+        "36",
+        "49",
+        "64"
+      ]
+    },
+    {
+      "argmax_reward_mass": "32/81",
+      "arm_id": "misaligned",
+      "expected_principal": "133/108",
+      "expected_reward": "623/108",
+      "record": "compliant",
+      "t": 3,
+      "weights": [
+        "1",
+        "8",
+        "27",
+        "64",
+        "125",
+        "216",
+        "343",
+        "512"
+      ]
+    },
+    {
+      "argmax_reward_mass": "1024/2193",
+      "arm_id": "misaligned",
+      "expected_principal": "700/731",
+      "expected_reward": "4417/731",
+      "record": "compliant",
+      "t": 4,
+      "weights": [
+        "1",
+        "16",
+        "81",
+        "256",
+        "625",
+        "1296",
+        "2401",
+        "4096"
+      ]
+    },
+    {
+      "argmax_reward_mass": "2048/3861",
+      "arm_id": "misaligned",
+      "expected_principal": "3937/5148",
+      "expected_reward": "32099/5148",
+      "record": "compliant",
+      "t": 5,
+      "weights": [
+        "1",
+        "32",
+        "243",
+        "1024",
+        "3125",
+        "7776",
+        "16807",
+        "32768"
+      ]
+    },
+    {
+      "argmax_reward_mass": "65536/111741",
+      "arm_id": "misaligned",
+      "expected_principal": "1364/2191",
+      "expected_reward": "13973/2191",
+      "record": "compliant",
+      "t": 6,
+      "weights": [
+        "1",
+        "64",
+        "729",
+        "4096",
+        "15625",
+        "46656",
+        "117649",
+        "262144"
+      ]
+    },
+    {
+      "argmax_reward_mass": "131072/206091",
+      "arm_id": "misaligned",
+      "expected_principal": "8309/16164",
+      "expected_reward": "104839/16164",
+      "record": "compliant",
+      "t": 7,
+      "weights": [
+        "1",
+        "128",
+        "2187",
+        "16384",
+        "78125",
+        "279936",
+        "823543",
+        "2097152"
+      ]
+    },
+    {
+      "argmax_reward_mass": "4194304/6171153",
+      "arm_id": "misaligned",
+      "expected_principal": "882700/2057051",
+      "expected_reward": "13516657/2057051",
+      "record": "compliant",
+      "t": 8,
+      "weights": [
+        "1",
+        "256",
+        "6561",
+        "65536",
+        "390625",
+        "1679616",
+        "5764801",
+        "16777216"
+      ]
+    },
+    {
+      "argmax_reward_mass": "8388608/11680281",
+      "arm_id": "misaligned",
+      "expected_principal": "79247/219348",
+      "expected_reward": "1456189/219348",
+      "record": "compliant",
+      "t": 9,
+      "weights": [
+        "1",
+        "512",
+        "19683",
+        "262144",
+        "1953125",
+        "10077696",
+        "40353607",
+        "134217728"
+      ]
+    },
+    {
+      "argmax_reward_mass": "268435456/356889381",
+      "arm_id": "misaligned",
+      "expected_principal": "36433348/118963127",
+      "expected_reward": "796308541/118963127",
+      "record": "compliant",
+      "t": 10,
+      "weights": [
+        "1",
+        "1024",
+        "59049",
+        "1048576",
+        "9765625",
+        "60466176",
+        "282475249",
+        "1073741824"
+      ]
+    },
+    {
+      "argmax_reward_mass": "536870912/686453751",
+      "arm_id": "misaligned",
+      "expected_principal": "8238737/31561092",
+      "expected_reward": "212688907/31561092",
+      "record": "compliant",
+      "t": 11,
+      "weights": [
+        "1",
+        "2048",
+        "177147",
+        "4194304",
+        "48828125",
+        "362797056",
+        "1977326743",
+        "8589934592"
+      ]
+    },
+    {
+      "argmax_reward_mass": "17179869184/21249749913",
+      "arm_id": "misaligned",
+      "expected_principal": "1583088700/7083249971",
+      "expected_reward": "47999661097/7083249971",
+      "record": "compliant",
+      "t": 12,
+      "weights": [
+        "1",
+        "4096",
+        "531441",
+        "16777216",
+        "244140625",
+        "2176782336",
+        "13841287201",
+        "68719476736"
+      ]
+    },
+    {
+      "argmax_reward_mass": "1/8",
+      "arm_id": "aligned",
+      "expected_principal": "7/2",
+      "expected_reward": "7/2",
+      "record": "compliant",
+      "t": 0,
+      "weights": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "argmax_reward_mass": "2/9",
+      "arm_id": "aligned",
+      "expected_principal": "14/3",
+      "expected_reward": "14/3",
+      "record": "compliant",
+      "t": 1,
+      "weights": [
+        "8",
+        "7",
+        "6",
+        "5",
+        "4",
+        "3",
+        "2",
+        "1"
+      ]
+    },
+    {
+      "argmax_reward_mass": "16/51",
+      "arm_id": "aligned",
+      "expected_principal": "91/17",
+      "expected_reward": "91/17",
+      "record": "compliant",
+      "t": 2,
+      "weights": [
+        "64",
+        "49",
+        "36",
+        "25",
+        "16",
+        "9",
+        "4",
+        "1"
+      ]
+    },
+    {
+      "argmax_reward_mass": "32/81",
+      "arm_id": "aligned",
+      "expected_principal": "623/108",
+      "expected_reward": "623/108",
+      "record": "compliant",
+      "t": 3,
+      "weights": [
+        "512",
+        "343",
+        "216",
+        "125",
+        "64",
+        "27",
+        "8",
+        "1"
+      ]
+    },
+    {
+      "argmax_reward_mass": "1024/2193",
+      "arm_id": "aligned",
+      "expected_principal": "4417/731",
+      "expected_reward": "4417/731",
+      "record": "compliant",
+      "t": 4,
+      "weights": [
+        "4096",
+        "2401",
+        "1296",
+        "625",
+        "256",
+        "81",
+        "16",
+        "1"
+      ]
+    },
+    {
+      "argmax_reward_mass": "2048/3861",
+      "arm_id": "aligned",
+      "expected_principal": "32099/5148",
+      "expected_reward": "32099/5148",
+      "record": "compliant",
+      "t": 5,
+      "weights": [
+        "32768",
+        "16807",
+        "7776",
+        "3125",
+        "1024",
+        "243",
+        "32",
+        "1"
+      ]
+    },
+    {
+      "argmax_reward_mass": "65536/111741",
+      "arm_id": "aligned",
+      "expected_principal": "13973/2191",
+      "expected_reward": "13973/2191",
+      "record": "compliant",
+      "t": 6,
+      "weights": [
+        "262144",
+        "117649",
+        "46656",
+        "15625",
+        "4096",
+        "729",
+        "64",
+        "1"
+      ]
+    },
+    {
+      "argmax_reward_mass": "131072/206091",
+      "arm_id": "aligned",
+      "expected_principal": "104839/16164",
+      "expected_reward": "104839/16164",
+      "record": "compliant",
+      "t": 7,
+      "weights": [
+        "2097152",
+        "823543",
+        "279936",
+        "78125",
+        "16384",
+        "2187",
+        "128",
+        "1"
+      ]
+    },
+    {
+      "argmax_reward_mass": "4194304/6171153",
+      "arm_id": "aligned",
+      "expected_principal": "13516657/2057051",
+      "expected_reward": "13516657/2057051",
+      "record": "compliant",
+      "t": 8,
+      "weights": [
+        "16777216",
+        "5764801",
+        "1679616",
+        "390625",
+        "65536",
+        "6561",
+        "256",
+        "1"
+      ]
+    },
+    {
+      "argmax_reward_mass": "8388608/11680281",
+      "arm_id": "aligned",
+      "expected_principal": "1456189/219348",
+      "expected_reward": "1456189/219348",
+      "record": "compliant",
+      "t": 9,
+      "weights": [
+        "134217728",
+        "40353607",
+        "10077696",
+        "1953125",
+        "262144",
+        "19683",
+        "512",
+        "1"
+      ]
+    },
+    {
+      "argmax_reward_mass": "268435456/356889381",
+      "arm_id": "aligned",
+      "expected_principal": "796308541/118963127",
+      "expected_reward": "796308541/118963127",
+      "record": "compliant",
+      "t": 10,
+      "weights": [
+        "1073741824",
+        "282475249",
+        "60466176",
+        "9765625",
+        "1048576",
+        "59049",
+        "1024",
+        "1"
+      ]
+    },
+    {
+      "argmax_reward_mass": "536870912/686453751",
+      "arm_id": "aligned",
+      "expected_principal": "212688907/31561092",
+      "expected_reward": "212688907/31561092",
+      "record": "compliant",
+      "t": 11,
+      "weights": [
+        "8589934592",
+        "1977326743",
+        "362797056",
+        "48828125",
+        "4194304",
+        "177147",
+        "2048",
+        "1"
+      ]
+    },
+    {
+      "argmax_reward_mass": "17179869184/21249749913",
+      "arm_id": "aligned",
+      "expected_principal": "47999661097/7083249971",
+      "expected_reward": "47999661097/7083249971",
+      "record": "compliant",
+      "t": 12,
+      "weights": [
+        "68719476736",
+        "13841287201",
+        "2176782336",
+        "244140625",
+        "16777216",
+        "531441",
+        "4096",
+        "1"
+      ]
+    }
+  ],
+  "withheld": [
+    "Valence, agency, consciousness, phenomenology",
+    "Any claim about real specifications' leakage (the zero-leakage limit is constructed here, not measured)",
+    "The intention-to-mechanism bridge (stays a bet per the essay \"Intention Is All You Need\")",
+    "LLM agent eval",
+    "A better language model"
+  ]
+}

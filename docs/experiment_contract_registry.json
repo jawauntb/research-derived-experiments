@@ -1146,6 +1146,35 @@
       ]
     },
     {
+      "package": "silent_substitution",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/silent_substitution/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "silent_substitution_2026_08_18",
+      "runs": [
+        {
+          "run_id": "silent_substitution_2026_08_18",
+          "publication_package": "silent_substitution",
+          "runtime_package": "silent_substitution",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/silent_substitution/experiment_manifest.json",
+          "report_paths": [
+            "experiments/silent_substitution/results/silent_substitution_summary.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_path": "experiments/silent_substitution/preregistration.json",
+          "preregistration_digest": "b7ed8a48bad7b1a05fbd7bc03afe633389f2afdee6586c9a0ad8e96d2c2a2e6a",
+          "producing_agent": {
+            "identity": "Claude Fable 5 (Cursor agent, under J. Brown direction)",
+            "session_ref": "4adbd42d-0e99-41df-b0be-7d9d5b7e3caa"
+          }
+        }
+      ]
+    },
+    {
       "package": "delete_repair_concern_transport",
       "coverage_mode": "structured_manifest",
       "manifest_path": "experiments/delete_repair_concern_transport/experiment_manifest.json",
