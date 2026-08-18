@@ -1,0 +1,96 @@
+{
+  "experiment_id": "pac_bayes_weakness_enum",
+  "schema_version": "1.0",
+  "run_id": "pac_bayes_weakness_enum_2026_08_18",
+  "producing_agent": {
+    "identity": "Cursor Grok 4.6 (under J. Brown direction)",
+    "session_ref": "551a32dd-382d-4456-91cf-669ec091a0a1"
+  },
+  "hypothesis": "On the four frozen finite domains with |X|=|Y|≤7, exact enumeration of H=Y^X recovers the overlapping-mixture mass P(h)=∑_{k≤W(h)} π_k/|H_{≥k}|, the cyclic identity-ρ fixed-action class has size |Y|^r=7, and the Langford–Seeger–Maurer plug-in at m=8, δ=0.05 is non-vacuous for the aligned truth. Wrong/random groups, π-schedule sign flips, and a hyperprior that merely repeats W_aligned are registered as independent kills of the OOD / extra-complexity readings, not of the finite mass formula.",
+  "primary_metric": "ranking.verdict",
+  "decision": "instrument_failed if class counts, the mass formula, or the cyclic fixed-action count break. finite_iid_killed if any m=8 aligned-truth bound is ≥ 0.99. finite_iid_holds_ood_or_weight_killed if the IID lane is non-vacuous but a wrong/random certificate is at least as tight as the aligned truth while the shortcut fails OOD, or if π flips the truth-vs-shortcut KL sign. finite_iid_holds otherwise. hyperprior_no_extra_info and neural_untransported are recorded independently. Any completed honest verdict other than a broken instrument passes CI.",
+  "gates": {
+    "PB_ENUM_CARDINALITY": "Each family enumerates exactly n^n functions.",
+    "PB_MASS_FORMULA": "Named-probe masses equal ∑_{k≤W} π_k/|H_{≥k}| on every frozen π schedule.",
+    "PB_FIXED_ACTION": "Cyclic identity-ρ equivariant class has size 7.",
+    "PB_IID_NONVACUOUS": "Every m=8 aligned-truth inverted bound is < 0.99.",
+    "PB_WEIGHT_STABLE": "sign(KL_shortcut-KL_truth) under the aligned group is the same for uniform/high/low π.",
+    "PB_HYPERPRIOR_ADDS_INFO": "Some IID seed has Spearman(W_aligned, KL_hyper) ≠ -1.",
+    "PB_OOD_WRONG_GROUP": "No family has shortcut OOD risk > 0, truth OOD risk = 0, and min(KL_wrong, KL_random)(shortcut) ≤ KL_aligned(truth).",
+    "PB_NEURAL_WITHHELD": "Neural / stochastic parameter-space PAC-Bayes is not run.",
+    "PB_RANKING_RECORDED": "Verdict is one of the four registered outcomes.",
+    "PB_CLAIM_BOUNDARY": "LSM is a plug-in; OOD is a separate lane; analytic-open P0 leftovers stay open."
+  },
+  "kill_criteria": {
+    "class_count_contradiction": "Exact |H_{≥k}| or the cyclic |H_eq|=|Y|^r count contradicts the compression mechanism.",
+    "iid_vacuous": "The m=8 aligned-truth certificate is ≥ 0.99 on any registered seed.",
+    "hyperprior_no_extra_info": "After the uniform 1/4 group hyperprior, certificate ranking among train-perfect hypotheses is a monotone transform of W_aligned on every seed.",
+    "wrong_group_tight_ood_fail": "A wrong or random group gives the shortcut a KL at most the aligned truth KL while that shortcut fails the frozen OOD split.",
+    "weight_sign_flip": "The sign of KL_shortcut-KL_truth under the aligned group depends on the π schedule.",
+    "neural_untransported": "Withheld by construction: no stochastic neural posterior is evaluated."
+  },
+  "audit_card": {
+    "target_object": "The sketch's finite PAC-Bayes bridge: does exact enumeration of H=Y^X on |X|≤7 recover the mixture-mass certificate, a non-vacuous IID plug-in, and the claimed OOD/group/weight distinctions?",
+    "decision": "finite_iid_holds / finite_iid_holds_ood_or_weight_killed / finite_iid_killed / instrument_failed, plus independent hyperprior and neural flags.",
+    "representation": "Functions as n-tuples in {0,...,n-1}^n. Repository weakness: exists h in G with f∘g = h∘f. Overlapping mixture P=∑ π_k U(H_{≥k}). Deterministic KL = -log P(h). LSM extra = log(2√m/δ) in nats.",
+    "data_clock": "No learning clock. Class counts are sample-independent. The IID lane draws m∈{8,32} labels from the frozen D (uniform on X, y=f*(x)) at seeds (7,11,13,17,19). The OOD lane is the frozen prefix/coset split and is not that D.",
+    "material_assumptions": [
+      "G, π schedules, and H are fixed independently of every IID sample.",
+      "Loss is 0-1. D is uniform on X with deterministic labels f*.",
+      "Color aligned G is all of S_6, scored by the fiber-count formula, not by listing 720 permutations.",
+      "LSM is an external real-number hypothesis, not a house theorem.",
+      "The four families and their literals in families.py are the whole instrument."
+    ],
+    "fatal_gates": [
+      "PB_ENUM_CARDINALITY",
+      "PB_MASS_FORMULA",
+      "PB_FIXED_ACTION",
+      "PB_IID_NONVACUOUS"
+    ],
+    "decisive_controls": [
+      "frozen_domains_and_groups",
+      "aligned_wrong_incomplete_random",
+      "iid_lane_separate_from_ood",
+      "three_pi_schedules",
+      "wave11_mass_identity",
+      "neural_withheld"
+    ],
+    "evidence_paths": [
+      "experiments/pac_bayes_weakness_enum/results/pac_bayes_weakness_enum_summary.json",
+      "experiments/pac_bayes_weakness_enum/preregistration.json",
+      "tests/test_pac_bayes_weakness_enum.py"
+    ]
+  },
+  "mathematical_claim": {
+    "objects": {
+      "H": "Y^X with |X|=|Y|=n in {6,7}",
+      "W_G": "|{g in G : exists h in G forall x, f(g x)=h f(x)}|",
+      "H_ge_k": "{f∈H : W_G(f)≥k}",
+      "P": "∑_k π_k Unif(H_{≥k}) over nonempty levels",
+      "kl_dirac": "-log P(f)",
+      "lsm_shape": "kl(Lhat || L) ≤ (KL + log(2√m/δ))/m, used only as a plug-in"
+    },
+    "types_domains_units": "Counts are integers. Mixture masses are exact rationals. KL and inverted bounds are float64 nats / [0,1] risks. m∈{8,32}, δ=0.05.",
+    "exact_claim": "For every named probe, P(f)=∑_{k≤W(f)} π_k/|H_{≥k}|. For C_7 with ρ=id, |H_eq|=7. ∑_f P(f)=1. The IID inverted bound at m=8 for the aligned truth is the registered vacuity test.",
+    "quantifiers": "Universal over the four frozen families, three π schedules, four group names, three named probes, five IID seeds, and two m values.",
+    "assumptions": "Prior independence of S; 0-1 loss; finite H; LSM cited not proved; color aligned uses the S_n fiber formula.",
+    "identification_conditions": "Class cards are obtained by exhaustive enumeration, not sampling.",
+    "derivation_dependencies": "Wave 11 WeaknessMixture masses; Wave 12 weakness_kl_certificate; Langford & Seeger 2001, Seeger 2002, Maurer 2004 as the plug-in shape.",
+    "coordinate_invariance": "Weakness is invariant under simultaneous relabeling of X and Y by the same permutation only if G is conjugated; the frozen literals are the coordinate system.",
+    "edge_limiting_null_cases": "Identity is always compatible. A constant map is fully S_n-compatible. Empty H_{≥k} contributes 0 and is dropped from π renormalization. Lhat=0 forces the inverted bound 1-exp(-rhs)."
+  },
+  "controls": [
+    "frozen_domains_and_groups",
+    "aligned_wrong_incomplete_random",
+    "iid_lane_separate_from_ood",
+    "three_pi_schedules",
+    "wave11_mass_identity",
+    "neural_withheld"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": "IID samples only: (7, 11, 13, 17, 19). Group literals already frozen.",
+    "sampling": "IID lane: with-replacement draws from {0,...,n-1}. Class counts: exhaustive."
+  },
+  "claim_boundary": "Accepted only as a finite exact enumeration of the sketch's mixture-mass certificate and the registered IID/OOD/weight/hyperprior kills. Not a proof of Langford–Seeger–Maurer. Not a neural PAC-Bayes bound. Not a relabel of the existing 500-trial symbolic OOD tables. Analytic-open P0 leftovers stay open."
+}

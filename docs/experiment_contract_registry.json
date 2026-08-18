@@ -1204,6 +1204,35 @@
       ]
     },
     {
+      "package": "pac_bayes_weakness_enum",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/pac_bayes_weakness_enum/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "pac_bayes_weakness_enum_2026_08_18",
+      "runs": [
+        {
+          "run_id": "pac_bayes_weakness_enum_2026_08_18",
+          "publication_package": "pac_bayes_weakness_enum",
+          "runtime_package": "pac_bayes_weakness_enum",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/pac_bayes_weakness_enum/experiment_manifest.json",
+          "report_paths": [
+            "experiments/pac_bayes_weakness_enum/results/pac_bayes_weakness_enum_summary.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_path": "experiments/pac_bayes_weakness_enum/preregistration.json",
+          "preregistration_digest": "3e493a56d42d6d4b4ed04ec2ed5ce785d6b2ed07b2507ed480da5d6aef4a21c6",
+          "producing_agent": {
+            "identity": "Cursor Grok 4.6 (under J. Brown direction)",
+            "session_ref": "551a32dd-382d-4456-91cf-669ec091a0a1"
+          }
+        }
+      ]
+    },
+    {
       "package": "dial_nestedness",
       "coverage_mode": "structured_manifest",
       "manifest_path": "experiments/dial_nestedness/experiment_manifest.json",

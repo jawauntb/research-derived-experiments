@@ -1,0 +1,95 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "pac_bayes_weakness_enum",
+  "hypothesis": "On the four frozen finite domains with |X|=|Y|≤7, exact enumeration of H=Y^X recovers the overlapping-mixture mass, the cyclic identity-ρ class has size 7, and the m=8 LSM plug-in for the aligned truth is non-vacuous; wrong/random groups, π sign flips, and a hyperprior that only repeats weakness are independent kills of the extra readings.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "frozen_domains_and_groups",
+      "description": "Domains, truths, group literals, OOD splits, π schedules, seeds, m, and δ are frozen in families.py / preregistration.json before class counts are inspected."
+    },
+    {
+      "control_id": "aligned_wrong_incomplete_random",
+      "description": "Each family carries aligned, incomplete, wrong, and random transformation families, plus a uniform 1/4 hyperprior over those four names."
+    },
+    {
+      "control_id": "iid_lane_separate_from_ood",
+      "description": "IID certificates use uniform-on-X draws with labels f*. The prefix/coset split is a separate OOD lane and is not called IID."
+    },
+    {
+      "control_id": "three_pi_schedules",
+      "description": "uniform / high / low weights, renormalized onto nonempty levels, test whether qualitative KL order is an artifact of π."
+    },
+    {
+      "control_id": "wave11_mass_identity",
+      "description": "The {shortcut, invariant} toy must reproduce masses 1/4 and 3/4."
+    },
+    {
+      "control_id": "neural_withheld",
+      "description": "No stochastic neural posterior is evaluated; that kill is withheld by construction."
+    }
+  ],
+  "seeds": [7, 11, 13, 17, 19],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/pac_bayes_weakness_enum/experiment.py"],
+    "estimated_minutes": 5,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "PB_ENUM_CARDINALITY",
+      "criterion": "Each family enumerates exactly n^n functions."
+    },
+    {
+      "gate_id": "PB_MASS_FORMULA",
+      "criterion": "Named-probe masses equal the overlapping-mixture formula on every frozen π schedule."
+    },
+    {
+      "gate_id": "PB_FIXED_ACTION",
+      "criterion": "Cyclic identity-ρ equivariant class has size 7."
+    },
+    {
+      "gate_id": "PB_IID_NONVACUOUS",
+      "criterion": "Every m=8 aligned-truth inverted bound is < 0.99."
+    },
+    {
+      "gate_id": "PB_WEIGHT_STABLE",
+      "criterion": "Aligned truth-vs-shortcut KL sign is the same for uniform/high/low π."
+    },
+    {
+      "gate_id": "PB_HYPERPRIOR_ADDS_INFO",
+      "criterion": "Some IID seed has Spearman(W_aligned, KL_hyper) ≠ -1."
+    },
+    {
+      "gate_id": "PB_OOD_WRONG_GROUP",
+      "criterion": "Wrong/random groups do not match the aligned-truth KL while the shortcut fails OOD."
+    },
+    {
+      "gate_id": "PB_NEURAL_WITHHELD",
+      "criterion": "Neural PAC-Bayes is not run."
+    },
+    {
+      "gate_id": "PB_RANKING_RECORDED",
+      "criterion": "Verdict is one of the four registered outcomes."
+    },
+    {
+      "gate_id": "PB_CLAIM_BOUNDARY",
+      "criterion": "LSM is a plug-in; OOD is a separate lane; analytic-open P0 leftovers stay open."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/pac_bayes_weakness_enum/results/pac_bayes_weakness_enum_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/pac_bayes_weakness_enum/preregistration.json",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

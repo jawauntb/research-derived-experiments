@@ -10,7 +10,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 
 | Path | Responsibility |
 |---|---|
-| `experiments/` | 105 research packages plus `common/` shared analysis utilities; harnesses, Modal sweeps, committed `results/`, generated `PROVENANCE.md` |
+| `experiments/` | 115 research packages plus `common/` shared analysis utilities; harnesses, Modal sweeps, committed `results/`, generated `PROVENANCE.md` |
 | `papers/` | Paper sources (`paper.md`), figures, shareable PDFs |
 | `scripts/` | 138 Python ops modules: quality, contracts, provenance, PDF/figure builders, summarizers |
 | `tests/` | 174 root test files collected together by pytest (`unittest`-style and pytest-native) |
@@ -132,6 +132,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_silent_substitution.py` | Gate 2 silence gate: record constant across both arms; misaligned E[r] rises / E[U] falls (7/2 → 1583088700/7083249971); t = 12 argmax mass exactly 17179869184/21249749913; aligned control rises; deterministic replay |
 | `test_choice_dividend.py` | Gate 1 dividend gate: dividends exactly 0/0/7/(73/11)/0 across the five registered tasks; gain curves weakly increasing with endpoint = dividend; negative gain(1) recorded on wide tasks; deterministic replay |
 | `test_dial_nestedness.py` | Review item 2: Bell(5)=52 partitions; rates 5/3/2/2/1 fall; all-optimizer nesting fails with witness; a chosen chain nests |
+| `test_pac_bayes_weakness_enum.py` | Wave-11 1/4–3/4 masses, n=3 mixture sum, cyclic `|H_eq|=3`, frozen-group identities, committed `|X|≤7` receipt replay |
 
 ```bash
 python3 scripts/run_quality_checks.py
@@ -162,8 +163,8 @@ environment.
 |---|---|
 | [system_design.md](system_design.md) | End-to-end design & operating model |
 | [module_explainer.md](module_explainer.md) | This catalog |
-| [verification.md](verification.md) / `verification.json` | Provenance index (auto-generated from all 105 research packages; `experiments/common` excluded) |
-| `experiment_contract_registry.json` | Authoritative 105-package coverage partition: 57 structured roots + 48 time-bounded legacy exceptions with frozen digest |
+| [verification.md](verification.md) / `verification.json` | Provenance index (auto-generated from all 115 research packages; `experiments/common` excluded) |
+| `experiment_contract_registry.json` | Authoritative 115-package coverage partition: 67 structured roots + 48 time-bounded legacy exceptions with frozen digest |
 | `program_evidence_registry.json` | 12 canonical evidence records with stable IDs, states, artifact refs, and claim links |
 | `claim_registry.json` | 12 canonical claim records with tiers, states, source refs, and bidirectional evidence links |
 | [causally_grounded_agents_benchmark.md](causally_grounded_agents_benchmark.md) | Benchmark umbrella |
@@ -210,9 +211,9 @@ environment.
 
 **Legend:** **P** = `PROVENANCE.md`, **B** = `BENCHMARK_CARD.md`, **R** = `README.md`, **res** = committed `results/`.
 
-**Verification reconciliation:** 105 research packages on disk plus one shared
+**Verification reconciliation:** 115 research packages on disk plus one shared
 support package, `experiments/common`. `gen_provenance.py` intentionally excludes
-the support package and derives 105 cards/index rows; `gen_provenance.py --check`
+the support package and derives 115 cards/index rows; `gen_provenance.py --check`
 fails if any generated card, either verification index, or the site mirror drifts.
 The structured registries currently contain 12 claims and 12 evidence records.
 
@@ -223,6 +224,7 @@ Universal dispatcher: `python scripts/regen.py <name>`.
 | Package | Artifacts | Purpose | Modules / entrypoints |
 |---|---|---|---|
 | `weakness_vs_simplicity` | P R res | Toy Boolean worlds: weakness vs simplicity under memorizer / broad-negative stress | `experiment.py` |
+| `pac_bayes_weakness_enum` | P R res | Predeclared `|X|≤7` exact `H=Y^X` PAC-Bayes tournament: mass formula and cyclic `|H_eq|=7` hold; m=8 aligned-truth bounds 0.666–0.762; parity kills a uniform OOD-from-certificate reading; neural PAC-Bayes withheld | `core.py`, `experiment.py` |
 | `representation_search` | R res | Structural Observatory instrument 1 (Fiber Finder): exact quotient-lattice search; sufficiency-then-compress recovers the invariant where MDL and accuracy fail | `core.py`, `experiment.py` |
 | `structure_compiler` | R res | Structural Observatory instrument 2: one accumulation/phase-transition/hysteresis structure compiled into music/visual/text/spatial with verified structural identity (`q_i∘F_i=id`) | `core.py`, `experiment.py` |
 | `symbolic_causation` | R res | Structural Observatory instrument 3: exact finite-state agency benchmark separating signal / control / knowledge / agency; false-credit and brittle-transfer controls | `core.py`, `experiment.py` |
