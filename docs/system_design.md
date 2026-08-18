@@ -440,8 +440,9 @@ Wave 9 banks the remaining closable Lean leftovers:
 `WeaknessP1.lean` (WI Proposition 1 on `{id, flip}`), and
 `IcaSignedPerm.lean` (signed-permutation class, not Theorem 7). All
 four **SafeVerify-passed** (same 4.29 scratch; receipt §Wave 9).
-The mathlib lane proves the Halmos–Savage packaging step and the
-Shannon converse at `D = 0`; the `0 < D` converse stays axiomatised.
+The mathlib lane proves the Halmos–Savage packaging step and both
+Shannon converses (`D = 0` and `0 < D` via Fano in `ShannonFano.lean`);
+no project-local axiom remains. Mathlib stays proved-not-verified.
 Measure-theoretic T4, CT-1 MDL, classical ICA, and unconditional
 SIC-C-c stay open.
 That instrument is `experiments/delete_repair_concern_estimation/`:

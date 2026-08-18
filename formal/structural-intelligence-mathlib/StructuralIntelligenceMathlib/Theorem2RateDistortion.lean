@@ -34,14 +34,12 @@ Mathlib companion can honestly cover *today*:
 * `symChannel_mutualInfo_closed_form` — the achieved mutual
   information `I(X; X̂) = log n − h_binary(D) − D · log(n − 1)`.
 
-* `Shannon1959_converse_uniform_hamming` — **axiomatised.**  The
-  converse half of Shannon 1959 states that no other test channel of
-  distortion `≤ D` achieves *smaller* mutual information; the full
-  proof requires a rate-distortion optimisation infrastructure
-  (Lagrangian on the simplex of test channels) that Mathlib does not
-  yet possess.  Cited: C. E. Shannon (1959), *Coding theorems for a
-  discrete source with a fidelity criterion*, IRE Nat. Conv. Rec.,
-  pt. 4, 142–163.
+* `Shannon1959_converse_D_zero` — **proved.**  Zero Hamming forces
+  a diagonal kernel, so `I = log n`.
+
+* The `0 < D` converse and the combined `R(D)` theorem live in
+  `ShannonFano.lean` (Fano + Jensen + `qaryEntropy` monotonicity;
+  no KKT).
 -/
 
 namespace StructuralIntelligenceMathlib
@@ -473,61 +471,5 @@ theorem Shannon1959_converse_D_zero
     unfold mutualInfo
     rw [hmarg, hcond0, entropy_uniform n hn, sub_zero]
   rw [hI, binaryEntropy_zero, zero_mul, sub_zero, sub_zero]
-
-/-- **Shannon 1959 converse (axiomatised for `0 < D`).**
-
-    The converse half of Shannon's rate–distortion theorem for the
-    uniform source and Hamming distortion: no test channel `K`
-    achieving expected Hamming distortion `≤ D` can attain mutual
-    information strictly less than the closed form
-    `log n − h_binary(D) − D · log(n − 1)`.
-
-    Combined with `symChannel_mutualInfo_closed_form` (achievability
-    by the symmetric error-`D` channel), this pins the rate–distortion
-    function to the classical formula.
-
-    We axiomatise the converse: its full proof requires a
-    Lagrangian/KKT argument on the simplex of transition matrices,
-    infrastructure Mathlib does not currently expose.  Cited:
-    C. E. Shannon (1959), *Coding theorems for a discrete source with
-    a fidelity criterion*, IRE Nat. Conv. Rec., pt. 4, 142-163
-    (Theorem 3, uniform-source / Hamming case). -/
-axiom Shannon1959_converse_uniform_hamming
-    (n : ℕ) (hn : 2 ≤ n) (D : ℝ)
-    (hD0 : 0 ≤ D) (hD1 : D ≤ 1 - 1 / (n : ℝ))
-    (K : Fin n → Fin n → ℝ)
-    (hK_nonneg : ∀ x y, 0 ≤ K x y)
-    (hK_stoch : ∀ x, ∑ y, K x y = 1)
-    (hK_dist : expectedDistortion n (uniformDist n) K (hammingDistortion n) ≤ D) :
-    Real.log (n : ℝ) - binaryEntropy D - D * Real.log ((n : ℝ) - 1)
-      ≤ mutualInfo n (uniformDist n) K
-
-/-- **Theorem 2 (Rate–distortion, uniform Hamming, closed form).**
-
-    Combining achievability (symmetric error-`D` channel realises the
-    formula) with the axiomatised converse gives the classical
-    rate–distortion function
-
-        R(D) = log n − h_binary(D) − D · log(n − 1)
-
-    for the uniform source with Hamming distortion on `Fin n`,
-    `n ≥ 2`, `0 < D < 1`. -/
-theorem R_D_uniform_hamming
-    (n : ℕ) (hn : 2 ≤ n) (D : ℝ) (hD0 : 0 < D) (hD1 : D < 1)
-    (hD_le : D ≤ 1 - 1 / (n : ℝ)) :
-    -- Achievability: symmetric channel meets the closed form.
-    mutualInfo n (uniformDist n) (symChannel n D)
-      = Real.log (n : ℝ) - binaryEntropy D - D * Real.log ((n : ℝ) - 1)
-    ∧
-    -- Converse (from axiom): no channel does better.
-    ∀ (K : Fin n → Fin n → ℝ),
-      (∀ x y, 0 ≤ K x y) →
-      (∀ x, ∑ y, K x y = 1) →
-      expectedDistortion n (uniformDist n) K (hammingDistortion n) ≤ D →
-      Real.log (n : ℝ) - binaryEntropy D - D * Real.log ((n : ℝ) - 1)
-        ≤ mutualInfo n (uniformDist n) K := by
-  refine ⟨symChannel_mutualInfo_closed_form hn D hD0 hD1, ?_⟩
-  intro K hK_nn hK_st hK_d
-  exact Shannon1959_converse_uniform_hamming n hn D (le_of_lt hD0) hD_le K hK_nn hK_st hK_d
 
 end StructuralIntelligenceMathlib

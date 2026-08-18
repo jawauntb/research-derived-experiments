@@ -9,7 +9,7 @@ Human author and research director
 Experiment code, analysis, and manuscript production under direction and review
 
 **Date:** August 3, 2026
-**Status:** five theorems + one conditional theorem + eleven instruments (seven exact + four fixed-seed Monte Carlo). SIC-C-c (uniform polynomial-in-`d_Z` learnability under an inductive-bias hypothesis class) is positively resolved for four distinct classes — linear ICA, sparse-*linear* ICA, auxiliary-variable iVAE, interventional CRL — each with its own numerical witness (Instruments 8–11), and is now a **conditional meta-theorem** for *any* class `H` with polynomial ε-covering (companion paper *Covering Learnability*, Lean-verified as `sicc_covering_meta`). SIC-A's master fibration, previously flagged as "posited, not derived", is now **derived** in the finite discrete positive-support case from T1 + P3 + CS-2 (companion paper *Foundations*, Lean-verified as `sic_a_finite_discrete`). **The full §5 extended program is now closed**: eleven companion papers cover the ten conjectural constructs plus the SIC-A finite derivation and the SIC-C-c covering meta-theorem (concern-fiber geometry, rate–distortion control limit / compiler tomography, sufficient antecedents, abstraction frontier, fiber audit / alignment as ensemble governance, theory atlas, causal semantics, representation-repair calculus, autocatalytic artwork). Each companion adds two theorems + one exact instrument. Full family: *Concern as Fiber Geometry* (CG-1/CG-2), *Compiler Tomography* (CT-1/CT-2), *Sufficient Antecedents* (SA-1), *Abstraction Frontier* (AF-1/AF-2), *Alignment as Ensemble Governance* (AG-1/AG-2), *Theory Atlas* (TA-1/TA-2), *Causal Semantics* (CS-1/CS-2), *Representation-Repair Calculus* (RR-1/RR-2), *Autocatalytic Artwork* (AA-1/AA-2), *Foundations* (SIC-A finite derivation), *Covering Learnability* (SIC-C-c meta-theorem). Machine-checked Lean 4 proofs now cover **every named theorem in the twelve-paper family** across two isolated projects: pure-core (`formal/structural-intelligence/`, no mathlib, 17 headlines) and mathlib companion (`formal/structural-intelligence-mathlib/`, mathlib v4.32.2, 19 headlines including T5-rate, T1, T2, P3, AG-1, CT-2, CG-1, CG-2, AA-1, `sic_a_finite_discrete`, `sicc_covering_meta`). Zero `sorry`s across both projects; only two explicitly-cited project axioms (Halmos–Savage 1949 packaging for T1, Shannon 1959 KKT converse for T2). The two new companion papers close the two residuals previously flagged as open in §5. An external laboratory is now on the table: Odrzywołek's EML calculus is an instance of the master object (tree language `X`, calculator class `Z`, denotation `q`, bootstrap compiler `K`), and the companion *EML as a Universal Substrate* (`papers/eml_universal_substrate/paper.md`) separates expressivity from tree, circuit, and Gibbs-access complexity on the `x^(2^n)` toy. That contact is outside the closed §5 program; completeness remains his, the four-seam split is ours.
+**Status:** five theorems + one conditional theorem + eleven instruments (seven exact + four fixed-seed Monte Carlo). SIC-C-c (uniform polynomial-in-`d_Z` learnability under an inductive-bias hypothesis class) is positively resolved for four distinct classes — linear ICA, sparse-*linear* ICA, auxiliary-variable iVAE, interventional CRL — each with its own numerical witness (Instruments 8–11), and is now a **conditional meta-theorem** for *any* class `H` with polynomial ε-covering (companion paper *Covering Learnability*, Lean-verified as `sicc_covering_meta`). SIC-A's master fibration, previously flagged as "posited, not derived", is now **derived** in the finite discrete positive-support case from T1 + P3 + CS-2 (companion paper *Foundations*, Lean-verified as `sic_a_finite_discrete`). **The full §5 extended program is now closed**: eleven companion papers cover the ten conjectural constructs plus the SIC-A finite derivation and the SIC-C-c covering meta-theorem (concern-fiber geometry, rate–distortion control limit / compiler tomography, sufficient antecedents, abstraction frontier, fiber audit / alignment as ensemble governance, theory atlas, causal semantics, representation-repair calculus, autocatalytic artwork). Each companion adds two theorems + one exact instrument. Full family: *Concern as Fiber Geometry* (CG-1/CG-2), *Compiler Tomography* (CT-1/CT-2), *Sufficient Antecedents* (SA-1), *Abstraction Frontier* (AF-1/AF-2), *Alignment as Ensemble Governance* (AG-1/AG-2), *Theory Atlas* (TA-1/TA-2), *Causal Semantics* (CS-1/CS-2), *Representation-Repair Calculus* (RR-1/RR-2), *Autocatalytic Artwork* (AA-1/AA-2), *Foundations* (SIC-A finite derivation), *Covering Learnability* (SIC-C-c meta-theorem). Machine-checked Lean 4 proofs now cover **every named theorem in the twelve-paper family** across two isolated projects: pure-core (`formal/structural-intelligence/`, no mathlib, 17 headlines) and mathlib companion (`formal/structural-intelligence-mathlib/`, mathlib v4.32.2, 19 headlines including T5-rate, T1, T2, P3, AG-1, CT-2, CG-1, CG-2, AA-1, `sic_a_finite_discrete`, `sicc_covering_meta`). Zero `sorry`s across both projects; no project-local axioms remain (Halmos–Savage packaging and both Shannon converses are theorems; mathlib headlines use only `{propext, Classical.choice, Quot.sound}`). The two new companion papers close the two residuals previously flagged as open in §5. An external laboratory is now on the table: Odrzywołek's EML calculus is an instance of the master object (tree language `X`, calculator class `Z`, denotation `q`, bootstrap compiler `K`), and the companion *EML as a Universal Substrate* (`papers/eml_universal_substrate/paper.md`) separates expressivity from tree, circuit, and Gibbs-access complexity on the `x^(2^n)` toy. That contact is outside the closed §5 program; completeness remains his, the four-seam split is ours.
 
 ---
 
@@ -1007,22 +1007,21 @@ at any resolution `ε`. The residual content is:
   and the classical-choice packaging step
   `HalmosSavage_minimality_h_extension` are theorems, citing Halmos
   & Savage 1949 Theorem 2; no project-local axiom), T2 (Shannon R–D closed
-  form for uniform-Hamming — achievability proved in full, the
-  `D = 0` converse proved, the `0 < D` KKT-on-simplex converse remaining
-  a single explicitly-cited project axiom
-  `Shannon1959_converse_uniform_hamming` pointing to Shannon 1959
-  Theorem 3), Proposition 3 (Coarsen ⊣ Refine adjunction with both
+  form for uniform-Hamming — achievability proved in full; both
+  converses are theorems: `D = 0` by a diagonal-kernel argument,
+  `0 < D` by Fano plus Jensen plus `qaryEntropy` monotonicity in
+  `ShannonFano.lean`, citing Shannon 1959 Theorem 3; no project-local
+  axiom), Proposition 3 (Coarsen ⊣ Refine adjunction with both
   triangle identities, fully proved, no axioms), AG-1 (Bernoulli
   survival bound plus joint product form), CT-2 (weighted Chebyshev
   correlation ⇒ Boltzmann tilt raises expected reward), CG-1
   (Fisher information matrix = Cov[T] in exponential families), CG-2
   (concern-form holonomy = ε·A via discrete Green's theorem), AA-1
   (Bayes-mixture log-likelihood monotone under refinement). Entry-point
-  files run `#print axioms` on every headline so the remaining
-  Shannon `0 < D` converse axiom is visible in the compile log and
-  cannot be silently expanded. The Halmos–Savage packaging step is
-  no longer a project axiom. Headline theorems otherwise depend only on
-  the mathlib-standard axiom set `[propext, Classical.choice, Quot.sound]`.
+  files run `#print axioms` on every headline. No project-local axiom
+  remains: Halmos–Savage packaging and both Shannon converses are
+  theorems. Headline theorems depend only on the mathlib-standard
+  axiom set `[propext, Classical.choice, Quot.sound]`.
   This closes the "prose-only" gap flagged in the original v1 of this
   paper; the seven instruments in §4 remain the *numerical* half of
   the check, complementary to the Lean formal half.

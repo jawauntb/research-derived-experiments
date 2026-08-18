@@ -1240,8 +1240,10 @@ cd formal/structural-intelligence && lake build
 
 Mathlib companion (separate Lake project; not imported by the
 mathlib-free cores). Wave 9 discharges `HalmosSavage_minimality_h_extension`
-and proves the Shannon converse at distortion `0`. The `0 < D`
-Shannon converse remains an axiom.
+and proves the Shannon converse at distortion `0`. Wave 10 adds
+`ShannonFano.lean` and proves the `0 < D` converse (Fano + Jensen +
+`qaryEntropy`; not KKT). No project-local axiom remains. Mathlib
+stays proved-not-verified.
 
 ```bash
 cd formal/structural-intelligence-mathlib && lake build

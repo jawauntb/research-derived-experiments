@@ -141,3 +141,18 @@ Theorem 4, Path A/B, or US-2/3. IDENT model scores stay Python.
 The mathlib Halmos–Savage packaging theorem and the Shannon `D = 0`
 converse live in `formal/structural-intelligence-mathlib/` and are
 **proved-not-verified** (SafeVerify is the 4.29 mathlib-free lane).
+
+## Wave 10 (2026-08-18): Shannon `0 < D` converse
+
+Mathlib lane only. Not SafeVerify — `Classical.choice` is outside
+the whitelist. Check: `lake build StructuralIntelligenceMathlib`
+in `formal/structural-intelligence-mathlib/` (Lean 4.32.2).
+
+| file | verdict | headline axioms |
+|---|---|---|
+| `ShannonFano.lean` | **proved-not-verified** | `Shannon1959_converse_uniform_hamming`, `R_D_uniform_hamming`: `{propext, Classical.choice, Quot.sound}` — no project-local axiom |
+
+The argument is Fano's inequality plus Jensen on `binEntropy` plus
+monotonicity of `qaryEntropy n` on `[0, 1 - 1/n]`. It is not a KKT
+argument. Combined with Wave 9's `D = 0` case, the mathlib package
+has **zero** project-local axioms.

@@ -223,16 +223,15 @@ mathlib build in an isolated CI lane.
   the converse at distortion `0`, proved: expected Hamming `≤ 0`
   forces a diagonal kernel, so `I = log n`.
 
+* `StructuralIntelligenceMathlib.Shannon1959_converse_uniform_hamming`
+  — the `0 < D` converse, **proved** in `ShannonFano.lean` by Fano
+  plus Jensen on binary entropy plus monotonicity of Mathlib's
+  `qaryEntropy n` on `[0, 1 - 1/n]`.  No KKT.  Cited: C. E. Shannon
+  (1959), *Coding theorems for a discrete source with a fidelity
+  criterion*, IRE Nat. Conv. Rec., pt. 4, 142–163, Theorem 3.
+
 * `StructuralIntelligenceMathlib.R_D_uniform_hamming` — the full
-  Shannon 1959 statement (both directions).  The **`0 < D` converse**
-  — no channel of distortion `≤ D` achieves strictly smaller mutual
-  information — remains the axiom
-  `StructuralIntelligenceMathlib.Shannon1959_converse_uniform_hamming`.
-  Its full proof requires a Lagrangian / KKT argument on the simplex
-  of transition matrices, infrastructure that Mathlib does not
-  currently expose.  Cited: C. E. Shannon (1959), *Coding theorems
-  for a discrete source with a fidelity criterion*, IRE Nat. Conv.
-  Rec., pt. 4, 142–163, Theorem 3.
+  Shannon 1959 statement (both directions).  No project-local axiom.
 
 ### Proposition 3 (Coarsen ⊣ Refine adjunction) — `StructuralIntelligenceMathlib/Proposition3Adjunction.lean`
 
@@ -528,21 +527,12 @@ by composing Theorem 5-rate (this project) with Theorem 6's
 ε-covering reduction (pure-core `refinement_preserves_screen`); both
 introduce **zero** additional project-local axioms.
 
-One first-wave headline still uses a **project-local `axiom`**, with
-an inline citation.  The Halmos–Savage packaging step is now a
-theorem (Wave 9).
-
-* `StructuralIntelligenceMathlib.Shannon1959_converse_uniform_hamming`
-  — the `0 < D` converse half of Shannon's rate-distortion theorem for
-  uniform source with Hamming distortion.  Achievability — the
-  symmetric error-`D` channel realises `log n − h_binary(D) − D · log(n−1)`
-  — is proved in full.  The `D = 0` converse is
-  `Shannon1959_converse_D_zero`.  The remaining converse requires a
-  Lagrangian / KKT argument on the simplex of transition matrices;
-  Mathlib does not yet expose that infrastructure.
-  Reference: C. E. Shannon (1959), *Coding theorems for a discrete
-  source with a fidelity criterion*, IRE Nat. Conv. Rec., pt. 4,
-  142–163, Theorem 3.
+No first-wave headline uses a project-local `axiom`.  Wave 9
+discharged Halmos–Savage packaging; Wave 10 discharged the Shannon
+`0 < D` converse (`ShannonFano.lean`, Fano + Jensen + `qaryEntropy`
+monotonicity; not KKT).  Both remain **proved-not-verified**
+(SafeVerify is the mathlib-free 4.29 lane).  `#print axioms` on
+`R_D_uniform_hamming` is `{propext, Classical.choice, Quot.sound}`.
 
 The CT-2 wrapper is stated with `Z > 0` as a hypothesis rather than
 deducing it from the shape of `p` and `r`.  A cleaner version would
