@@ -28,6 +28,7 @@ import StructuralIntelligence.MenuBlind
 import StructuralIntelligence.GeneratorBorder
 import StructuralIntelligence.ConcernChoice
 import StructuralIntelligence.CrossingUnique
+import StructuralIntelligence.SilentSubstitution
 import StructuralIntelligence.MeaningVsCompany
 import StructuralIntelligence.WeakestAdequate
 import StructuralIntelligence.KleisliSection
@@ -179,6 +180,15 @@ remaining Structural-Intelligence companion papers:
     (`sections_spec_indistinguishable`), the section space is closed
     under fiberwise replacement (`section_swap`), and the registered
     2×2 witness carries exactly four sections with one shadow.
+*   `StructuralIntelligence.SilentSubstitution.*` — the intention
+    essay's central kernel (P10): `tilt_monotone` (Theorem D's finite
+    Chebyshev core — one ecology step weakly raises expected reward
+    over any finite region, any monotone tilt; the two algebraic
+    lemmas beneath it were proved by an autonomous Lea run),
+    `monitor_constant` (Lemma L1, axiom-free: spec-level monitors are
+    constant on a compliance class), and the registered opposed-reward
+    witness where expected reward strictly rises while principal value
+    strictly falls (axiom-free).
 *   `StructuralIntelligence.DialZero.*` — Theorem B's D = 0 clause:
     the level-set partition of the task law has zero task-distortion
     (`levelCells_zero_distortion`), every zero-distortion encoder
@@ -250,6 +260,9 @@ and are documented as future work in the package `README.md`.
 #print axioms StructuralIntelligence.ConcernChoice.boundary_ext
 #print axioms StructuralIntelligence.ConcernChoice.mirrored_dual_ext
 #print axioms StructuralIntelligence.CrossingUnique.crossing_unique
+#print axioms StructuralIntelligence.SilentSubstitution.tilt_monotone
+#print axioms StructuralIntelligence.SilentSubstitution.monitor_constant
+#print axioms StructuralIntelligence.SilentSubstitution.silent_substitution_witness
 #print axioms StructuralIntelligence.MeaningVsCompany.neither_partition_refines_the_other
 #print axioms StructuralIntelligence.MeaningVsCompany.company_does_not_refine_meaning
 #print axioms StructuralIntelligence.WeakestAdequate.no_largest_adequate

@@ -118,6 +118,14 @@ Append. Driven by "Intention Is All You Need" v3 and its review.
   proof-engineering runs — raised to 80 in `config/lea.local.toml`.
   The adapter must run under launchd (`com.lea.adapter`), not under
   an agent shell; shells here reap child processes between commands.
+- `SilentSubstitution` (Wave 6b): Lea proved `rearrange` +
+  `tilt_pointwise` (generalize-products-then-omega beats blind AC
+  rewriting; ac-normalization via
+  `simp [Nat.mul_add, Nat.mul_comm, Nat.mul_left_comm, …]` closes
+  product equalities); the list Chebyshev induction rides on
+  `sumBy_mul_left/right` + `sumBy_add` + a pointwise cross lemma.
+  All SafeVerify-passed; kernel axioms `propext, Quot.sound`
+  (`omega` normalizes through `Int`).
 
 ## Runbook facts (2026-08-18)
 
