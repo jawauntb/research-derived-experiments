@@ -25,3 +25,13 @@ The constant-only census is a different package
 python3 experiments/eml_variable_spectrum/experiment.py
 python3 -m unittest tests.test_eml_variable_spectrum
 ```
+
+## Lean formalisation (Wave 7)
+
+The labeled-count headline is kernel-checked mathlib-free in
+`formal/structural-intelligence/StructuralIntelligence/EmlCatalan.lean`:
+`emlVar_counts` (counts = 2^(k+1)*C_k = 2, 4, 16, 80, 448, 2688 for
+k = 0..5 via a single-pass bucket fold over the 3238-tree shell) and
+`emlVar_formula` / `emlVar_total`. Grid spectra stay Python, as
+registered. Verification status:
+`docs/lea/VERIFY_RECEIPT_2026-08-18.md`.

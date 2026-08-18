@@ -27,3 +27,15 @@ squaring-separation branch, not here.
 python3 experiments/eml_fiber_spectrum/experiment.py
 python3 -m unittest tests.test_eml_fiber_spectrum
 ```
+
+## Lean formalisation (Wave 7)
+
+The census and witness headlines are kernel-checked mathlib-free in
+`formal/structural-intelligence/StructuralIntelligence/EmlCatalan.lean`:
+`emlFib_counts` (shell counts = Catalan C_0..C_6; 197 trees, axiom-free),
+`catalan_values`, `emlFib_total`, and the size-2 split `eml_pair_diff`
+(same size, distinct terms, denotations separated by a registered Nat
+model of the ExpLn fragment; the carrier-general derivations are
+`left_denotes` / `right_denotes`). Numerical fiber statistics stay
+Python, as registered. Verification status:
+`docs/lea/VERIFY_RECEIPT_2026-08-18.md`.

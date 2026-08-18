@@ -523,11 +523,20 @@ common latent waiting to be found.
   (analogue of a universal cover of a groupoid) is a separate result
   that we do not prove. The instrument witnesses the diagnostic, not
   the repair.
-- **No Lean formalisation.** Both proofs are elementary and the sheaf
-  descent argument in the discrete setting is amenable to Lean/mathlib
-  once the permutation-composition machinery is imported. The
-  formalisation is left for future work; the numerical witness in
-  Instrument 5 provides the analogue check.
+- **Machine-checked (Lean 4, mathlib-free), TA-2 discrete core.**
+  Theorem TA-2's taxonomy is kernel-checked in
+  `formal/structural-intelligence/StructuralIntelligence/ObstructionTaxonomy.lean`:
+  the rank/support classifier is total, mutually exclusive, and
+  exhaustive on *every* finite chart world (`taxonomy_trichotomy`,
+  `classify_conditions` — the general classifier↔conditions
+  equivalences), and the three registered worlds (`good_family`,
+  `phase_boundary_family`, `bad_family` on the shift permutations of
+  `Z/4`) are classified `glue` / `boundary` / `missingLatent` by
+  kernel `decide` (`ta2_taxonomy_classifies`). Verification status is
+  tracked in `docs/lea/VERIFY_RECEIPT_2026-08-18.md`. The
+  enlargement-existence result (universal-cover analogue) and the
+  two-element rank-saturation corollary remain withheld, as stated;
+  TA-1's naked `↔` form still needs bijective transitions.
 
 ---
 

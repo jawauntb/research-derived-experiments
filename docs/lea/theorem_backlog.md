@@ -64,8 +64,8 @@ From `.cursor/skills/lea/SKILL.md`, `docs/lea/instructions.md`, `docs/lea/memory
 | SIC-Cc-uncond | Unconditional poly-in-`d_Z` learnability without covering hypothesis | `papers/structural_intelligence/paper.md` §2.5c | prose-only | — (conditional: `sicc_covering_meta`) | analytic-open | P0 |
 | T4-prob | Measure-theoretic Theorem 4: tasks CI given common latent screen | `papers/structural_intelligence/paper.md` §2.4 | prose-only | algebraic core only | needs-mathlib | P0 |
 | T7-ICA | Classical linear-ICA unmixing identifiable up to perm/sign | `papers/structural_intelligence/paper.md` Thm 7 | prose-only | — | needs-mathlib | P0 |
-| TA-2 | Cocycle failure rank/support classifies obstruction type | `papers/theory_atlas/paper.md` TA-2 | prose-only | TA-1 halves only | finite-decidable (discrete) | P0 |
-| RR-1 | Eight canonical failure rows each admit a repairing lift on a toy | `papers/representation_repair_calculus/paper.md` RR-1 | prose-only | RR-2 only | finite-decidable | P0 |
+| TA-2 | Cocycle failure rank/support classifies obstruction type | `papers/theory_atlas/paper.md` TA-2 | discrete core lean-proved (Wave 7) | `ObstructionTaxonomy.lean` (+ TA-1 halves) | done (discrete); enlargement analytic-open | P0 |
+| RR-1 | Eight canonical failure rows each admit a repairing lift on a toy | `papers/representation_repair_calculus/paper.md` RR-1 | lean-proved (Wave 7) | `RepairTable.lean` (+ RR-2) | done | P0 |
 | CT-1-MDL | Full MDL consistency under identifiability (probabilistic) | `papers/compiler_tomography/paper.md` CT-1 | prose-only | combinatorial core only | needs-mathlib | P0 |
 | T2-converse | Shannon 1959 KKT converse for uniform-Hamming RD | mathlib package axiom | prose-only (axiomatized) | `Shannon1959_converse_uniform_hamming` (axiom) | needs-mathlib | P0 |
 | T1-HS-pack | Halmos–Savage minimality `h`-extension packaging | mathlib package axiom | prose-only (axiomatized) | `HalmosSavage_minimality_h_extension` (axiom) | needs-mathlib | P0 |
@@ -76,12 +76,12 @@ From `.cursor/skills/lea/SKILL.md`, `docs/lea/instructions.md`, `docs/lea/memory
 
 | id | claim (≤20 words) | source path | status | formalizability | priority |
 |---|---|---|---|---|---|
-| EML-fib-Ck | Enumerated size-k fiber counts equal Catalan `C_k` for k=0..6 | `experiments/eml_fiber_spectrum/` | python-enumerated | finite-decidable | P0 |
-| EML-var-Ck | Variable-x size-k counts equal `2^{k+1} C_k` for k=0..5 | `experiments/eml_variable_spectrum/` | python-enumerated | finite-decidable | P0 |
-| EML-pair-diff | Two same-size trees differ in denotation (symbolic form) | `eml_fiber_spectrum` | python-enumerated | finite-decidable | P0 |
-| CONC-EST | Plug-in frequency estimator converges at registered steps 1/2/6 | `experiments/delete_repair_concern_estimation/` | python-enumerated | finite-decidable | P0 |
-| RR-1-table | Eight-row lift table on registered toys | `papers/representation_repair_calculus/` | prose+python | finite-decidable | P0 |
-| TA-2-discrete | Discrete obstruction taxonomy on registered charts | `papers/theory_atlas/` | prose-only | finite-decidable | P0 |
+| EML-fib-Ck | Enumerated size-k fiber counts equal Catalan `C_k` for k=0..6 | `experiments/eml_fiber_spectrum/` | lean-proved (Wave 7, `EmlCatalan.lean` `emlFib_counts`, 197 trees) | done | P0 |
+| EML-var-Ck | Variable-x size-k counts equal `2^{k+1} C_k` for k=0..5 | `experiments/eml_variable_spectrum/` | lean-proved (Wave 7, `EmlCatalan.lean` `emlVar_counts`, 3238 trees) | done | P0 |
+| EML-pair-diff | Two same-size trees differ in denotation (symbolic form) | `eml_fiber_spectrum` | lean-proved (Wave 7, `EmlCatalan.lean` `eml_pair_diff`: derivations in any `ExpLn` carrier + registered `Nat` model separation) | done | P0 |
+| CONC-EST | Plug-in frequency estimator converges at registered steps 1/2/6 | `experiments/delete_repair_concern_estimation/` | python-enumerated (sequence traces quarantined Python per 2026-08-18 receipt) | finite-decidable | P0 |
+| RR-1-table | Eight-row lift table on registered toys | `papers/representation_repair_calculus/` | lean-proved (Wave 7, `RepairTable.lean` `rr1_table_well_defined`) | done | P0 |
+| TA-2-discrete | Discrete obstruction taxonomy on registered charts | `papers/theory_atlas/` | lean-proved (Wave 7, `ObstructionTaxonomy.lean` `ta2_taxonomy_classifies` + general `classify_conditions`) | done | P0 |
 
 ### C. P1 (supporting)
 
@@ -168,9 +168,12 @@ conditional (`sicc_covering_meta`, `sicc_covering_poly`).
 
 1. **Bank Wave 5** — aggregator imports, SafeVerify receipts, paper
    labels. (In progress 2026-08-18.)
-2. **Wave 6, finite leftovers (mathlib-free):** EML Catalan censuses
-   (`EML-fib-Ck`, `EML-var-Ck`, `EML-pair-diff`), `CONC-EST`
-   convergence steps, RR-1 eight-row table, TA-2 discrete taxonomy.
+2. **Wave 7 (landed 2026-08-18, PRs #523–#525):** EML Catalan censuses
+   (`EML-fib-Ck`, `EML-var-Ck`, `EML-pair-diff` → `EmlCatalan.lean`),
+   RR-1 eight-row table (`RepairTable.lean`), TA-2 discrete taxonomy
+   (`ObstructionTaxonomy.lean`).  `CONC-EST` stays python-enumerated:
+   the 2026-08-18 receipt quarantines the estimator's sequence traces
+   as Python, and no kernel-decidable core has been carved out yet.
 3. **Axiom discharge (mathlib lane):** replace or isolate
    `HalmosSavage_minimality_h_extension` and
    `Shannon1959_converse_uniform_hamming`.

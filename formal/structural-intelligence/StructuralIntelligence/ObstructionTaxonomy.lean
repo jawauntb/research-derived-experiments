@@ -211,6 +211,62 @@ theorem taxonomy_trichotomy (w : ChartWorld) :
   exact ⟨taxon_exhaustive w, (taxon_mutually_exclusive w).1,
     (taxon_mutually_exclusive w).2.1, (taxon_mutually_exclusive w).2.2⟩
 
+/-! ## Classifier ↔ conditions, on every world (Wave-7 INT strengthening)
+
+The lane banked exhaustiveness/exclusivity of the classifier output;
+these lemmas add the substantive general fact: on *arbitrary* chart
+worlds, each taxon is assigned exactly when the paper's rank/support
+condition holds, so the three conditions partition all worlds. -/
+
+/-- At most three edges can be non-identity. -/
+theorem numNonIdentityEdges_le (w : ChartWorld) :
+    numNonIdentityEdges w ≤ allEdges.length :=
+  List.length_filter_le _ _
+
+/-- "No identity edge" is exactly "every edge non-identity". -/
+theorem not_hasIdentityEdge_iff (w : ChartWorld) :
+    hasIdentityEdge w = false ↔ allEdgesNonIdentity w = true := by
+  have hle : numNonIdentityEdges w ≤ allEdges.length :=
+    numNonIdentityEdges_le w
+  unfold hasIdentityEdge allEdgesNonIdentity
+  simp only [decide_eq_false_iff_not, Nat.not_lt, beq_iff_eq]
+  omega
+
+/-- `classify` returns `glue` exactly on rank-zero worlds. -/
+theorem classify_glue_iff (w : ChartWorld) :
+    classify w = .glue ↔ allRanksZero w = true := by
+  cases hz : allRanksZero w <;> cases hi : hasIdentityEdge w <;>
+    simp [classify, hz, hi]
+
+/-- `classify` returns `boundary` exactly when some rank is positive
+    and an identity edge exists (the paper's localized obstruction). -/
+theorem classify_boundary_iff (w : ChartWorld) :
+    classify w = .boundary ↔
+      (someRankPos w = true ∧ hasIdentityEdge w = true) := by
+  cases hz : allRanksZero w <;> cases hi : hasIdentityEdge w <;>
+    simp [classify, someRankPos, hz, hi]
+
+/-- `classify` returns `missingLatent` exactly when some rank is
+    positive and every edge is non-identity (the paper's spread
+    obstruction). -/
+theorem classify_missing_latent_iff (w : ChartWorld) :
+    classify w = .missingLatent ↔
+      (someRankPos w = true ∧ allEdgesNonIdentity w = true) := by
+  cases hz : allRanksZero w <;> cases hi : hasIdentityEdge w <;>
+    simp [classify, someRankPos, hz, hi, ← not_hasIdentityEdge_iff]
+
+/-- **TA-2 conditions (general).**  The three rank/support conditions
+    are tracked exactly by the classifier on every finite chart world,
+    hence are mutually exclusive and exhaustive. -/
+theorem classify_conditions (w : ChartWorld) :
+    (classify w = .glue ↔ allRanksZero w = true) ∧
+    (classify w = .boundary ↔
+      (someRankPos w = true ∧ hasIdentityEdge w = true)) ∧
+    (classify w = .missingLatent ↔
+      (someRankPos w = true ∧ allEdgesNonIdentity w = true)) :=
+  ⟨classify_glue_iff w, classify_boundary_iff w,
+    classify_missing_latent_iff w⟩
+
 /-! ## Registered witness worlds (names match `core.py`) -/
 
 /-- Good charts: cocycle holds (`good_family`). -/

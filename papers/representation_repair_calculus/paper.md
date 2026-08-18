@@ -406,10 +406,16 @@ to further companion papers.
   lifts we sketch the pushout construction; a full formal treatment
   (categorical pushout in the representation lattice, with the
   associated universal property) is standard but not developed here.
-- **No Lean formalisation.** The elementary case-by-case verification
-  is straightforward to formalise (parallel to Theorem 5's Lean core
-  in `formal/structural-intelligence/StructuralIntelligence/`), but
-  that work is not yet done.
+- **Machine-checked (Lean 4, mathlib-free).** Theorem RR-1's
+  case-by-case verification is kernel-checked in
+  `formal/structural-intelligence/StructuralIntelligence/RepairTable.lean`
+  (`rr1_table_well_defined`, axiom-free): all eight registered witness
+  worlds at their exact Python sizes (6–16 states), each row's
+  misses/captures/minimality decided by kernel `decide`, with
+  minimality exhaustive over every nonempty drop-set of added
+  components. Verification status is tracked in
+  `docs/lea/VERIFY_RECEIPT_2026-08-18.md`. The pushout treatment of
+  interacting lifts remains future work.
 - **Not an alignment technology.** RR-1 says nothing about *how* to
   diagnose the failure signature of a real-world representation in the
   first place. That is where the actual work of representation debugging

@@ -33,6 +33,9 @@ import StructuralIntelligence.MeaningVsCompany
 import StructuralIntelligence.WeakestAdequate
 import StructuralIntelligence.KleisliSection
 import StructuralIntelligence.DialZero
+import StructuralIntelligence.EmlCatalan
+import StructuralIntelligence.RepairTable
+import StructuralIntelligence.ObstructionTaxonomy
 
 /-!
 # Structural Intelligence — Lean 4 formalisation
@@ -195,6 +198,28 @@ remaining Structural-Intelligence companion papers:
     refines it (`zero_distortion_cell_in_level`), and on the
     registered witness no two-cell partition qualifies
     (`no_coarser_on_witness`).
+*   `StructuralIntelligence.EmlCatalan.*` — Wave-7 EML censuses:
+    the constant grammar's shells carry Catalan counts `C_0..C_6`
+    (`emlFib_counts`, 197 trees), the variable grammar's carry
+    `2^(k+1)·C_k` for `k = 0..5` (`emlVar_counts`, 3238 trees,
+    single-pass bucket fold), and the size-2 pair is same-size,
+    distinct, and separated by the registered `Nat` model of the
+    `ExpLn` fragment (`eml_pair_diff`, with the carrier-general
+    derivations `left_denotes` / `right_denotes`).
+*   `StructuralIntelligence.RepairTable.*` — Theorem RR-1 on the
+    eight registered witness worlds (`rr1_table_well_defined`):
+    each canonical row's broken rep misses its invariant, the lift
+    captures it (functional factorisation), and the lift is minimal
+    over every nonempty drop-set of added components — all kernel
+    `decide` at registered sizes (6–16 states, no reductions).
+*   `StructuralIntelligence.ObstructionTaxonomy.*` — Theorem TA-2's
+    discrete taxonomy: the rank/support classifier is total,
+    mutually exclusive, and exhaustive (`taxonomy_trichotomy`),
+    tracks the paper's defining conditions on every finite chart
+    world (`classify_conditions`), and assigns `glue` / `boundary` /
+    `missingLatent` correctly to the three registered worlds
+    (`ta2_taxonomy_classifies`).  Enlargement-existence (the
+    universal-cover analogue) stays withheld, as in the paper.
 
 Everything is proven in pure Lean 4 core (no `Mathlib`).  The analytic
 step `(1 - 1/(cM))^N ≤ exp(-N/(cM))` and the resulting
@@ -271,3 +296,9 @@ and are documented as future work in the package `README.md`.
 #print axioms StructuralIntelligence.KleisliSection.section_swap
 #print axioms StructuralIntelligence.DialZero.zero_distortion_cell_in_level
 #print axioms StructuralIntelligence.DialZero.no_coarser_on_witness
+#print axioms StructuralIntelligence.EmlCatalan.emlFib_counts
+#print axioms StructuralIntelligence.EmlCatalan.emlVar_counts
+#print axioms StructuralIntelligence.EmlCatalan.eml_pair_diff
+#print axioms StructuralIntelligence.RepairTable.rr1_table_well_defined
+#print axioms StructuralIntelligence.ObstructionTaxonomy.ta2_taxonomy_classifies
+#print axioms StructuralIntelligence.ObstructionTaxonomy.classify_conditions
