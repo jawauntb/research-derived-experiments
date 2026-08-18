@@ -300,5 +300,6 @@ and are documented as future work in the package `README.md`.
 #print axioms StructuralIntelligence.EmlCatalan.emlVar_counts
 #print axioms StructuralIntelligence.EmlCatalan.eml_pair_diff
 #print axioms StructuralIntelligence.RepairTable.rr1_table_well_defined
+#print axioms StructuralIntelligence.ObstructionTaxonomy.taxonomy_trichotomy
 #print axioms StructuralIntelligence.ObstructionTaxonomy.ta2_taxonomy_classifies
 #print axioms StructuralIntelligence.ObstructionTaxonomy.classify_conditions

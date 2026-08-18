@@ -17,6 +17,10 @@ integration agent, or a batch of draft PRs.
 4. When the check passes: `gh pr ready N` then `gh pr merge N --squash`.
    This repo does not have GitHub auto-merge. Squash immediately; do not wait.
 5. Do not leave a green PR sitting as draft.
+6. If a sibling session dies or is abandoned: inspect its worktree,
+   commit leftover complete work, squash-merge if the check is green,
+   and stop that session. Do not leave a dirty tree sitting as "someone
+   else's job."
 
 `/tmp/us4-search` already holds `main`. Use GitHub squash merge. Do not
 check out `main` in a second local worktree.
