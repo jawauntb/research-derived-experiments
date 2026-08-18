@@ -377,7 +377,8 @@ held-out 6/7; `surgery_killed`).
 Paper F is `experiments/delete_repair_kappa/`: κ_cheap is not
 a function; κ_screen hits 11/11 and is Theorem 4 plus a total
 order; verdict `calculus_is_sic`.
-The close-out is `papers/sic_dynamics/`. Wave 2 P0/P1 lemmas are
+The close-out is `papers/sic_dynamics/` (`paper.md` for the
+instruments; `for_readers.md` for a cold reader). Wave 2 P0/P1 lemmas are
 **proved** in `formal/structural-intelligence/` (`KappaCheap`,
 `KappaScreen`, `KappaUnique`, `KappaRelabel`, `Aff13`,
 `DiamondInterval`, `SurgeryMiss`). Six are **verified**;

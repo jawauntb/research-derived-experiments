@@ -530,7 +530,7 @@ exhaustive counterexample search, and replayable MIDAS regression.
 | `papers/delete_repair_disanalogy/` | Paper D: shared cartoon is not a shared theorem; 196 diamonds, four intervals (`paper.md`); companion instrument `delete_repair_disanalogy` |
 | `papers/delete_repair_surgery/` | Paper E: taxonomy is not a one-shot agent rule; unused symmetry ≠ leftover privilege (`paper.md`); companion instrument `delete_repair_surgery` |
 | `papers/delete_repair_kappa/` | Paper F: the written function is Theorem 4 plus a total order (`paper.md`); companion instrument `delete_repair_kappa` |
-| `papers/sic_dynamics/` | Close-out: A–F laid out; Possibility 5 is the house; not a better LLM; next method is Lea (`paper.md`) |
+| `papers/sic_dynamics/` | Close-out: A–F laid out; Possibility 5 is the house; not a better LLM; next method is Lea (`paper.md`). Cold-reader English: `for_readers.md` |
 | `papers/eml_access_geometry/` | Process-split synthesis: expressivity ≠ access, access is process-relative; LLM/SIC translation without a better-model claim |
 | `papers/sufficient_antecedents/` | Companion paper (Theorem SA-1): taxonomy of SIC-C-c positive resolutions — each of the four known identifiability escapes (linear ICA, sparse-linear ICA, iVAE, interventional CRL) is one way of populating Theorem 4's Markov-screen antecedent via local separation + cross-`u` coherence (`paper.md`, `paper.pdf`); companion instrument `antecedent_taxonomy_pair` |
 | `papers/structural_intelligence_covering_learnability/` | Companion paper (SIC-C-c covering meta-theorem): conditional closure of SIC-C-c under the polynomial-ε-covering hypothesis on `H`, composed from Theorem 6-core (ε-covering reduction, pure-core `refinement_preserves_screen`) and Theorem 5-rate (quantitative bound). Machine-checked as `StructuralIntelligenceMathlib.sicc_covering_meta` / `sicc_covering_poly` with zero new axioms. Isolates why linear ICA, sparse-linear ICA, iVAE, interventional CRL satisfy SIC-C-c and why Locatello 2019's fully-unsupervised nonlinear ICA does not (`paper.md`); companion instrument `sicc_covering_meta_pair` |
@@ -1134,7 +1134,7 @@ Notable bundles:
 - `papers/delete_repair_disanalogy/` — Paper D: poset does not determine Minkowski interval; PE quotient still fails
 - `papers/delete_repair_surgery/` — Paper E: name-blind one-shot rule dies on unused symmetry
 - `papers/delete_repair_kappa/` — Paper F: written κ is SIC, not a new master object
-- `papers/sic_dynamics/` — close-out paper, A–F in one place; next method is Lea
+- `papers/sic_dynamics/` — close-out paper, A–F in one place; `for_readers.md` for a cold reader; next method is Lea
 - `papers/eml_access_geometry/` — process-split synthesis and LLM/SIC translation
 - Synthesis: `metaphysics_synthesis`, `metric_stack_synthesis`, literature audits/reviews
 - Review methods: `unified_citation_grounded_review` (framework, ontology, executable reviewer, and alpha-research operating system)
