@@ -428,8 +428,12 @@ both EML censuses (Catalan `C_0..C_6`, 197 trees; `2^(k+1)·C_k` for
 with general classifier↔conditions equivalences. All three are
 **SafeVerify-verified** (4.29 replay, 2026-08-18; the EmlCatalan
 enumeration needs `--tstack=262144`; axioms ⊆ {propext}) — receipt
-§Wave 7 in `docs/lea/VERIFY_RECEIPT_2026-08-18.md`. `CONC-EST`
-remains python-enumerated by receipt quarantine.
+§Wave 7 in `docs/lea/VERIFY_RECEIPT_2026-08-18.md`.
+Wave 8 (`ConcernEst.lean`, #529) banks the CONC-EST kernel: plug-in
+frequency counting recovers the oracle choice at prefixes 1 / 2 / 6,
+those steps are minimal, and the misspecification expected-cost gap
+is 4. **SafeVerify-passed** (same 4.29 scratch; axioms ⊆ {propext};
+receipt §Wave 8). The 24-row traces stay Python.
 That instrument is `experiments/delete_repair_concern_estimation/`:
 concern is estimated by registered frequency counting on three
 literal 24-draw task sequences, and the plug-in choice recovers the

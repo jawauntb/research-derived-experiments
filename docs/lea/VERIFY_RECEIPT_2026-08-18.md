@@ -94,7 +94,27 @@ it false and the corrected census (2, 4, 16, 80, 448, 2688; total
 
 With this wave every finite-decidable P0 row in
 `docs/lea/theorem_backlog.md` §B is verified except `CONC-EST`,
-which stays Python by the quarantine above. Remaining P0 work is
-analytic/mathlib-lane (SIC-A-gen, T4-prob, T7-ICA, CT-1-MDL, axiom
-discharge for the two packaged classics, TA-1-naked, TA-2's
-enlargement existence, RR-1's pushout treatment).
+whose *traces* stay Python by the quarantine above. The kernel
+core is Wave 8.
+
+Remaining P0 work is analytic/mathlib-lane (SIC-A-gen, T4-prob,
+T7-ICA, CT-1-MDL, axiom discharge for the two packaged classics,
+TA-1-naked, TA-2's enlargement existence, RR-1's pushout treatment).
+
+## Wave 8 (2026-08-18): CONC-EST kernel
+
+Same method (4.29 scratch at `/tmp/sv429/formal/structural-intelligence`,
+sorry-target via `gen_target.py`, `safe_verify -v target.olean
+submission.olean --disallow-partial`, `--tstack=262144`). Replay
+script: `/tmp/sv429/replay8.sh`. Log: `/tmp/sv429/verdicts8/ConcernEst_sv.log`.
+
+| file | verdict | headline axioms |
+|---|---|---|
+| `ConcernEst.lean` | **SAFEVERIFY_PASSED** (26 declarations replayed) | `conc_est_registered_steps`, `bag_stays`, `mix_stays`, `pair_stays`, `misspec_expected_gap`: `propext` only |
+
+Cites door 3 (`ConcernChoice.cost` / `pick` / `candidates`). Does not
+re-prove door 3, Theorem 4, or Path A/B. The 3×24 choice traces stay
+Python. No `Classical.choice`, no `sorryAx`, no `native_decide`.
+
+Lane: #529 (`ConcernEst.lean`). This INT banks the aggregator and
+derives the labels from this receipt.

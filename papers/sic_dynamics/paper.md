@@ -475,10 +475,11 @@ P0/P1 nodes are **proved** (mathlib-free, zero `sorry`, in the
 | `emlFib_counts` / `emlVar_counts` / `eml_pair_diff` | `EmlCatalan.lean` | verified |
 | `rr1_table_well_defined` | `RepairTable.lean` | verified |
 | `ta2_taxonomy_classifies` | `ObstructionTaxonomy.lean` | verified |
+| `conc_est_registered_steps` | `ConcernEst.lean` | verified |
 
 Still Python: empirical `Φ` ratios, GD 8/8, extras 43/28, and the
-`CONC-EST` frequency-estimator traces. Wave 7 files are
-SafeVerify-verified (2026-08-18 receipt §Wave 7, axioms ⊆ {propext}).
+`CONC-EST` 24-row choice traces. Wave 7–8 files are
+SafeVerify-verified (2026-08-18 receipt, axioms ⊆ {propext}).
 The n=4 representability matrix and Paper B `swap_typed_wins` are now Lean.
 
 Lea is installed locally (`docs/lea/ENV_STATUS.md`). `/verify` is
@@ -510,7 +511,9 @@ Wave 2 headlines are **verified**, including `kappa_screen_hits_suite`.
 Wave 4: `dta_n4_representable_iff` and `swap_typed_wins` are **verified**.
 See `docs/lea/VERIFY_RECEIPT_2026-08-17.md`.
 Wave 7: `EmlCatalan.lean`, `RepairTable.lean`,
-`ObstructionTaxonomy.lean` are **proved, not verified**.
+`ObstructionTaxonomy.lean` are **verified**.
+Wave 8: `ConcernEst.lean` (`conc_est_registered_steps`) is
+**verified**. The 24-row estimator traces stay Python.
 
 Reproduce Paper F:
 

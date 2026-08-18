@@ -158,3 +158,21 @@ set. Uniqueness and continuum lifts are withheld.
 Rank/support trichotomy is exhaustive and mutually exclusive, and the
 three registered chart worlds classify as glue / boundary /
 missing-latent. Enlargement-existence is withheld.
+
+## conc_est_registered_steps
+- kind: theorem
+- uses:
+
+On door 3's menu and cost, plug-in frequency counting recovers the
+oracle choice at the registered prefixes 1 / 2 / 6, those steps are
+minimal, and the misspecification expected-cost gap is 4. The 24-row
+traces stay Python.
+
+## conc_est_registered_steps
+- kind: theorem
+- uses:
+
+On door 3's menu and cost, plug-in frequency counting recovers the
+oracle choice at the registered prefixes 1 / 2 / 6, those steps are
+minimal, and the misspecification expected-cost gap is 4. The 24-row
+traces stay Python.

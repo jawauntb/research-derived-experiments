@@ -20,7 +20,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `references/` | Public source list; local-only full texts (gitignored subdirs) |
 | `formal/ontology-hs/` | Haskell typed ontology gate (Arc 2B) |
 | `formal/relative-identifiability/` | Dependency-free Lean 4 proofs for observational quotient factorization, obstruction, and experiment-family refinement |
-| `formal/structural-intelligence/` | Dependency-free Lean 4 cores for the SIC family, including `DeleteRepair.lean`, `Compiler/SquaringSeparation.lean`, `EmlZeroIdentity.lean`, Wave 2 + Wave 4 `KappaCheap` / `KappaScreen` / `KappaUnique` / `KappaRelabel` / `Aff13` / `DiamondInterval` / `SurgeryMiss` / `DtaN4` / `SwapTyped` (verified), Wave 5 door files `MenuBlind` / `GeneratorBorder` / `ConcernChoice` (verified), Wave 6 essay-driven files `CrossingUnique` (Lea-proved) / `MeaningVsCompany` / `WeakestAdequate` / `KleisliSection` / `DialZero` / `SilentSubstitution` (verified; receipt: `docs/lea/VERIFY_RECEIPT_2026-08-18.md`), and Wave 7 `EmlCatalan` / `RepairTable` / `ObstructionTaxonomy` (verified; receipt §Wave 7, SafeVerify 2026-08-18) |
+| `formal/structural-intelligence/` | Dependency-free Lean 4 cores for the SIC family, including `DeleteRepair.lean`, `Compiler/SquaringSeparation.lean`, `EmlZeroIdentity.lean`, Wave 2 + Wave 4 `KappaCheap` / `KappaScreen` / `KappaUnique` / `KappaRelabel` / `Aff13` / `DiamondInterval` / `SurgeryMiss` / `DtaN4` / `SwapTyped` (verified), Wave 5 door files `MenuBlind` / `GeneratorBorder` / `ConcernChoice` (verified), Wave 6 essay-driven files `CrossingUnique` (Lea-proved) / `MeaningVsCompany` / `WeakestAdequate` / `KleisliSection` / `DialZero` / `SilentSubstitution` (verified; receipt: `docs/lea/VERIFY_RECEIPT_2026-08-18.md`), Wave 7 `EmlCatalan` / `RepairTable` / `ObstructionTaxonomy` (verified; receipt §Wave 7), and Wave 8 `ConcernEst` (verified; receipt §Wave 8) |
 | `docs/lea/` | Seed instructions / memory / blueprint for a Lea project `Lea.SicDynamics` (not a Lake package), verify receipts, and the standing [theorem backlog](lea/theorem_backlog.md) |
 | `.cursor/skills/lea/` | Repo skill for standing up Lea and banking proved vs verified Lean |
 | `sites/` | Public static sites (atlas, Inquiry landing, Envelope Guard) |
@@ -1224,7 +1224,8 @@ cd formal/ontology-hs && cabal test all && cabal run ontology-check
 | `StructuralIntelligence/EmlCatalan.lean` | Wave 7: Catalan / `2^{k+1}C_k` censuses and the size-2 denotation split — **verified** (SafeVerify 2026-08-18, receipt §Wave 7) |
 | `StructuralIntelligence/RepairTable.lean` | Wave 7: RR-1 eight-row lift table on registered toys — **verified** (SafeVerify 2026-08-18, receipt §Wave 7) |
 | `StructuralIntelligence/ObstructionTaxonomy.lean` | Wave 7: TA-2 discrete rank/support trichotomy — **verified** (SafeVerify 2026-08-18, receipt §Wave 7) |
-| `StructuralIntelligence.lean` | Root import and `#print axioms` for every named headline, including `squaring_separation`, `eml_zero_identity`, and the Wave 7 headlines |
+| `StructuralIntelligence/ConcernEst.lean` | Wave 8: CONC-EST plug-in estimator at prefixes 1/2/6 — **verified** (SafeVerify 2026-08-18, receipt §Wave 8). Traces stay Python |
+| `StructuralIntelligence.lean` | Root import and `#print axioms` for every named headline, including `squaring_separation`, `eml_zero_identity`, and the Wave 7–8 headlines |
 | `lakefile.toml` / `lean-toolchain` | Dependency-free Lean 4.31 library |
 
 ```bash

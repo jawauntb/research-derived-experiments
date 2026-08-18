@@ -36,6 +36,7 @@ import StructuralIntelligence.DialZero
 import StructuralIntelligence.EmlCatalan
 import StructuralIntelligence.RepairTable
 import StructuralIntelligence.ObstructionTaxonomy
+import StructuralIntelligence.ConcernEst
 
 /-!
 # Structural Intelligence — Lean 4 formalisation
@@ -220,6 +221,11 @@ remaining Structural-Intelligence companion papers:
     `missingLatent` correctly to the three registered worlds
     (`ta2_taxonomy_classifies`).  Enlargement-existence (the
     universal-cover analogue) stays withheld, as in the paper.
+*   `StructuralIntelligence.ConcernEst.conc_est_registered_steps`
+    — Wave 8 CONC-EST: door 3's plug-in frequency counting recovers
+    the oracle choice at the registered prefixes 1 / 2 / 6, those
+    steps are minimal, and the misspecification expected-cost gap
+    is exactly 4.  The 24-row traces stay Python.
 
 Everything is proven in pure Lean 4 core (no `Mathlib`).  The analytic
 step `(1 - 1/(cM))^N ≤ exp(-N/(cM))` and the resulting
@@ -303,3 +309,5 @@ and are documented as future work in the package `README.md`.
 #print axioms StructuralIntelligence.ObstructionTaxonomy.taxonomy_trichotomy
 #print axioms StructuralIntelligence.ObstructionTaxonomy.ta2_taxonomy_classifies
 #print axioms StructuralIntelligence.ObstructionTaxonomy.classify_conditions
+#print axioms StructuralIntelligence.ConcernEst.conc_est_registered_steps
+#print axioms StructuralIntelligence.ConcernEst.misspec_expected_gap

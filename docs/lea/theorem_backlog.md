@@ -81,7 +81,7 @@ From `.cursor/skills/lea/SKILL.md`, `docs/lea/instructions.md`, `docs/lea/memory
 | EML-fib-Ck | Enumerated size-k fiber counts equal Catalan `C_k` for k=0..6 | `experiments/eml_fiber_spectrum/` | lean-verified (Wave 7, `EmlCatalan.lean` `emlFib_counts`, 197 trees; SafeVerify 2026-08-18) | done | P0 |
 | EML-var-Ck | Variable-x size-k counts equal `2^{k+1} C_k` for k=0..5 | `experiments/eml_variable_spectrum/` | lean-verified (Wave 7, `EmlCatalan.lean` `emlVar_counts`, 3238 trees; SafeVerify 2026-08-18) | done | P0 |
 | EML-pair-diff | Two same-size trees differ in denotation (symbolic form) | `eml_fiber_spectrum` | lean-verified (Wave 7, `EmlCatalan.lean` `eml_pair_diff`: derivations in any `ExpLn` carrier + registered `Nat` model separation; SafeVerify 2026-08-18) | done | P0 |
-| CONC-EST | Plug-in frequency estimator converges at registered steps 1/2/6 | `experiments/delete_repair_concern_estimation/` | python-enumerated (sequence traces quarantined Python per 2026-08-18 receipt) | finite-decidable | P0 |
+| CONC-EST | Plug-in frequency estimator converges at registered steps 1/2/6 | `experiments/delete_repair_concern_estimation/` | lean-verified (Wave 8, `ConcernEst.lean` `conc_est_registered_steps`; SafeVerify 2026-08-18). 24-row traces stay Python | done (kernel); traces quarantined | P0 |
 | RR-1-table | Eight-row lift table on registered toys | `papers/representation_repair_calculus/` | lean-verified (Wave 7, `RepairTable.lean` `rr1_table_well_defined`; SafeVerify 2026-08-18) | done | P0 |
 | TA-2-discrete | Discrete obstruction taxonomy on registered charts | `papers/theory_atlas/` | lean-verified (Wave 7, `ObstructionTaxonomy.lean` `ta2_taxonomy_classifies` + general `classify_conditions`; SafeVerify 2026-08-18) | done | P0 |
 
@@ -137,9 +137,11 @@ work remains open from Waves 5–6.
 
 Wave 7 (2026-08-18): `EmlCatalan` (`emlFib_counts`, `emlVar_counts`,
 `eml_pair_diff`), `RepairTable` (`rr1_table_well_defined`),
-`ObstructionTaxonomy` (`ta2_taxonomy_classifies`) — **lean-proved,
-not verified**. Files landed in #523–#525; aggregator bank is this
-INT. Do not call `lake lean` “verified.”
+`ObstructionTaxonomy` (`ta2_taxonomy_classifies`) —
+**SafeVerify-passed** (receipt §Wave 7).
+
+Wave 8 (2026-08-18): `ConcernEst` (`conc_est_registered_steps`) —
+**SafeVerify-passed** (receipt §Wave 8). 24-row traces stay Python.
 
 ### A2. Mathlib-free cores (`formal/structural-intelligence/`) — lean-proved
 
@@ -154,7 +156,8 @@ Paper A five finite facts (`DeleteRepair.*`); Theorem 4 core
 **do not re-prove**); EML zero identity (`EmlZeroIdentity`,
 **do not re-prove**); Wave 5 door files (`MenuBlind`,
 `GeneratorBorder`, `ConcernChoice`); Wave 7 finite leftovers
-(`EmlCatalan`, `RepairTable`, `ObstructionTaxonomy`).
+(`EmlCatalan`, `RepairTable`, `ObstructionTaxonomy`); Wave 8
+(`ConcernEst`).
 
 ### A3. Mathlib companion (`formal/structural-intelligence-mathlib/`) — lean-proved
 
@@ -175,17 +178,12 @@ conditional (`sicc_covering_meta`, `sicc_covering_poly`).
 
 ## Suggested Lea wave order (operational)
 
-1. **SafeVerify Wave 7** — replay `EmlCatalan`, `RepairTable`,
-   `ObstructionTaxonomy` on the 4.29 scratch; then relabel
-   proved → verified. Do not call the current bank verified.
-2. **Wave 8, last finite leftover:** `CONC-EST` plug-in frequency
-   estimator at registered prefixes 1 / 2 / 6. Sequence traces stay
-   Python per the 2026-08-18 receipt until a kernel-decidable core
-   is carved out.
-3. **Axiom discharge (mathlib lane):** replace or isolate
+1. **Finite P0 leftovers are closed.** Waves 7–8 are
+   SafeVerify-verified. `CONC-EST` traces stay Python.
+2. **Axiom discharge (mathlib lane):** replace or isolate
    `HalmosSavage_minimality_h_extension` and
    `Shannon1959_converse_uniform_hamming`.
-4. **Mathlib analytics:** T4 probabilistic, CT-1 MDL, T7 ICA,
+3. **Mathlib analytics:** T4 probabilistic, CT-1 MDL, T7 ICA,
    unconditional SIC-C-c (likely reframe as covering necessity).
-5. **Never:** empirical Φ/GD/extras; Paper 0; re-proving the banned
+4. **Never:** empirical Φ/GD/extras; Paper 0; re-proving the banned
    cores.
