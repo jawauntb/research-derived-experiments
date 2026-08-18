@@ -1,0 +1,89 @@
+{
+  "experiment_id": "delete_repair_concern_transport",
+  "schema_version": "1.0",
+  "run_id": "delete_repair_concern_transport_2026_08_18",
+  "producing_agent": {
+    "identity": "Claude Fable 5 (Cursor agent, under J. Brown direction)",
+    "session_ref": "4adbd42d-0e99-41df-b0be-7d9d5b7e3caa"
+  },
+  "hypothesis": "The concern choice function's symmetry layer is coordinate-free (reversal-natural under both menus) while its content layer is menu-relative: the bag/pair_eq boundary moves from 11/27 (to q_id) on the base menu to 7/27 (to q_pair01) on the extended menu, because q_pair01 serves pair_eq at cost 12 instead of the 32 miss penalty. Doors 1 and 3 compose: what to hold is a joint function of the menu and the expected questions.",
+  "primary_metric": "ranking.verdict",
+  "decision": "Accept transport_holds_boundary_moves if reversal naturality holds under both menus, both registered boundaries are confirmed by exact sweeps, and the boundaries differ. Accept boundary_menu_stable if naturality holds and they are equal. Accept transport_fails if naturality breaks. Otherwise inconclusive. Any recorded verdict passes CI.",
+  "gates": {
+    "CT_SPECIFIED": "Everything registered before the run, including both crossing points.",
+    "CT_CANDIDATE_SETS": "5 base candidates, 7 extended candidates.",
+    "CT_DELTA_ANCHOR": "Pure bag chooses q_perm under both menus.",
+    "CT_BOUNDARIES_CONFIRMED": "Sweeps match 11/27 (base, to q_id) and 7/27 (ext, to q_pair01).",
+    "CT_REVERSAL": "Mirrored pair chooses q_stab0/q_stab_last duals under both menus.",
+    "CT_RANKING_RECORDED": "Verdict is one of the four registered outcomes.",
+    "CT_CLAIM_BOUNDARY": "No valence, learned concern, LLM, or master object."
+  },
+  "kill_criteria": {
+    "CT_BOUNDARIES_CONFIRMED": "Kill the instrument if a sweep disagrees with the registered crossing; the predictions are the point.",
+    "CT_DELTA_ANCHOR": "Kill the instrument if the concern-free anchor is not menu-stable.",
+    "transport": "The coordinate-free reading of the symmetry layer dies if the mirrored pair is not dual under either menu.",
+    "menu_stability": "The menu-relativity claim dies if the two boundaries coincide."
+  },
+  "audit_card": {
+    "target_object": "Door 3's registered next test: transport the concern machinery across the reversal relabel and door 1's menu extension.",
+    "decision": "transport_holds_boundary_moves / boundary_menu_stable / transport_fails / inconclusive by the registered rule.",
+    "representation": "Door 1's menus and extended screen/task tables; door 3's cost rule; four registered concerns; two 55-point exact sweeps.",
+    "data_clock": "None. Exact rational computation, no sampling, no learning, no LLM.",
+    "material_assumptions": [
+      "Cost rule fixed as door 3 registered it (fibres on represent, 32 on miss).",
+      "Menus fixed as door 1 registered them.",
+      "Tie-break is Paper F's order.",
+      "Reversal (3,2,1,0) is the disclosed relabel."
+    ],
+    "fatal_gates": [
+      "CT_SPECIFIED",
+      "CT_CANDIDATE_SETS",
+      "CT_DELTA_ANCHOR",
+      "CT_BOUNDARIES_CONFIRMED",
+      "CT_REVERSAL",
+      "CT_RANKING_RECORDED",
+      "CT_CLAIM_BOUNDARY"
+    ],
+    "decisive_controls": [
+      "boundaries_predicted",
+      "door3_anchor",
+      "delta_bag_menu_stable",
+      "exact_arithmetic",
+      "kill_does_not_fail_ci"
+    ],
+    "evidence_paths": [
+      "experiments/delete_repair_concern_transport/results/delete_repair_concern_transport_summary.json",
+      "experiments/delete_repair_concern_transport/preregistration.json",
+      "tests/test_delete_repair_concern_transport.py"
+    ]
+  },
+  "mathematical_claim": {
+    "objects": {
+      "R_base(bag)": "5 screens (fibres 5, 6, 8, 8, 16)",
+      "R_ext(bag)": "7 screens (adds q_pair01, q_pair23 at 12 fibres)",
+      "boundary_base": "cost(q_perm | w_eps) = 5 + 27 eps crosses cost(q_id) = 16 at 11/27",
+      "boundary_ext": "cost(q_perm | w_eps) = 5 + 27 eps crosses cost(q_pair01) = 12 at 7/27"
+    },
+    "types_domains_units": "Weights, costs, and boundaries are exact rationals; fibre counts are integers; miss penalty 32.",
+    "exact_claim": "Under the base menu the eps-dial chooses q_perm for eps ≤ 11/27 and q_id above. Under the extended menu it chooses q_perm for eps ≤ 7/27 and q_pair01 above (q_pair01 also serves pair_eq because it keeps bits 0 and 1; it beats q_id 12 < 16 and beats q_pair23 by name at the 12-fibre tie). The mirrored concern pair chooses q_stab0/q_stab_last under both menus. delta_bag chooses q_perm under both menus.",
+    "quantifiers": "Universal over the 55 sweep points per menu and the four registered concerns; existential for the boundary separation.",
+    "assumptions": "Registered menus, cost rule, tie-break; no other screens or tasks.",
+    "identification_conditions": "The transportable content is identified as the symmetry layer of the choice function; the menu-relative content is the boundary. Neither is a new primitive.",
+    "derivation_dependencies": "Door 1 (menu-relative gold, representing_in_menu), door 3 (cost rule, 11/27 anchor), Paper F (tie-break), Paper A (representability).",
+    "coordinate_invariance": "Reversal swaps first_bit/last_bit, q_stab0/q_stab_last, q_pair01/q_pair23; bag, parity, q_perm, q_rot, q_id are fixed. The choice function must commute on the mirrored pair under both menus.",
+    "edge_limiting_null_cases": "At eps = 0 both menus reproduce Paper F's q_perm. At the exact ties (11/27, 7/27) the fewest-fibres rule keeps q_perm. If the boundaries had coincided the verdict is boundary_menu_stable, not a fabricated difference."
+  },
+  "controls": [
+    "boundaries_predicted",
+    "door3_anchor",
+    "delta_bag_menu_stable",
+    "exact_arithmetic",
+    "kill_does_not_fail_ci"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": "none",
+    "sampling": "None. 4 concerns x 2 menus plus two 55-point exact sweeps."
+  },
+  "claim_boundary": "Accepted only as: the concern choice's symmetry layer transports across the reversal under both registered menus, its phase boundary is menu-relative (11/27 vs 7/27, to different screens), and the concern-free anchor is menu-stable. Not valence, not learned concern, not an LLM, not a new master object, not Paper G."
+}

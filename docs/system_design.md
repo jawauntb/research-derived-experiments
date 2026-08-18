@@ -402,6 +402,15 @@ the cube macro (`x^3`, bound 5) replicates the outside-fact shape
 (min 5 vs 2, mass 2 vs 3, screens invariant, round trip identity)
 beside an exact sq replay anchor, with min sizes registered before
 enumeration. Verdict `border_consolidated`.
+Door 3's consolidation is
+`experiments/delete_repair_concern_transport/`: the concern choice
+is reversal-natural under both door-1 menus, the pure-`bag` anchor
+is menu-stable, and the `bag`/`pair_eq` boundary is menu-relative
+(11/27 → `q_id` base; 7/27 → `q_pair01` extended). Verdict
+`transport_holds_boundary_moves`. With that, the runnable
+enumerations licensed by the close-out's three doors are exhausted;
+remaining follow-ups are Lean banking via Lea and a registered
+instrument design for learned concern.
 The close-out is `papers/sic_dynamics/` (`paper.md` for the
 instruments; `for_readers.md` for a cold reader). Wave 2 P0/P1 lemmas are
 **verified** in `formal/structural-intelligence/` (`KappaCheap`,
