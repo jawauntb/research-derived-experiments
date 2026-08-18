@@ -158,3 +158,12 @@ Append. Driven by "Intention Is All You Need" v3 and its review.
   wrong; `decide` refuted it; correct is 3238 = sum 2^(k+1)C_k, k<=5.
 - Lane model note: primary-model lanes died on usage limits; Composer
   lanes (#523, #524) built both files green on the first try.
+
+## Wave 8 banked and verified (2026-08-18)
+
+- `ConcernEst.lean` (`conc_est_registered_steps`) SAFEVERIFY_PASSED
+  in the 4.29 scratch; 26 declarations; axioms <= {propext}.
+  Replay script: `/tmp/sv429/replay8.sh`.
+- Cites door 3; does not re-prove it. Prefix-sum serving cost is
+  n times plug-in expected cost, so the argmin is door 3's `pick`.
+- 24-row traces stay Python. Misspec expected gap 4 = sum-gap 8 / 2.

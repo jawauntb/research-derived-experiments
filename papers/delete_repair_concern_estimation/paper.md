@@ -81,6 +81,11 @@ menu, this cost rule, or these sequences. No stochastic-convergence
 claim (the sequences are literal, not sampled). No LLM. No new
 master object. Not Paper G.
 
+**Lean (Wave 8).** The kernel core is `ConcernEst.lean`:
+`conc_est_registered_steps` is **verified** (SafeVerify 2026-08-18,
+receipt §Wave 8, axioms ⊆ {propext}). It cites door 3 and does not
+re-prove it. The 24-row traces stay Python.
+
 **What would change the conclusion.** Any final-prefix choice off
 oracle (`estimation_fails`) — none observed. Convergence at
 unregistered steps (`inconclusive`) — none observed; the mismatch
