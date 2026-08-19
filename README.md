@@ -10,6 +10,7 @@ This repository tracks a research program around a recurring pattern:
 |---|---|
 | [docs/system_design.md](docs/system_design.md) | End-to-end system design and operating model: components, runtime flow, config, deps, env setup, deploy, assumptions, limitations |
 | [docs/module_explainer.md](docs/module_explainer.md) | Package catalog and module explainer: experiments, scripts, tests, docs, and a script/test/doc map |
+| [Formal System Atlas](papers/formal_system_atlas/paper.md) | Repository-wide proof, experiment, finding, failure, and hypothesis audit; the generated PDF includes exhaustive registries and Lean declarations |
 | [docs/concern_gated_retrieval_research_program.md](docs/concern_gated_retrieval_research_program.md) | Canonical intuition, evidence boundary, split claim ladder, safety gates, and staged E2-to-live-agent advancement program for concern-gated off-context retrieval |
 | [AGENTS.md](AGENTS.md) | Contributor/agent rules, including the requirement to keep the two docs above in sync with meaningful code changes |
 

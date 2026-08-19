@@ -268,6 +268,19 @@ reports and intentionally public tables/PDFs are committed.
 
 ### 3.2 Papers (`papers/`)
 
+`papers/formal_system_atlas/` is the repository-wide epistemic audit. Its
+`paper.md` states the quotient/fiber/compiler system, system dynamics, theorem
+and conjecture boundaries, hypothesis outcomes, and major failures as of commit
+`3a86730`. `scripts/build_formal_system_atlas_pdf.py` renders the narrative and
+generates exhaustive appendices directly from the claim/evidence registries,
+the experiment verification and contract registries, every top-level JSON
+preregistration, committed JSON result-status signals, and all Lean theorem,
+lemma, and proposition declarations. The stable artifact is
+`output/pdf/research_derived_experiments_formal_system_atlas_2026-08-19.pdf`.
+The builder treats experiment provenance as traceability rather than automatic
+scientific endorsement and distinguishes SafeVerify receipts from green Lean
+builds.
+
 The delete–obstruction–repair paper (`papers/delete_the_absolute/`) is the
 dynamics of SIC, not a silent twelfth closed companion. It banks a Lean
 no-go / holonomy / noncommutativity core and two exact instruments
@@ -1618,8 +1631,8 @@ pins the PEP 735 quality environment, and the explicit `pytorch-cpu` source
 keeps Linux CI from resolving CUDA, NVIDIA, or Triton packages. Every remaining
 command reuses that environment through `uv run --no-sync`:
 
-1. `pytest -q tests` over all 142 root test files (torch, numpy, scikit-learn,
-   matplotlib, reportlab, pytest)
+1. `pytest -q tests` over all 191 root test files (torch, numpy, scikit-learn,
+   matplotlib, reportlab, pypdf, pytest)
 2. `compileall` on `scripts`, `experiments`, `tests`
 3. `publication_guard.py`
 4. `validate_evidence_registry.py`
@@ -1783,7 +1796,7 @@ cd coherence-testbench && python3 scripts/run_phase0.py --smoke
 |---|---|---|
 | Local pilots | Python 3.12, optional torch/numpy via uvx | Many smoke paths are CPU-only |
 | Modal sweeps | Doppler (or Modal tokens) + network + GPU quota | Most large results are Modal-backed |
-| PDF rebuild | reportlab/matplotlib via uvx or Modal paper tasks | Prefer committed numbers as source of truth |
+| PDF rebuild | reportlab/matplotlib plus pypdf verification in the locked quality group, or Modal paper tasks | Prefer committed numbers as source of truth |
 | Atlas / inquiry sites | Push to `main` + `RAILWAY_TOKEN` | Actions matrix deploy |
 | Formal ontology | GHC/Cabal | Optional for most contributors |
 | Relative-identifiability proof | Lean 4.31.0 via Elan/Lake | Required only for the theorem package; Python regressions remain dependency-free |
