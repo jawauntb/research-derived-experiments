@@ -9,6 +9,7 @@ quality = [
     "numpy",
     "pytest",
     "pytest-xdist",
+    "pypdf",
     "reportlab",
     "ruff",
     "scikit-learn",

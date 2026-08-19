@@ -11,9 +11,9 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | Path | Responsibility |
 |---|---|
 | `experiments/` | 115 research packages plus `common/` shared analysis utilities; harnesses, Modal sweeps, committed `results/`, generated `PROVENANCE.md` |
-| `papers/` | Paper sources (`paper.md`), figures, shareable PDFs |
-| `scripts/` | 138 Python ops modules: quality, contracts, provenance, PDF/figure builders, summarizers |
-| `tests/` | 174 root test files collected together by pytest (`unittest`-style and pytest-native) |
+| `papers/` | 129 paper sources (`paper.md`), figures, shareable PDFs, including the repository-wide Formal System Atlas |
+| `scripts/` | 144 Python ops modules: quality, contracts, provenance, PDF/figure builders, summarizers |
+| `tests/` | 191 root test files collected together by pytest (`unittest`-style and pytest-native) |
 | `docs/` | Design docs, verification, handoffs, plans, reviews, solutions |
 | `docs/primers/backlogs/` | Six article-specific, source-anchored research TODOs derived from the primer PDFs |
 | `notes/` | Program-level research synthesis |
@@ -32,7 +32,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `TODO.md` | Active research ledger |
 | `AGENTS.md` | Agent/contributor rules (doc sync + merge-on-complete) |
 | `.cursor/rules/` | Always-on Cursor rules (`scientific-discovery-loop`, `merge-on-complete`) |
-| `pyproject.toml` | Python ≥3.12 project metadata; locked root `quality` dependency group; explicit CPU-only PyTorch index; Ruff and ty configuration; experiment/Modal runtime dependencies remain call-site specific |
+| `pyproject.toml` | Python ≥3.12 project metadata; locked root `quality` dependency group including ReportLab and pypdf for generated-artifact verification; explicit CPU-only PyTorch index; Ruff and ty configuration; experiment/Modal runtime dependencies remain call-site specific |
 | `uv.lock` | Cross-platform lock for the root `quality` dependency group, including CPU-only Torch resolution |
 
 ---
@@ -49,6 +49,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | Refresh provenance index | `python scripts/gen_provenance.py` |
 | Validate research contracts | `python3 scripts/validate_{evidence_registry,claim_registry,experiment_manifest,gate_verdict,public_artifact_envelopes}.py` (manifest validator also enforces `docs/experiment_contract_registry.json` coverage) |
 | Run the quality gate | `python3 scripts/run_quality_checks.py` |
+| Rebuild the repository-wide formal audit PDF | `python3 scripts/build_formal_system_atlas_pdf.py` |
 | Check API/Modal env without leaking secrets | `python3 scripts/env_probe.py` |
 | Public agent benchmark package | [causally_grounded_agents_benchmark.md](causally_grounded_agents_benchmark.md) |
 | Concern-gated retrieval theory and next experiments | [concern_gated_retrieval_research_program.md](concern_gated_retrieval_research_program.md) + [next-agent handoff](next_agent_concern_gated_retrieval_handoff_2026-07-23.md) |
@@ -1017,6 +1018,7 @@ Raw outputs stay under `artifacts/` until summarized.
 | `env_probe.py` | Report env var presence/length only | `--json` |
 | `build_information_limited_discovery_pdf.py` | Deterministic ReportLab renderer for the Information-Limited Discovery paper; normalizes the paper's finite LaTeX vocabulary, adds page furniture, and mirrors exact bytes to the paper archive locations | In: `papers/information_limited_discovery/paper.md`; out: paper-local PDF, `papers/pdf/` copy, optional existing local Metaphysics archive |
 | `build_obstruction_aware_admission_pdf.py` | Deterministic ReportLab renderer for the Obstruction-Aware Admission paper; normalizes the finite recurrence, embeds three verified figures, adds page furniture, and mirrors exact bytes to the paper archive locations | In: `papers/obstruction_aware_admission/paper.md`; out: paper-local PDF, `papers/pdf/` copy, optional existing local Metaphysics archive |
+| `build_formal_system_atlas_pdf.py` | ReportLab renderer for the repository-wide formal system audit; reads the narrative and generates exhaustive claim, evidence, experiment, preregistration, result-signal, and Lean declaration appendices | In: `papers/formal_system_atlas/paper.md` plus checked-in registries and `formal/**/*.lean`; out: `output/pdf/research_derived_experiments_formal_system_atlas_2026-08-19.pdf` |
 
 ### 4.2 PDF toolkit & builders
 
@@ -1148,6 +1150,7 @@ Pattern: `papers/<topic>/paper.md` (+ optional prereg/runbook/figures).
 
 Notable bundles:
 
+- `papers/formal_system_atlas/` — repository-wide typed claim audit: formal ontology and dynamics, proof-status boundaries, empirical findings and failures, hypothesis outcomes, open conjectures, and a reproducible PDF with generated exhaustive appendices
 - `papers/icml_publication_package_2026/` — submission packages
 - `papers/constraint_swap_causal_geometry/` — citation-grounded source, four figures, and deterministic PDF for the registered scoped counterexample
 - `papers/future_commitment_quotient/` — theorem, preregistered 2×2 result, two figures, calibrated limitations, and deterministic nine-page PDF
