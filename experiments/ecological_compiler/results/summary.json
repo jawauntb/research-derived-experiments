@@ -1,0 +1,704 @@
+{
+  "claim_ceiling": "Cross-sectional association only; no causal, nutritional, neurobiological, genetic, or Europe-specific superiority inference.",
+  "claim_tier": "descriptive",
+  "compiler_pattern": {
+    "aic_change_m2_minus_m1_common": -57.47217341304565,
+    "m1_common_coefficient": 0.2665243948497549,
+    "m2_coefficient": 0.26737374149168586,
+    "proportional_attenuation": -0.0031867500999664955
+  },
+  "cutpoint_sensitivity": [
+    {
+      "coefficient": 0.3597827270504303,
+      "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "same_sign": true,
+      "standard_error": 0.38280610246841723,
+      "success": true,
+      "threshold_ea033_at_least": 2,
+      "within_three_pooled_se": true
+    },
+    {
+      "coefficient": 0.430855558660184,
+      "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "same_sign": true,
+      "standard_error": 0.5005441094872279,
+      "success": true,
+      "threshold_ea033_at_least": 3,
+      "within_three_pooled_se": true
+    },
+    {
+      "coefficient": 0.42173759328007154,
+      "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "same_sign": true,
+      "standard_error": 0.6525138073368998,
+      "success": true,
+      "threshold_ea033_at_least": 4,
+      "within_three_pooled_se": true
+    },
+    {
+      "coefficient": 1.417973651073698,
+      "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "same_sign": true,
+      "standard_error": 2.4325851476286995,
+      "success": true,
+      "threshold_ea033_at_least": 5,
+      "within_three_pooled_se": true
+    }
+  ],
+  "data_audit": {
+    "family_clusters": 164,
+    "m1_outcome_counts": {
+      "1": 523,
+      "2": 333,
+      "3": 162,
+      "4": 83,
+      "5": 44
+    },
+    "macroregions": [
+      "Africa",
+      "Australia",
+      "Eurasia",
+      "North America",
+      "Papunesia",
+      "South America"
+    ],
+    "missingness": {
+      "agriculture": 1,
+      "annual_temperature": 0,
+      "community_size": 680,
+      "distance_to_coast": 0,
+      "fishing": 1,
+      "gathering": 1,
+      "hunting": 1,
+      "husbandry": 1,
+      "net_primary_production": 10,
+      "political_complexity": 136,
+      "population": 338,
+      "precipitation_predictability": 0,
+      "settlement": 104,
+      "temperature_variance": 0
+    },
+    "spatial_clusters": 83
+  },
+  "gates": {
+    "EC_G0_PROVENANCE": "PASS",
+    "EC_G1_DATA_INTEGRITY": "PASS",
+    "EC_G2_ADJUSTED_ASSOCIATION": "FAIL",
+    "EC_G3_COASTAL_SEPARATION": "FAIL",
+    "EC_G4_SUBSISTENCE_SPECIFICITY": "PASS",
+    "EC_G5_COMPILER_PATTERN": "FAIL",
+    "EC_G6_TRANSPORT": "FAIL",
+    "EC_G7_ORDINAL_STABILITY": "PASS"
+  },
+  "leave_one_macroregion_out_positive_count": 6,
+  "models": {
+    "m0": {
+      "aic": 2932.323119937798,
+      "approximate_standard_error": 0.3719973502475039,
+      "approximate_wald_95": [
+        -1.0635678409256604,
+        0.3946617720445548
+      ],
+      "coefficient_per_category": -0.3344530344405528,
+      "cutpoints": [
+        -0.7147011677541489,
+        0.6436064452065454,
+        1.6709448584157416,
+        2.8263450667668666
+      ],
+      "features": [
+        "fishing"
+      ],
+      "iterations": 19,
+      "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "n": 1155,
+      "nll": 1461.161559968899,
+      "standardized_coefficient": -0.5837740055613333,
+      "success": true
+    },
+    "m1": {
+      "aic": 2468.820549794872,
+      "approximate_standard_error": 0.8221125518980426,
+      "approximate_wald_95": [
+        -1.3528282534772187,
+        1.8698529499631082
+      ],
+      "coefficient_per_category": 0.2585123482429448,
+      "cutpoints": [
+        -0.40506492953732604,
+        1.3745277397396625,
+        2.6679077477645827,
+        4.0912394307707345
+      ],
+      "features": [
+        "fishing",
+        "hunting",
+        "husbandry",
+        "agriculture",
+        "abs_latitude",
+        "log1p_distance_to_coast",
+        "annual_temperature",
+        "temperature_variance",
+        "precipitation_predictability",
+        "net_primary_production",
+        "focal_year",
+        "macroregion=Australia",
+        "macroregion=Eurasia",
+        "macroregion=North America",
+        "macroregion=Papunesia",
+        "macroregion=South America"
+      ],
+      "iterations": 80,
+      "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "n": 1145,
+      "nll": 1214.410274897436,
+      "standardized_coefficient": 0.4468106752433008,
+      "success": true
+    },
+    "m1_common_m2_sample": {
+      "aic": 962.7640439171674,
+      "approximate_standard_error": 0.7515203201237094,
+      "approximate_wald_95": [
+        -1.2064554325927155,
+        1.7395042222922252
+      ],
+      "coefficient_per_category": 0.2665243948497549,
+      "cutpoints": [
+        -0.4033217046477073,
+        1.3240125953961825,
+        2.3975430938383724,
+        3.614755718902214
+      ],
+      "features": [
+        "fishing",
+        "hunting",
+        "husbandry",
+        "agriculture",
+        "abs_latitude",
+        "log1p_distance_to_coast",
+        "annual_temperature",
+        "temperature_variance",
+        "precipitation_predictability",
+        "net_primary_production",
+        "focal_year",
+        "macroregion=Australia",
+        "macroregion=Eurasia",
+        "macroregion=North America",
+        "macroregion=Papunesia",
+        "macroregion=South America"
+      ],
+      "iterations": 132,
+      "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "n": 467,
+      "nll": 461.3820219585837,
+      "standardized_coefficient": 0.48003428649641267,
+      "success": true
+    },
+    "m2": {
+      "aic": 905.2918705041218,
+      "approximate_standard_error": 0.3712716555533893,
+      "approximate_wald_95": [
+        -0.46031870339295716,
+        0.9950661863763288
+      ],
+      "coefficient_per_category": 0.26737374149168586,
+      "cutpoints": [
+        0.010729240645959112,
+        1.9803321189339391,
+        3.340192649099394,
+        4.762393739072202
+      ],
+      "features": [
+        "fishing",
+        "hunting",
+        "husbandry",
+        "agriculture",
+        "abs_latitude",
+        "log1p_distance_to_coast",
+        "annual_temperature",
+        "temperature_variance",
+        "precipitation_predictability",
+        "net_primary_production",
+        "focal_year",
+        "community_size",
+        "log1p_population",
+        "macroregion=Australia",
+        "macroregion=Eurasia",
+        "macroregion=North America",
+        "macroregion=Papunesia",
+        "macroregion=South America",
+        "settlement=2",
+        "settlement=3",
+        "settlement=4",
+        "settlement=5",
+        "settlement=6",
+        "settlement=7",
+        "settlement=8"
+      ],
+      "iterations": 157,
+      "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "n": 467,
+      "nll": 423.6459352520609,
+      "standardized_coefficient": 0.4815640358068925,
+      "success": true
+    }
+  },
+  "provenance": {
+    "dplace_support_commit": "9bfed2c8c206be00f55f71516f262bbca2234e5a",
+    "dplace_support_worktree_clean": true,
+    "duplicate_counts": {},
+    "ea_commit": "5aa46eea62815daa283ac67cc757065a1b3be16e",
+    "ea_worktree_clean": true,
+    "input_sha256": {
+      "artifacts/ecological_compiler/dplace-data/csv/glottolog.csv": "49f164b5e729399586fe1fa15db1d7528cbdabd2a01d7cbcae47fe5821d4950e",
+      "artifacts/ecological_compiler/dplace-data/datasets/GSHHS/data.csv": "aa80ed44b4c271de2568f557b9f706465578f548b2fe439e08a2d7732023d7c2",
+      "artifacts/ecological_compiler/dplace-data/datasets/MODIS/data.csv": "f9bed7627da01d6df7d135a47ed8d30d01bccdbbddfda08c4cec2f314cc8e13b",
+      "artifacts/ecological_compiler/dplace-data/datasets/ecoClimate/data.csv": "faa1321d932e084a0781bcbfc2ed971fa58558a4062d22ac1736c3df5456e125",
+      "artifacts/ecological_compiler/dplace-dataset-ea/cldf/codes.csv": "a57cfd1a1ec35a5b7872700a10693a13e73b7d50fac40d5ce3976e5724c9c9e5",
+      "artifacts/ecological_compiler/dplace-dataset-ea/cldf/data.csv": "69c3ce90ae8a11ac9da8e773c09d2038537d100555e89b60bebba8f6db317990",
+      "artifacts/ecological_compiler/dplace-dataset-ea/cldf/societies.csv": "0c665e055fa1fa7358594c60e1fd5efd6c9da1fc5a222305e1c9d46a14716d2c"
+    },
+    "societies_loaded": 1291
+  },
+  "run_id": "ecological_compiler_study1_2026_08_26",
+  "schema_version": "1.0",
+  "seed": 20260826,
+  "subsistence_substitutes": {
+    "gathering": {
+      "aic": 2469.1503425436513,
+      "approximate_standard_error": 0.6409859977221637,
+      "approximate_wald_95": [
+        -1.5103266829473705,
+        1.002338428123511
+      ],
+      "coefficient_per_category": -0.25399412741192967,
+      "cutpoints": [
+        -1.087382505466446,
+        0.6920396897238703,
+        1.985448698059961,
+        3.4077680872448335
+      ],
+      "features": [
+        "gathering",
+        "hunting",
+        "husbandry",
+        "agriculture",
+        "abs_latitude",
+        "log1p_distance_to_coast",
+        "annual_temperature",
+        "temperature_variance",
+        "precipitation_predictability",
+        "net_primary_production",
+        "focal_year",
+        "macroregion=Australia",
+        "macroregion=Eurasia",
+        "macroregion=North America",
+        "macroregion=Papunesia",
+        "macroregion=South America"
+      ],
+      "iterations": 67,
+      "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "n": 1145,
+      "nll": 1214.5751712718256,
+      "standardized_coefficient": -0.4133616536101668,
+      "success": true
+    },
+    "hunting": {
+      "aic": 2468.820548401455,
+      "approximate_standard_error": 0.5634475248695681,
+      "approximate_wald_95": [
+        -0.9707408621756171,
+        1.2379734353130896
+      ],
+      "coefficient_per_category": 0.1336162865687363,
+      "cutpoints": [
+        -0.6046092395309287,
+        1.174962064020797,
+        2.4683640441743977,
+        3.8916897691467116
+      ],
+      "features": [
+        "hunting",
+        "fishing",
+        "husbandry",
+        "agriculture",
+        "abs_latitude",
+        "log1p_distance_to_coast",
+        "annual_temperature",
+        "temperature_variance",
+        "precipitation_predictability",
+        "net_primary_production",
+        "focal_year",
+        "macroregion=Australia",
+        "macroregion=Eurasia",
+        "macroregion=North America",
+        "macroregion=Papunesia",
+        "macroregion=South America"
+      ],
+      "iterations": 80,
+      "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "n": 1145,
+      "nll": 1214.4102742007276,
+      "standardized_coefficient": 0.21380962561454997,
+      "success": true
+    }
+  },
+  "transport": {
+    "leave_one_macroregion_out": {
+      "Africa": {
+        "aic": 1171.7308407351693,
+        "approximate_standard_error": 0.47165152806161814,
+        "approximate_wald_95": [
+          -0.7648482127372903,
+          1.084025777264253
+        ],
+        "coefficient_per_category": 0.1595887822634813,
+        "cutpoints": [
+          -0.1673723115297952,
+          1.5374867353114754,
+          2.627407118502586,
+          3.754277496212528
+        ],
+        "features": [
+          "fishing",
+          "hunting",
+          "husbandry",
+          "agriculture",
+          "abs_latitude",
+          "log1p_distance_to_coast",
+          "annual_temperature",
+          "temperature_variance",
+          "precipitation_predictability",
+          "net_primary_production",
+          "focal_year",
+          "macroregion=Australia",
+          "macroregion=Eurasia",
+          "macroregion=North America",
+          "macroregion=Papunesia",
+          "macroregion=South America"
+        ],
+        "iterations": 57,
+        "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+        "n": 666,
+        "nll": 565.8654203675846,
+        "standardized_coefficient": 0.30184683574611376,
+        "success": true
+      },
+      "Australia": {
+        "aic": 2460.6105145063125,
+        "approximate_standard_error": 0.4969442039345075,
+        "approximate_wald_95": [
+          -0.6996795395719928,
+          1.2483417398512766
+        ],
+        "coefficient_per_category": 0.27433110013964185,
+        "cutpoints": [
+          -0.40249559442510596,
+          1.3758118568977347,
+          2.6691809912303177,
+          4.092088970159963
+        ],
+        "features": [
+          "fishing",
+          "hunting",
+          "husbandry",
+          "agriculture",
+          "abs_latitude",
+          "log1p_distance_to_coast",
+          "annual_temperature",
+          "temperature_variance",
+          "precipitation_predictability",
+          "net_primary_production",
+          "focal_year",
+          "macroregion=Australia",
+          "macroregion=Eurasia",
+          "macroregion=North America",
+          "macroregion=Papunesia",
+          "macroregion=South America"
+        ],
+        "iterations": 34,
+        "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+        "n": 1132,
+        "nll": 1210.3052572531562,
+        "standardized_coefficient": 0.47444268073111695,
+        "success": true
+      },
+      "Eurasia": {
+        "aic": 1923.211177263786,
+        "approximate_standard_error": 0.8244146841712103,
+        "approximate_wald_95": [
+          -1.3014766105776225,
+          1.930228951373522
+        ],
+        "coefficient_per_category": 0.3143761703979498,
+        "cutpoints": [
+          -0.6608690045554889,
+          1.2606718765698788,
+          2.8539471642837593,
+          5.105005102704956
+        ],
+        "features": [
+          "fishing",
+          "hunting",
+          "husbandry",
+          "agriculture",
+          "abs_latitude",
+          "log1p_distance_to_coast",
+          "annual_temperature",
+          "temperature_variance",
+          "precipitation_predictability",
+          "net_primary_production",
+          "focal_year",
+          "macroregion=Australia",
+          "macroregion=Eurasia",
+          "macroregion=North America",
+          "macroregion=Papunesia",
+          "macroregion=South America"
+        ],
+        "iterations": 89,
+        "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+        "n": 975,
+        "nll": 941.605588631893,
+        "standardized_coefficient": 0.5440235310296052,
+        "success": true
+      },
+      "North America": {
+        "aic": 2098.86299922654,
+        "approximate_standard_error": 0.447567881931431,
+        "approximate_wald_95": [
+          -0.5252483325379045,
+          1.229217764633305
+        ],
+        "coefficient_per_category": 0.3519847160477002,
+        "cutpoints": [
+          -0.6349130925001332,
+          1.128862932810448,
+          2.4557936826921694,
+          3.913312875854575
+        ],
+        "features": [
+          "fishing",
+          "hunting",
+          "husbandry",
+          "agriculture",
+          "abs_latitude",
+          "log1p_distance_to_coast",
+          "annual_temperature",
+          "temperature_variance",
+          "precipitation_predictability",
+          "net_primary_production",
+          "focal_year",
+          "macroregion=Australia",
+          "macroregion=Eurasia",
+          "macroregion=North America",
+          "macroregion=Papunesia",
+          "macroregion=South America"
+        ],
+        "iterations": 60,
+        "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+        "n": 873,
+        "nll": 1029.43149961327,
+        "standardized_coefficient": 0.5224801878163978,
+        "success": true
+      },
+      "Papunesia": {
+        "aic": 2192.977074778086,
+        "approximate_standard_error": 0.6478869905427949,
+        "approximate_wald_95": [
+          -1.1416645818417164,
+          1.3980524210860394
+        ],
+        "coefficient_per_category": 0.12819391962216162,
+        "cutpoints": [
+          -0.6755442376548839,
+          1.159902267239626,
+          2.415950552708667,
+          3.890947792274104
+        ],
+        "features": [
+          "fishing",
+          "hunting",
+          "husbandry",
+          "agriculture",
+          "abs_latitude",
+          "log1p_distance_to_coast",
+          "annual_temperature",
+          "temperature_variance",
+          "precipitation_predictability",
+          "net_primary_production",
+          "focal_year",
+          "macroregion=Australia",
+          "macroregion=Eurasia",
+          "macroregion=North America",
+          "macroregion=Papunesia",
+          "macroregion=South America"
+        ],
+        "iterations": 57,
+        "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+        "n": 1018,
+        "nll": 1076.488537389043,
+        "standardized_coefficient": 0.21827791668766994,
+        "success": true
+      },
+      "South America": {
+        "aic": 2379.948014422776,
+        "approximate_standard_error": 0.7270942570746394,
+        "approximate_wald_95": [
+          -1.1290464975167944,
+          1.7211629902157919
+        ],
+        "coefficient_per_category": 0.29605824634949873,
+        "cutpoints": [
+          -0.42961950092390805,
+          1.3605256271548083,
+          2.656410089587191,
+          4.105106167034088
+        ],
+        "features": [
+          "fishing",
+          "hunting",
+          "husbandry",
+          "agriculture",
+          "abs_latitude",
+          "log1p_distance_to_coast",
+          "annual_temperature",
+          "temperature_variance",
+          "precipitation_predictability",
+          "net_primary_production",
+          "focal_year",
+          "macroregion=Australia",
+          "macroregion=Eurasia",
+          "macroregion=North America",
+          "macroregion=Papunesia",
+          "macroregion=South America"
+        ],
+        "iterations": 54,
+        "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+        "n": 1061,
+        "nll": 1169.974007211388,
+        "standardized_coefficient": 0.5174206613095487,
+        "success": true
+      }
+    },
+    "non_europe": {
+      "aic": 2347.26388508091,
+      "approximate_standard_error": 0.46544832741830444,
+      "approximate_wald_95": [
+        -0.6034293548251066,
+        1.2211280886546467
+      ],
+      "coefficient_per_category": 0.30884936691477,
+      "cutpoints": [
+        -0.13698361172549078,
+        1.6559585892848239,
+        3.022324864656306,
+        4.695872517795068
+      ],
+      "features": [
+        "fishing",
+        "hunting",
+        "husbandry",
+        "agriculture",
+        "abs_latitude",
+        "log1p_distance_to_coast",
+        "annual_temperature",
+        "temperature_variance",
+        "precipitation_predictability",
+        "net_primary_production",
+        "focal_year",
+        "macroregion=Australia",
+        "macroregion=Eurasia",
+        "macroregion=North America",
+        "macroregion=Papunesia",
+        "macroregion=South America"
+      ],
+      "iterations": 68,
+      "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "n": 1107,
+      "nll": 1153.631942540455,
+      "standardized_coefficient": 0.5355180482435158,
+      "success": true
+    },
+    "without_three_largest_families": {
+      "aic": 1154.3536846960872,
+      "approximate_standard_error": 0.5019051854699844,
+      "approximate_wald_95": [
+        -1.0610621071508113,
+        0.9064062198915277
+      ],
+      "coefficient_per_category": -0.07732794362964181,
+      "cutpoints": [
+        -0.6274534270681599,
+        1.5589787473845473,
+        2.5198390839138773,
+        3.610264625638132
+      ],
+      "excluded_families": [
+        "Atlantic-Congo",
+        "Austronesian",
+        "Afro-Asiatic"
+      ],
+      "features": [
+        "fishing",
+        "hunting",
+        "husbandry",
+        "agriculture",
+        "abs_latitude",
+        "log1p_distance_to_coast",
+        "annual_temperature",
+        "temperature_variance",
+        "precipitation_predictability",
+        "net_primary_production",
+        "focal_year",
+        "macroregion=Australia",
+        "macroregion=Eurasia",
+        "macroregion=North America",
+        "macroregion=Papunesia",
+        "macroregion=South America"
+      ],
+      "iterations": 80,
+      "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "n": 675,
+      "nll": 557.1768423480436,
+      "standardized_coefficient": -0.14262981047409243,
+      "success": true
+    }
+  },
+  "uncertainty": {
+    "family_block": {
+      "attempts": 300,
+      "failures": 0,
+      "interval_95": [
+        -0.15459664882665117,
+        0.47762719869056497
+      ],
+      "level_dropout_failures": 0,
+      "requested_draws": 300,
+      "successful_draws": 300
+    },
+    "spatial_block": {
+      "attempts": 300,
+      "failures": 0,
+      "interval_95": [
+        -0.06051727862139018,
+        0.43636016800260097
+      ],
+      "level_dropout_failures": 0,
+      "requested_draws": 300,
+      "successful_draws": 300,
+      "sufficient_draws": true
+    },
+    "within_macroregion_permutation": {
+      "attempts": 500,
+      "failures": 0,
+      "null_interval_95": [
+        -0.08140538537748411,
+        0.08634077647536624
+      ],
+      "one_sided_p": 0.001996007984031936,
+      "requested_draws": 500,
+      "successful_draws": 500
+    }
+  },
+  "verdict": "rejected"
+}

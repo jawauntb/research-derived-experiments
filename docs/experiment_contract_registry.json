@@ -1741,6 +1741,39 @@
       ]
     },
     {
+      "package": "ecological_compiler",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/ecological_compiler/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "ecological_compiler_study1_2026_08_26",
+      "runs": [
+        {
+          "run_id": "ecological_compiler_study1_2026_08_26",
+          "publication_package": "ecological_compiler",
+          "runtime_package": "ecological_compiler",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/ecological_compiler/experiment_manifest.json",
+          "report_paths": [
+            "experiments/ecological_compiler/preregistration.md",
+            "experiments/ecological_compiler/results/summary.json",
+            "experiments/ecological_compiler/results/summary.md",
+            "papers/ecological_compiler/paper.md",
+            "output/pdf/the_ecological_compiler_2026-08-26.pdf"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_path": "experiments/ecological_compiler/preregistration.md",
+          "preregistration_digest": "b8f1f88f7ecfd52e7e591540f84f993b487a7d271b4dc6a0459aa86abe6eecf2",
+          "producing_agent": {
+            "identity": "Codex (agent, under Jawaun Brown direction)",
+            "session_ref": "codex/ecological-compiler-paper 2026-08-26"
+          }
+        }
+      ]
+    },
+    {
       "package": "eml_fiber_spectrum",
       "coverage_mode": "structured_manifest",
       "manifest_path": "experiments/eml_fiber_spectrum/experiment_manifest.json",

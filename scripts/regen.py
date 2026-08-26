@@ -41,6 +41,13 @@ CPU_DEPS = [
 # Local, CPU-only, deterministic reproducers. Each value is a list of commands
 # (run from repo root). Everything else prints its documented run command.
 LOCAL = {
+    "ecological_compiler": [
+        "uv run --no-project --python 3.12 --with numpy==2.5.1 "
+        "--with scipy==1.18.0 --with matplotlib==3.11.0 "
+        "python3 -m experiments.ecological_compiler.analysis",
+        "uv run --no-project --python 3.12 --with reportlab==4.4.9 "
+        "--with pypdf==6.10.0 python3 scripts/build_ecological_compiler_pdf.py",
+    ],
     "grid_cell_weakness": [
         "python experiments/grid_cell_weakness/pilot.py",
         "python experiments/grid_cell_weakness/run_local.py --seeds 2 --steps 4000",
@@ -132,7 +139,9 @@ def load_structured_recipe(package: str, *, root: Path = ROOT) -> tuple[list[str
     if package not in CLEAN_CLONE_ALLOWLIST:
         raise ValueError(f"package is not in the clean-clone allowlist: {package}")
     output_rel = CLEAN_CLONE_ALLOWLIST[package]
-    registry = json.loads((root / "docs" / "experiment_contract_registry.json").read_text())
+    registry = json.loads(
+        (root / "docs" / "experiment_contract_registry.json").read_text()
+    )
     record = next(
         (
             item
@@ -141,7 +150,10 @@ def load_structured_recipe(package: str, *, root: Path = ROOT) -> tuple[list[str
         ),
         None,
     )
-    if not isinstance(record, dict) or record.get("coverage_mode") != "structured_manifest":
+    if (
+        not isinstance(record, dict)
+        or record.get("coverage_mode") != "structured_manifest"
+    ):
         raise ValueError(f"clean-clone package lacks structured coverage: {package}")
     manifest_rel = record.get("manifest_path")
     primary_run_id = record.get("primary_run_id")
@@ -172,12 +184,18 @@ def load_structured_recipe(package: str, *, root: Path = ROOT) -> tuple[list[str
             f"clean-clone recipe must be local_cpu, found {execution_class}: {package}"
         )
     command = runtime.get("command")
-    if not isinstance(command, list) or not command or any(
-        not isinstance(part, str) or not part for part in command
+    if (
+        not isinstance(command, list)
+        or not command
+        or any(not isinstance(part, str) or not part for part in command)
     ):
-        raise ValueError(f"manifest runtime.command must be a non-empty argv list: {package}")
+        raise ValueError(
+            f"manifest runtime.command must be a non-empty argv list: {package}"
+        )
     if any(";" in part or "|" in part or "&&" in part for part in command):
-        raise ValueError(f"manifest runtime.command looks shell-interpolated: {package}")
+        raise ValueError(
+            f"manifest runtime.command looks shell-interpolated: {package}"
+        )
     return list(cast(list[str], command)), output_rel
 
 
@@ -306,7 +324,9 @@ def main(argv: list[str] | None = None) -> None:
             f"[regen] {name} is not a local CPU reproducer "
             "(likely needs Modal/GPU/secrets)."
         )
-        print(f"[regen] documented run command:\n    {command or '(see README / result reports)'}")
+        print(
+            f"[regen] documented run command:\n    {command or '(see README / result reports)'}"
+        )
         print("[regen] inspect only; this dispatcher does not launch Modal.")
     else:
         print(f"[regen] unknown experiment '{name}'. Try: python scripts/regen.py list")

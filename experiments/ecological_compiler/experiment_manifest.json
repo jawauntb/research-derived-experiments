@@ -1,0 +1,132 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "ecological_compiler_study1",
+  "hypothesis": "Fishing dependence has a positive residual association with jurisdictional hierarchy across Ethnographic Atlas societies after measured subsistence, ecological, geographic, and shared-history controls; settlement and population scale explain a material portion of any residual.",
+  "claim_tier": "descriptive",
+  "controls": [
+    {
+      "control_id": "within_macroregion_permutation",
+      "description": "Permute fishing dependence within D-PLACE macroregions to estimate a geography-preserving null distribution."
+    },
+    {
+      "control_id": "subsistence_substitutes",
+      "description": "Replace fishing with hunting or gathering in matched adjusted models to test whether the result is distinctive to aquatic subsistence."
+    },
+    {
+      "control_id": "distance_to_coast",
+      "description": "Include logged distance to coast so fishing dependence is not merely a coastline indicator."
+    },
+    {
+      "control_id": "family_and_spatial_blocks",
+      "description": "Resample Glottolog language families and 20-degree geographic cells to expose cultural and spatial dependence."
+    }
+  ],
+  "seeds": [20260826],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": [
+      "uv",
+      "run",
+      "--no-project",
+      "--python",
+      "3.12",
+      "--with",
+      "numpy==2.5.1",
+      "--with",
+      "scipy==1.18.0",
+      "--with",
+      "matplotlib==3.11.0",
+      "python3",
+      "-m",
+      "experiments.ecological_compiler.analysis"
+    ],
+    "estimated_minutes": 15,
+    "max_cost_usd": 0
+  },
+  "dependencies": [
+    {
+      "name": "matplotlib",
+      "version": "3.11.0"
+    },
+    {
+      "name": "numpy",
+      "version": "2.5.1"
+    },
+    {
+      "name": "scipy",
+      "version": "1.18.0"
+    }
+  ],
+  "gates": [
+    {
+      "gate_id": "EC_G0_PROVENANCE",
+      "criterion": "Match the registered source commits and SHA-256 hashes for all seven inputs, require clean source-data worktrees, and record join counts and the deterministic run command."
+    },
+    {
+      "gate_id": "EC_G1_DATA_INTEGRITY",
+      "criterion": "Registered supports and finite matrices pass, society-variable duplicates are absent after deterministic resolution, all outcome levels remain, and adjusted M1 has at least 600 complete societies."
+    },
+    {
+      "gate_id": "EC_G2_ADJUSTED_ASSOCIATION",
+      "criterion": "M1 fishing coefficient is positive, the language-family block 95% interval excludes zero, and the within-macroregion permutation p-value is at most 0.05."
+    },
+    {
+      "gate_id": "EC_G3_COASTAL_SEPARATION",
+      "criterion": "EC_G2 is evaluated in the model that includes logged distance to coast."
+    },
+    {
+      "gate_id": "EC_G4_SUBSISTENCE_SPECIFICITY",
+      "criterion": "The standardized M1 fishing coefficient exceeds matched hunting and gathering substitute coefficients."
+    },
+    {
+      "gate_id": "EC_G5_COMPILER_PATTERN",
+      "criterion": "Potential mediators improve AIC and attenuate the absolute fishing coefficient by at least 25 percent without sign reversal."
+    },
+    {
+      "gate_id": "EC_G6_TRANSPORT",
+      "criterion": "M1 fishing remains positive outside Europe, after excluding the three largest language families, and in all six leave-one-macroregion-out refits."
+    },
+    {
+      "gate_id": "EC_G7_ORDINAL_STABILITY",
+      "criterion": "All binary-cutpoint fishing coefficients share the ordinal sign and stay within three pooled standard errors."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/ecological_compiler/results/summary.json",
+      "public": true
+    },
+    {
+      "kind": "summary",
+      "path": "experiments/ecological_compiler/results/summary.md",
+      "public": true
+    },
+    {
+      "kind": "figure",
+      "path": "experiments/ecological_compiler/results/model_coefficients.png",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/ecological_compiler/preregistration.md",
+      "public": true
+    },
+    {
+      "kind": "paper",
+      "path": "papers/ecological_compiler/paper.md",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "papers/ecological_compiler/source_notes.md",
+      "public": true
+    },
+    {
+      "kind": "paper",
+      "path": "output/pdf/the_ecological_compiler_2026-08-26.pdf",
+      "public": true
+    }
+  ],
+  "status": "rejected"
+}
