@@ -14,6 +14,7 @@ import json
 import math
 import subprocess
 from collections import Counter, defaultdict
+from collections.abc import Mapping
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any, Sequence
@@ -33,6 +34,41 @@ EA_COMMIT = "5aa46eea62815daa283ac67cc757065a1b3be16e"
 DPLACE_COMMIT = "9bfed2c8c206be00f55f71516f262bbca2234e5a"
 SEED = 20260826
 MIN_CUTPOINT_GAP = 1e-4
+
+EXPECTED_INPUT_SHA256 = {
+    "artifacts/ecological_compiler/dplace-data/csv/glottolog.csv": (
+        "49f164b5e729399586fe1fa15db1d7528cbdabd2a01d7cbcae47fe5821d4950e"
+    ),
+    "artifacts/ecological_compiler/dplace-data/datasets/GSHHS/data.csv": (
+        "aa80ed44b4c271de2568f557b9f706465578f548b2fe439e08a2d7732023d7c2"
+    ),
+    "artifacts/ecological_compiler/dplace-data/datasets/MODIS/data.csv": (
+        "f9bed7627da01d6df7d135a47ed8d30d01bccdbbddfda08c4cec2f314cc8e13b"
+    ),
+    "artifacts/ecological_compiler/dplace-data/datasets/ecoClimate/data.csv": (
+        "faa1321d932e084a0781bcbfc2ed971fa58558a4062d22ac1736c3df5456e125"
+    ),
+    "artifacts/ecological_compiler/dplace-dataset-ea/cldf/codes.csv": (
+        "a57cfd1a1ec35a5b7872700a10693a13e73b7d50fac40d5ce3976e5724c9c9e5"
+    ),
+    "artifacts/ecological_compiler/dplace-dataset-ea/cldf/data.csv": (
+        "69c3ce90ae8a11ac9da8e773c09d2038537d100555e89b60bebba8f6db317990"
+    ),
+    "artifacts/ecological_compiler/dplace-dataset-ea/cldf/societies.csv": (
+        "0c665e055fa1fa7358594c60e1fd5efd6c9da1fc5a222305e1c9d46a14716d2c"
+    ),
+}
+
+GATE_IDS = (
+    "EC_G0_PROVENANCE",
+    "EC_G1_DATA_INTEGRITY",
+    "EC_G2_ADJUSTED_ASSOCIATION",
+    "EC_G3_COASTAL_SEPARATION",
+    "EC_G4_SUBSISTENCE_SPECIFICITY",
+    "EC_G5_COMPILER_PATTERN",
+    "EC_G6_TRANSPORT",
+    "EC_G7_ORDINAL_STABILITY",
+)
 
 EA_VARIABLES = {
     "EA001": "gathering",
@@ -85,12 +121,19 @@ class ModelData:
     feature_names: tuple[str, ...]
     family_clusters: tuple[str, ...]
     spatial_clusters: tuple[str, ...]
-    regions: tuple[str, ...]
+    macroregions: tuple[str, ...]
     exposure_sd: float
 
 
 def _softplus(value: np.ndarray) -> np.ndarray:
     return np.logaddexp(0.0, value)
+
+
+def _probabilities_from_cumulative(cumulative: np.ndarray) -> np.ndarray:
+    first = cumulative[:, :1]
+    middle = np.diff(cumulative, axis=1)
+    last = 1.0 - cumulative[:, -1:]
+    return np.clip(np.concatenate((first, middle, last), axis=1), 1e-12, 1.0)
 
 
 def strictly_increasing_cutpoints(raw: np.ndarray) -> np.ndarray:
@@ -115,10 +158,7 @@ def ordered_probabilities(eta: np.ndarray, cutpoints: np.ndarray) -> np.ndarray:
     linear = np.asarray(eta, dtype=float)
     cuts = np.asarray(cutpoints, dtype=float)
     cumulative = expit(cuts[:, None] - linear[None, :]).T
-    first = cumulative[:, :1]
-    middle = np.diff(cumulative, axis=1)
-    last = 1.0 - cumulative[:, -1:]
-    return np.clip(np.concatenate((first, middle, last), axis=1), 1e-12, 1.0)
+    return _probabilities_from_cumulative(cumulative)
 
 
 def _initial_ordered_parameters(x: np.ndarray, y: np.ndarray) -> np.ndarray:
@@ -127,7 +167,9 @@ def _initial_ordered_parameters(x: np.ndarray, y: np.ndarray) -> np.ndarray:
     cutpoints = logit(np.clip(proportions, 0.02, 0.98))
     for index in range(1, len(cutpoints)):
         cutpoints[index] = max(cutpoints[index], cutpoints[index - 1] + 0.2)
-    return np.concatenate((np.zeros(x.shape[1]), _inverse_cutpoint_parameters(cutpoints)))
+    return np.concatenate(
+        (np.zeros(x.shape[1]), _inverse_cutpoint_parameters(cutpoints))
+    )
 
 
 def _ordered_nll(parameters: np.ndarray, x: np.ndarray, y: np.ndarray) -> float:
@@ -138,6 +180,56 @@ def _ordered_nll(parameters: np.ndarray, x: np.ndarray, y: np.ndarray) -> float:
     selected = probabilities[np.arange(len(y)), y]
     value = -float(np.log(selected).sum())
     return value if math.isfinite(value) else 1e100
+
+
+def _ordered_nll_and_gradient(
+    parameters: np.ndarray, x: np.ndarray, y: np.ndarray
+) -> tuple[float, np.ndarray]:
+    """Return ordered-logit NLL and its analytic parameter gradient."""
+
+    n_features = x.shape[1]
+    coefficients = parameters[:n_features]
+    raw_cutpoints = parameters[n_features:]
+    cutpoints = strictly_increasing_cutpoints(raw_cutpoints)
+    cumulative = expit(cutpoints[:, None] - (x @ coefficients)[None, :]).T
+    densities = cumulative * (1.0 - cumulative)
+    probabilities = _probabilities_from_cumulative(cumulative)
+    selected = probabilities[np.arange(len(y)), y]
+    nll = -float(np.log(selected).sum())
+
+    eta_gradient = np.empty(len(y), dtype=float)
+    first = y == 0
+    last = y == len(cutpoints)
+    middle = ~(first | last)
+    eta_gradient[first] = densities[first, 0] / selected[first]
+    eta_gradient[last] = -densities[last, -1] / selected[last]
+    middle_rows = np.flatnonzero(middle)
+    middle_levels = y[middle]
+    eta_gradient[middle] = (
+        densities[middle_rows, middle_levels]
+        - densities[middle_rows, middle_levels - 1]
+    ) / selected[middle]
+
+    cutpoint_gradient = np.zeros(len(cutpoints), dtype=float)
+    for index in range(len(cutpoints)):
+        upper_rows = y == index
+        lower_rows = y == index + 1
+        cutpoint_gradient[index] -= np.sum(
+            densities[upper_rows, index] / selected[upper_rows]
+        )
+        cutpoint_gradient[index] += np.sum(
+            densities[lower_rows, index] / selected[lower_rows]
+        )
+
+    raw_gradient = np.empty_like(raw_cutpoints)
+    raw_gradient[0] = sum(float(value) for value in cutpoint_gradient)
+    raw_gradient[1:] = (
+        expit(raw_cutpoints[1:]) * np.cumsum(cutpoint_gradient[:0:-1])[::-1]
+    )
+    gradient = np.concatenate((x.T @ eta_gradient, raw_gradient))
+    if not math.isfinite(nll) or not np.all(np.isfinite(gradient)):
+        return 1e100, np.zeros_like(parameters)
+    return nll, gradient
 
 
 def _optimizer_standard_errors(result: OptimizeResult, n_parameters: int) -> np.ndarray:
@@ -157,7 +249,7 @@ def fit_ordered_logit(
     y: np.ndarray,
     *,
     start: np.ndarray | None = None,
-    maxiter: int = 300,
+    maxiter: int = 1_000,
 ) -> OrderedFit:
     """Fit a proportional-odds ordered logit with five or more observations."""
 
@@ -178,17 +270,25 @@ def fit_ordered_logit(
     bounds = [(-12.0, 12.0)] * design.shape[1]
     bounds += [(-12.0, 12.0)] + [(-8.0, 8.0)] * (n_cutpoints - 1)
     result = minimize(
-        _ordered_nll,
+        _ordered_nll_and_gradient,
         initial,
         args=(design, outcome),
         method="L-BFGS-B",
+        jac=True,
         bounds=bounds,
-        options={"maxiter": maxiter, "ftol": 1e-10, "gtol": 1e-6},
+        options={
+            "maxiter": maxiter,
+            "maxfun": max(50_000, maxiter * (len(initial) + 1) * 4),
+            "ftol": 1e-10,
+            "gtol": 1e-6,
+        },
     )
     parameters = np.asarray(result.x, dtype=float)
     coefficients = parameters[: design.shape[1]]
     cutpoints = strictly_increasing_cutpoints(parameters[design.shape[1] :])
-    standard_errors = _optimizer_standard_errors(result, len(parameters))[: design.shape[1]]
+    standard_errors = _optimizer_standard_errors(result, len(parameters))[
+        : design.shape[1]
+    ]
     success = bool(
         result.success
         and np.all(np.isfinite(parameters))
@@ -213,19 +313,37 @@ def _binary_nll(parameters: np.ndarray, x: np.ndarray, y: np.ndarray) -> float:
     coefficients = parameters[1:]
     eta = intercept + x @ coefficients
     probabilities = np.clip(expit(eta), 1e-12, 1.0 - 1e-12)
-    return -float((y * np.log(probabilities) + (1 - y) * np.log1p(-probabilities)).sum())
+    return -float(
+        (y * np.log(probabilities) + (1 - y) * np.log1p(-probabilities)).sum()
+    )
+
+
+def _binary_nll_and_gradient(
+    parameters: np.ndarray, x: np.ndarray, y: np.ndarray
+) -> tuple[float, np.ndarray]:
+    """Return binary-logit NLL and its analytic parameter gradient."""
+
+    intercept = parameters[0]
+    coefficients = parameters[1:]
+    probabilities = expit(intercept + x @ coefficients)
+    clipped = np.clip(probabilities, 1e-12, 1.0 - 1e-12)
+    nll = -float((y * np.log(clipped) + (1 - y) * np.log1p(-clipped)).sum())
+    residual = probabilities - y
+    gradient = np.concatenate(([residual.sum()], x.T @ residual))
+    return nll, gradient
 
 
 def fit_binary_logit(x: np.ndarray, y: np.ndarray) -> BinaryFit:
     design = np.asarray(x, dtype=float)
     outcome = np.asarray(y, dtype=int)
     result = minimize(
-        _binary_nll,
+        _binary_nll_and_gradient,
         np.zeros(design.shape[1] + 1),
         args=(design, outcome),
         method="L-BFGS-B",
+        jac=True,
         bounds=[(-12.0, 12.0)] * (design.shape[1] + 1),
-        options={"maxiter": 300, "ftol": 1e-10, "gtol": 1e-6},
+        options={"maxiter": 3_000, "maxfun": 50_000, "ftol": 1e-10, "gtol": 1e-6},
     )
     standard_errors = _optimizer_standard_errors(result, len(result.x))[1:]
     return BinaryFit(
@@ -284,7 +402,9 @@ def read_cldf_values(
     return values, dict(duplicate_counts)
 
 
-def _read_long_numeric(path: Path, variable_ids: set[str]) -> dict[str, dict[str, float]]:
+def _read_long_numeric(
+    path: Path, variable_ids: set[str]
+) -> dict[str, dict[str, float]]:
     values: dict[str, dict[str, float]] = {variable: {} for variable in variable_ids}
     with path.open(newline="") as stream:
         for row in csv.DictReader(stream):
@@ -297,7 +417,9 @@ def _read_long_numeric(path: Path, variable_ids: set[str]) -> dict[str, dict[str
                 continue
             society = row.get("soc_id", "")
             existing = values[variable].get(society)
-            if existing is not None and not math.isclose(existing, value, abs_tol=1e-12):
+            if existing is not None and not math.isclose(
+                existing, value, abs_tol=1e-12
+            ):
                 raise ValueError(
                     f"conflicting environmental duplicate for {society} {variable}"
                 )
@@ -313,6 +435,12 @@ def _float_or_none(value: str | None) -> float | None:
     return parsed if math.isfinite(parsed) else None
 
 
+def _is_europe_region(region: str) -> bool:
+    """Identify D-PLACE regional labels assigned to Europe."""
+
+    return region.endswith("Europe")
+
+
 def _git_commit(path: Path) -> str:
     result = subprocess.run(
         ["git", "-C", str(path), "rev-parse", "HEAD"],
@@ -321,6 +449,25 @@ def _git_commit(path: Path) -> str:
         text=True,
     )
     return result.stdout.strip()
+
+
+def _git_worktree_clean(path: Path) -> bool:
+    result = subprocess.run(
+        ["git", "-C", str(path), "status", "--porcelain"],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return not result.stdout.strip()
+
+
+def _glottolog_labels(
+    society_id: str,
+    glottocode: str,
+    glottolog: Mapping[str, tuple[str | None, str | None]],
+) -> tuple[str, str]:
+    family, macroregion = glottolog.get(glottocode, (None, None))
+    return family or f"Unknown:{society_id}", macroregion or "Unknown"
 
 
 def _sha256(path: Path) -> str:
@@ -354,17 +501,15 @@ def load_society_rows() -> tuple[list[dict[str, Any]], dict[str, Any]]:
     if missing:
         raise FileNotFoundError("missing registered inputs: " + ", ".join(missing))
 
-    ea_values, duplicate_counts = read_cldf_values(
-        ea_data, ea_codes, set(EA_VARIABLES)
-    )
+    ea_values, duplicate_counts = read_cldf_values(ea_data, ea_codes, set(EA_VARIABLES))
     climate = _read_long_numeric(climate_path, set(CLIMATE_VARIABLES))
     npp = _read_long_numeric(npp_path, {NPP_VARIABLE})
     coast = _read_long_numeric(coast_path, {COAST_VARIABLE})
 
-    glottolog: dict[str, str] = {}
+    glottolog: dict[str, tuple[str | None, str | None]] = {}
     with glottolog_path.open(newline="") as stream:
         for row in csv.DictReader(stream):
-            glottolog[row["id"]] = row.get("family_name") or "Unknown"
+            glottolog[row["id"]] = (row.get("family_name"), row.get("macroarea"))
 
     rows: list[dict[str, Any]] = []
     with ea_societies.open(newline="") as stream:
@@ -373,6 +518,8 @@ def load_society_rows() -> tuple[list[dict[str, Any]], dict[str, Any]]:
             latitude = _float_or_none(society.get("Latitude"))
             longitude = _float_or_none(society.get("Longitude"))
             focal_year = _float_or_none(society.get("main_focal_year"))
+            glottocode = society.get("Glottocode", "")
+            family, macroregion = _glottolog_labels(society_id, glottocode, glottolog)
             row: dict[str, Any] = {
                 "society_id": society_id,
                 "name": society.get("Name", society_id),
@@ -381,7 +528,8 @@ def load_society_rows() -> tuple[list[dict[str, Any]], dict[str, Any]]:
                 "abs_latitude": abs(latitude) if latitude is not None else None,
                 "focal_year": focal_year,
                 "region": society.get("region") or "Unknown",
-                "family": glottolog.get(society.get("Glottocode", ""), "Unknown"),
+                "macroregion": macroregion or "Unknown",
+                "family": family or f"Unknown:{society_id}",
             }
             if latitude is None or longitude is None:
                 row["spatial_block"] = "Unknown"
@@ -400,6 +548,8 @@ def load_society_rows() -> tuple[list[dict[str, Any]], dict[str, Any]]:
     provenance = {
         "ea_commit": _git_commit(EA_ROOT),
         "dplace_support_commit": _git_commit(DPLACE_ROOT),
+        "ea_worktree_clean": _git_worktree_clean(EA_ROOT),
+        "dplace_support_worktree_clean": _git_worktree_clean(DPLACE_ROOT),
         "input_sha256": {str(path.relative_to(ROOT)): _sha256(path) for path in inputs},
         "duplicate_counts": duplicate_counts,
         "societies_loaded": len(rows),
@@ -447,7 +597,7 @@ def prepare_model_data(
     *,
     exposure: str = "fishing",
     society_ids: set[str] | None = None,
-    region_levels: Sequence[str] | None = None,
+    macroregion_levels: Sequence[str] | None = None,
     settlement_levels: Sequence[int] = tuple(range(1, 9)),
 ) -> ModelData:
     required = _required_numeric_fields(model, exposure)
@@ -482,15 +632,23 @@ def prepare_model_data(
         feature_names.append(name)
 
     if model in {"m1", "m2"}:
-        levels = sorted({str(row["region"]) for row in rows}) if region_levels is None else list(region_levels)
+        levels = (
+            sorted({str(row["macroregion"]) for row in rows})
+            if macroregion_levels is None
+            else list(macroregion_levels)
+        )
         for level in levels[1:]:
-            columns.append(np.array([float(str(row["region"]) == level) for row in selected]))
-            feature_names.append(f"region={level}")
+            columns.append(
+                np.array([float(str(row["macroregion"]) == level) for row in selected])
+            )
+            feature_names.append(f"macroregion={level}")
 
     if model == "m2":
         for level in settlement_levels[1:]:
             columns.append(
-                np.array([float(int(float(row["settlement"])) == level) for row in selected])
+                np.array(
+                    [float(int(float(row["settlement"])) == level) for row in selected]
+                )
             )
             feature_names.append(f"settlement={level}")
 
@@ -503,18 +661,16 @@ def prepare_model_data(
         feature_names=tuple(feature_names),
         family_clusters=tuple(str(row["family"]) for row in selected),
         spatial_clusters=tuple(str(row["spatial_block"]) for row in selected),
-        regions=tuple(str(row["region"]) for row in selected),
+        macroregions=tuple(str(row["macroregion"]) for row in selected),
         exposure_sd=float(exposure_values.std(ddof=0)),
     )
 
 
-def _resampled_indices(clusters: Sequence[str], rng: np.random.Generator) -> np.ndarray:
+def _cluster_members(clusters: Sequence[str]) -> dict[str, np.ndarray]:
     members: dict[str, list[int]] = defaultdict(list)
     for index, cluster in enumerate(clusters):
         members[cluster].append(index)
-    labels = sorted(members)
-    sampled = rng.choice(labels, size=len(labels), replace=True)
-    return np.array([index for label in sampled for index in members[str(label)]], dtype=int)
+    return {label: np.asarray(indices, dtype=int) for label, indices in members.items()}
 
 
 def block_bootstrap(
@@ -524,50 +680,64 @@ def block_bootstrap(
     *,
     draws: int,
     seed: int,
-) -> tuple[list[float], int]:
+) -> tuple[list[float], int, int, int]:
     rng = np.random.default_rng(seed)
+    members = _cluster_members(clusters)
+    labels = sorted(members)
+    outcome_support = np.unique(data.y)
     coefficients: list[float] = []
-    failures = 0
-    for _ in range(draws):
-        indices = _resampled_indices(clusters, rng)
+    optimizer_failures = 0
+    level_dropout_failures = 0
+    attempts = 0
+    max_attempts = max(draws * 10, draws + 10)
+    while len(coefficients) < draws and attempts < max_attempts:
+        attempts += 1
+        sampled = rng.integers(0, len(labels), size=len(labels))
+        indices = np.concatenate([members[labels[int(index)]] for index in sampled])
+        if not np.array_equal(np.unique(data.y[indices]), outcome_support):
+            level_dropout_failures += 1
+            continue
         try:
             estimate = fit_ordered_logit(
-                data.x[indices], data.y[indices], start=fit.parameters, maxiter=180
+                data.x[indices], data.y[indices], start=fit.parameters, maxiter=4_000
             )
         except ValueError:
-            failures += 1
+            optimizer_failures += 1
             continue
         if estimate.success:
             coefficients.append(float(estimate.coefficients[0]))
         else:
-            failures += 1
-    return coefficients, failures
+            optimizer_failures += 1
+    return coefficients, optimizer_failures, level_dropout_failures, attempts
 
 
-def within_region_permutation(
+def within_macroregion_permutation(
     data: ModelData,
     fit: OrderedFit,
     *,
     draws: int,
     seed: int,
-) -> tuple[list[float], int]:
+) -> tuple[list[float], int, int]:
     rng = np.random.default_rng(seed)
     groups: dict[str, np.ndarray] = {}
-    region_array = np.asarray(data.regions)
-    for region in sorted(set(data.regions)):
-        groups[region] = np.flatnonzero(region_array == region)
+    macroregion_array = np.asarray(data.macroregions)
+    for macroregion in sorted(set(data.macroregions)):
+        groups[macroregion] = np.flatnonzero(macroregion_array == macroregion)
     coefficients: list[float] = []
     failures = 0
-    for _ in range(draws):
+    attempts = 0
+    max_attempts = max(draws * 10, draws + 10)
+    while len(coefficients) < draws and attempts < max_attempts:
+        attempts += 1
         x = data.x.copy()
         for indices in groups.values():
             x[indices, 0] = rng.permutation(x[indices, 0])
-        estimate = fit_ordered_logit(x, data.y, start=fit.parameters, maxiter=180)
+        estimate = fit_ordered_logit(x, data.y, start=fit.parameters, maxiter=4_000)
         if estimate.success:
             coefficients.append(float(estimate.coefficients[0]))
         else:
             failures += 1
-    return coefficients, failures
+    return coefficients, failures, attempts
 
 
 def _percentile_interval(values: Sequence[float]) -> list[float | None]:
@@ -598,8 +768,8 @@ def _fit_summary(fit: OrderedFit, data: ModelData) -> dict[str, Any]:
     }
 
 
-def _safe_point_fit(data: ModelData) -> OrderedFit:
-    fit = fit_ordered_logit(data.x, data.y)
+def _safe_point_fit(data: ModelData, *, start: np.ndarray | None = None) -> OrderedFit:
+    fit = fit_ordered_logit(data.x, data.y, start=start)
     if not fit.success:
         raise RuntimeError(f"ordered-logit point fit failed: {fit.message}")
     return fit
@@ -607,6 +777,26 @@ def _safe_point_fit(data: ModelData) -> OrderedFit:
 
 def _status(pass_value: bool) -> str:
     return "PASS" if pass_value else "FAIL"
+
+
+def registered_verdict(gates: dict[str, str]) -> str:
+    """Apply the eight registered fatal gates noncompensatorily."""
+
+    if set(gates) != set(GATE_IDS):
+        raise ValueError("gate ledger must contain every registered gate exactly once")
+    return "accepted" if all(gates[gate] == "PASS" for gate in GATE_IDS) else "rejected"
+
+
+def provenance_gate_passes(provenance: dict[str, Any]) -> bool:
+    """Check exact registered revisions, bytes, and source-tree cleanliness."""
+
+    return bool(
+        provenance["ea_commit"] == EA_COMMIT
+        and provenance["dplace_support_commit"] == DPLACE_COMMIT
+        and bool(provenance["ea_worktree_clean"])
+        and bool(provenance["dplace_support_worktree_clean"])
+        and provenance["input_sha256"] == EXPECTED_INPUT_SHA256
+    )
 
 
 def _serializable_fit(fit: OrderedFit) -> dict[str, Any]:
@@ -623,14 +813,14 @@ def run_analysis(
     permutation_draws: int = 500,
 ) -> dict[str, Any]:
     rows, provenance = load_society_rows()
-    regions = sorted({str(row["region"]) for row in rows})
+    macroregions = sorted({str(row["macroregion"]) for row in rows})
 
-    m0_data = prepare_model_data(rows, "m0", region_levels=regions)
-    m1_data = prepare_model_data(rows, "m1", region_levels=regions)
-    m2_data = prepare_model_data(rows, "m2", region_levels=regions)
+    m0_data = prepare_model_data(rows, "m0", macroregion_levels=macroregions)
+    m1_data = prepare_model_data(rows, "m1", macroregion_levels=macroregions)
+    m2_data = prepare_model_data(rows, "m2", macroregion_levels=macroregions)
     common_ids = set(m2_data.society_ids)
     m1_common_data = prepare_model_data(
-        rows, "m1", society_ids=common_ids, region_levels=regions
+        rows, "m1", society_ids=common_ids, macroregion_levels=macroregions
     )
 
     m0_fit = _safe_point_fit(m0_data)
@@ -638,25 +828,31 @@ def run_analysis(
     m1_common_fit = _safe_point_fit(m1_common_data)
     m2_fit = _safe_point_fit(m2_data)
 
-    family_values, family_failures = block_bootstrap(
-        m1_data,
-        m1_fit,
-        m1_data.family_clusters,
-        draws=family_draws,
-        seed=SEED + 1,
+    family_values, family_failures, family_level_dropouts, family_attempts = (
+        block_bootstrap(
+            m1_data,
+            m1_fit,
+            m1_data.family_clusters,
+            draws=family_draws,
+            seed=SEED + 1,
+        )
     )
-    spatial_values, spatial_failures = block_bootstrap(
-        m1_data,
-        m1_fit,
-        m1_data.spatial_clusters,
-        draws=spatial_draws,
-        seed=SEED + 2,
+    spatial_values, spatial_failures, spatial_level_dropouts, spatial_attempts = (
+        block_bootstrap(
+            m1_data,
+            m1_fit,
+            m1_data.spatial_clusters,
+            draws=spatial_draws,
+            seed=SEED + 2,
+        )
     )
-    permutation_values, permutation_failures = within_region_permutation(
-        m1_data,
-        m1_fit,
-        draws=permutation_draws,
-        seed=SEED + 3,
+    permutation_values, permutation_failures, permutation_attempts = (
+        within_macroregion_permutation(
+            m1_data,
+            m1_fit,
+            draws=permutation_draws,
+            seed=SEED + 3,
+        )
     )
     observed = float(m1_fit.coefficients[0])
     permutation_p = (
@@ -673,7 +869,7 @@ def run_analysis(
             "m1",
             exposure=exposure,
             society_ids=set(m1_data.society_ids),
-            region_levels=regions,
+            macroregion_levels=macroregions,
         )
         substitute_fit = _safe_point_fit(substitute_data)
         substitute_results[exposure] = _fit_summary(substitute_fit, substitute_data)
@@ -690,12 +886,12 @@ def run_analysis(
     non_europe_ids = {
         str(row["society_id"])
         for row in rows
-        if str(row["region"]).lower() != "europe"
+        if not _is_europe_region(str(row["region"]))
     }
     non_europe = prepare_model_data(
-        rows, "m1", society_ids=non_europe_ids, region_levels=regions
+        rows, "m1", society_ids=non_europe_ids, macroregion_levels=macroregions
     )
-    non_europe_fit = _safe_point_fit(non_europe)
+    non_europe_fit = _safe_point_fit(non_europe, start=m1_fit.parameters)
     transport["non_europe"] = _fit_summary(non_europe_fit, non_europe)
 
     family_counts = Counter(m1_data.family_clusters)
@@ -708,26 +904,31 @@ def run_analysis(
         if family not in largest_families
     }
     without_largest = prepare_model_data(
-        rows, "m1", society_ids=without_largest_ids, region_levels=regions
+        rows, "m1", society_ids=without_largest_ids, macroregion_levels=macroregions
     )
-    without_largest_fit = _safe_point_fit(without_largest)
+    without_largest_fit = _safe_point_fit(without_largest, start=m1_fit.parameters)
     without_largest_summary = _fit_summary(without_largest_fit, without_largest)
     transport["without_three_largest_families"] = {
         "excluded_families": largest_families,
         **without_largest_summary,
     }
 
-    leave_one_region_out: dict[str, dict[str, Any]] = {}
-    for region in regions:
+    leave_one_macroregion_out: dict[str, dict[str, Any]] = {}
+    for macroregion in macroregions:
         ids = {
             str(row["society_id"])
             for row in rows
-            if str(row["region"]) != region
+            if str(row["macroregion"]) != macroregion
         }
-        subset = prepare_model_data(rows, "m1", society_ids=ids, region_levels=regions)
-        subset_fit = _safe_point_fit(subset)
-        leave_one_region_out[region] = _fit_summary(subset_fit, subset)
-    transport["leave_one_region_out"] = leave_one_region_out
+        subset = prepare_model_data(
+            rows,
+            "m1",
+            society_ids=ids,
+            macroregion_levels=macroregions,
+        )
+        subset_fit = _safe_point_fit(subset, start=m1_fit.parameters)
+        leave_one_macroregion_out[macroregion] = _fit_summary(subset_fit, subset)
+    transport["leave_one_macroregion_out"] = leave_one_macroregion_out
 
     cutpoint_sensitivity: list[dict[str, Any]] = []
     ordinal_se = float(m1_fit.standard_errors[0])
@@ -763,6 +964,7 @@ def run_analysis(
     integrity = bool(
         supports_ok
         and matrices_finite
+        and not provenance["duplicate_counts"]
         and len(m1_data.y) >= 600
         and len(np.unique(m1_data.y)) == 5
     )
@@ -794,7 +996,7 @@ def run_analysis(
     )
     loo_positive = sum(
         float(result["coefficient_per_category"]) > 0
-        for result in leave_one_region_out.values()
+        for result in leave_one_macroregion_out.values()
     )
     transport_gate = bool(
         float(transport["non_europe"]["coefficient_per_category"]) > 0
@@ -807,11 +1009,7 @@ def run_analysis(
         and bool(item["within_three_pooled_se"])
         for item in cutpoint_sensitivity
     )
-    provenance_ok = bool(
-        provenance["ea_commit"] == EA_COMMIT
-        and provenance["dplace_support_commit"] == DPLACE_COMMIT
-        and len(provenance["input_sha256"]) == 7
-    )
+    provenance_ok = provenance_gate_passes(provenance)
 
     gates = {
         "EC_G0_PROVENANCE": _status(provenance_ok),
@@ -825,17 +1023,14 @@ def run_analysis(
         "EC_G6_TRANSPORT": _status(transport_gate),
         "EC_G7_ORDINAL_STABILITY": _status(ordinal_stability),
     }
-    fatal = [
-        "EC_G0_PROVENANCE",
-        "EC_G1_DATA_INTEGRITY",
-        "EC_G2_ADJUSTED_ASSOCIATION",
-        "EC_G3_COASTAL_SEPARATION",
-        "EC_G7_ORDINAL_STABILITY",
-    ]
-    verdict = "accepted" if all(gates[name] == "PASS" for name in fatal) else "rejected"
+    verdict = registered_verdict(gates)
 
     missingness: dict[str, int] = {}
-    for field in sorted(set(EA_VARIABLES.values()) | set(CLIMATE_VARIABLES.values()) | {"net_primary_production", "distance_to_coast"}):
+    for field in sorted(
+        set(EA_VARIABLES.values())
+        | set(CLIMATE_VARIABLES.values())
+        | {"net_primary_production", "distance_to_coast"}
+    ):
         missingness[field] = sum(row.get(field) is None for row in rows)
 
     summary: dict[str, Any] = {
@@ -852,7 +1047,7 @@ def run_analysis(
         "provenance": provenance,
         "data_audit": {
             "missingness": missingness,
-            "regions": regions,
+            "macroregions": macroregions,
             "m1_outcome_counts": {
                 str(level + 1): int((m1_data.y == level).sum()) for level in range(5)
             },
@@ -870,19 +1065,24 @@ def run_analysis(
                 "requested_draws": family_draws,
                 "successful_draws": len(family_values),
                 "failures": family_failures,
+                "level_dropout_failures": family_level_dropouts,
+                "attempts": family_attempts,
                 "interval_95": family_interval,
             },
             "spatial_block": {
                 "requested_draws": spatial_draws,
                 "successful_draws": len(spatial_values),
                 "failures": spatial_failures,
+                "level_dropout_failures": spatial_level_dropouts,
+                "attempts": spatial_attempts,
                 "interval_95": _percentile_interval(spatial_values),
                 "sufficient_draws": enough_spatial,
             },
-            "within_region_permutation": {
+            "within_macroregion_permutation": {
                 "requested_draws": permutation_draws,
                 "successful_draws": len(permutation_values),
                 "failures": permutation_failures,
+                "attempts": permutation_attempts,
                 "one_sided_p": permutation_p,
                 "null_interval_95": _percentile_interval(permutation_values),
             },
@@ -895,7 +1095,7 @@ def run_analysis(
             "aic_change_m2_minus_m1_common": m2_fit.aic - m1_common_fit.aic,
         },
         "transport": transport,
-        "leave_one_region_out_positive_count": loo_positive,
+        "leave_one_macroregion_out_positive_count": loo_positive,
         "cutpoint_sensitivity": cutpoint_sensitivity,
     }
 
@@ -907,7 +1107,7 @@ def run_analysis(
             {
                 "family_block": family_values,
                 "spatial_block": spatial_values,
-                "within_region_permutation": permutation_values,
+                "within_macroregion_permutation": permutation_values,
                 "point_fit": _serializable_fit(m1_fit),
             },
             indent=2,
@@ -956,7 +1156,7 @@ def write_markdown_summary(summary: dict[str, Any], path: Path) -> None:
         )
     family = uncertainty["family_block"]
     spatial = uncertainty["spatial_block"]
-    permutation = uncertainty["within_region_permutation"]
+    permutation = uncertainty["within_macroregion_permutation"]
     lines += [
         "",
         "## Dependence and null checks",
@@ -965,7 +1165,7 @@ def write_markdown_summary(summary: dict[str, Any], path: Path) -> None:
         f"({family['successful_draws']}/{family['requested_draws']} fits).",
         f"- Spatial-block 95% interval: `{spatial['interval_95']}` "
         f"({spatial['successful_draws']}/{spatial['requested_draws']} fits).",
-        f"- Within-region permutation p-value: `{permutation['one_sided_p']}` "
+        f"- Within-macroregion permutation p-value: `{permutation['one_sided_p']}` "
         f"({permutation['successful_draws']}/{permutation['requested_draws']} fits).",
         "",
         "## Compiler-pattern check",
@@ -1011,14 +1211,15 @@ def write_coefficient_figure(summary: dict[str, Any], path: Path) -> None:
         capsize=4,
     )
     family_interval = summary["uncertainty"]["family_block"]["interval_95"]
-    if family_interval[0] is not None:
+    if family_interval[0] is not None and family_interval[1] is not None:
+        family_lower = float(family_interval[0])
+        family_upper = float(family_interval[1])
         axis.plot(
-            [family_interval[0], family_interval[1]],
-            [1.13, 1.13],
+            np.asarray([family_lower, family_upper], dtype=float),
+            np.asarray([1.13, 1.13], dtype=float),
             color="#c55a11",
             linewidth=4,
             solid_capstyle="round",
-            label="M1 language-family block 95% interval",
         )
     axis.axvline(0.0, color="#333333", linewidth=1, linestyle="--")
     axis.set_yticks(positions, labels)
@@ -1026,7 +1227,6 @@ def write_coefficient_figure(summary: dict[str, Any], path: Path) -> None:
     axis.set_xlabel("Ordered-logit coefficient per fishing-dependence category")
     axis.set_title("Fishing dependence and jurisdictional hierarchy")
     axis.grid(axis="x", alpha=0.18)
-    axis.legend(loc="lower right", frameon=False)
     figure.tight_layout()
     figure.savefig(path, dpi=180)
     plt.close(figure)
@@ -1047,7 +1247,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         spatial_draws=args.spatial_draws,
         permutation_draws=args.permutation_draws,
     )
-    print(json.dumps({"verdict": summary["verdict"], "gates": summary["gates"]}, indent=2))
+    print(
+        json.dumps({"verdict": summary["verdict"], "gates": summary["gates"]}, indent=2)
+    )
     return 0
 
 

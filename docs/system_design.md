@@ -208,11 +208,11 @@ Each experiment directory is a self-contained research unit. Typical contents:
 
 | Set | Count |
 |---|---|
-| Research experiment packages | **66** |
+| Research experiment packages | **116** |
 | Shared non-experiment support packages | **1** — `experiments/common` |
 | Contain one or more `modal_*.py` entrypoints | **47** |
-| Canonical package-root `experiment_manifest.json` files | **18** |
-| Authoritative package-contract records | **66** = **18** `structured_manifest` + **48** time-bounded `legacy_exception` in `docs/experiment_contract_registry.json` |
+| Canonical package-root `experiment_manifest.json` files | **68** |
+| Authoritative package-contract records | **116** = **68** `structured_manifest` + **48** time-bounded `legacy_exception` in `docs/experiment_contract_registry.json` |
 | Canonical per-gate verdict files | **1** (E5). Ten evidence rows declare gate IDs; only E5 currently has a committed verdict file. Manifest gate declarations are not verdicts. |
 | Canonical claim records | **12** |
 | Canonical evidence records | **12** |
@@ -224,8 +224,21 @@ rather than a second hand-maintained inventory. Recent local packages including
 `passive_active_phase_map`, `grounded_statecharts`,
 `load_bearing_prose_test`, `concern_gated_retrieval`, and
 `constraint_swap_causal_geometry`, `future_commitment_quotient`,
-`relative_identifiability`, `information_limited_discovery`, and `ident` are present in the regenerated 66-package
+`relative_identifiability`, `information_limited_discovery`, `ident`, and
+`ecological_compiler` are present in the regenerated 116-package
 index.
+
+`experiments/ecological_compiler/` is the local-CPU cross-cultural analysis for
+the marine-subsistence hypothesis. It joins pinned D-PLACE Ethnographic Atlas,
+climate, production, coast-distance, and Glottolog support data; fits registered
+ordered-logit specifications with six Glottolog macroarea controls; and
+publishes only reduced summaries and a coefficient figure. Exact input hashes,
+clean pinned data worktrees, society-specific clusters for missing family
+labels, duplicate rejection, and successful-draw resampling make the run fail
+closed. Raw repositories and bootstrap draws remain under the gitignored
+`artifacts/ecological_compiler/`. The rejected claim, post-result corrective
+audit, source ledger, essay, and rendered PDF are connected through the package
+manifest and authoritative contract registry.
 
 `experiments/future_commitment_quotient/` is the exact finite-state successor
 to the Constraint-Swap null. It preregisters a 2×2 crossing of coordinate
@@ -1834,7 +1847,7 @@ cd coherence-testbench && python3 scripts/run_phase0.py --smoke
 - **No universal research dependency specification.** The root quality gate has a complete locked dependency group, but experiment and Modal runtimes still rely on command-specific `uvx` sets or explicit Modal images.
 - **Machine-specific paths** in docs/handoffs (Doppler scope, local archives).
 - **Result fidelity depends on summarization discipline.** Gitignored JSON vs committed Markdown can drift.
-- **Structured-contract coverage is early but fail-closed.** All 115 research packages are partitioned in `docs/experiment_contract_registry.json` (67 structured roots + 48 bounded legacy exceptions). Only one gate currently has a committed verdict file. Structured provenance cards consume the package primary run; legacy packages still use labeled heuristic extraction. Public-artifact digest envelopes cover the E5 confirmatory JSON and E4 appendix. Clean-clone CPU reproduction is allowlisted for `bayesian_voi`, `grounded_statecharts`, `information_limited_discovery`, `mathematical_claims`, `relative_identifiability`, and `seed_bootstrap_calibration`.
+- **Structured-contract coverage is early but fail-closed.** All 116 research packages are partitioned in `docs/experiment_contract_registry.json` (68 structured roots + 48 bounded legacy exceptions). Only one gate currently has a committed verdict file. Structured provenance cards consume the package primary run; legacy packages still use labeled heuristic extraction. Public-artifact digest envelopes cover the E5 confirmatory JSON and E4 appendix. Clean-clone CPU reproduction is allowlisted for `bayesian_voi`, `grounded_statecharts`, `information_limited_discovery`, `mathematical_claims`, `relative_identifiability`, and `seed_bootstrap_calibration`.
 - **Paper-primary experiments** may have no committed `results/*.md`; evidence lives in the paper + local artifacts.
 - **Coherence / Inquiry / Cabal / site tests** are outside the root Python quality gate.
 - **Scientific claims are gate-bound.** Fixture smokes do not settle the program thesis.

@@ -202,3 +202,66 @@ EA003-EA033 relationship, the execution command was narrowed to a clean Python
 versions. The scientific question, variables, estimands, controls, seeds,
 resampling counts, gates, and failure thresholds are unchanged. Lint and type
 checks run separately through pinned standalone `ruff` and `ty` environments.
+
+## Pre-result numerical amendment (2026-08-26)
+
+The first two full-run attempts stopped before producing any model coefficient:
+first at SciPy's default function-evaluation ceiling and then at the registered
+300-iteration ceiling. The likelihood implementation now supplies an analytic
+gradient, checked against central finite differences in the test suite. The
+point-fit ceiling is 1,000 iterations and the warm-started resample ceiling is
+600. Bounds, likelihood, starting values, sample, model specification, seeds,
+draw counts, gates, and failure handling are unchanged.
+
+After the analytic repair, a diagnostic point fit exposed the M1 coefficient
+(`0.1603`) but no complete result set. Before the next full run, two late-stage
+implementation defects were corrected: D-PLACE's European labels are matched
+by the `* Europe` suffix rather than equality to a nonexistent `Europe` label,
+and transport refits warm-start from the converged M1 parameters. These repairs
+implement the already registered transport checks and do not alter a gate.
+
+The first complete result artifact then showed that 195 family and 227 spatial
+draws, plus all four binary-cutpoint fits, stopped at numerical limits. Those
+gates were therefore unknown, not scientific failures. A 20-draw diagnostic in
+each block design converged completely when allowed more than 600 iterations.
+The final run raises the warm-started ordered-logit ceiling to 4,000 and gives
+binary logit an analytic gradient checked by finite differences. No estimate,
+sample rule, resampling draw, seed, threshold, or gate was changed.
+
+One of four binary fits still stopped at the 1,000-iteration ceiling in the
+next complete run, so the final binary ceiling is 3,000. The verdict code was
+also corrected to require all eight gates, matching the section that registered
+them as noncompensatory. This correction cannot rescue the hypothesis: the
+family interval already crossed zero and the three-family exclusion reversed
+the fishing coefficient.
+
+## Post-result implementation audit and corrective rerun (2026-08-26)
+
+Code review after the first complete result found that the fixed effects,
+permutation blocks, and leave-one-out checks had used the Ethnographic Atlas
+`region` field's 50 fine-grained values even though the registered
+representation named D-PLACE macroregions. The corrected rerun uses the
+pre-existing Glottolog `macroarea` field in the pinned D-PLACE support data:
+Africa, Australia, Eurasia, North America, Papunesia, and South America. The
+original result remains recoverable from the branch history. This is a
+representation repair, not a post hoc attempt to clear a gate; all results and
+the final verdict are regenerated whether they become more or less favorable.
+
+The same audit enforced other rules that were already registered but not fully
+implemented. Missing family labels now create society-specific singleton
+clusters. EC_G0 now matches the exact SHA-256 digest of every registered input
+and requires both pinned source-data worktrees to be clean. EC_G1 now fails on
+any conflicting society-variable duplicate. Block intervals now collect 300
+successful, outcome-support-preserving resamples while reporting optimizer
+failures, outcome-level dropouts, and total attempts; permutation inference
+likewise reports attempts needed to obtain 500 successful fits.
+
+Two interpretive limitations are made explicit. EC_G3 is a redundant
+implementation-presence check rather than evidence independent of EC_G2,
+because EC_G2 is already evaluated in the distance-to-coast model. EC_G4 is a
+limited compositional contrast, not an exact proof of marine specificity.
+EC_G7's three-standard-error comparison uses optimizer inverse-Hessian
+approximations as a sensitivity heuristic; the family-block interval remains
+the registered primary uncertainty estimate. None of these gates can rescue a
+failed necessary gate, and none upgrades the study beyond cross-sectional
+description.

@@ -7,12 +7,131 @@ import numpy as np
 import pytest
 from scipy.special import expit
 
+from scripts import regen
 from experiments.ecological_compiler.analysis import (
+    DPLACE_COMMIT,
+    EA_COMMIT,
+    EXPECTED_INPUT_SHA256,
+    GATE_IDS,
+    _initial_ordered_parameters,
+    _binary_nll,
+    _binary_nll_and_gradient,
+    _glottolog_labels,
+    _is_europe_region,
+    _ordered_nll,
+    _ordered_nll_and_gradient,
     fit_ordered_logit,
     ordered_probabilities,
+    provenance_gate_passes,
     read_cldf_values,
+    registered_verdict,
     strictly_increasing_cutpoints,
 )
+
+
+@pytest.mark.parametrize(
+    ("region", "expected"),
+    [
+        ("Eastern Europe", True),
+        ("Northern Europe", True),
+        ("Southwestern Europe", True),
+        ("Western Asia", False),
+        ("Europe", True),
+    ],
+)
+def test_europe_region_classification(region: str, expected: bool) -> None:
+    assert _is_europe_region(region) is expected
+
+
+def test_missing_language_families_form_singleton_clusters() -> None:
+    glottolog = {"known": ("Atlantic-Congo", "Africa")}
+
+    first = _glottolog_labels("S1", "missing", glottolog)
+    second = _glottolog_labels("S2", "missing", glottolog)
+    known = _glottolog_labels("S3", "known", glottolog)
+
+    assert first == ("Unknown:S1", "Unknown")
+    assert second == ("Unknown:S2", "Unknown")
+    assert first[0] != second[0]
+    assert known == ("Atlantic-Congo", "Africa")
+
+
+def test_registered_verdict_requires_every_gate_to_pass() -> None:
+    passing = {gate: "PASS" for gate in GATE_IDS}
+
+    assert registered_verdict(passing) == "accepted"
+    for gate in GATE_IDS:
+        failing = {**passing, gate: "FAIL"}
+        assert registered_verdict(failing) == "rejected"
+
+    with pytest.raises(ValueError, match="every registered gate"):
+        registered_verdict(dict(list(passing.items())[:-1]))
+
+
+def test_provenance_gate_checks_exact_bytes_and_clean_sources() -> None:
+    provenance = {
+        "ea_commit": EA_COMMIT,
+        "dplace_support_commit": DPLACE_COMMIT,
+        "ea_worktree_clean": True,
+        "dplace_support_worktree_clean": True,
+        "input_sha256": EXPECTED_INPUT_SHA256.copy(),
+    }
+
+    assert provenance_gate_passes(provenance)
+
+    changed = {**provenance, "input_sha256": {**EXPECTED_INPUT_SHA256}}
+    first_path = next(iter(EXPECTED_INPUT_SHA256))
+    changed["input_sha256"][first_path] = "0" * 64
+    assert not provenance_gate_passes(changed)
+    assert not provenance_gate_passes({**provenance, "ea_worktree_clean": False})
+
+
+def test_regen_recipe_runs_analysis_and_pdf_builder() -> None:
+    commands = regen.LOCAL["ecological_compiler"]
+
+    assert len(commands) == 2
+    assert "experiments.ecological_compiler.analysis" in commands[0]
+    assert "scripts/build_ecological_compiler_pdf.py" in commands[1]
+
+
+def test_ordered_logit_analytic_gradient_matches_finite_difference() -> None:
+    rng = np.random.default_rng(42)
+    x = rng.normal(size=(40, 5))
+    y = np.tile(np.arange(5), 8)
+    parameters = _initial_ordered_parameters(x, y) + rng.normal(scale=0.1, size=9)
+
+    _, analytic = _ordered_nll_and_gradient(parameters, x, y)
+    epsilon = 1e-6
+    numerical = np.empty_like(parameters)
+    for index in range(len(parameters)):
+        offset = np.zeros_like(parameters)
+        offset[index] = epsilon
+        numerical[index] = (
+            _ordered_nll(parameters + offset, x, y)
+            - _ordered_nll(parameters - offset, x, y)
+        ) / (2 * epsilon)
+
+    assert analytic == pytest.approx(numerical, abs=1e-5)
+
+
+def test_binary_logit_analytic_gradient_matches_finite_difference() -> None:
+    rng = np.random.default_rng(7)
+    x = rng.normal(size=(40, 6))
+    y = np.tile(np.array([0, 1]), 20)
+    parameters = rng.normal(scale=0.2, size=7)
+
+    _, analytic = _binary_nll_and_gradient(parameters, x, y)
+    epsilon = 1e-6
+    numerical = np.empty_like(parameters)
+    for index in range(len(parameters)):
+        offset = np.zeros_like(parameters)
+        offset[index] = epsilon
+        numerical[index] = (
+            _binary_nll(parameters + offset, x, y)
+            - _binary_nll(parameters - offset, x, y)
+        ) / (2 * epsilon)
+
+    assert analytic == pytest.approx(numerical, abs=1e-5)
 
 
 def test_cutpoint_parameterization_is_strictly_increasing() -> None:

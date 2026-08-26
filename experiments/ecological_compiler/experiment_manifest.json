@@ -5,7 +5,7 @@
   "claim_tier": "descriptive",
   "controls": [
     {
-      "control_id": "within_region_permutation",
+      "control_id": "within_macroregion_permutation",
       "description": "Permute fishing dependence within D-PLACE macroregions to estimate a geography-preserving null distribution."
     },
     {
@@ -60,15 +60,15 @@
   "gates": [
     {
       "gate_id": "EC_G0_PROVENANCE",
-      "criterion": "Record exact source commits, input hashes, join counts, and deterministic run command."
+      "criterion": "Match the registered source commits and SHA-256 hashes for all seven inputs, require clean source-data worktrees, and record join counts and the deterministic run command."
     },
     {
       "gate_id": "EC_G1_DATA_INTEGRITY",
-      "criterion": "Registered supports and finite matrices pass, all outcome levels remain, and adjusted M1 has at least 600 complete societies."
+      "criterion": "Registered supports and finite matrices pass, society-variable duplicates are absent after deterministic resolution, all outcome levels remain, and adjusted M1 has at least 600 complete societies."
     },
     {
       "gate_id": "EC_G2_ADJUSTED_ASSOCIATION",
-      "criterion": "M1 fishing coefficient is positive, the language-family block 95% interval excludes zero, and the within-region permutation p-value is at most 0.05."
+      "criterion": "M1 fishing coefficient is positive, the language-family block 95% interval excludes zero, and the within-macroregion permutation p-value is at most 0.05."
     },
     {
       "gate_id": "EC_G3_COASTAL_SEPARATION",
@@ -84,7 +84,7 @@
     },
     {
       "gate_id": "EC_G6_TRANSPORT",
-      "criterion": "M1 fishing remains positive outside Europe, after excluding the three largest language families, and in at least six leave-one-region-out refits."
+      "criterion": "M1 fishing remains positive outside Europe, after excluding the three largest language families, and in all six leave-one-macroregion-out refits."
     },
     {
       "gate_id": "EC_G7_ORDINAL_STABILITY",
@@ -116,7 +116,17 @@
       "kind": "paper",
       "path": "papers/ecological_compiler/paper.md",
       "public": true
+    },
+    {
+      "kind": "other",
+      "path": "papers/ecological_compiler/source_notes.md",
+      "public": true
+    },
+    {
+      "kind": "paper",
+      "path": "output/pdf/the_ecological_compiler_2026-08-26.pdf",
+      "public": true
     }
   ],
-  "status": "planned"
+  "status": "rejected"
 }

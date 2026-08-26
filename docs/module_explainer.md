@@ -10,8 +10,8 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 
 | Path | Responsibility |
 |---|---|
-| `experiments/` | 115 research packages plus `common/` shared analysis utilities; harnesses, Modal sweeps, committed `results/`, generated `PROVENANCE.md` |
-| `papers/` | 129 paper sources (`paper.md`), figures, shareable PDFs, including the repository-wide Formal System Atlas |
+| `experiments/` | 116 research packages plus `common/` shared analysis utilities; harnesses, Modal sweeps, committed `results/`, generated `PROVENANCE.md` |
+| `papers/` | 130 paper sources (`paper.md`), figures, shareable PDFs, including the repository-wide Formal System Atlas |
 | `scripts/` | 144 Python ops modules: quality, contracts, provenance, PDF/figure builders, summarizers |
 | `tests/` | 191 root test files collected together by pytest (`unittest`-style and pytest-native) |
 | `docs/` | Design docs, verification, handoffs, plans, reviews, solutions |
@@ -50,6 +50,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | Validate research contracts | `python3 scripts/validate_{evidence_registry,claim_registry,experiment_manifest,gate_verdict,public_artifact_envelopes}.py` (manifest validator also enforces `docs/experiment_contract_registry.json` coverage) |
 | Run the quality gate | `python3 scripts/run_quality_checks.py` |
 | Rebuild the repository-wide formal audit PDF | `python3 scripts/build_formal_system_atlas_pdf.py` |
+| Reproduce the Ecological Compiler study and paper | `python scripts/regen.py ecological_compiler` |
 | Check API/Modal env without leaking secrets | `python3 scripts/env_probe.py` |
 | Public agent benchmark package | [causally_grounded_agents_benchmark.md](causally_grounded_agents_benchmark.md) |
 | Concern-gated retrieval theory and next experiments | [concern_gated_retrieval_research_program.md](concern_gated_retrieval_research_program.md) + [next-agent handoff](next_agent_concern_gated_retrieval_handoff_2026-07-23.md) |
@@ -111,6 +112,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_run_quality_checks.py` | Locked quality-command order, local serial default, bounded xdist worker parsing, `loadscope` scheduling, and native-thread caps |
 | `test_build_primer_residuals_pdf.py` | Required six-article residual source sections plus reproducible ReportLab PDF build |
 | `test_build_unified_review_superset_pdf.py` | Required four-part review synthesis, fatal-gate semantics, and deterministic ReportLab PDF build |
+| `test_build_ecological_compiler_pdf.py` | Ecological Compiler PDF metadata, page floor, dynamic verdict, registered figure, result-digest binding, portable fonts, results section, and references |
 | `test_cogr_wave0_pdf.py` | Wave 0 PDF builder smoke test: skips if `papers/concern_gated_retrieval_wave0/paper.md` does not yet exist (upstream report-draft has not run) or if `reportlab` is unavailable; otherwise builds into a `tmp_path` (never touches the committed PDF or the Metaphysics archive), and asserts the output starts with `%PDF`, exists, is at least 30 KB, and matches the mirrored `papers/pdf/` copy byte-for-byte. |
 | `test_delete_the_absolute.py` | Sixteen-point cube, group sizes, 4×4 representability matrix, leftover-privilege fibre counts, exact repair split, Path A/B noncommute, cycle holonomy |
 | `test_eml_fiber_spectrum.py` | Catalan census through k=6, size-2 denotation split, hand identities, US-4′ withheld |
@@ -164,8 +166,8 @@ environment.
 |---|---|
 | [system_design.md](system_design.md) | End-to-end design & operating model |
 | [module_explainer.md](module_explainer.md) | This catalog |
-| [verification.md](verification.md) / `verification.json` | Provenance index (auto-generated from all 115 research packages; `experiments/common` excluded) |
-| `experiment_contract_registry.json` | Authoritative 115-package coverage partition: 67 structured roots + 48 time-bounded legacy exceptions with frozen digest |
+| [verification.md](verification.md) / `verification.json` | Provenance index (auto-generated from all 116 research packages; `experiments/common` excluded) |
+| `experiment_contract_registry.json` | Authoritative 116-package coverage partition: 68 structured roots + 48 time-bounded legacy exceptions with frozen digest |
 | `program_evidence_registry.json` | 12 canonical evidence records with stable IDs, states, artifact refs, and claim links |
 | `claim_registry.json` | 12 canonical claim records with tiers, states, source refs, and bidirectional evidence links |
 | [causally_grounded_agents_benchmark.md](causally_grounded_agents_benchmark.md) | Benchmark umbrella |
@@ -212,9 +214,9 @@ environment.
 
 **Legend:** **P** = `PROVENANCE.md`, **B** = `BENCHMARK_CARD.md`, **R** = `README.md`, **res** = committed `results/`.
 
-**Verification reconciliation:** 115 research packages on disk plus one shared
+**Verification reconciliation:** 116 research packages on disk plus one shared
 support package, `experiments/common`. `gen_provenance.py` intentionally excludes
-the support package and derives 115 cards/index rows; `gen_provenance.py --check`
+the support package and derives 116 cards/index rows; `gen_provenance.py --check`
 fails if any generated card, either verification index, or the site mirror drifts.
 The structured registries currently contain 12 claims and 12 evidence records.
 
@@ -239,6 +241,7 @@ Universal dispatcher: `python scripts/regen.py <name>`.
 | `interventional_crl_learnability` | R res | Instrument 11 (SIC-C-c fourth class: interventional causal representation learning, Ahuja 2022). Per-environment FastICA + intervention-shift alignment; environment-split strictly beats pooled control | `core.py`, `experiment.py` |
 | `concern_fisher_pair` | R res | Companion instrument for *Concern as Fiber Geometry*: exact Fisher-matrix + holonomy witness of Theorems CG-1, CG-2 on the 4-bit Boolean world. 4/4 gates to 1e-12 (Fisher) and 1e-3 (holonomy) | `core.py`, `experiment.py` |
 | `compiler_tomography_pair` | R res | Companion instrument for *Compiler Tomography*: MDL recovery-rate + Boltzmann-ecology monotone-reward witness of Theorems CT-1, CT-2. 4/4 gates | `core.py`, `experiment.py` |
+| `ecological_compiler` | R res | Rejected descriptive test of fishing dependence and jurisdictional hierarchy across 1,145 D-PLACE societies; six macroregion controls, 300 family blocks, 300 spatial blocks, 500 within-macroregion permutations, transport and ordinal controls | `analysis.py`, `preregistration.md`, `experiment_manifest.json` |
 | `squaring_separation` | R res | Companion instrument for *EML as a Universal Substrate*: exact DP + Gibbs fiber-mass witness of the `x^(2^n)` four-seam split (expressivity ≠ tree size ≠ circuit size ≠ learnability). Six gates; n=4 headline `7.8e-12` vs `4.0e-3`, `log₂` ratio 28.92 against amended bound 28.28; one Catalan shell of 9,694,845 vs 27 Sq shells. US-4′ untested | `core.py`, `experiment.py` |
 | `antecedent_taxonomy_pair` | R res | Companion instrument for *Sufficient Antecedents*: exact refinement check for Theorem SA-1 on the four canonical antecedents. 4/4 gates | `core.py`, `experiment.py` |
 | `sicc_covering_meta_pair` | R res | Companion instrument for *Covering Learnability and the SIC-C-c Meta-Theorem*: exact inclusion-exclusion coupon-collector witness of the meta-theorem `n = c · K · log(K/δ)` on eps-cover sizes `K ∈ {8, 16, 32, 64, 128, 256}` with `δ = 0.05`. Fitted `c_fitted(K)` stable across `K` (span 6.06% of mean, gate 20%); approaches 1 from below with `K`. 4/4 gates | `core.py`, `experiment.py` |
@@ -542,6 +545,7 @@ exhaustive counterexample search, and replayable MIDAS regression.
 | `papers/structural_intelligence/` | Umbrella manuscript for the Structural Observatory: stochastic-fibration master object (Theorems 1, 2, 4, 5, 6, 7 + Proposition 3), SIC-A/B/C-a/C-b/C-c honest split with C-c positively resolved for four inductive-bias classes (linear ICA, sparse-linear ICA, iVAE, interventional CRL), eleven instruments (seven exact + four Monte Carlo), the ten-construct program, and the Core⊂Shell conscious/reliable-agent architecture (`paper.md`, `paper.pdf`, README) |
 | `papers/concern_as_fiber_geometry/` | Companion paper (Theorems CG-1, CG-2): exponential-family Fisher metric on the fiber + concern-holonomy characterisation of exactness (`paper.md`, `paper.pdf`); companion instrument `concern_fisher_pair` |
 | `papers/compiler_tomography/` | Companion paper (Theorems CT-1, CT-2): MDL identifiability of the shared compiler + Boltzmann ecology monotone-reward dynamics (`paper.md`, `paper.pdf`); companion instrument `compiler_tomography_pair` |
+| `papers/ecological_compiler/` | Final evidence-bounded essay and source ledger separating marine nutrition, resource topology, and maritime connectivity; Study I rejects a robust global fishing-hierarchy claim; shareable PDF at `output/pdf/the_ecological_compiler_2026-08-26.pdf` |
 | `papers/eml_universal_substrate/` | Contact paper: Odrzywołek EML as an instance of the SIC master object; four-seam separation on `x^(2^n)`; Gibbs fiber-mass account of access (`paper.md`); companion instrument `squaring_separation`; Lean core `Compiler/SquaringSeparation.lean` |
 | `papers/eml_us4_prime/` | Gibbs-vs-shortest on the truncated variable-`x` language; min-shell multiplicity of the exact zero identity; extra-shell transfer and gradient recovery withheld (`paper.md`); companion instrument `eml_us4_prime` |
 | `papers/eml_us4_gradient/` | Lowest-bound master-formula GD analogue; zero 8/8 vs singleton 6/8; not a Gibbs sampler; neural bootstrap withheld (`paper.md`); companion instrument `eml_us4_gradient` |
@@ -1005,7 +1009,7 @@ Raw outputs stay under `artifacts/` until summarized.
 | Script | Purpose | Flags / I/O |
 |---|---|---|
 | `research_contracts.py` | Shared schema version, identifier patterns, claim tiers/statuses, and evidence statuses used by registry/verdict adapters | Library; parity-tested against JSON Schemas |
-| `gen_provenance.py` | Validate registries, resolve structured primary-run bindings from the contract registry, regenerate all experiment `PROVENANCE.md` files + `docs/verification.{md,json}` + site mirror; `--check` compares expected bytes without writing; legacy packages still use labeled heuristic extraction | In: 65 experiment dirs + claim/evidence/contract registries; excludes `experiments/common` |
+| `gen_provenance.py` | Validate registries, resolve structured primary-run bindings from the contract registry, regenerate all experiment `PROVENANCE.md` files + `docs/verification.{md,json}` + site mirror; `--check` compares expected bytes without writing; legacy packages still use labeled heuristic extraction | In: 116 experiment dirs + claim/evidence/contract registries; excludes `experiments/common` |
 | `validate_evidence_registry.py` | Validate canonical evidence IDs, gate statuses, artifact refs, and supersession shape | `docs/program_evidence_registry.json` |
 | `validate_claim_registry.py` | Validate exact claim shape/tiers/states and bidirectional claim↔evidence edges | Reads `docs/claim_registry.json` + `docs/program_evidence_registry.json`; never writes either |
 | `validate_experiment_manifest.py` | Enforce the authoritative package-contract registry (93 = 45 structured + 48 legacy), then discover and dependency-free validate every v1 experiment-package contract; every registered run `manifest_path` must be an `experiment_manifest.json` inside its publication package and validate as v1 by content; run records may declare `preregistration_digest` + `preregistration_path` (SHA-256 of a tracked pre-reg file, content-verified) and `producing_agent` (`identity` + `session_ref`); when the registry sets `preregistration_policy.required_after_run_date`, any run whose `run_id` ends with a date on or after the cutoff must supply all three | Reads `docs/experiment_contract_registry.json` and `experiments/**/experiment_manifest.json`; portable contracts in `schemas/experiment_contract_registry.schema.json` and `schemas/experiment_manifest.schema.json` |
@@ -1019,6 +1023,7 @@ Raw outputs stay under `artifacts/` until summarized.
 | `build_information_limited_discovery_pdf.py` | Deterministic ReportLab renderer for the Information-Limited Discovery paper; normalizes the paper's finite LaTeX vocabulary, adds page furniture, and mirrors exact bytes to the paper archive locations | In: `papers/information_limited_discovery/paper.md`; out: paper-local PDF, `papers/pdf/` copy, optional existing local Metaphysics archive |
 | `build_obstruction_aware_admission_pdf.py` | Deterministic ReportLab renderer for the Obstruction-Aware Admission paper; normalizes the finite recurrence, embeds three verified figures, adds page furniture, and mirrors exact bytes to the paper archive locations | In: `papers/obstruction_aware_admission/paper.md`; out: paper-local PDF, `papers/pdf/` copy, optional existing local Metaphysics archive |
 | `build_formal_system_atlas_pdf.py` | ReportLab renderer for the repository-wide formal system audit; reads the narrative and generates exhaustive claim, evidence, experiment, preregistration, result-signal, and Lean declaration appendices | In: `papers/formal_system_atlas/paper.md` plus checked-in registries and `formal/**/*.lean`; out: `output/pdf/research_derived_experiments_formal_system_atlas_2026-08-19.pdf` |
+| `build_ecological_compiler_pdf.py` | ReportLab renderer for the Ecological Compiler essay; derives cover metrics from the registered summary, binds the paper to the result digest, uses portable fonts, requires the coefficient figure, adds a generated contents page, and validates rendered text | In: `papers/ecological_compiler/paper.md` plus the Study I summary and figure; out: `output/pdf/the_ecological_compiler_2026-08-26.pdf` |
 
 ### 4.2 PDF toolkit & builders
 
