@@ -27,8 +27,15 @@
     "command": [
       "uv",
       "run",
-      "--group",
-      "quality",
+      "--no-project",
+      "--python",
+      "3.12",
+      "--with",
+      "numpy==2.5.1",
+      "--with",
+      "scipy==1.18.0",
+      "--with",
+      "matplotlib==3.11.0",
       "python3",
       "-m",
       "experiments.ecological_compiler.analysis"
@@ -113,4 +120,3 @@
   ],
   "status": "planned"
 }
-

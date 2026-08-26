@@ -192,3 +192,13 @@ each. Failed optimizations are counted and reported, never silently replaced.
 - Figure: `experiments/ecological_compiler/results/model_coefficients.png`.
 - Paper: `papers/ecological_compiler/paper.md`.
 
+## Pre-execution amendment (2026-08-26)
+
+The registered command originally used the repository's complete `quality`
+dependency group. On this Intel macOS host, that group cannot resolve because
+the pinned Torch build exposes an ARM-only macOS wheel. Before inspecting the
+EA003-EA033 relationship, the execution command was narrowed to a clean Python
+3.12 environment containing the same registered NumPy, SciPy, and Matplotlib
+versions. The scientific question, variables, estimands, controls, seeds,
+resampling counts, gates, and failure thresholds are unchanged. Lint and type
+checks run separately through pinned standalone `ruff` and `ty` environments.

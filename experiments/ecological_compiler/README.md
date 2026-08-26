@@ -29,8 +29,12 @@ git -C artifacts/ecological_compiler/dplace-data checkout \
 Then run:
 
 ```bash
-uv run --group quality python3 -m experiments.ecological_compiler.analysis
-uv run --group quality python3 -m pytest tests/test_ecological_compiler.py -q
+uv run --no-project --python 3.12 \
+  --with numpy==2.5.1 --with scipy==1.18.0 --with matplotlib==3.11.0 \
+  python3 -m experiments.ecological_compiler.analysis
+uv run --no-project --python 3.12 \
+  --with numpy==2.5.1 --with scipy==1.18.0 --with pytest==9.1.1 \
+  python3 -m pytest tests/test_ecological_compiler.py -q
 ```
 
 Raw source data and bootstrap draws stay under `artifacts/`. Public summaries,
@@ -46,4 +50,3 @@ the registered figure, and every failed gate are written to `results/`.
   cross-sectional design into a causal experiment.
 
 Pre-registration: `experiments/ecological_compiler/preregistration.md`.
-
