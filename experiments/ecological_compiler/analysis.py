@@ -248,7 +248,12 @@ def read_cldf_values(
     with codes_path.open(newline="") as stream:
         for row in csv.DictReader(stream):
             raw_order = (row.get("ord") or "").strip()
-            if row.get("Var_ID") in variable_ids and raw_order:
+            code_id = row.get("ID", "")
+            if (
+                row.get("Var_ID") in variable_ids
+                and raw_order
+                and not code_id.endswith("-NA")
+            ):
                 code_orders[row["ID"]] = float(raw_order)
 
     values: dict[str, dict[str, float]] = {variable: {} for variable in variable_ids}

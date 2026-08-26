@@ -87,6 +87,33 @@ def test_read_cldf_values_rejects_conflicting_duplicates(tmp_path: Path) -> None
         read_cldf_values(data_path, codes_path, {"EA003"})
 
 
+def test_read_cldf_values_ignores_missing_code_sentinel(tmp_path: Path) -> None:
+    data_path = tmp_path / "data.csv"
+    codes_path = tmp_path / "codes.csv"
+    with codes_path.open("w", newline="") as stream:
+        writer = csv.DictWriter(stream, fieldnames=["ID", "Var_ID", "ord"])
+        writer.writeheader()
+        writer.writerow({"ID": "EA033-NA", "Var_ID": "EA033", "ord": "99"})
+    with data_path.open("w", newline="") as stream:
+        writer = csv.DictWriter(
+            stream,
+            fieldnames=["Soc_ID", "Var_ID", "Value", "Code_ID"],
+        )
+        writer.writeheader()
+        writer.writerow(
+            {
+                "Soc_ID": "S1",
+                "Var_ID": "EA033",
+                "Value": "Missing data",
+                "Code_ID": "EA033-NA",
+            }
+        )
+
+    values, _ = read_cldf_values(data_path, codes_path, {"EA033"})
+
+    assert values["EA033"] == {}
+
+
 def test_synthetic_probabilities_match_logistic_cumulative_form() -> None:
     eta = np.array([0.25])
     cutpoints = np.array([-1.0, 0.0, 1.0, 2.0])
