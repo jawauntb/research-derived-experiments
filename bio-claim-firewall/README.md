@@ -25,11 +25,14 @@ It does not prove biology. It proves that an accepted claim obeys a locked forma
 
 ## Phase status
 
-- [x] **Phase 1 — Spec.** Claim / evidence / verdict schemas, fault taxonomy, inference rules, non-goals. No biology data touched.
-- [ ] **Phase 2 — Frozen pilot world.** One perturbation dataset + separated ontology snapshots. Pending dataset selection and download authorization.
-- [ ] **Phase 3 — Deterministic verifier.** Tiny TCB: parser, snapshot loader, identifier resolver, rule engine, verdict formatter, hashing.
-- [ ] **Phase 4 — Untrusted model interfaces.** `propose_claims` + `repair_claim`. Ablations.
-- [ ] **Phase 5 — Pre-registered validation.** Mechanical + adversarial + empirical suites, mutation tests per fault code, independent blinded audit.
+- [x] **Phase 1 — Spec.** Claim / evidence / verdict schemas, fault taxonomy, inference rules, non-goals. (#538)
+- [x] **Phase 2 — Frozen pilot world.** HGNC (45,045 genes), Cell Ontology, Cell Line Ontology, NCBI Taxonomy, Reactome, Replogle 2022 Perturb-seq (9,400 records). All hash-verified. (#543)
+- [x] **Phase 3 — Deterministic verifier.** Audit ledger, normalize, evidence loader, 30-rule cascade, top-level `verify()` composer. Fail-closed. (#539, #540, #541)
+- [x] **Phase 4 preview — Untrusted model interfaces.** `Proposer` + `Repairer` + `Orchestrator` + `TrajectoryLogger`; MIDAS-derived `ModelManager`. Live-LLM smoke test still pending an adapter fix. (#542)
+- [x] **Phase 5a — Mutation-test framework.** 31 mutation sites discovered; first run found 2 real coverage gaps. (#542)
+- [ ] **Phase 5b — Live-LLM end-to-end + adversarial + empirical suites + independent blinded audit.** See [`HANDOFF.md`](HANDOFF.md) §5.
+
+**New agent picking this up: read [`HANDOFF.md`](HANDOFF.md) first.**
 
 ## Provenance
 
