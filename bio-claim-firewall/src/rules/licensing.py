@@ -21,18 +21,21 @@ from .cited import CitedRecord
 from .sections._shared import causal_matched, edge_and_context_matched
 from .types import AppliedRule
 
-# RULES-DECISION: neither `normalize.CanonicalClaim`/`CanonicalEvidence`
-# nor the `Snapshot`/`SnapshotBundle` protocol exposes a CURIE -> label
-# lookup (`SnapshotBundle.curies` is a bare `frozenset[str]`, no label
-# map) -- cell_context.cell_line is carried as a CURIE only, on both the
-# claim and evidence schemas. `spec/inference_rules.md`'s own worked
-# examples (`"only in cell_line=CLO:0009454 (K562)"`) and
-# `tests/fixtures/expectations.jsonl`'s `expected_conditions_contain`
-# checks (which look for the bare human label `"K562"`/`"RPE1"`, never the
-# CURIE) both assume this annotation exists somewhere. We maintain a small
-# static registry for the fixture pack's two known cell lines, used
-# *only* for rendering -- never for matching/identity, which always
-# compares raw CURIEs. An unrecognized cell_line CURIE degrades
+# FIXTURE-CLEANUP-DECISION (was RULES-DECISION #11 against the pre-cleanup
+# fixture pack): `SnapshotBundle` now exposes a CURIE -> label lookup
+# (`SnapshotBundle.label`, backed by each ontology source's optional
+# `labels.jsonl` -- see `evidence/loader.py` / `evidence/snapshot.py`), so
+# cell-line labels are read from the frozen snapshot first.
+# `spec/inference_rules.md`'s own worked examples (`"only in
+# cell_line=CLO:0009454 (K562)"`) and `tests/fixtures/expectations.jsonl`'s
+# `expected_conditions_contain` checks (which look for the bare human
+# label `"K562"`/`"RPE1"`, never the CURIE) both assume this annotation
+# exists somewhere. `snapshot.label(curie)` is tried first; this small
+# static registry is kept as a fallback for a real-world deployment whose
+# loaded ontology snapshot doesn't carry a `labels.jsonl` for a cell-line
+# source, or for a CURIE a `labels.jsonl` doesn't cover -- never deleted
+# outright. Used *only* for rendering -- never for matching/identity,
+# which always compares raw CURIEs. A CURIE unrecognized by both degrades
 # gracefully to the bare CURIE with no parenthetical.
 _KNOWN_CELL_LINE_LABELS: dict[str, str] = {
     "CLO:0009454": "K562",
@@ -60,7 +63,9 @@ def _winning_records(
     return causal_matched(claim, candidates)
 
 
-def _render_conditions(winners: Sequence[CitedRecord]) -> tuple[tuple[str, ...], tuple[AppliedRule, ...]]:
+def _render_conditions(
+    winners: Sequence[CitedRecord], snapshot: SnapshotBundle
+) -> tuple[tuple[str, ...], tuple[AppliedRule, ...]]:
     conditions: list[str] = []
     applied: list[AppliedRule] = []
     seen: set[str] = set()
@@ -75,7 +80,7 @@ def _render_conditions(winners: Sequence[CitedRecord]) -> tuple[tuple[str, ...],
     for record in winners:
         e = record.canonical
         if e.cell_line is not None:
-            label = _KNOWN_CELL_LINE_LABELS.get(e.cell_line)
+            label = snapshot.label(e.cell_line) or _KNOWN_CELL_LINE_LABELS.get(e.cell_line)
             text = f"only in cell_line={e.cell_line}" + (f" ({label})" if label else "")
             _add(text, "R-CTX-03", record.evidence_id)
         if e.state is not None:
@@ -95,7 +100,7 @@ def license_claim(
     winners = _winning_records(claim, cited, snapshot)
     if not winners:
         return None
-    conditions, applied_rules = _render_conditions(winners)
+    conditions, applied_rules = _render_conditions(winners, snapshot)
     if not conditions or not applied_rules:
         # Defensive: RuleResult's own invariants require both non-empty for
         # ACCEPTED; every winner renders at least an assay + edge condition,

@@ -1,9 +1,8 @@
 schema_version: "0.1.0"
-source: reactome_v_test
+source: "reactome_v_test"
 source_url: "synthetic://frozen-test-world/reactome_v_test (hand-authored fixture snapshot; not a real Reactome download)"
 retrieved_at: "2026-01-15T00:00:00Z"
 license: "CC0-1.0"
-snapshot_file: ontology_snapshots/reactome_v_test/curies.txt
-sha256: "badff48349969ec37eb917ce3132cbf1afa813aade43ef87c13d4fec72061aa1"
+sha256: "58511560a50785b1b3da3966bcf2f7e819551558d0f630e310adb322788a1eaf"
 row_count: 1
-preprocessing_cmd: "none -- curies.txt is hand-authored as the frozen synthetic pathway snapshot (single placeholder pathway, used only for UNSUPPORTED_EDGE fixtures citing pathway-membership as if it licensed a direct binds claim)."
+preprocessing_cmd: "none -- curies.txt is hand-authored as the frozen synthetic pathway snapshot (single placeholder pathway, used only for UNSUPPORTED_EDGE fixtures citing pathway-membership as if it licensed a direct binds claim); labels.jsonl carries its label. sha256 = sha256_dir(ontology_snapshots/reactome_v_test) over every file in the directory, per evidence.hashing.sha256_dir -- run synthetic_world/recompute_hashes.py after any edit."

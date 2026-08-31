@@ -1,2 +1,2 @@
-NCBITaxon:9606	Homo sapiens
-NCBITaxon:10090	Mus musculus
+NCBITaxon:9606
+NCBITaxon:10090

@@ -1,0 +1,10 @@
+{
+  "schema_version": "0.1.0",
+  "source": "cellline_v_test",
+  "source_url": "synthetic://frozen-test-world/cellline_v_test (hand-authored fixture snapshot; not a real Cell Line Ontology download)",
+  "retrieved_at": "2026-01-15T00:00:00Z",
+  "license": "CC0-1.0",
+  "sha256": "6f0be81814d45312227d67dc285a57ee1ae951bb5f77b42417460badfc8a17b0",
+  "row_count": 2,
+  "preprocessing_cmd": "none -- curies.txt is hand-authored as the frozen synthetic cell-line snapshot (K562, RPE1); labels.jsonl carries the human-readable label for each curie. sha256 = sha256_dir(ontology_snapshots/cellline_v_test) over every file in the directory, per evidence.hashing.sha256_dir -- run synthetic_world/recompute_hashes.py after any edit."
+}

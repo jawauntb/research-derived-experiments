@@ -1,0 +1,10 @@
+{
+  "schema_version": "0.1.0",
+  "source": "perturbseq_v_test",
+  "source_url": "synthetic://frozen-test-world/perturbseq_v_test (hand-authored synthetic perturbation, co-expression, and co-IP observations; not derived from any real dataset)",
+  "retrieved_at": "2026-01-15T00:00:00Z",
+  "license": "CC0-1.0",
+  "sha256": "d6481e99389b8431c31c44d73495e00f16b48c89b0901e00f5b337157d3c76b3",
+  "row_count": 6,
+  "preprocessing_cmd": "python3 synthetic_world/recompute_hashes.py -- derives evidence_records/perturbseq_v_test/records.jsonl from raw_source.jsonl: sets every record's snapshot_hash = sha256(raw_source.jsonl) (raw-file provenance, distinct from this manifest's own sha256); processes rows in file order R1..R6, resolving each '$ref:<row_label>' entry in 'contradicts' to the already-computed evidence_id of that earlier row; computes each record's evidence_id as f'perturbseq_v_test:{sha256(canonical_json(record_without_evidence_id))[:16]}' where canonical_json = json.dumps(obj, sort_keys=True, separators=(',', ':')). This manifest's own sha256 = sha256_file(evidence_records/perturbseq_v_test/records.jsonl), per evidence.hashing.sha256_file -- the loader hashes the built records file, not raw_source.jsonl. See evidence_records/perturbseq_v_test/RECORD_ID_MAP.md for the resulting row_label -> evidence_id table."
+}

@@ -15,12 +15,56 @@ from .snapshot import SnapshotBundle
 _MANIFEST_SUFFIXES = (".yaml", ".yml", ".json")
 
 
-def _iter_manifest_paths(manifests_dir: Path) -> Iterator[Path]:
-    # Sorted for determinism: load_bundle must return the same SnapshotBundle
-    # for the same data_root regardless of filesystem iteration order.
+def _iter_manifest_path_groups(manifests_dir: Path) -> Iterator[list[Path]]:
+    """One group of same-stem candidate manifest paths per source.
+
+    Grouped (not just individually yielded) so a source that ships more
+    than one manifest format side by side under the same stem -- e.g.
+    `cellline_v_test.yaml` + a `cellline_v_test.json` sibling, emitted so
+    the loader can ingest a source even where `pyyaml` is not importable,
+    see `evidence/manifest.py` -- is tried as ONE source by
+    `_load_first_parseable_manifest`, not raised as a spurious
+    `duplicate_manifest_source`. Groups are yielded in sorted-stem order
+    for determinism: `load_bundle` must return the same `SnapshotBundle`
+    for the same `data_root` regardless of filesystem iteration order.
+    """
+    by_stem: dict[str, list[Path]] = {}
     for path in sorted(manifests_dir.iterdir()):
         if path.is_file() and path.suffix.lower() in _MANIFEST_SUFFIXES:
-            yield path
+            by_stem.setdefault(path.stem, []).append(path)
+    for stem in sorted(by_stem):
+        yield by_stem[stem]
+
+
+def _load_first_parseable_manifest(candidate_paths: list[Path]) -> Manifest:
+    """Load the one manifest a same-stem group of candidates represents.
+
+    A single candidate (the common case -- every pre-existing data root
+    has exactly one manifest file per source) is loaded exactly as before,
+    with no behavior change: any error propagates unmodified.
+
+    Multiple same-stem candidates (a `.yaml`/`.yml` manifest plus a
+    `.json` sibling for the same source) are tried in `_MANIFEST_SUFFIXES`
+    order; the first one that parses without raising is used -- "the
+    loader chooses whichever it can parse" -- so a `.yaml` manifest that
+    fails only because `pyyaml` is not importable in this environment
+    falls through to its `.json` sibling instead of failing the whole load.
+    """
+    if len(candidate_paths) == 1:
+        return load_manifest(candidate_paths[0])
+
+    by_suffix = {path.suffix.lower(): path for path in candidate_paths}
+    last_error: ValueError | None = None
+    for suffix in _MANIFEST_SUFFIXES:
+        path = by_suffix.get(suffix)
+        if path is None:
+            continue
+        try:
+            return load_manifest(path)
+        except ValueError as exc:
+            last_error = exc
+    assert last_error is not None  # candidate_paths is non-empty by construction
+    raise last_error
 
 
 def _read_jsonl(path: Path) -> list[dict[str, Any]]:
@@ -49,7 +93,7 @@ def _read_jsonl(path: Path) -> list[dict[str, Any]]:
 
 
 def _load_ontology_source(onto_dir: Path, manifest: Manifest, source: str) -> tuple[
-    set[str], dict[str, str], dict[str, tuple[str, ...]]
+    set[str], dict[str, str], dict[str, tuple[str, ...]], dict[str, str]
 ]:
     actual_hash = sha256_dir(onto_dir)
     if actual_hash != manifest.sha256:
@@ -64,6 +108,24 @@ def _load_ontology_source(onto_dir: Path, manifest: Manifest, source: str) -> tu
             line = line.strip()
             if line:
                 curies.add(line)
+
+    # EVIDENCE-DECISION: labels.jsonl is an OPTIONAL companion file (not
+    # every ontology source needs human-readable labels), read the same way
+    # aliases.jsonl / cell_ontology.jsonl are: absent -> empty map, present
+    # -> parsed and folded into the merged SnapshotBundle.labels map. It
+    # participates in sha256_dir(onto_dir) like every other file in the
+    # directory, so it is part of the frozen, hash-verified snapshot with
+    # no separate verification path needed.
+    labels: dict[str, str] = {}
+    labels_path = onto_dir / "labels.jsonl"
+    if labels_path.is_file():
+        for row in _read_jsonl(labels_path):
+            try:
+                labels[row["curie"]] = row["label"]
+            except KeyError as exc:
+                raise EvidenceError(
+                    "HASH_MISMATCH", reason="malformed_label_row", source=source, row=row
+                ) from exc
 
     aliases: dict[str, str] = {}
     aliases_path = onto_dir / "aliases.jsonl"
@@ -87,7 +149,7 @@ def _load_ontology_source(onto_dir: Path, manifest: Manifest, source: str) -> tu
                     "HASH_MISMATCH", reason="malformed_cell_ontology_row", source=source, row=row
                 ) from exc
 
-    return curies, aliases, ancestors
+    return curies, aliases, ancestors, labels
 
 
 def _load_evidence_source(
@@ -123,8 +185,14 @@ def load_bundle(data_root: Path) -> SnapshotBundle:
 
         data_root/
           manifests/*.{yaml,json}
-          ontology_snapshots/<source>/{aliases.jsonl, cell_ontology.jsonl, curies.txt}
+          ontology_snapshots/<source>/{aliases.jsonl, cell_ontology.jsonl, curies.txt, labels.jsonl}
           evidence_records/<source>/records.jsonl
+
+    ``labels.jsonl`` (one ``{"curie": ..., "label": ...}`` object per line)
+    is an optional companion file per ontology source. When present, it is
+    merged across every loaded source into ``SnapshotBundle.labels`` for
+    human-readable rendering (e.g. ``src/rules/licensing.py``'s accepted
+    conditions) -- purely additive, never used for identity/matching.
 
     Fails closed (raises ``EvidenceError("HASH_MISMATCH", ...)``) on any
     manifest whose declared ``sha256`` disagrees with the hash actually
@@ -151,20 +219,21 @@ def load_bundle(data_root: Path) -> SnapshotBundle:
         raise EvidenceError("HASH_MISMATCH", reason="missing_manifests_dir", path=str(manifests_dir))
 
     manifests: dict[str, Manifest] = {}
-    for manifest_path in _iter_manifest_paths(manifests_dir):
-        manifest = load_manifest(manifest_path)
+    for candidate_paths in _iter_manifest_path_groups(manifests_dir):
+        manifest = _load_first_parseable_manifest(candidate_paths)
         if manifest.source in manifests:
             raise EvidenceError(
                 "HASH_MISMATCH",
                 reason="duplicate_manifest_source",
                 source=manifest.source,
-                path=str(manifest_path),
+                path=str(candidate_paths[0]),
             )
         manifests[manifest.source] = manifest
 
     all_curies: set[str] = set()
     all_aliases: dict[str, str] = {}
     all_ancestors: dict[str, tuple[str, ...]] = {}
+    all_labels: dict[str, str] = {}
     all_records: dict[str, dict[str, Any]] = {}
     record_file_hashes: dict[str, str] = {}
 
@@ -192,10 +261,11 @@ def load_bundle(data_root: Path) -> SnapshotBundle:
             )
 
         if is_ontology:
-            curies, aliases, ancestors = _load_ontology_source(onto_source_dir, manifest, source)
+            curies, aliases, ancestors, labels = _load_ontology_source(onto_source_dir, manifest, source)
             all_curies.update(curies)
             all_aliases.update(aliases)
             all_ancestors.update(ancestors)
+            all_labels.update(labels)
         else:
             record_file_hashes[source] = _load_evidence_source(evidence_file, manifest, source, all_records)
 
@@ -206,4 +276,5 @@ def load_bundle(data_root: Path) -> SnapshotBundle:
         curies=frozenset(all_curies),
         alias_map=all_aliases,
         ancestor_map=all_ancestors,
+        labels=all_labels,
     )
