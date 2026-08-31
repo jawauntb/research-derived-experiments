@@ -1,9 +1,8 @@
 schema_version: "0.1.0"
-source: ncbitaxon_v_test
+source: "ncbitaxon_v_test"
 source_url: "synthetic://frozen-test-world/ncbitaxon_v_test (hand-authored fixture snapshot; not a real NCBITaxon download)"
 retrieved_at: "2026-01-15T00:00:00Z"
 license: "CC0-1.0"
-snapshot_file: ontology_snapshots/ncbitaxon_v_test/curies.txt
-sha256: "b666c426cbd2047a09c6688fbaf402213214e255db98f057087183d108ad24f7"
+sha256: "76a74e864b21e81b974ba5af6c78ef98858a90d764f1236541b6e175909192cb"
 row_count: 2
-preprocessing_cmd: "none -- curies.txt is hand-authored as the frozen synthetic species snapshot (human + mouse, mouse present only to exercise R-SCOPE-90 OUT_OF_SCOPE)."
+preprocessing_cmd: "none -- curies.txt is hand-authored as the frozen synthetic species snapshot (human + mouse, mouse present only to exercise R-SCOPE-90 OUT_OF_SCOPE); labels.jsonl carries each curie's species name. sha256 = sha256_dir(ontology_snapshots/ncbitaxon_v_test) over every file in the directory, per evidence.hashing.sha256_dir -- run synthetic_world/recompute_hashes.py after any edit."

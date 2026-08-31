@@ -1,1 +1,1 @@
-REACT:R-HSA-1234	Synthetic test pathway (frozen pilot world placeholder)
+REACT:R-HSA-1234

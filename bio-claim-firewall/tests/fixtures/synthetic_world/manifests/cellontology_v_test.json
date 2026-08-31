@@ -1,0 +1,10 @@
+{
+  "schema_version": "0.1.0",
+  "source": "cellontology_v_test",
+  "source_url": "synthetic://frozen-test-world/cellontology_v_test (hand-authored fixture snapshot; not a real Cell Ontology download)",
+  "retrieved_at": "2026-01-15T00:00:00Z",
+  "license": "CC0-1.0",
+  "sha256": "f141a0db22414eed1d76131d61cdff50f5771397629963859c82309eed1fef73",
+  "row_count": 5,
+  "preprocessing_cmd": "none -- curies.txt is hand-authored as the frozen synthetic Cell Ontology snapshot; labels.jsonl carries each curie's label; cell_ontology.jsonl carries the is_a-closure ancestors for the 4 non-root terms (used by R-CTX-02 / R-SCOPE-03). sha256 = sha256_dir(ontology_snapshots/cellontology_v_test) over every file in the directory, per evidence.hashing.sha256_dir -- run synthetic_world/recompute_hashes.py after any edit."
+}

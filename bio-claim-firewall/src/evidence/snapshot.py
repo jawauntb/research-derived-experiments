@@ -9,7 +9,8 @@ contract; every method here matches its signature exactly (see
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from types import MappingProxyType
 from typing import Mapping
 
 # Bare-form imports resolve via the top-level `bio-claim-firewall/conftest.py`
@@ -44,6 +45,17 @@ class SnapshotBundle:
     curies: frozenset[str]
     alias_map: Mapping[str, str]
     ancestor_map: Mapping[str, tuple[str, ...]]
+    # EVIDENCE-DECISION: optional, purely-rendering CURIE -> human-readable
+    # label map, populated by loader.load_bundle from each ontology
+    # source's optional `labels.jsonl` (see loader.py). Defaults to an
+    # empty immutable mapping so existing callers that construct a
+    # SnapshotBundle by hand (tests isolating SnapshotBundle's own logic
+    # from the loader) don't need to pass it. `MappingProxyType` rather
+    # than a bare `{}` default because a frozen dataclass's
+    # `default_factory=dict` would otherwise hand back a *mutable* dict --
+    # harmless in practice (nothing here mutates it) but inconsistent with
+    # every other field on this frozen, read-only bundle.
+    labels: Mapping[str, str] = field(default_factory=lambda: MappingProxyType({}))
 
     def contains(self, curie: str) -> bool:
         """True iff ``curie`` resolves, as-is, in a loaded ontology snapshot.
@@ -89,6 +101,15 @@ class SnapshotBundle:
         ancestors" from "unknown CURIE".
         """
         return self.ancestor_map.get(curie, ())
+
+    def label(self, curie: str) -> str | None:
+        """The human-readable label recorded for ``curie`` by a loaded
+        ontology snapshot's ``labels.jsonl``, or ``None`` if none was
+        recorded (including for a CURIE absent from every snapshot
+        entirely). Purely for rendering -- e.g. ``src/rules/licensing.py``'s
+        accepted conditions -- never used for identity/matching.
+        """
+        return self.labels.get(curie)
 
     def aliases(self, curie: str) -> tuple[str, ...]:
         """The deprecated CURIEs that forward-map onto this canonical ``curie``.

@@ -22,6 +22,15 @@ from pathlib import Path
 
 import pytest
 
+# Bare-form imports resolve via the top-level `bio-claim-firewall/conftest.py`,
+# which puts `bio-claim-firewall/src/` on sys.path before any test module is
+# collected. These are the real, authoritative evidence-module functions --
+# used here so this self-consistency check can never drift from what
+# `evidence/loader.py` actually verifies at load time.
+from evidence import load_bundle
+from evidence.errors import EvidenceError
+from evidence.hashing import sha256_dir, sha256_file
+
 FIXTURES_DIR = Path(__file__).resolve().parent          # .../bio-claim-firewall/tests/fixtures
 SYNTH_DIR = FIXTURES_DIR / "synthetic_world"
 CLAIMS_DIR = FIXTURES_DIR / "claims"
@@ -202,9 +211,9 @@ MANIFEST_LINE_RE = re.compile(r'^([a-zA-Z0-9_]+):\s*(.*)$')
 def _parse_flat_manifest(path: Path) -> dict:
     """Parses the flat `key: value` manifest format written by this fixture
     pack (see synthetic_world/manifests/*.yaml). Strips surrounding quotes
-    from scalar values. Not a general YAML parser -- these manifests are
-    deliberately flat so both this test and recompute_hashes.py can avoid
-    a PyYAML dependency."""
+    from scalar values, and parses `row_count` as an int. Not a general
+    YAML parser -- these manifests are deliberately flat so both this test
+    and recompute_hashes.py can avoid a PyYAML dependency."""
     out = {}
     for line in path.read_text().splitlines():
         line = line.strip()
@@ -215,6 +224,8 @@ def _parse_flat_manifest(path: Path) -> dict:
         key, value = m.group(1), m.group(2).strip()
         if value.startswith('"') and value.endswith('"'):
             value = value[1:-1]
+        elif key == "row_count":
+            value = int(value)
         out[key] = value
     return out
 
@@ -321,16 +332,49 @@ def test_manifest_has_required_fields(manifest_path: Path):
 
 
 @pytest.mark.parametrize("manifest_path", sorted(MANIFESTS_DIR.glob("*.yaml")), ids=lambda p: p.name)
-def test_manifest_sha256_matches_referenced_file(manifest_path: Path):
+def test_manifest_sha256_matches_what_the_loader_would_compute(manifest_path: Path):
+    """No `snapshot_file` field any more -- a manifest's `sha256` must equal
+    exactly what `evidence/loader.py` hashes to verify that source:
+    `sha256_dir(ontology_snapshots/<source>/)` for an ontology source,
+    `sha256_file(evidence_records/<source>/records.jsonl)` for the evidence
+    source. Using the real `evidence.hashing` functions here (not a
+    reimplementation) means this test can never silently drift from what
+    `load_bundle` actually checks."""
     fields = _parse_flat_manifest(manifest_path)
-    snapshot_path = SYNTH_DIR / fields["snapshot_file"]
-    assert snapshot_path.is_file(), f"{manifest_path.name}: snapshot_file {fields['snapshot_file']} does not exist"
-    actual = recompute_hashes.sha256_file(snapshot_path)
+    source = fields["source"]
+    onto_dir = SYNTH_DIR / "ontology_snapshots" / source
+    evidence_file = SYNTH_DIR / "evidence_records" / source / "records.jsonl"
+
+    if onto_dir.is_dir():
+        actual = sha256_dir(onto_dir)
+    elif evidence_file.is_file():
+        actual = sha256_file(evidence_file)
+    else:  # pragma: no cover - guards fixture-pack drift, not exercised today
+        pytest.fail(f"{source}: no ontology_snapshots dir or evidence_records/.../records.jsonl found")
+
     assert actual == fields["sha256"], (
-        f"{manifest_path.name}: manifest sha256 {fields['sha256']} does not match actual "
-        f"sha256 of {fields['snapshot_file']} ({actual}). Run "
-        f"synthetic_world/recompute_hashes.py to fix."
+        f"{manifest_path.name}: manifest sha256 {fields['sha256']} does not match the actual "
+        f"loader-computed hash {actual}. Run synthetic_world/recompute_hashes.py to fix."
     )
+
+
+@pytest.mark.parametrize("source", sorted(p.stem for p in MANIFESTS_DIR.glob("*.yaml")), ids=lambda s: s)
+def test_manifest_has_json_sibling(source: str):
+    """The loader accepts `.yaml`/`.yml` or `.json` -- every manifest must
+    ship both so `load_bundle` works even where `pyyaml` is not importable
+    (e.g. `uv run --no-sync`, per `evidence/manifest.py`)."""
+    assert (MANIFESTS_DIR / f"{source}.json").is_file(), f"{source}: no manifests/{source}.json sibling"
+
+
+@pytest.mark.parametrize("source", sorted(p.stem for p in MANIFESTS_DIR.glob("*.yaml")), ids=lambda s: s)
+def test_manifest_yaml_and_json_agree(source: str):
+    yaml_fields = _parse_flat_manifest(MANIFESTS_DIR / f"{source}.yaml")
+    json_fields = json.loads((MANIFESTS_DIR / f"{source}.json").read_text())
+    for key in ("source", "source_url", "retrieved_at", "license", "sha256", "row_count", "schema_version"):
+        assert yaml_fields[key] == json_fields[key], (
+            f"{source}: .yaml/.json manifests disagree on {key!r}: "
+            f"{yaml_fields[key]!r} != {json_fields[key]!r}"
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -339,22 +383,34 @@ def test_manifest_sha256_matches_referenced_file(manifest_path: Path):
 #    regenerate from raw_source.jsonl (catches any hand-edit drift).
 # ---------------------------------------------------------------------------
 
-def test_evidence_snapshot_hash_matches_manifest():
-    manifests = _all_manifests()
-    perturbseq_sha256 = manifests["perturbseq_v_test.yaml"]["sha256"]
+def test_evidence_snapshot_hash_matches_raw_source():
+    """Each record's `snapshot_hash` attests to the raw upstream file it was
+    extracted from (`sha256_file(raw_source.jsonl)`) -- raw-file provenance,
+    a *record-level* fact `evidence/loader.py` never checks. This is a
+    DIFFERENT value from the manifest's own `sha256`
+    (`sha256_file(records.jsonl)`, checked by `test_manifest_sha256_matches_
+    what_the_loader_would_compute` above) now that the manifest hashes the
+    built ledger file, not the raw source."""
+    raw_sha256 = sha256_file(RAW_SOURCE_PATH)
     for record in _load_evidence_records():
-        assert record["snapshot_hash"] == perturbseq_sha256, (
+        assert record["snapshot_hash"] == raw_sha256, (
             f"{record['evidence_id']}: snapshot_hash {record['snapshot_hash']} != "
-            f"manifests/perturbseq_v_test.yaml sha256 {perturbseq_sha256}"
+            f"sha256(raw_source.jsonl) {raw_sha256}"
         )
 
 
-def test_records_jsonl_matches_recomputation_from_raw_source():
+def test_perturbseq_manifest_sha256_matches_built_records_file():
     manifests = _all_manifests()
-    raw_sha256 = manifests["perturbseq_v_test.yaml"]["sha256"]
-    assert raw_sha256 == recompute_hashes.sha256_file(RAW_SOURCE_PATH), (
-        "manifest sha256 does not match current raw_source.jsonl -- run recompute_hashes.py"
+    manifest_sha256 = manifests["perturbseq_v_test.yaml"]["sha256"]
+    actual = sha256_file(RECORDS_PATH)
+    assert manifest_sha256 == actual, (
+        f"manifests/perturbseq_v_test.yaml sha256 {manifest_sha256} does not match "
+        f"sha256_file(records.jsonl) {actual} -- run recompute_hashes.py to fix."
     )
+
+
+def test_records_jsonl_matches_recomputation_from_raw_source():
+    raw_sha256 = sha256_file(RAW_SOURCE_PATH)
     rebuilt = [record for _label, record in recompute_hashes.build_perturbseq_records(raw_sha256)]
     on_disk = _load_evidence_records()
     assert rebuilt == on_disk, (
@@ -504,8 +560,10 @@ def test_claim_ids_are_unique():
 
 
 def _known_hgnc_ids() -> set[str]:
+    # curies.txt is bare CURIEs, one per line -- evidence/loader.py never
+    # tab-splits it (that was the bug: see FIXTURE-CLEANUP-DECISION below).
     lines = (SYNTH_DIR / "ontology_snapshots" / "hgnc_v_test" / "curies.txt").read_text().splitlines()
-    return {line.split("\t")[0] for line in lines if line.strip()}
+    return {line.strip() for line in lines if line.strip()}
 
 
 def test_non_unknown_entity_claims_use_resolvable_hgnc_ids():
@@ -523,3 +581,97 @@ def test_non_unknown_entity_claims_use_resolvable_hgnc_ids():
                     f"{claim_path.name}: {role}.id {entity['id']!r} is not in the frozen "
                     f"hgnc_v_test snapshot (and this isn't the UNKNOWN_ENTITY fixture)"
                 )
+
+
+# ---------------------------------------------------------------------------
+# 9. The fixture pack is byte-format compatible with evidence/loader.py:
+#    bare curies.txt, labels.jsonl (optional companion), the loader's own
+#    field names in aliases.jsonl / cell_ontology.jsonl, and -- the
+#    load-bearing check -- evidence.load_bundle(SYNTHETIC_WORLD) actually
+#    succeeds. If this section regresses, the fixture pack is broken again
+#    and every workaround this migration deleted (see former
+#    tests/rules/conftest.py) would have to come back.
+# ---------------------------------------------------------------------------
+
+def _ontology_source_dirs() -> list[Path]:
+    return sorted(p for p in (SYNTH_DIR / "ontology_snapshots").iterdir() if p.is_dir())
+
+
+@pytest.mark.parametrize("onto_dir", _ontology_source_dirs(), ids=lambda p: p.name)
+def test_curies_txt_is_bare_curies_no_tab_no_label(onto_dir: Path):
+    for line in (onto_dir / "curies.txt").read_text().splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        assert "\t" not in line, (
+            f"{onto_dir.name}/curies.txt: line {line!r} still has a tab -- evidence/loader.py "
+            f"reads whole stripped lines into the curies set, it never tab-splits, so a label "
+            f"left in this column would silently fail contains()/canonicalize()."
+        )
+
+
+@pytest.mark.parametrize("onto_dir", _ontology_source_dirs(), ids=lambda p: p.name)
+def test_labels_jsonl_curies_are_known_and_well_formed(onto_dir: Path):
+    labels_path = onto_dir / "labels.jsonl"
+    if not labels_path.is_file():
+        pytest.skip(f"{onto_dir.name} has no labels.jsonl")
+    known_curies = {ln.strip() for ln in (onto_dir / "curies.txt").read_text().splitlines() if ln.strip()}
+    for lineno, line in enumerate((labels_path.read_text()).splitlines(), start=1):
+        line = line.strip()
+        if not line:
+            continue
+        row = json.loads(line)
+        assert "curie" in row and "label" in row, (
+            f"{onto_dir.name}/labels.jsonl:{lineno}: expected {{'curie', 'label'}}, got {row!r}"
+        )
+        assert row["curie"] in known_curies, (
+            f"{onto_dir.name}/labels.jsonl:{lineno}: curie {row['curie']!r} is not in "
+            f"{onto_dir.name}/curies.txt"
+        )
+
+
+def test_aliases_jsonl_uses_loader_field_names():
+    path = SYNTH_DIR / "ontology_snapshots" / "hgnc_v_test" / "aliases.jsonl"
+    rows = [json.loads(ln) for ln in path.read_text().splitlines() if ln.strip()]
+    assert rows, "hgnc_v_test/aliases.jsonl is unexpectedly empty"
+    for row in rows:
+        assert "deprecated" in row and "canonical" in row, (
+            f"aliases.jsonl row missing loader field names 'deprecated'/'canonical': {row!r}"
+        )
+        assert "deprecated_id" not in row and "current_id" not in row, (
+            f"aliases.jsonl row still carries the old 'deprecated_id'/'current_id' keys: {row!r}"
+        )
+
+
+def test_cell_ontology_jsonl_uses_loader_field_names():
+    path = SYNTH_DIR / "ontology_snapshots" / "cellontology_v_test" / "cell_ontology.jsonl"
+    rows = [json.loads(ln) for ln in path.read_text().splitlines() if ln.strip()]
+    assert rows, "cellontology_v_test/cell_ontology.jsonl is unexpectedly empty"
+    for row in rows:
+        assert "curie" in row and "ancestors" in row, (
+            f"cell_ontology.jsonl row missing loader field names 'curie'/'ancestors': {row!r}"
+        )
+        assert "id" not in row and "is_a" not in row, (
+            f"cell_ontology.jsonl row still carries the old 'id'/'is_a' keys: {row!r}"
+        )
+
+
+def test_load_bundle_succeeds_without_hash_mismatch():
+    """The load-bearing integration check: `evidence.load_bundle` over the
+    fixture pack as it actually sits on disk must succeed. If this fails,
+    the fixture pack disagrees with evidence/loader.py again -- byte-format
+    or hash drift -- and every rules-side repair-copy workaround this
+    migration deleted would have to come back."""
+    try:
+        bundle = load_bundle(SYNTH_DIR)
+    except EvidenceError as exc:  # pragma: no cover - failure path, not the happy path
+        pytest.fail(f"evidence.load_bundle({SYNTH_DIR}) raised EvidenceError({exc.fault_code!r}, {exc.details!r})")
+
+    assert bundle.ledger.count() == 6
+    assert bundle.contains("HGNC:1097")
+    assert bundle.canonicalize("HGNC:OLD1") == "HGNC:1097"
+    assert bundle.ancestors("CL:0000236") == ("CL:0000738", "CL:0000988", "CL:0000000")
+    # labels.jsonl round-trips through SnapshotBundle.label() -- see
+    # evidence/snapshot.py and evidence/loader.py's additive label support.
+    assert bundle.label("CLO:0009454") == "K562"
+    assert bundle.label("CLO:0037231") == "RPE1"
