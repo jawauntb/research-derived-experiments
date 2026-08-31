@@ -1,0 +1,29 @@
+{
+  "schema_version": "0.1.0",
+  "claim_id": "6d7728ef-d2d8-4894-b1cc-76c4b0050261",
+  "subject": {
+    "id": "HGNC:11998",
+    "label": "TP53"
+  },
+  "relation": "regulates_epigenetically",
+  "object": {
+    "id": "HGNC:11892",
+    "label": "CDKN1A"
+  },
+  "polarity": "positive",
+  "species": "NCBITaxon:9606",
+  "cell_context": {
+    "cell_type": "CL:0000988",
+    "cell_line": "CLO:0009454",
+    "state": "resting"
+  },
+  "assay_context": {
+    "assay": "CRISPRi_screen",
+    "perturbation": "CRISPRi:HGNC:11998"
+  },
+  "evidence_ids": [
+    "perturbseq_v_test:d92b7542b5f1bc7c"
+  ],
+  "confidence_language": "supported",
+  "requested_status": "hypothesis"
+}

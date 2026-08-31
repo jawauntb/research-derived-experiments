@@ -1,0 +1,29 @@
+{
+  "schema_version": "0.1.0",
+  "claim_id": "c88754ad-be46-4113-8552-b50315010b28",
+  "subject": {
+    "id": "HGNC:5173",
+    "label": "IL6"
+  },
+  "relation": "binds",
+  "object": {
+    "id": "HGNC:8975",
+    "label": "IL6R"
+  },
+  "polarity": "none",
+  "species": "NCBITaxon:9606",
+  "cell_context": {
+    "cell_type": "CL:0000000",
+    "cell_line": null,
+    "state": null
+  },
+  "assay_context": {
+    "assay": "co-IP",
+    "perturbation": null
+  },
+  "evidence_ids": [
+    "perturbseq_v_test:5bde6e0544a4736f"
+  ],
+  "confidence_language": "observed",
+  "requested_status": "hypothesis"
+}

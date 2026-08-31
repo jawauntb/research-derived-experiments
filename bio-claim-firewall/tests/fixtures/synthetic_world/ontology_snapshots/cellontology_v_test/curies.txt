@@ -1,0 +1,5 @@
+CL:0000000	cell
+CL:0000738	leukocyte
+CL:0000988	hematopoietic cell
+CL:0000236	B cell
+CL:0000094	granulocyte

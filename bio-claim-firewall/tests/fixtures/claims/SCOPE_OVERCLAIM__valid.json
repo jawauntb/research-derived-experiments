@@ -1,0 +1,30 @@
+{
+  "schema_version": "0.1.0",
+  "claim_id": "545054aa-4bbe-4a11-a59b-00790100a1ab",
+  "subject": {
+    "id": "HGNC:1097",
+    "label": "BRCA1"
+  },
+  "relation": "causes",
+  "object": {
+    "id": "HGNC:6407",
+    "label": "KRAS"
+  },
+  "polarity": "positive",
+  "species": "NCBITaxon:9606",
+  "cell_context": {
+    "cell_type": "CL:0000000",
+    "cell_line": null,
+    "state": "resting"
+  },
+  "assay_context": {
+    "assay": "CRISPRi_screen",
+    "perturbation": "CRISPRi:HGNC:1097"
+  },
+  "evidence_ids": [
+    "perturbseq_v_test:fc1d7ea4dd7c21a7",
+    "perturbseq_v_test:c8b48071a22cff0d"
+  ],
+  "confidence_language": "causal",
+  "requested_status": "established"
+}
