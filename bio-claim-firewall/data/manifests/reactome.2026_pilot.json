@@ -1,0 +1,10 @@
+{
+  "schema_version": "0.1.0",
+  "source": "reactome.2026_pilot",
+  "source_url": "https://reactome.org/download/current/Ensembl2Reactome.txt",
+  "retrieved_at": "2026-08-31T22:00:08Z",
+  "license": "CC0-1.0",
+  "sha256": "fa31cf7f2a994e27d1f33cd4f25b31fb5cb070e0a3aa645c80ea19565d79fdea",
+  "row_count": 2012,
+  "preprocessing_cmd": "python3 data/scripts/download_reactome.py -- streams Ensembl2Reactome.txt (tab-separated: ensembl_gene_id, reactome_pathway_id, url, pathway_name, evidence_code, species), filters to species=='Homo sapiens', caps membership rows at 20000 in on-disk file order (raw multi-species download not retained -- ~183MB, exceeds the per-source disk budget); writes curies.txt + labels.jsonl for every REACT pathway touched by the kept rows, plus pathway_membership.jsonl (gene, pathway) for the kept rows themselves."
+}

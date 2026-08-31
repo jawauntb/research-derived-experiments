@@ -1,0 +1,8 @@
+schema_version: "0.1.0"
+source: "cellontology.2026_pilot"
+source_url: "https://purl.obolibrary.org/obo/cl/cl-basic.obo"
+retrieved_at: "2026-08-31T22:00:04Z"
+license: "CC-BY-4.0"
+sha256: "d0801ecac3cae19b03c6d2b839bc01914941c14de4c1abf4b0e33401e9e6e3d7"
+row_count: 3335
+preprocessing_cmd: "python3 data/scripts/download_cell_ontology.py -- parses [Term] stanzas from cl-basic.obo with a stdlib regex OBO parser (no pronto/owlready2 dependency); drops is_obsolete=true stanzas; writes curies.txt + labels.jsonl (id -> name) + cell_ontology.jsonl (is_a closure via BFS, depth=3)."

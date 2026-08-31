@@ -1,0 +1,8 @@
+schema_version: "0.1.0"
+source: "ncbitaxon.2026_pilot"
+source_url: "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=taxonomy&id=9606,10090,10116,7955,6239,7227,4932&retmode=xml"
+retrieved_at: "2026-08-31T22:00:04Z"
+license: "Public-Domain"
+sha256: "4bab09bbc0900954a13ab2fd396bf15047ca3e717aee550620ef2ab372cefc9b"
+row_count: 7
+preprocessing_cmd: "python3 data/scripts/download_ncbitaxon.py -- fetches NCBI E-utilities efetch (db=taxonomy, retmode=xml) for a curated small taxon-id list (9606, 10090, 10116, 7955, 6239, 7227, 4932) instead of the full ~80-160MB taxdump, since the pilot world only cites NCBITaxon:9606 (human); parses TaxId/ScientificName into curies.txt + labels.jsonl."
