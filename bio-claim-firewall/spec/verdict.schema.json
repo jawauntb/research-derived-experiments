@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bio-claim-firewall/spec/verdict.schema.json",
+  "title": "Verdict",
+  "description": "The verifier's single, typed answer for one claim. Exactly one verdict per claim_id lands in the audit ledger. INCONCLUSIVE and CHECKER_ERROR MUST NOT be rendered as verified.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "verdict_id",
+    "claim_id",
+    "verdict",
+    "issued_at",
+    "checker_version",
+    "snapshot_hashes",
+    "schema_version"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "0.1.0" },
+    "verdict_id": {
+      "description": "SHA-256, first 32 hex chars, of the canonicalized (claim + verdict + derivation + snapshot_hashes + checker_version) tuple. Guarantees tamper-evidence in the ledger.",
+      "type": "string",
+      "pattern": "^[0-9a-f]{32}$"
+    },
+    "claim_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "verdict": {
+      "type": "string",
+      "enum": [
+        "ACCEPTED_CONDITIONALLY",
+        "REJECTED",
+        "INCONCLUSIVE",
+        "CHECKER_ERROR"
+      ]
+    },
+    "fault_code": {
+      "description": "Required iff verdict=REJECTED. See spec/fault_taxonomy.md for the closed enum.",
+      "type": ["string", "null"],
+      "enum": [
+        null,
+        "UNKNOWN_ENTITY",
+        "INVALID_RELATION",
+        "UNSUPPORTED_EDGE",
+        "SIGN_MISMATCH",
+        "CONTEXT_MISMATCH",
+        "CAUSALITY_OVERCLAIM",
+        "SCOPE_OVERCLAIM",
+        "CONTRADICTED",
+        "BAD_CITATION",
+        "UNSUPPORTED_CERTAINTY",
+        "OUT_OF_SCOPE"
+      ]
+    },
+    "reasons": {
+      "description": "Verifier-produced explanation strings. NEVER filled by an LLM. One entry per rule that fired against the claim.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["rule_id", "message"],
+        "properties": {
+          "rule_id": {
+            "description": "Stable id of the rule that fired (e.g. `R-CTX-01`, `R-CAUS-02`). Defined in spec/inference_rules.md.",
+            "type": "string",
+            "pattern": "^R-[A-Z]+-[0-9]{2}$"
+          },
+          "message": {
+            "description": "Verifier's human-readable rendering of the rule's failure. Must not include LLM prose.",
+            "type": "string"
+          },
+          "evidence_id": {
+            "description": "Evidence record the rule cited, if applicable.",
+            "type": ["string", "null"]
+          }
+        }
+      }
+    },
+    "derivation": {
+      "description": "Required iff verdict=ACCEPTED_CONDITIONALLY. Machine-readable trace: which evidence records the verifier consulted, and which rules it applied to accept the claim.",
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["evidence_ids", "applied_rules", "conditions"],
+      "properties": {
+        "evidence_ids": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        },
+        "applied_rules": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^R-[A-Z]+-[0-9]{2}$" },
+          "minItems": 1
+        },
+        "conditions": {
+          "description": "Human-readable list of the scope conditions attached to acceptance. Rendered verbatim in any downstream prose (e.g. `only in K562, resting state`, `only under CRISPRi perturbation`).",
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "checker_error": {
+      "description": "Required iff verdict=CHECKER_ERROR. Explains why the checker itself failed (loader crash, snapshot hash mismatch, rule-engine bug). NEVER auto-repaired into a REJECTED_* verdict; escalates fail-closed.",
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["stage", "message"],
+      "properties": {
+        "stage": { "enum": ["load_snapshot", "resolve_entity", "load_evidence", "run_rules", "format_verdict"] },
+        "message": { "type": "string" },
+        "exception_class": { "type": ["string", "null"] }
+      }
+    },
+    "snapshot_hashes": {
+      "description": "SHA-256 of every snapshot the verifier consulted for this verdict. Two verdicts computed against the same claim under the same snapshot_hashes MUST be identical.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      }
+    },
+    "checker_version": {
+      "description": "Semver of the verifier binary that produced this verdict. Bump on any change to the rule engine, resolver, or verdict formatter.",
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "issued_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "verdict": { "const": "REJECTED" } }, "required": ["verdict"] },
+      "then": { "required": ["fault_code", "reasons"] }
+    },
+    {
+      "if": { "properties": { "verdict": { "const": "ACCEPTED_CONDITIONALLY" } }, "required": ["verdict"] },
+      "then": { "required": ["derivation"] }
+    },
+    {
+      "if": { "properties": { "verdict": { "const": "CHECKER_ERROR" } }, "required": ["verdict"] },
+      "then": { "required": ["checker_error"] }
+    }
+  ]
+}

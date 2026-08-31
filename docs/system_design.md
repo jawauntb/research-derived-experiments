@@ -122,6 +122,7 @@ explicit Modal images and independent research commands may still use `uvx`.
 | Envelope Guard | `sites/envelope_guard/` | Node **whitelist** static, port default **3020** | Railway (Actions) | Interactive Constraint Transport bench + research explainer; domain `envelope-guard-production.up.railway.app` |
 | Inquiry Black Box app | `apps/inquiry-black-box/` | Bun workspaces: Electron desktop, Chrome MV3, optional Bun cloud API | Local package; cloud on Railway; batch on Modal | Local-first; privacy-gated sync |
 | Coherence testbench | `coherence-testbench/` | Own Python 3.12 project + Modal jobs | Modal for gates; optional Railway site | **Not** in root `run_quality_checks.py`; Phase 3 **frozen** |
+| Bio Claim Firewall | `bio-claim-firewall/` | Local Python 3.12; deterministic rule-engine verifier | Local CLI only (no hosted service) | **Phase 1 landed** (schemas + fault taxonomy + inference rules + non-goals). Phase 3 verifier plumbing in progress. Runs against a frozen, hash-verified snapshot of ontologies + one perturbation evidence source. LLM output is data, never executable code. Architecturally MIDAS-adjacent (typed steps, Generate→Execute→Analyse contract, JSONL trajectory log) with reuse permission recorded in `bio-claim-firewall/PROVENANCE.md`. |
 
 ### 2.2 Grounded-harness research surfaces
 

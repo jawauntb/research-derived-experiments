@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bio-claim-firewall/spec/evidence.schema.json",
+  "title": "EvidenceRecord",
+  "description": "One row in the frozen evidence ledger. Records are stored per source; the verifier reads them and does not synthesize new ones. There is no merged 'truth graph'.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "evidence_id",
+    "source",
+    "snapshot_hash",
+    "record_type",
+    "subject",
+    "object",
+    "species",
+    "cell_context",
+    "assay_context",
+    "observation_type",
+    "retrieved_at",
+    "license",
+    "schema_version"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "0.1.0"
+    },
+    "evidence_id": {
+      "description": "Stable id inside this ledger. Format: `<source>:<record_hash>` — record_hash is SHA-256 of the canonicalized source row, first 16 hex chars.",
+      "type": "string",
+      "pattern": "^[a-z0-9_.-]+:[0-9a-f]{16}$"
+    },
+    "source": {
+      "description": "Which frozen source this record came from. Must match a manifest under data/manifests/.",
+      "type": "string",
+      "examples": ["perturbseq.replogle_2022", "reactome.v88", "hgnc.2026Q3", "go.2026-06-01"]
+    },
+    "snapshot_hash": {
+      "description": "SHA-256 of the raw source file this record was extracted from. Must equal the corresponding manifest's sha256.",
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "record_type": {
+      "description": "What kind of evidence this row is. Governs which claim relations it can license — see spec/inference_rules.md §Evidence licensing.",
+      "type": "string",
+      "enum": [
+        "perturbation_effect",
+        "physical_interaction",
+        "pathway_membership",
+        "expression_observation",
+        "ontology_annotation",
+        "identifier_alias"
+      ]
+    },
+    "subject": { "$ref": "claim.schema.json#/$defs/EntityRef" },
+    "object": { "$ref": "claim.schema.json#/$defs/EntityRef" },
+    "species": {
+      "type": "string",
+      "pattern": "^NCBITaxon:[0-9]+$"
+    },
+    "cell_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cell_type"],
+      "properties": {
+        "cell_type": { "type": "string" },
+        "cell_line": { "type": ["string", "null"] },
+        "state": { "type": ["string", "null"] }
+      }
+    },
+    "assay_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assay"],
+      "properties": {
+        "assay": { "type": "string" },
+        "perturbation": { "type": ["string", "null"] }
+      }
+    },
+    "observation_type": {
+      "description": "`interventional` means the source applied a perturbation and measured the change; `observational` means an association was measured without intervention. Only `interventional` records can license a `causes` claim.",
+      "type": "string",
+      "enum": ["interventional", "observational"]
+    },
+    "effect": {
+      "description": "Direction and magnitude of the measured effect. Required for record_type=`perturbation_effect` or `expression_observation`; omitted for interaction / annotation records.",
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["sign", "magnitude", "significance"],
+      "properties": {
+        "sign": { "enum": ["positive", "negative", "null"] },
+        "magnitude": {
+          "description": "Effect size on the source's native scale (log2FC, correlation coefficient, etc.). Interpretation depends on `magnitude_scale`.",
+          "type": "number"
+        },
+        "magnitude_scale": {
+          "description": "Free-text tag for the scale (`log2fc`, `pearson_r`, `odds_ratio`). Rules that compare magnitudes must be gated on scale equality.",
+          "type": "string"
+        },
+        "significance": {
+          "description": "Adjusted p-value or FDR as reported by the source. `null` if the source did not compute one.",
+          "type": ["number", "null"],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "n_replicates": { "type": ["integer", "null"], "minimum": 1 }
+      }
+    },
+    "contradicts": {
+      "description": "Evidence ids this record directly contradicts under the same context. The verifier uses this to satisfy the CONTRADICTED rule without re-inferring conflicts.",
+      "type": "array",
+      "items": { "type": "string" },
+      "default": []
+    },
+    "retrieved_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "license": {
+      "description": "Free-text license tag from the source's manifest. Records whose license disallows redistribution stay under data/evidence_records/restricted/ and never appear in a published derivation.",
+      "type": "string"
+    },
+    "source_citation": {
+      "description": "Human-readable citation for the primary study, if the source is a curated aggregator. Rendered in the accepted-claim explanation; never used for identity.",
+      "type": ["string", "null"]
+    }
+  }
+}

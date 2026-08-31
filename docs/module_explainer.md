@@ -26,6 +26,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `sites/` | Public static sites (atlas, Inquiry landing, Envelope Guard) |
 | `apps/inquiry-black-box/` | Local-first Inquiry product monorepo (Bun/Electron/MV3) |
 | `coherence-testbench/` | Separate EEG/eyetrack Phase-0 GO/KILL project |
+| `bio-claim-firewall/` | Proof-carrying biological claim system (Phase 1 spec landed; verifier + evaluation suites in progress). Locked JSON schemas, closed fault taxonomy, deterministic rule cascade; MIDAS-adjacent architecture with permission (`bio-claim-firewall/PROVENANCE.md`). |
 | `data/` | Gitignored raw data; committed exception `data/paper_b/` |
 | `artifacts/` | Gitignored raw run outputs (never commit) |
 | `README.md` | Human entrypoint |
