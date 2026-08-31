@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bio-claim-firewall/spec/claim.schema.json",
+  "title": "Claim",
+  "description": "A single biological claim submitted to the firewall. This is the ONLY artifact an untrusted model may produce for verification. LLM prose is never verified directly.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "claim_id",
+    "subject",
+    "relation",
+    "object",
+    "polarity",
+    "species",
+    "cell_context",
+    "assay_context",
+    "evidence_ids",
+    "confidence_language",
+    "requested_status",
+    "schema_version"
+  ],
+  "properties": {
+    "schema_version": {
+      "description": "Semver of this schema the claim was written against. Bump on any incompatible change.",
+      "type": "string",
+      "const": "0.1.0"
+    },
+    "claim_id": {
+      "description": "Client-generated UUIDv4. The verifier uses it to key the verdict. Duplicates are refused at the ledger boundary.",
+      "type": "string",
+      "format": "uuid"
+    },
+    "subject": { "$ref": "#/$defs/EntityRef" },
+    "relation": {
+      "description": "The relation the subject is asserted to have to the object. See spec/inference_rules.md for the evidence rule that governs each relation.",
+      "type": "string",
+      "enum": [
+        "increases",
+        "decreases",
+        "binds",
+        "expressed_in",
+        "causes",
+        "correlates_with"
+      ]
+    },
+    "object": { "$ref": "#/$defs/EntityRef" },
+    "polarity": {
+      "description": "Explicit sign of the asserted effect. `none` is only valid for relations where sign is undefined (e.g. `binds`, `expressed_in`).",
+      "type": "string",
+      "enum": ["positive", "negative", "none"]
+    },
+    "species": {
+      "description": "NCBI Taxonomy CURIE. The frozen ontology snapshot must contain this taxon.",
+      "type": "string",
+      "pattern": "^NCBITaxon:[0-9]+$"
+    },
+    "cell_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cell_type"],
+      "properties": {
+        "cell_type": {
+          "description": "Cell Ontology CURIE (e.g. `CL:0000236`) or the literal string `unspecified`. `unspecified` bypasses cell-type matching but forces the claim's status to at most `hypothesis`.",
+          "type": "string"
+        },
+        "cell_line": {
+          "description": "Cell-line CURIE (e.g. `CLO:0009454` for K562) or null. If present, the evidence must be recorded in the same cell line unless the inference rule waives it.",
+          "type": ["string", "null"]
+        },
+        "state": {
+          "description": "Free-text tag for developmental / stimulation / disease state (e.g. `resting`, `IFNG_stimulated`, `hypoxia_24h`). Compared to evidence.state by exact string equality; free-text mismatch triggers CONTEXT_MISMATCH unless waived by rule.",
+          "type": ["string", "null"]
+        }
+      }
+    },
+    "assay_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assay"],
+      "properties": {
+        "assay": {
+          "description": "Assay type (e.g. `scRNA-seq`, `bulk-RNA-seq`, `CRISPRi_screen`, `ChIP-seq`, `co-IP`). Governs which relations the evidence can license — see spec/inference_rules.md.",
+          "type": "string"
+        },
+        "perturbation": {
+          "description": "Perturbation label if applicable (e.g. `CRISPRi:HGNC:1097`) or null. `causes` claims REQUIRE this to be non-null and to match an interventional evidence record.",
+          "type": ["string", "null"]
+        }
+      }
+    },
+    "evidence_ids": {
+      "description": "Source-record identifiers in the frozen evidence ledger. Every id must resolve; unresolved ids trigger BAD_CITATION. The empty list is invalid — the verifier does not verify unsupported claims.",
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "confidence_language": {
+      "description": "How strongly the claim is worded. Mapped to an evidence-strength floor by spec/inference_rules.md. Overreach triggers UNSUPPORTED_CERTAINTY.",
+      "type": "string",
+      "enum": ["observed", "supported", "suggestive", "causal"]
+    },
+    "requested_status": {
+      "description": "The presentation tier the proposer wants the claim rendered at. `established` requires the strictest evidence rule; `hypothesis` is always available for supported claims.",
+      "type": "string",
+      "enum": ["hypothesis", "established"]
+    }
+  },
+  "$defs": {
+    "EntityRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label"],
+      "properties": {
+        "id": {
+          "description": "CURIE in a known prefix (HGNC, ENSEMBL, UNIPROT, MONDO, CL, GO, CHEBI, REACT). Unknown prefix triggers UNKNOWN_ENTITY.",
+          "type": "string",
+          "pattern": "^(HGNC|ENSEMBL|UNIPROT|MONDO|CL|GO|CHEBI|REACT):[A-Za-z0-9_.:-]+$"
+        },
+        "label": {
+          "description": "Human-readable label. Used only for rendering, never for identity. Label / id mismatch is a soft warning, not a fault.",
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}
