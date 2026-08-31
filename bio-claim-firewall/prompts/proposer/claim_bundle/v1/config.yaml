@@ -1,0 +1,3 @@
+task: proposer
+version: v1
+description: 'Emit a JSON list of claims matching spec/claim.schema.json.'

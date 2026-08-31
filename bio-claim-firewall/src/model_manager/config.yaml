@@ -1,0 +1,40 @@
+# Sourced structure from MIDAS with permission (see bio-claim-firewall/PROVENANCE.md).
+# Task-oriented model routing for the bio-claim-firewall untrusted proposer.
+
+providers:
+  # Placeholder providers; real credentials come from env vars.
+  # OpenAI-compatible; API key from ANTHROPIC_API_KEY or OPENAI_API_KEY per provider config.
+  openai_gpt4o_mini:
+    type: openai_sdk
+    model: gpt-4o-mini
+    api_key_env: OPENAI_API_KEY
+    base_url: https://api.openai.com/v1
+    timeout_s: 30
+  anthropic_claude_haiku:
+    type: openai_sdk  # anthropic offers an OpenAI-compatible endpoint
+    model: claude-haiku-4-5-20251001
+    api_key_env: ANTHROPIC_API_KEY
+    base_url: https://api.anthropic.com/v1
+    timeout_s: 30
+  ollama_local:
+    type: ollama
+    model: llama3.1:8b
+    base_url: http://localhost:11434
+    timeout_s: 60
+
+tasks:
+  proposer:
+    provider: openai_gpt4o_mini
+    prompt_ref: proposer/claim_bundle@v1
+    max_tokens: 2000
+    temperature: 0.0
+    timeout_s: 45
+  repairer:
+    provider: openai_gpt4o_mini
+    prompt_ref: repairer/claim_repair@v1
+    max_tokens: 1500
+    temperature: 0.0
+    timeout_s: 30
+  # `checker` is our deterministic rule engine, NOT a model call.
+  # Recorded here for documentation only; the ModelManager will refuse
+  # to dispatch a `checker` task, per the fault-split invariant.
