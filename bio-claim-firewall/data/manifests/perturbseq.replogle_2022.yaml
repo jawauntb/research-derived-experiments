@@ -1,0 +1,8 @@
+schema_version: "0.1.0"
+source: "perturbseq.replogle_2022"
+source_url: "https://ndownloader.figshare.com/files/38349305"
+retrieved_at: "2026-08-31T22:00:14Z"
+license: "CC0-1.0"
+sha256: "2f1a951c23b8685091ee3979300fce582c61cab1fa9970b5cad332872734bfb8"
+row_count: 9400
+preprocessing_cmd: "python3 data/scripts/sample_replogle_2022.py -- ranks perturbations by annotated_embedding_coordinates.csv's Anderson-Darling DE gene count (desc), takes the top 100; for each, ranks measured genes in clustered_mean_gene_expression_figs2-4.csv.gz by |z-score| (desc), takes the top 100; maps both perturbed- and measured-gene symbols through this repo's own frozen HGNC snapshot (unmapped symbols dropped, never invented); writes one perturbation_effect EvidenceRecord per kept pair (cap 20000)."

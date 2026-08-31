@@ -1,0 +1,8 @@
+schema_version: "0.1.0"
+source: "cellline.2026_pilot"
+source_url: "https://www.ebi.ac.uk/ols4/api/ontologies/clo/terms/{double-url-encoded PURL} (per-term)"
+retrieved_at: "2026-08-31T22:00:05Z"
+license: "CC-BY-4.0"
+sha256: "2812b130349fdf85a32ad4192064a14cc9a4241ec61eabb6dfefdebc6ffb7fee"
+row_count: 7
+preprocessing_cmd: "python3 data/scripts/download_cell_line_ontology.py -- CLO has no working bulk OBO/OWL download at fetch time (purl.obolibrary.org/obo/clo.obo 404s); falls back to per-term lookups against the EBI OLS REST API for a curated real-CURIE list (K562, RPE1, + a handful of common lines), verified by label match, not invented. Writes curies.txt + labels.jsonl."

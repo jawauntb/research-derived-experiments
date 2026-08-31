@@ -1,0 +1,10 @@
+{
+  "schema_version": "0.1.0",
+  "source": "hgnc.2026_pilot",
+  "source_url": "https://storage.googleapis.com/public-download-files/hgnc/tsv/tsv/hgnc_complete_set.txt ; https://storage.googleapis.com/public-download-files/hgnc/tsv/tsv/withdrawn.txt",
+  "retrieved_at": "2026-08-31T22:00:01Z",
+  "license": "CC0-1.0",
+  "sha256": "8a3627d7257bf3787580c8737aefeaa8741213fe7e4725ccdd5a131734737bab",
+  "row_count": 45045,
+  "preprocessing_cmd": "python3 data/scripts/download_hgnc.py -- parses hgnc_complete_set.txt (tab-separated, full unsampled set) into curies.txt (hgnc_id) + labels.jsonl (hgnc_id -> symbol); parses withdrawn.txt into aliases.jsonl (deprecated hgnc_id -> canonical hgnc_id) for entries with a live MERGED_INTO_REPORT(S) successor only."
+}
