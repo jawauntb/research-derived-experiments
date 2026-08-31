@@ -1,0 +1,4 @@
+{"id": "CL:0000988", "label": "hematopoietic cell", "is_a": ["CL:0000000"]}
+{"id": "CL:0000738", "label": "leukocyte", "is_a": ["CL:0000988", "CL:0000000"]}
+{"id": "CL:0000236", "label": "B cell", "is_a": ["CL:0000738", "CL:0000988", "CL:0000000"]}
+{"id": "CL:0000094", "label": "granulocyte", "is_a": ["CL:0000738", "CL:0000988", "CL:0000000"]}

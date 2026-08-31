@@ -1,0 +1,9 @@
+schema_version: "0.1.0"
+source: cellline_v_test
+source_url: "synthetic://frozen-test-world/cellline_v_test (hand-authored fixture snapshot; not a real Cell Line Ontology download)"
+retrieved_at: "2026-01-15T00:00:00Z"
+license: "CC0-1.0"
+snapshot_file: ontology_snapshots/cellline_v_test/curies.txt
+sha256: "a45faa7b25d3f8d09da20738ae3f74f85247164ccd9e069f2f51b85581b68e6f"
+row_count: 2
+preprocessing_cmd: "none -- curies.txt is hand-authored as the frozen synthetic cell-line snapshot (K562, RPE1)."
