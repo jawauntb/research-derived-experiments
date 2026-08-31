@@ -3,23 +3,14 @@
 from __future__ import annotations
 
 import json
-import sys
 from pathlib import Path
 
 import pytest
 
-# EVIDENCE-DECISION: bio-claim-firewall has no pyproject.toml / pytest.ini
-# of its own yet (the monorepo root's pyproject.toml is out of scope to
-# edit for this task), so nothing puts bio-claim-firewall/ on sys.path for
-# `import src.evidence...` when tests run via
-# `python -m pytest bio-claim-firewall/tests/evidence/` from the monorepo
-# root. Do it here, in this directory's own conftest.py (in-scope), rather
-# than touching any file outside src/evidence/ or tests/evidence/.
-_REPO_ROOT = Path(__file__).resolve().parents[2]
-if str(_REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(_REPO_ROOT))
-
-from src.evidence.hashing import sha256_dir, sha256_file  # noqa: E402
+# `bio-claim-firewall/conftest.py` puts `bio-claim-firewall/src/` on sys.path
+# before any test module (including this conftest) is imported, so bare-form
+# `from evidence.hashing import ...` resolves without any per-file hack.
+from evidence.hashing import sha256_dir, sha256_file
 
 SPECIES_ID = "NCBITaxon:9606"
 GENE_1 = "HGNC:1097"

@@ -13,15 +13,10 @@ provides `FakeSnapshot`, a tiny dict-backed `Snapshot` test double covering:
 
 from __future__ import annotations
 
-import sys
-from pathlib import Path
-
-_SRC = Path(__file__).resolve().parents[2] / "src"
-if str(_SRC) not in sys.path:
-    sys.path.insert(0, str(_SRC))
-
 import pytest
 
+# `bio-claim-firewall/conftest.py` puts `bio-claim-firewall/src/` on sys.path
+# before any test module (including this conftest) is imported.
 from normalize.errors import NormalizationError
 
 
