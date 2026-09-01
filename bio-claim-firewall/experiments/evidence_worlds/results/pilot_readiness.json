@@ -1,0 +1,323 @@
+{
+  "decision": "READY_FOR_BOUNDED_PILOT",
+  "decision_rule": "Every fatal gate for each of the three included worlds must be PASS; deferred worlds are excluded and cannot contribute evidence.",
+  "deferred_worlds": [
+    {
+      "reason": "Deferred: no committed licensed evidence fixture or adapter.",
+      "status": "DEFERRED",
+      "world_id": "flywire-codex"
+    },
+    {
+      "reason": "Deferred: no committed licensed evidence fixture or adapter.",
+      "status": "DEFERRED",
+      "world_id": "neurovault"
+    }
+  ],
+  "evaluation_mode": "offline_deterministic",
+  "limitations": [
+    "A passing receipt establishes consistency with a hash-bound compact fixture, not source authenticity.",
+    "Arc results are measurements, not STATE predictions; Open Targets results are associations, not causality or efficacy.",
+    "ClinicalTrials.gov plus SEC results are disclosure consistency checks, not trial success or corporate-truth claims."
+  ],
+  "pilot_ready": true,
+  "schema_version": "bio-claim-firewall-pilot-readiness-1",
+  "worlds": [
+    {
+      "artifacts": {
+        "as_of": "2026-06-03T08:08:45Z",
+        "fixture_sha256": "f054a3800d4ee1fef6787bf7c55a4a3894c3b560ff450caa05d9589a81c05dd9"
+      },
+      "controls": [
+        {
+          "control_id": "clinical-trials-positive-timestamped-join",
+          "expected": [
+            "ACCEPTED"
+          ],
+          "kind": "positive",
+          "message": "The human-confirmed disclosure locator and span are consistent with timestamped registry identity.",
+          "observed": "ACCEPTED",
+          "passed": true,
+          "reason_code": "REGISTERED_DISCLOSURE_CONSISTENT"
+        },
+        {
+          "control_id": "clinical-trials-negative-sponsor-mismatch",
+          "expected": [
+            "REJECTED"
+          ],
+          "kind": "negative",
+          "message": "The declared sponsor does not match both timestamped source records.",
+          "observed": "REJECTED",
+          "passed": true,
+          "reason_code": "SPONSOR_MISMATCH"
+        },
+        {
+          "control_id": "clinical-trials-null-unknown-accession",
+          "expected": [
+            "INCONCLUSIVE"
+          ],
+          "kind": "null",
+          "message": "The exact NCT and SEC accession could not both be resolved.",
+          "observed": "INCONCLUSIVE",
+          "passed": true,
+          "reason_code": "IDENTITY_NOT_RESOLVED"
+        },
+        {
+          "control_id": "clinical-trials-corrupted-registry-bytes",
+          "expected": [
+            "CHECKER_ERROR"
+          ],
+          "kind": "corruption",
+          "message": "clinical-trials fixture integrity digest mismatch",
+          "observed": "CHECKER_ERROR",
+          "passed": true,
+          "reason_code": "CORRUPT_EVIDENCE"
+        },
+        {
+          "control_id": "clinical-trials-cross-world-claim",
+          "expected": [
+            "CHECKER_ERROR"
+          ],
+          "kind": "cross_world",
+          "message": "claim world identity does not match the selected Clinical Trials world",
+          "observed": "CHECKER_ERROR",
+          "passed": true,
+          "reason_code": "CORRUPT_EVIDENCE"
+        }
+      ],
+      "fatal_gates": [
+        {
+          "evidence": "Manifest world/version and source IDs match the loaded fixture.",
+          "gate_id": "official_source_identity",
+          "status": "PASS"
+        },
+        {
+          "evidence": "Manifest source licenses are verified and raw custody is outside the public fixture.",
+          "gate_id": "license_and_custody",
+          "status": "PASS"
+        },
+        {
+          "evidence": "The world-specific adapter validated its frozen scope and integrity constraints.",
+          "gate_id": "timestamp_cutoff_no_time_travel",
+          "status": "PASS"
+        },
+        {
+          "evidence": "Adapter loaded the schema; source hashes and derived-artifact hash match the manifest.",
+          "gate_id": "complete_hashes_and_schema",
+          "status": "PASS"
+        },
+        {
+          "evidence": "All preregistered organic and adversarial controls matched their expected fail-closed outcomes.",
+          "gate_id": "organic_positive_negative_null_controls",
+          "status": "PASS"
+        },
+        {
+          "evidence": "Foreign-world and corrupted-fixture controls fail closed.",
+          "gate_id": "world_isolation_and_fail_closed",
+          "status": "PASS"
+        }
+      ],
+      "scope_note": "PASS means bounded fixture/source consistency only; it does not establish authenticity, causality, efficacy, or universal truth.",
+      "status": "PASS",
+      "version": "2025-09-01_2026-09-01",
+      "world_id": "clinical-trials-sec"
+    },
+    {
+      "artifacts": {
+        "fixture_sha256": "2ecef125755c05e580a1ad65a8a31e8efce2119ae0f074d1ea31e4b6ff0032c4"
+      },
+      "controls": [
+        {
+          "control_id": "open-targets-positive-release-row",
+          "expected": [
+            "ACCEPTED"
+          ],
+          "kind": "positive",
+          "message": "The exact source-specific target-disease association exists in Open Targets release 26.06.",
+          "observed": "ACCEPTED",
+          "passed": true,
+          "reason_code": "SOURCE_SPECIFIC_ASSOCIATION_PRESENT"
+        },
+        {
+          "control_id": "open-targets-negative-absent-source",
+          "expected": [
+            "REJECTED"
+          ],
+          "kind": "negative",
+          "message": "No exact target, disease, and source association exists in the pinned release.",
+          "observed": "REJECTED",
+          "passed": true,
+          "reason_code": "ASSOCIATION_ABSENT"
+        },
+        {
+          "control_id": "open-targets-null-absent-disease",
+          "expected": [
+            "REJECTED",
+            "INCONCLUSIVE"
+          ],
+          "kind": "null",
+          "message": "No exact target, disease, and source association exists in the pinned release.",
+          "observed": "REJECTED",
+          "passed": true,
+          "reason_code": "ASSOCIATION_ABSENT"
+        },
+        {
+          "control_id": "open-targets-corrupted-release-bytes",
+          "expected": [
+            "CHECKER_ERROR"
+          ],
+          "kind": "corruption",
+          "message": "Open Targets fixture integrity digest mismatch",
+          "observed": "CHECKER_ERROR",
+          "passed": true,
+          "reason_code": "CORRUPT_EVIDENCE"
+        },
+        {
+          "control_id": "open-targets-cross-world-claim",
+          "expected": [
+            "CHECKER_ERROR"
+          ],
+          "kind": "cross_world",
+          "message": "claim world identity does not match the selected Open Targets world",
+          "observed": "CHECKER_ERROR",
+          "passed": true,
+          "reason_code": "CORRUPT_EVIDENCE"
+        }
+      ],
+      "fatal_gates": [
+        {
+          "evidence": "Manifest world/version and source IDs match the loaded fixture.",
+          "gate_id": "official_release_identity",
+          "status": "PASS"
+        },
+        {
+          "evidence": "Manifest source licenses are verified and raw custody is outside the public fixture.",
+          "gate_id": "license_and_redistribution",
+          "status": "PASS"
+        },
+        {
+          "evidence": "Adapter loaded the schema; source hashes and derived-artifact hash match the manifest.",
+          "gate_id": "complete_hashes_and_schema",
+          "status": "PASS"
+        },
+        {
+          "evidence": "The world-specific adapter validated its frozen scope and integrity constraints.",
+          "gate_id": "release_and_score_semantics",
+          "status": "PASS"
+        },
+        {
+          "evidence": "All preregistered organic and adversarial controls matched their expected fail-closed outcomes.",
+          "gate_id": "organic_positive_negative_null_controls",
+          "status": "PASS"
+        },
+        {
+          "evidence": "Foreign-world and corrupted-fixture controls fail closed.",
+          "gate_id": "world_isolation_and_fail_closed",
+          "status": "PASS"
+        }
+      ],
+      "scope_note": "PASS means bounded fixture/source consistency only; it does not establish authenticity, causality, efficacy, or universal truth.",
+      "status": "PASS",
+      "version": "26.06",
+      "world_id": "open-targets"
+    },
+    {
+      "artifacts": {
+        "fixture_sha256": "4bd9c5fef5060ca500eac08af06ad9ecae3b4957382893f46e392c6193809853"
+      },
+      "controls": [
+        {
+          "control_id": "arc-positive-heldout",
+          "expected": [
+            "ACCEPTED"
+          ],
+          "kind": "positive",
+          "message": "frozen measurement supports the asserted direction",
+          "observed": "ACCEPTED",
+          "passed": true,
+          "reason_code": "ARC-H1-001"
+        },
+        {
+          "control_id": "arc-negative-sign-reversal",
+          "expected": [
+            "REJECTED"
+          ],
+          "kind": "negative",
+          "message": "frozen measurement reports the opposite direction",
+          "observed": "REJECTED",
+          "passed": true,
+          "reason_code": "ARC-H1-002"
+        },
+        {
+          "control_id": "arc-null-unsupported-record",
+          "expected": [
+            "INCONCLUSIVE",
+            "REJECTED"
+          ],
+          "kind": "null",
+          "message": "measurement is below the frozen threshold and has no directional response",
+          "observed": "REJECTED",
+          "passed": true,
+          "reason_code": "ARC-H1-003"
+        },
+        {
+          "control_id": "arc-corrupted-measurement-bytes",
+          "expected": [
+            "CHECKER_ERROR"
+          ],
+          "kind": "corruption",
+          "message": "measurement ledger hash does not match fixture metadata",
+          "observed": "CHECKER_ERROR",
+          "passed": true,
+          "reason_code": ""
+        },
+        {
+          "control_id": "arc-cross-world-claim",
+          "expected": [
+            "CHECKER_ERROR"
+          ],
+          "kind": "cross_world",
+          "message": "claim world identity does not match the selected Arc VCC fixture",
+          "observed": "CHECKER_ERROR",
+          "passed": true,
+          "reason_code": ""
+        }
+      ],
+      "fatal_gates": [
+        {
+          "evidence": "Manifest source licenses are verified and raw custody is outside the public fixture.",
+          "gate_id": "dataset_license_scope",
+          "status": "PASS"
+        },
+        {
+          "evidence": "Manifest world/version and source IDs match the loaded fixture.",
+          "gate_id": "official_release_identity",
+          "status": "PASS"
+        },
+        {
+          "evidence": "The world-specific adapter validated its frozen scope and integrity constraints.",
+          "gate_id": "split_integrity_no_leakage",
+          "status": "PASS"
+        },
+        {
+          "evidence": "Adapter loaded the schema; source hashes and derived-artifact hash match the manifest.",
+          "gate_id": "complete_hashes_and_schema",
+          "status": "PASS"
+        },
+        {
+          "evidence": "All preregistered organic and adversarial controls matched their expected fail-closed outcomes.",
+          "gate_id": "organic_positive_negative_null_controls",
+          "status": "PASS"
+        },
+        {
+          "evidence": "Foreign-world and corrupted-fixture controls fail closed.",
+          "gate_id": "world_isolation_and_fail_closed",
+          "status": "PASS"
+        }
+      ],
+      "scope_note": "PASS means bounded fixture/source consistency only; it does not establish authenticity, causality, efficacy, or universal truth.",
+      "status": "PASS",
+      "version": "2025-h1-measurements",
+      "world_id": "arc-vcc"
+    }
+  ]
+}
