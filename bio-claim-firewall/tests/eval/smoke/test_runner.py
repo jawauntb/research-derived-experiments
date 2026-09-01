@@ -293,8 +293,11 @@ def test_schema_gate_rejects_invalid_or_absent_proposals():
         assert_schema_valid_proposed_claims({"attempts": []})
 
 
-def test_provider_preflight_handles_ready_missing_unsupported_and_malformed_configs(
-    tmp_path, monkeypatch
+@pytest.mark.parametrize(
+    "missing_package", ["openai", "httpx", "tenacity", "truststore"]
+)
+def test_provider_preflight_requires_every_openai_provider_dependency(
+    tmp_path, monkeypatch, missing_package
 ):
     config_path = tmp_path / "config.yaml"
     config_path.write_text(
@@ -318,11 +321,48 @@ def test_provider_preflight_handles_ready_missing_unsupported_and_malformed_conf
     monkeypatch.setattr(
         runner.importlib.util,
         "find_spec",
-        lambda package: None if package == "openai" else object(),
+        lambda package: None if package == missing_package else object(),
     )
-    assert "missing optional dependency openai" in runner._provider_preflight(
-        config_path, {"TOKEN": "present"}
+    assert (
+        f"missing optional dependency {missing_package}"
+        in runner._provider_preflight(config_path, {"TOKEN": "present"})
     )
+
+
+@pytest.mark.parametrize("missing_package", ["ollama", "httpx", "tenacity"])
+def test_provider_preflight_requires_every_ollama_provider_dependency(
+    tmp_path, monkeypatch, missing_package
+):
+    config_path = tmp_path / "config.yaml"
+    config_path.write_text(
+        json.dumps(
+            {
+                "tasks": {"proposer": {"provider": "provider"}},
+                "providers": {"provider": {"type": "ollama"}},
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(runner.importlib.util, "find_spec", lambda package: object())
+
+    assert runner._provider_preflight(config_path, {}) == []
+
+    monkeypatch.setattr(
+        runner.importlib.util,
+        "find_spec",
+        lambda package: None if package == missing_package else object(),
+    )
+    assert (
+        f"missing optional dependency {missing_package}"
+        in runner._provider_preflight(config_path, {})
+    )
+
+
+def test_provider_preflight_handles_unsupported_and_malformed_configs(
+    tmp_path, monkeypatch
+):
+    config_path = tmp_path / "config.yaml"
+    monkeypatch.setattr(runner.importlib.util, "find_spec", lambda package: object())
 
     config_path.write_text(
         json.dumps(

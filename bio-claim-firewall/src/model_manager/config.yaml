@@ -6,7 +6,7 @@ providers:
   # OpenAI-compatible; API key from ANTHROPIC_API_KEY or OPENAI_API_KEY per provider config.
   openai_gpt4o_mini:
     type: openai_sdk
-    model: gpt-4o-mini
+    model: gpt-4o-mini-2024-07-18
     api_key_env: OPENAI_API_KEY
     base_url: https://api.openai.com/v1
     timeout_s: 30

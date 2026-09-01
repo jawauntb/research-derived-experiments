@@ -161,9 +161,14 @@ def _provider_preflight(config_path: Path, environ: Mapping[str, str]) -> list[s
 
     required_packages = {"jinja2", "pydantic"}
     if provider_type == "openai_sdk":
-        required_packages.add("openai")
+        # Keep this in lockstep with ``OpenAIProvider``'s guarded import.
+        # Checking only the SDK lets preflight report ready even though the
+        # first provider initialization must fail before an API request.
+        required_packages.update({"openai", "httpx", "tenacity", "truststore"})
     elif provider_type == "ollama":
-        required_packages.add("ollama")
+        # ``OllamaProvider`` has the same guarded-import boundary for its
+        # transport and retry dependencies.
+        required_packages.update({"ollama", "httpx", "tenacity"})
     else:
         errors.append(f"unsupported smoke-study provider type: {provider_type!r}")
 

@@ -77,3 +77,17 @@ Residual content:
 Next move: from `bio-claim-firewall/`, run `python -m eval.smoke --preflight`
 with the chosen provider dependencies and credential, then execute the fixed
 five-case manifest once.
+
+## Execution addendum — 2026-09-01
+
+The preregistered manifest was executed once as run ID `2026-09-01-live-01`
+after no-network preflight. The configured OpenAI `gpt-4o-mini-2024-07-18`
+proposer emitted one schema-valid claim for each case; all five received
+`ACCEPTED_CONDITIONALLY`, with no repair calls and no `CHECKER_ERROR`. Local
+receipts, their SHA-256 values, the retained zero-call bootstrap failure, and
+the non-promotion boundary are recorded in
+[`bio-claim-firewall/eval/smoke/RESULTS_2026-09-01.md`](../../bio-claim-firewall/eval/smoke/RESULTS_2026-09-01.md).
+
+This is accepted only as narrow operational evidence for this exact provider,
+prompt, frozen world, and five supplied-evidence selectors. It does not amend
+the preregistration's limitations or establish a biological or safety claim.
