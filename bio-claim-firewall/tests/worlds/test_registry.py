@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-import pytest
 from types import SimpleNamespace
 
-from claim_checker.service import ClaimCheckInputError, ClaimCheckResult, check_claim
+import pytest
 from claim_checker import natural_language
+from claim_checker.service import ClaimCheckInputError, ClaimCheckResult, check_claim
 from evidence import EvidenceError
 from evidence.loader import load_bundle
 from worlds import K562_WORLD, WORLD_REGISTRY, World, WorldRegistry, WorldRegistryError
@@ -52,7 +52,7 @@ def test_receipt_v2_payload_is_stable_and_excludes_run_metadata(monkeypatch):
     registry = WorldRegistry((world,))
     bundle = SimpleNamespace(
         manifests={},
-        ledger=SimpleNamespace(snapshot_hashes=lambda: {}),
+        ledger=SimpleNamespace(snapshot_hashes=dict),
     )
     result = ClaimCheckResult(
         claim={"subject": "A", "object": "B", "direction": "increases"},
@@ -102,7 +102,7 @@ def test_source_mismatch_fails_before_adapter_runs(monkeypatch):
     registry = WorldRegistry((world,))
     bundle = SimpleNamespace(
         manifests={"other": SimpleNamespace(sha256="a" * 64)},
-        ledger=SimpleNamespace(snapshot_hashes=lambda: {}),
+        ledger=SimpleNamespace(snapshot_hashes=dict),
     )
     monkeypatch.setattr(
         "claim_checker.service._run_k562_adapter",

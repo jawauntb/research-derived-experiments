@@ -12,8 +12,9 @@ import json
 import os
 import tempfile
 import urllib.request
+from collections.abc import Callable, Mapping
 from pathlib import Path
-from typing import Any, Callable, Mapping
+from typing import Any
 
 CONTRACT_STATES = frozenset(
     {"RESEARCHED", "RESEARCHED_DEFERRED", "FROZEN", "PREFLIGHT_PASSED", "EVALUATED", "ADMITTED", "WITHHELD_LICENSE", "WITHHELD_INTEGRITY", "WITHHELD_SCIENTIFIC"}
@@ -166,7 +167,7 @@ def acquire_bytes(
         return {"status": "cached", "path": str(destination), "sha256": existing_sha, "changed": False}
     if fetcher is None:
         def fetcher(target: str) -> bytes:
-            with urllib.request.urlopen(target, timeout=60) as response:  # noqa: S310 - URL is a caller-selected official source
+            with urllib.request.urlopen(target, timeout=60) as response:
                 return response.read()
     payload = fetcher(url)
     if not isinstance(payload, bytes):
