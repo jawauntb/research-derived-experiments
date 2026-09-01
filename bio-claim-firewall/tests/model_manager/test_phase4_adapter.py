@@ -27,8 +27,15 @@ def _claim() -> dict:
         "object": {"id": "HGNC:6407", "label": "KRAS"},
         "polarity": "positive",
         "species": "NCBITaxon:9606",
-        "cell_context": {"cell_type": "CL:0000988", "cell_line": "CLO:0009454", "state": "resting"},
-        "assay_context": {"assay": "CRISPRi_screen", "perturbation": "CRISPRi:HGNC:1097"},
+        "cell_context": {
+            "cell_type": "CL:0000988",
+            "cell_line": "CLO:0009454",
+            "state": "resting",
+        },
+        "assay_context": {
+            "assay": "CRISPRi_screen",
+            "perturbation": "CRISPRi:HGNC:1097",
+        },
         "evidence_ids": ["perturbseq_v_test:fc1d7ea4dd7c21a7"],
         "confidence_language": "supported",
         "requested_status": "hypothesis",
@@ -76,6 +83,30 @@ def test_adapter_renders_proposer_prompt_and_maps_response_metadata(manager_with
     assert response.tokens_completion == 23
 
 
+def test_adapter_renders_frozen_evidence_id_as_prompt_id(manager_with_fake):
+    manager, fake = manager_with_fake
+    adapter = ModelManagerAdapter(manager)
+
+    adapter.call(
+        task="proposer",
+        user_msg=json.dumps(
+            {
+                "question": "Does BRCA1 increase KRAS?",
+                "evidence_records": [
+                    {"evidence_id": "perturbseq.replogle_2022:real-record"}
+                ],
+                "context_hints": {},
+            }
+        ),
+        prompt_ref="proposer/claim_bundle@v1",
+    )
+
+    assert (
+        "- id: perturbseq.replogle_2022:real-record"
+        in fake.requests[-1].messages[1]["content"]
+    )
+
+
 def test_adapter_rejects_unconfigured_prompt_ref_before_dispatch(manager_with_fake):
     manager, fake = manager_with_fake
     adapter = ModelManagerAdapter(manager)
@@ -84,7 +115,11 @@ def test_adapter_rejects_unconfigured_prompt_ref_before_dispatch(manager_with_fa
         adapter.call(
             task="proposer",
             user_msg=json.dumps(
-                {"question": "Does BRCA1 increase KRAS?", "evidence_records": [], "context_hints": {}}
+                {
+                    "question": "Does BRCA1 increase KRAS?",
+                    "evidence_records": [],
+                    "context_hints": {},
+                }
             ),
             prompt_ref="proposer/claim_bundle@v999",
         )
@@ -112,7 +147,9 @@ def test_adapter_preserves_checker_refusal_before_dispatch(manager_with_fake):
         json.dumps({"question": "Does BRCA1 increase KRAS?"}),
     ],
 )
-def test_adapter_rejects_malformed_proposer_envelopes_before_dispatch(manager_with_fake, user_msg):
+def test_adapter_rejects_malformed_proposer_envelopes_before_dispatch(
+    manager_with_fake, user_msg
+):
     manager, fake = manager_with_fake
     adapter = ModelManagerAdapter(manager)
 
@@ -151,7 +188,9 @@ def test_repairer_wraps_real_manager_and_aligns_repair_prompt(make_manager):
         "reasons": [{"message": "evidence id does not resolve"}],
     }
 
-    result = Repairer(manager).repair(_claim(), rejected, [{"id": repaired["evidence_ids"][0]}])
+    result = Repairer(manager).repair(
+        _claim(), rejected, [{"id": repaired["evidence_ids"][0]}]
+    )
 
     assert result.claim == repaired
     assert result.provider == "fake"
@@ -183,7 +222,9 @@ def test_repairer_fails_closed_on_invalid_verdict_envelope(make_manager, verdict
     assert fake.requests == []
 
 
-def test_src_import_style_wraps_a_real_manager_with_only_firewall_root_on_pythonpath(tmp_path):
+def test_src_import_style_wraps_a_real_manager_with_only_firewall_root_on_pythonpath(
+    tmp_path,
+):
     firewall_root = Path(__file__).resolve().parents[2]
     config_path = tmp_path / "config.yaml"
     config_path.write_text(
@@ -202,7 +243,9 @@ tasks:
     prompt_ref: repairer/claim_repair@v2
 """
     )
-    responses = json.dumps([json.dumps([_claim()]), json.dumps({"abstain": True, "reason": "no repair"})])
+    responses = json.dumps(
+        [json.dumps([_claim()]), json.dumps({"abstain": True, "reason": "no repair"})]
+    )
     script = """
 import json
 import os

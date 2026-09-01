@@ -30,7 +30,7 @@ It does not prove biology. It proves that an accepted claim obeys a locked forma
 - [x] **Phase 3 — Deterministic verifier.** Audit ledger, normalize, evidence loader, 30-rule cascade, top-level `verify()` composer. Fail-closed. (#539, #540, #541)
 - [x] **Phase 4 preview — Untrusted model interfaces.** `Proposer` + `Repairer` + `Orchestrator` + `TrajectoryLogger`; MIDAS-derived `ModelManager` now connects through its prompt-rendering compatibility adapter. No live-LLM smoke call has run yet. (#542)
 - [x] **Phase 5a — Mutation-test framework.** 31 mutation sites discovered; direct R-CTX-02 and R-CTX-05 regressions close the two first-run coverage gaps, with all 18 `_shared.py` context mutants killed. (#542)
-- [ ] **Phase 5b — Live-LLM end-to-end + adversarial + empirical suites + independent blinded audit.** See [`HANDOFF.md`](HANDOFF.md) §5.
+- [ ] **Phase 5b — Live-LLM end-to-end + adversarial + empirical suites + independent blinded audit.** The five-case smoke runner is preregistered but awaits a provider credential and model dependencies; see [`HANDOFF.md`](HANDOFF.md) §5.
 
 **New agent picking this up: read [`HANDOFF.md`](HANDOFF.md) first.**
 
