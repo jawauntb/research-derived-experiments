@@ -1,0 +1,23 @@
+Failed claim (field: value):
+{% for key, value in failed_claim.items() %}
+- {{ key }}: {{ value }}
+{% endfor %}
+
+fault_code: {{ fault_code }}
+
+Reasons:
+{% for reason in reasons %}
+- {{ reason }}
+{% endfor %}
+
+Evidence records available to you:
+{% for record in evidence_records %}
+- id: {{ record.id }}
+{% for key, value in record.items() if key != "id" %}
+  {{ key }}: {{ value }}
+{% endfor %}
+{% else %}
+(no evidence records were provided)
+{% endfor %}
+
+Return the JSON repair object now.

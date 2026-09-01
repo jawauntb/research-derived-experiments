@@ -37,38 +37,30 @@ from typing import Any
 from .errors import ProposerError
 from .types import ClaimBundle
 
-try:  # pragma: no cover - exercised once Phase 4a lands `src/model_manager`
-    from model_manager import ChatRequest, ChatResponse, ModelManager
-except ImportError:  # pragma: no cover - fallback path, exercised today
-    from dataclasses import dataclass
-    from typing import Protocol, runtime_checkable
+try:  # pragma: no cover - exercised by the bare-package adapter tests
+    from model_manager import ModelManager, adapt_model_manager
+except ImportError:
+    try:  # pragma: no cover - exercised by the src-package adapter test
+        from src.model_manager import ModelManager, adapt_model_manager
+    except ImportError:  # pragma: no cover - lightweight fake fallback
+        from typing import Protocol, runtime_checkable
 
-    @dataclass(frozen=True)
-    class ChatResponse:  # type: ignore[no-redef]
-        content: str
-        provider: str
-        model: str
-        prompt_ref: str
-        prompt_version: str
-        latency_ms: int
-        tokens_prompt: int
-        tokens_completion: int
+        @runtime_checkable
+        class ModelManager(Protocol):  # type: ignore[no-redef]
+            def call(
+                self,
+                task: str,
+                user_msg: str,
+                *,
+                system_msg: str | None = None,
+                max_tokens: int | None = None,
+                temperature: float | None = None,
+                timeout_s: float | None = None,
+                prompt_ref: str | None = None,
+            ) -> Any: ...
 
-    ChatRequest = Any  # type: ignore[assignment,misc]
-
-    @runtime_checkable
-    class ModelManager(Protocol):  # type: ignore[no-redef]
-        def call(
-            self,
-            task: str,
-            user_msg: str,
-            *,
-            system_msg: str | None = None,
-            max_tokens: int | None = None,
-            temperature: float | None = None,
-            timeout_s: float | None = None,
-            prompt_ref: str | None = None,
-        ) -> ChatResponse: ...
+        def adapt_model_manager(manager: Any) -> Any:
+            return manager
 
 
 _SPEC_DIR = Path(__file__).resolve().parents[2] / "spec"
@@ -96,7 +88,7 @@ class Proposer:
     """
 
     def __init__(self, mm: ModelManager, prompt_ref: str = "proposer/claim_bundle@v1") -> None:
-        self.mm = mm
+        self.mm = adapt_model_manager(mm)
         self.prompt_ref = prompt_ref
         self._required_fields = _load_required_top_level_fields()
 
@@ -135,16 +127,11 @@ class Proposer:
         evidence_records: list[dict],
         context_hints: dict | None,
     ) -> str:
-        # PHASE4B-DECISION: the ModelManager interface this task was handed
-        # takes plain `user_msg`/`system_msg` strings (no templated
-        # `variables` dict like MIDAS's `call(task=..., variables=...)`),
-        # so prompt *templating* is out of scope for this module -- the
-        # real prompt files under `prompts/proposer/claim_bundle/v1/` are
-        # Phase 4a's concern (loaded, if at all, inside `ModelManager`
-        # itself). This builds a plain, deterministic JSON envelope of the
-        # call's inputs; it never needs to load a prompt template file, so
-        # `Proposer` works correctly whether or not Phase 4a's prompt
-        # files exist yet (see the task brief's `FakeModelManager` note).
+        # The Phase 4b-shaped interface takes one `user_msg` string. For
+        # lightweight fakes, this deterministic envelope is the whole
+        # request. For a real manager, ModelManagerAdapter validates and
+        # expands the same envelope into the configured versioned prompt's
+        # {question, evidence_records, context_hints} variables.
         payload = {
             "question": question,
             "evidence_records": evidence_records,
