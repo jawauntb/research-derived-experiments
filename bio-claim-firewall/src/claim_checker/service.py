@@ -15,6 +15,7 @@ import uuid
 from collections.abc import Mapping
 from dataclasses import dataclass
 from datetime import UTC, datetime, timezone
+from pathlib import Path
 from typing import Any
 
 from audit import canonicalize_for_hash
@@ -181,6 +182,114 @@ def _run_k562_adapter(bundle: Any, claim: Mapping[str, Any], *, checker_version:
     )
 
 
+def _adapter_result_to_claim_check(result: Any, world: World) -> ClaimCheckResult:
+    """Normalize a typed world adapter result to the generic checker surface.
+
+    The adapter owns its receipt schema and verdict semantics.  This boundary
+    only copies its JSON-compatible fields and verifies that the adapter's
+    source hashes still equal the registered contract; it never turns an
+    adapter error into an acceptance.
+    """
+    payload = result.as_dict()
+    if not isinstance(payload, Mapping):
+        raise WorldRegistryError(f"adapter {world.adapter!r} returned a non-object result")
+    source_hashes = payload.get("source_hashes")
+    if source_hashes is None:
+        source_hashes = payload.get("snapshot_hashes")
+    if not isinstance(source_hashes, Mapping):
+        raise WorldRegistryError(f"adapter {world.adapter!r} returned no source hashes")
+    actual = dict(source_hashes)
+    expected = {
+        contract.source: contract.sha256
+        for contract in world.source_contracts
+        if contract.sha256 is not None
+    }
+    if actual != expected:
+        raise WorldRegistryError(
+            f"adapter {world.adapter!r} source hashes do not match registered world"
+        )
+
+    verdict_name = payload.get("verdict")
+    if not isinstance(verdict_name, str) or not verdict_name:
+        raise WorldRegistryError(f"adapter {world.adapter!r} returned no verdict")
+    verdict: dict[str, Any] = {"verdict": verdict_name}
+    for key in (
+        "outcome",
+        "reason",
+        "message",
+        "reason_code",
+        "winning_rule",
+        "citations",
+        "checker_version",
+        "world_id",
+        "world_version",
+        "source_hashes",
+        "snapshot_hashes",
+    ):
+        if key in payload:
+            verdict[key] = payload[key]
+    receipt = payload.get("receipt")
+    if receipt is not None and not isinstance(receipt, Mapping):
+        raise WorldRegistryError(f"adapter {world.adapter!r} returned an invalid receipt")
+    return ClaimCheckResult(
+        claim=dict(payload["claim"]) if isinstance(payload.get("claim"), Mapping) else None,
+        evidence=dict(payload["evidence"]) if isinstance(payload.get("evidence"), Mapping) else None,
+        verdict=verdict,
+        receipt=dict(receipt) if isinstance(receipt, Mapping) else None,
+    )
+
+
+def _run_registered_adapter(
+    world: World,
+    fixture: Any,
+    claim: Mapping[str, Any],
+    *,
+    checker_version: str,
+) -> ClaimCheckResult:
+    """Dispatch only to an explicitly registered adapter.
+
+    K562 continues to use its ``SnapshotBundle`` protocol.  Other worlds use
+    an explicit fixture path (Arc's directory, or an Open Targets/Clinical
+    Trials JSON file) or an in-memory fixture mapping where the adapter
+    supports it.  No directory walking, source lookup, or plugin discovery is
+    performed here.
+    """
+    allowed = set(world.claim_fields)
+    unknown = set(claim) - allowed
+    if unknown:
+        raise ClaimCheckInputError(
+            f"claim contains fields outside {world.world_key}: {sorted(unknown)!r}"
+        )
+    if world.adapter == "k562":
+        return _run_k562_adapter(fixture, claim, checker_version=checker_version)
+
+    if world.adapter == "arc_vcc":
+        from worlds.arc_vcc import ArcVCCAdapter
+
+        if not isinstance(fixture, (str, Path)):
+            raise ClaimCheckInputError(
+                "Arc VCC requires an explicit fixture directory path"
+            )
+        adapter_result = ArcVCCAdapter.from_path(
+            Path(fixture), checker_version=checker_version
+        ).check(claim)
+    elif world.adapter == "open_targets":
+        from worlds.open_targets import OpenTargetsAdapter
+
+        adapter_result = OpenTargetsAdapter(
+            fixture, checker_version=checker_version
+        ).check(claim, checker_version=checker_version)
+    elif world.adapter == "clinical_trials":
+        from worlds.clinical_trials import ClinicalTrialsAdapter
+
+        adapter_result = ClinicalTrialsAdapter(
+            fixture, checker_version=checker_version
+        ).check(claim, checker_version=checker_version)
+    else:
+        raise WorldRegistryError(f"no adapter registered for world {world.world_key}")
+    return _adapter_result_to_claim_check(adapter_result, world)
+
+
 def check_claim(
     bundle: Any,
     world_id: str,
@@ -210,14 +319,23 @@ def check_claim(
             claim = claim_fields
         if claim is None or not isinstance(claim, Mapping):
             raise ClaimCheckInputError("a structured world claim is required")
-        if world.adapter != "k562":
-            raise WorldRegistryError(f"no adapter registered for world {world.world_key}")
-        # Resolve and verify the exact world bundle before invoking any
-        # adapter or rule. This is the fail-closed isolation gate: a bundle
-        # from another world can never influence a verdict.
-        _world_source_hashes(bundle, world)
-        result = _run_k562_adapter(bundle, claim, checker_version=checker_version)
-        return _attach_receipt(result, world, bundle, checker_version=checker_version, strict_bundle=True)
+        if world.adapter == "k562":
+            # Resolve and verify the exact world bundle before invoking any
+            # adapter or rule. This is the fail-closed isolation gate for the
+            # legacy SnapshotBundle protocol.
+            _world_source_hashes(bundle, world)
+        result = _run_registered_adapter(
+            world, bundle, claim, checker_version=checker_version
+        )
+        if world.adapter == "k562":
+            return _attach_receipt(
+                result,
+                world,
+                bundle,
+                checker_version=checker_version,
+                strict_bundle=True,
+            )
+        return result
     except (WorldRegistryError, ClaimCheckInputError) as exc:
         return _checker_error(str(exc), claim=dict(claim) if isinstance(claim, Mapping) else None, checker_version=checker_version)
     except Exception as exc:  # noqa: BLE001 - fail closed at the world boundary

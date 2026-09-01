@@ -6,7 +6,10 @@ entries are data, not plugin discovery; adapters are registered explicitly.
 """
 
 from .registry import (
+    ARC_VCC_WORLD,
+    CLINICAL_TRIALS_WORLD,
     K562_WORLD,
+    OPEN_TARGETS_WORLD,
     WORLD_REGISTRY,
     SourceContract,
     World,
@@ -17,7 +20,10 @@ from .registry import (
 )
 
 __all__ = [
+    "ARC_VCC_WORLD",
+    "CLINICAL_TRIALS_WORLD",
     "K562_WORLD",
+    "OPEN_TARGETS_WORLD",
     "WORLD_REGISTRY",
     "SourceContract",
     "World",

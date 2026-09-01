@@ -154,6 +154,183 @@ K562_WORLD = World(
 )
 
 
+# These entries deliberately mirror the compact, real fixtures checked by the
+# world adapters.  A source hash here is the hash of the retained source
+# response/dataset bytes, not a hash of an arbitrary local fixture.  Keeping
+# the contracts in this module means a caller cannot silently route one
+# adapter through another world's snapshot.
+ARC_VCC_WORLD = World(
+    world_id="arc-vcc",
+    version="2025-h1-measurements",
+    modality="perturbational",
+    description="Arc Institute H1 VCC 2025 real measurement subset.",
+    source_allowlist=(
+        "arc-cell-eval2-h1-vcc-real-subset",
+        "arc-vcc-derived-ledger",
+    ),
+    source_contracts=(
+        SourceContract(
+            "arc-cell-eval2-h1-vcc-real-subset",
+            "eb36c766cbf76353f9981cb3a3aa32137622d1de53b29d861c483742bcd4dec7",
+            "MIT",
+        ),
+        SourceContract(
+            "arc-vcc-derived-ledger",
+            "4bd9c5fef5060ca500eac08af06ad9ecae3b4957382893f46e392c6193809853",
+            "internal-derived",
+        ),
+    ),
+    claim_fields=(
+        "perturbed_gene",
+        "response_gene",
+        "summary_statistic",
+        "direction",
+        "threshold",
+        "assay",
+        "split",
+        "world_id",
+        "world_version",
+    ),
+    capabilities=("check_structured_claim",),
+    adapter="arc_vcc",
+    parser_schema={
+        "type": "object",
+        "additionalProperties": False,
+        "required": [
+            "perturbed_gene",
+            "response_gene",
+            "summary_statistic",
+            "direction",
+            "threshold",
+            "assay",
+            "split",
+        ],
+        "properties": {
+            "perturbed_gene": {"type": "string"},
+            "response_gene": {"type": "string"},
+            "summary_statistic": {"type": "string"},
+            "direction": {"type": "string", "enum": ["increases", "decreases", "null"]},
+            "threshold": {"type": "number"},
+            "assay": {"type": "string"},
+            "split": {"type": "string", "enum": ["development", "locked_holdout"]},
+            "world_id": {"const": "arc-vcc"},
+            "world_version": {"const": "2025-h1-measurements"},
+        },
+    },
+)
+
+
+OPEN_TARGETS_WORLD = World(
+    world_id="open-targets",
+    version="26.06",
+    modality="translational_association",
+    description="Open Targets 26.06 source-specific target-disease associations.",
+    source_allowlist=("open-targets-graphql-26-06",),
+    source_contracts=(
+        SourceContract(
+            "open-targets-graphql-26-06",
+            "8e9299d18b7c9089b0cfe8c59183d9bedf1694cb69f8357fba580ec3a43badf4",
+            "CC0-1.0",
+        ),
+    ),
+    claim_fields=(
+        "target_id",
+        "disease_id",
+        "evidence_source",
+        "release",
+        "claim_id",
+        "score",
+        "score_threshold",
+        "assertion_type",
+        "confidence_language",
+        "world_id",
+        "world_version",
+    ),
+    capabilities=("check_structured_claim",),
+    adapter="open_targets",
+    parser_schema={
+        "type": "object",
+        "additionalProperties": False,
+        "required": ["target_id", "disease_id", "evidence_source", "release"],
+        "properties": {
+            "target_id": {"type": "string"},
+            "disease_id": {"type": "string"},
+            "evidence_source": {"type": "string"},
+            "release": {"type": "string", "const": "26.06"},
+            "claim_id": {"type": "string"},
+            "score": {"type": "number"},
+            "score_threshold": {"type": "number"},
+            "assertion_type": {"type": "string"},
+            "confidence_language": {"type": "string"},
+            "world_id": {"const": "open-targets"},
+            "world_version": {"const": "26.06"},
+        },
+    },
+)
+
+
+CLINICAL_TRIALS_WORLD = World(
+    world_id="clinical-trials-sec",
+    version="2025-09-01_2026-09-01",
+    modality="translational_disclosure",
+    description="Timestamped ClinicalTrials.gov and SEC disclosure identity consistency.",
+    source_allowlist=("clinicaltrials-gov-api-v2", "sec-edgar-submissions-and-archives"),
+    source_contracts=(
+        SourceContract(
+            "clinicaltrials-gov-api-v2",
+            "1c04f811b0300bbba0b56caaade1dfb5c78808169c152924024594124493345e",
+            "ClinicalTrials.gov-terms-2023-01-31",
+        ),
+        SourceContract(
+            "sec-edgar-submissions-and-archives",
+            "873c321bc7a918f4e7ad2cee5cde2de814376a864f1fece3e0c483cc8911a80e",
+            "SEC-EDGAR-public-access",
+        ),
+    ),
+    claim_fields=(
+        "nct_id",
+        "sponsor",
+        "intervention",
+        "sec_accession",
+        "cik",
+        "exhibit_locator",
+        "asserted_span_sha256",
+        "as_of",
+        "claim_id",
+        "world_id",
+        "world_version",
+    ),
+    capabilities=("check_structured_claim",),
+    adapter="clinical_trials",
+    parser_schema={
+        "type": "object",
+        "additionalProperties": False,
+        "required": [
+            "nct_id",
+            "sponsor",
+            "intervention",
+            "sec_accession",
+            "exhibit_locator",
+            "asserted_span_sha256",
+            "as_of",
+        ],
+        "properties": {
+            "nct_id": {"type": "string"},
+            "sponsor": {"type": "string"},
+            "intervention": {"type": "string"},
+            "sec_accession": {"type": "string"},
+            "cik": {"type": "string"},
+            "exhibit_locator": {"type": "string"},
+            "asserted_span_sha256": {"type": "string"},
+            "as_of": {"type": "string"},
+            "claim_id": {"type": "string"},
+            "world_id": {"const": "clinical-trials-sec"},
+            "world_version": {"const": "2025-09-01_2026-09-01"},
+        },
+    },
+)
+
+
 class WorldRegistry:
     """Immutable lookup table keyed by the explicit ``(world_id, version)``."""
 
@@ -183,7 +360,9 @@ class WorldRegistry:
             raise WorldRegistryError(f"unknown world or version: {world_id}/{world_version}") from exc
 
 
-WORLD_REGISTRY = WorldRegistry((K562_WORLD,))
+WORLD_REGISTRY = WorldRegistry(
+    (K562_WORLD, ARC_VCC_WORLD, OPEN_TARGETS_WORLD, CLINICAL_TRIALS_WORLD)
+)
 
 
 def get_world(world_id: str, world_version: str | None = None, *, registry: WorldRegistry = WORLD_REGISTRY) -> World:
@@ -192,4 +371,3 @@ def get_world(world_id: str, world_version: str | None = None, *, registry: Worl
 
 def list_worlds(*, registry: WorldRegistry = WORLD_REGISTRY) -> tuple[World, ...]:
     return registry.worlds
-

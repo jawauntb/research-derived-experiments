@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
@@ -7,7 +9,18 @@ from claim_checker import natural_language
 from claim_checker.service import ClaimCheckInputError, ClaimCheckResult, check_claim
 from evidence import EvidenceError
 from evidence.loader import load_bundle
-from worlds import K562_WORLD, WORLD_REGISTRY, World, WorldRegistry, WorldRegistryError
+from worlds import (
+    ARC_VCC_WORLD,
+    CLINICAL_TRIALS_WORLD,
+    K562_WORLD,
+    OPEN_TARGETS_WORLD,
+    WORLD_REGISTRY,
+    World,
+    WorldRegistry,
+    WorldRegistryError,
+)
+
+FIXTURES = Path(__file__).parents[1] / "fixtures" / "worlds"
 
 
 def test_k562_world_is_explicitly_registered_and_immutable():
@@ -19,6 +32,116 @@ def test_k562_world_is_explicitly_registered_and_immutable():
         world.source_allowlist += ("other",)  # type: ignore[misc]
     with pytest.raises(WorldRegistryError, match="version"):
         WORLD_REGISTRY.resolve("replogle-k562", None)
+
+
+def test_real_world_contracts_are_registered_with_closed_adapter_ids():
+    assert WORLD_REGISTRY.resolve("arc-vcc", "2025-h1-measurements") == ARC_VCC_WORLD
+    assert WORLD_REGISTRY.resolve("open-targets", "26.06") == OPEN_TARGETS_WORLD
+    assert WORLD_REGISTRY.resolve("clinical-trials-sec", "2025-09-01_2026-09-01") == CLINICAL_TRIALS_WORLD
+    assert {world.adapter for world in WORLD_REGISTRY.worlds} == {
+        "k562",
+        "arc_vcc",
+        "open_targets",
+        "clinical_trials",
+    }
+
+
+def test_registered_adapters_check_explicit_real_fixture_paths():
+    root = FIXTURES
+    cases = (
+        (
+            "arc-vcc",
+            "2025-h1-measurements",
+            root / "arc_vcc",
+            {
+                "perturbed_gene": "STAT1",
+                "response_gene": "TAGLN",
+                "summary_statistic": "log2_fold_change_mean_raw_counts_pseudocount_1",
+                "direction": "increases",
+                "threshold": 0.25,
+                "assay": "H1",
+                "split": "locked_holdout",
+            },
+        ),
+        (
+            "open-targets",
+            "26.06",
+            root / "open_targets" / "release-26.06.json",
+            {
+                "target_id": "ENSG00000141510",
+                "disease_id": "MONDO_0018875",
+                "evidence_source": "uniprot_variants",
+                "release": "26.06",
+            },
+        ),
+        (
+            "clinical-trials-sec",
+            "2025-09-01_2026-09-01",
+            root / "clinical_trials" / "fixture.json",
+            {
+                "nct_id": "NCT06260774",
+                "sponsor": "TransCode Therapeutics",
+                "intervention": "TTX-MC138",
+                "sec_accession": "0001104659-26-069810",
+                "cik": "0001829635",
+                "exhibit_locator": "EX-99.1#NCT06260774",
+                "asserted_span_sha256": "1ec3a0b235e0653bbced4f641d97df751f475020f5e18f72a71b5d354b973f33",
+                "as_of": "2026-06-03T08:09:00Z",
+            },
+        ),
+    )
+    for world_id, version, fixture, claim in cases:
+        result = check_claim(fixture, world_id, version, claim)
+        assert result.verdict["verdict"] in {"ACCEPTED", "ACCEPTED_CONDITIONALLY"}
+        assert result.receipt is not None
+        assert result.verdict["world_id"] == world_id
+        assert result.verdict["world_version"] == version
+
+
+def test_registered_adapter_rejects_wrong_world_version_and_corrupt_fixture(tmp_path):
+    root = FIXTURES
+    claim = {
+        "target_id": "ENSG00000141510",
+        "disease_id": "MONDO_0018875",
+        "evidence_source": "uniprot_variants",
+        "release": "26.06",
+    }
+    wrong_version = check_claim(
+        root / "open_targets" / "release-26.06.json",
+        "open-targets",
+        "25.06",
+        claim,
+    )
+    assert wrong_version.verdict["verdict"] == "CHECKER_ERROR"
+    assert wrong_version.verdict["checker_error"]["stage"] == "load_snapshot"
+
+    corrupted = json.loads(
+        (root / "open_targets" / "release-26.06.json").read_text()
+    )
+    corrupted["records"][0]["score"] = 0.0
+    corrupt_path = tmp_path / "release-26.06.json"
+    corrupt_path.write_text(json.dumps(corrupted))
+    corrupt_result = check_claim(corrupt_path, "open-targets", "26.06", claim)
+    assert corrupt_result.verdict["verdict"] == "CHECKER_ERROR"
+
+
+def test_registered_adapter_rejects_cross_world_fixture_without_fallback():
+    root = FIXTURES
+    result = check_claim(
+        root / "open_targets" / "release-26.06.json",
+        "arc-vcc",
+        "2025-h1-measurements",
+        {
+            "perturbed_gene": "STAT1",
+            "response_gene": "TAGLN",
+            "summary_statistic": "log2_fold_change_mean_raw_counts_pseudocount_1",
+            "direction": "increases",
+            "threshold": 0.25,
+            "assay": "H1",
+            "split": "locked_holdout",
+        },
+    )
+    assert result.verdict["verdict"] == "CHECKER_ERROR"
 
 
 def test_registry_rejects_duplicate_world_versions():
