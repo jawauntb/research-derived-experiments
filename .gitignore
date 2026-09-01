@@ -26,6 +26,24 @@ data/
 artifacts/
 tmp/
 
+# Bio Claim Firewall: tracked contracts, registry, preregistration cards, and
+# deterministic acquisition helpers. Raw/heavy/private artifacts remain
+# ignored by bio-claim-firewall/data/.gitignore.
+!bio-claim-firewall/data/
+!bio-claim-firewall/data/worlds/
+!bio-claim-firewall/data/worlds/**
+!bio-claim-firewall/data/manifests/
+!bio-claim-firewall/data/manifests/worlds/
+!bio-claim-firewall/data/manifests/worlds/**
+!bio-claim-firewall/data/scripts/
+!bio-claim-firewall/data/scripts/worlds/
+!bio-claim-firewall/data/scripts/worlds/**
+!bio-claim-firewall/experiments/
+!bio-claim-firewall/experiments/evidence_worlds/
+!bio-claim-firewall/experiments/evidence_worlds/**
+!bio-claim-firewall/tests/data_worlds/
+!bio-claim-firewall/tests/data_worlds/**
+
 # OS/editor noise.
 .DS_Store
 

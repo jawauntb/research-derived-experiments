@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0.0",
+  "world_id": "arc-vcc",
+  "version": "2025-h1-measurements",
+  "rank": 3,
+  "modality": "perturbational",
+  "state": "RESEARCHED",
+  "decision": "Check a perturbation-to-response direction in the declared 2025 H1 measurement assay and split; do not use or redistribute State model code or weights.",
+  "claim_contract": {"object": "perturbation_expression_direction", "required_fields": ["assay", "split", "perturbed_gene", "response_gene", "summary_statistic", "direction", "threshold"], "evidence_semantics": "interventional_measurement", "units": "declared expression summary units; threshold is assay-specific"},
+  "data_clock": {"release": "2025 H1 measurements", "retrieval_at": null, "as_of_rule": "Use only the archived H1 measurement tables and declared train/validation partition.", "snapshot_policy": "Retain exact dataset bytes and hashes outside git; never substitute State artifacts."},
+  "sources": [{"source_id": "arc-virtual-cell-challenge-measurements", "official_url": "https://virtualcellchallenge.org/", "access_url": "https://virtualcellchallenge.org/data", "source_kind": "immutable_release", "release_or_snapshot": "2025-H1-measurements", "license": {"id": "CC0-1.0", "status": "verified", "reference_url": "https://virtualcellchallenge.org/", "redistribution": "dataset_only", "commercial_demo": "dataset_only"}, "custody": "Ignored bounded measurement-table cache; State code/weights are excluded from acquisition and custody.", "refresh_cadence": "release-driven", "staleness_horizon": "next measurement release", "artifact_paths": ["raw/arc-vcc/2025-h1/*.csv"]}],
+  "transformation": {"command": "python3 data/scripts/worlds/acquire_fixture.py --world arc-vcc", "derived_artifact": "derived/arc-vcc/2025-h1/measurement-ledger.jsonl", "schema_version": "arc-vcc-measurement-ledger-0.1", "row_count": null, "sha256": null},
+  "material_assumptions": ["Perturbation, response, assay, split, statistic, direction, and threshold are explicit.", "Held-out validation records never tune a threshold.", "No State model inference, weights, code, or benchmark claims are in scope."],
+  "fatal_gates": [{"id": "dataset_license_scope", "status": "not_run"}, {"id": "official_release_identity", "status": "not_run"}, {"id": "split_integrity_no_leakage", "status": "not_run"}, {"id": "complete_hashes_and_schema", "status": "not_run"}, {"id": "organic_positive_negative_null_controls", "status": "not_run"}, {"id": "world_isolation_and_fail_closed", "status": "not_run"}],
+  "decisive_controls": {"positive": "held-out H1 perturbation/response direction within assay", "negative": "sign reversal or absent response", "null": "unsupported assay/split or below threshold", "corruption": "changed measurement-table bytes", "isolation": "Open Targets/NeuroVault records cannot satisfy this claim"},
+  "evidence_paths": {"audit_card": "experiments/evidence_worlds/preregistration/arc-vcc.yaml", "manifest": "data/manifests/worlds/arc-vcc.json", "raw": "data/raw/arc-vcc/", "derived": "data/derived/arc-vcc/", "results": "experiments/evidence_worlds/results/arc-vcc/"},
+  "public_policy": "Public receipts cite dataset measurements only; State artifacts and raw matrices remain excluded."
+}

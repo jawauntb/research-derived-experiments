@@ -1,0 +1,12 @@
+schema_version: "1.0.0"
+world_id: "neurovault"
+version: "metadata-pilot"
+rank: 4
+target_and_decision: "Research whether a frozen map's source-reported peak/region relationship can be checked without unpinned voxel resampling; defer full spatial adapter."
+representation: "Collection ID, map ID, source-reported region/peak, exact coordinates, and source-declared coordinate space; descriptive spatial association only."
+data_clock: "NeuroVault rolling API catalog; selected metadata/coordinate records must be pinned before claims; retrieval clock retained."
+assumptions: ["Map and collection identity must match.", "No implicit atlas conversion or resampling.", "Diagnosis, subject-level, causal, and thresholded-only interpretations are out of scope."]
+fatal_gates: [map_and_collection_identity, coordinate_space_policy, license_and_custody, complete_hashes_and_schema, organic_controls, world_isolation]
+controls: [positive_matching_map_region_coordinate, negative_wrong_collection_or_space, null_metadata_without_reported_spatial_evidence, corruption_changed_metadata_bytes, cross_world_isolation]
+evidence_paths: {contract: "data/manifests/worlds/neurovault.json", acquisition: "data/scripts/worlds/acquire_fixture.py --world neurovault", raw: "data/raw/neurovault/", derived: "data/derived/neurovault/", results: "experiments/evidence_worlds/results/neurovault/"}
+initial_state: "RESEARCHED_DEFERRED"

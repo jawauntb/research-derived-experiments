@@ -1,0 +1,12 @@
+schema_version: "1.0.0"
+world_id: "arc-vcc"
+version: "2025-h1-measurements"
+rank: 3
+target_and_decision: "Assess perturbation-to-response direction in the declared Arc VCC H1 measurement assay and split."
+representation: "Perturbed gene, response gene, assay, train/validation split, summary statistic, direction, threshold; interventional measurement, not State inference."
+data_clock: "Archived 2025 H1 CC0 measurement tables; train/validation partition is frozen before tuning."
+assumptions: ["All claim fields are explicit.", "Held-out validation is untouched during tuning.", "State model code and weights are excluded from scope and custody."]
+fatal_gates: [dataset_license_scope, official_release_identity, split_integrity_no_leakage, complete_hashes_and_schema, organic_controls, world_isolation]
+controls: [positive_held_out_direction, negative_sign_reversal_or_absent_response, null_unsupported_assay_or_threshold, corruption_changed_measurement_bytes, cross_world_isolation]
+evidence_paths: {contract: "data/manifests/worlds/arc-vcc.json", acquisition: "data/scripts/worlds/acquire_fixture.py --world arc-vcc", raw: "data/raw/arc-vcc/", derived: "data/derived/arc-vcc/", results: "experiments/evidence_worlds/results/arc-vcc/"}
+initial_state: "RESEARCHED"

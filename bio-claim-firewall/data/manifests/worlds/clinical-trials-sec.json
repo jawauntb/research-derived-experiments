@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0.0",
+  "world_id": "clinical-trials-sec",
+  "version": "2025-disclosure-pilot",
+  "rank": 1,
+  "modality": "translational_disclosure",
+  "state": "RESEARCHED",
+  "decision": "Check a human-confirmed, locator-cited disclosure assertion against registered trial status/results available at the disclosure timestamp; do not infer efficacy.",
+  "claim_contract": {
+    "object": "trial_disclosure_assertion",
+    "required_fields": ["nct_id", "sponsor", "intervention", "sec_accession", "exhibit_locator", "asserted_span_sha256", "as_of"],
+    "evidence_semantics": "registered_disclosure_and_asserted_span_consistency",
+    "units": "timestamps are RFC3339 UTC; identifiers are exact source identifiers"
+  },
+  "data_clock": {
+    "window": "2025-09-01/2026-09-01",
+    "as_of_rule": "Only registry records and SEC submissions accepted at or before the asserted disclosure timestamp may support a check.",
+    "retrieval_at": null,
+    "snapshot_policy": "Retain exact response bytes and accession/registry timestamps outside git; a changed re-fetch creates a new version."
+  },
+  "sources": [
+    {
+      "source_id": "clinicaltrials-gov-api-v2",
+      "official_url": "https://clinicaltrials.gov/data-api/api",
+      "source_kind": "rolling_snapshot",
+      "release_or_snapshot": "api-v2",
+      "license": {"id": "US-public-record", "status": "verified", "reference_url": "https://clinicaltrials.gov/data-api/api", "redistribution": "permitted_for_source_records", "commercial_demo": "requires_record_citation"},
+      "custody": "Ignored local raw cache with retained request URL, retrieval clock, response hash, and source row identifiers.",
+      "refresh_cadence": "per pilot rebuild",
+      "staleness_horizon": "90 days",
+      "artifact_paths": ["raw/clinical-trials-sec/clinicaltrials-gov/*.json"]
+    },
+    {
+      "source_id": "sec-edgar-submissions-and-archives",
+      "official_url": "https://www.sec.gov/search-filings/edgar-application-programming-interfaces",
+      "access_url": "https://www.sec.gov/Archives/edgar/data/",
+      "source_kind": "rolling_snapshot",
+      "release_or_snapshot": "EDGAR-API-and-archive",
+      "license": {"id": "US-public-record", "status": "verified", "reference_url": "https://www.sec.gov/os/accessing-edgar-data", "redistribution": "permitted_for_source_records", "commercial_demo": "requires_record_citation"},
+      "custody": "Ignored local raw filing cache with accession, exhibit locator, SEC acceptance timestamp, response hash, and user-agent record.",
+      "refresh_cadence": "per pilot rebuild",
+      "staleness_horizon": "90 days",
+      "artifact_paths": ["raw/clinical-trials-sec/sec/*.json", "raw/clinical-trials-sec/sec/*.txt"]
+    }
+  ],
+  "transformation": {"command": "python3 data/scripts/worlds/acquire_fixture.py --world clinical-trials-sec", "derived_artifact": "derived/clinical-trials-sec/disclosure-ledger.jsonl", "schema_version": "clinical-trials-sec-ledger-0.1", "row_count": null, "sha256": null},
+  "material_assumptions": ["NCT/sponsor/intervention joins are exact or inconclusive.", "Human confirmation is required before an asserted span enters the ledger.", "A registry match does not establish efficacy or corporate truth."],
+  "fatal_gates": [
+    {"id": "official_source_identity", "status": "not_run"},
+    {"id": "license_and_custody", "status": "not_run"},
+    {"id": "timestamp_cutoff_no_time_travel", "status": "not_run"},
+    {"id": "complete_hashes_and_schema", "status": "not_run"},
+    {"id": "organic_positive_negative_null_controls", "status": "not_run"},
+    {"id": "world_isolation_and_fail_closed", "status": "not_run"}
+  ],
+  "decisive_controls": {"positive": "matching NCT and SEC assertion at or before as_of", "negative": "wrong sponsor/intervention or post-as_of result", "null": "missing accession/locator or ambiguous identity", "corruption": "modified response bytes", "isolation": "Open Targets/Arc records cannot satisfy this claim"},
+  "evidence_paths": {"audit_card": "experiments/evidence_worlds/preregistration/clinical-trials-sec.yaml", "manifest": "data/manifests/worlds/clinical-trials-sec.json", "raw": "data/raw/clinical-trials-sec/", "derived": "data/derived/clinical-trials-sec/", "results": "experiments/evidence_worlds/results/clinical-trials-sec/"},
+  "public_policy": "No raw filing, quoted span, person data, or live source response is public; only sanitized receipts after all gates pass."
+}
