@@ -9,6 +9,13 @@ import pytest
 
 
 MODULE_PATH = Path(__file__).parents[2] / "private" / "apollo_discovery.py"
+TRACKED_SUMMARY_PATH = (
+    Path(__file__).parents[2]
+    / "experiments"
+    / "evidence_worlds"
+    / "results"
+    / "buyer_discovery_summary.json"
+)
 SPEC = importlib.util.spec_from_file_location("apollo_discovery", MODULE_PATH)
 assert SPEC and SPEC.loader
 apollo = importlib.util.module_from_spec(SPEC)
@@ -73,3 +80,13 @@ def test_secure_write_uses_owner_only_permissions(tmp_path: Path) -> None:
 
     assert json.loads(target.read_text()) == {"ok": True}
     assert stat.S_IMODE(target.stat().st_mode) == 0o600
+
+
+def test_tracked_summary_is_aggregate_and_public_safe() -> None:
+    summary = json.loads(TRACKED_SUMMARY_PATH.read_text(encoding="utf-8"))
+
+    apollo.assert_public_safe(summary)
+    assert summary["account_count"] == 15
+    assert summary["role_candidate_count"] == 25
+    assert summary["outreach_performed"] is False
+    assert summary["person_level_data_included"] is False
