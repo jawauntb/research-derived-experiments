@@ -29,7 +29,7 @@ It does not prove biology. It proves that an accepted claim obeys a locked forma
 - [x] **Phase 2 — Frozen pilot world.** HGNC (45,045 genes), Cell Ontology, Cell Line Ontology, NCBI Taxonomy, Reactome, Replogle 2022 Perturb-seq (9,400 records). All hash-verified. (#543)
 - [x] **Phase 3 — Deterministic verifier.** Audit ledger, normalize, evidence loader, 30-rule cascade, top-level `verify()` composer. Fail-closed. (#539, #540, #541)
 - [x] **Phase 4 preview — Untrusted model interfaces.** `Proposer` + `Repairer` + `Orchestrator` + `TrajectoryLogger`; MIDAS-derived `ModelManager`. Live-LLM smoke test still pending an adapter fix. (#542)
-- [x] **Phase 5a — Mutation-test framework.** 31 mutation sites discovered; first run found 2 real coverage gaps. (#542)
+- [x] **Phase 5a — Mutation-test framework.** 31 mutation sites discovered; direct R-CTX-02 and R-CTX-05 regressions close the two first-run coverage gaps, with all 18 `_shared.py` context mutants killed. (#542)
 - [ ] **Phase 5b — Live-LLM end-to-end + adversarial + empirical suites + independent blinded audit.** See [`HANDOFF.md`](HANDOFF.md) §5.
 
 **New agent picking this up: read [`HANDOFF.md`](HANDOFF.md) first.**
