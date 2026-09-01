@@ -1,6 +1,6 @@
 # Handoff — bio-claim-firewall
 
-**Last updated:** 2026-08-31
+**Last updated:** 2026-09-01
 **Prepared by:** the previous agent session (see `PROVENANCE.md` and the commit trail on `main`).
 **Audience:** a cold-start agent picking this up. Read this file FIRST, then `README.md`, then `spec/`.
 
@@ -153,35 +153,31 @@ MIDAS has no upstream LICENSE. Reuse permission for this project is verbal-throu
 
 **Owner**: Jawaun (needs a real message from a real person).
 
-### 5.2 Phase 4c — ModelManager ↔ Proposer/Repairer adapter (BLOCKS end-to-end LLM tests)
+### 5.2 Phase 4c — ModelManager ↔ Proposer/Repairer adapter (**resolved 2026-09-01**)
 
 The Phase 4a subagent (model manager) and the Phase 4b subagent (proposer/repairer) landed slightly different function signatures for `ModelManager.call()`. Every current test uses a `FakeModelManager` and passes; wiring a real LLM will fail on `AttributeError`.
 
 - **Phase 4a shipped**: `call(task, variables=None, schema=None, messages_override=None, **params_override)`; `ChatResponse` fields include `content`, `raw`, `meta`, `parsed`, `prompt_ref`, `prompt_version`.
 - **Phase 4b assumed**: `call(task, user_msg, *, system_msg=None, max_tokens=None, temperature=None, timeout_s=None, prompt_ref=None)`; response fields include `provider`, `model`, `latency_ms`, `tokens_prompt`, `tokens_completion`.
 
-**Two ways to fix**:
-1. Write a thin `ModelManagerAdapter` class inside `src/proposer/adapter.py` (and `src/repairer/adapter.py`) that translates Phase 4b's call shape into Phase 4a's. Cheapest.
-2. Change Phase 4b to call the real interface. Bigger diff, but a cleaner end state.
+**Resolution**: `src/model_manager/adapter.py` now translates the Phase 4b call shape to Phase 4a's configured task, versioned prompt, and provider metadata. `Proposer` and `Repairer` automatically wrap a real manager while preserving their lightweight test doubles. The repairer now selects `repairer/claim_repair@v2`, whose two JSON output shapes match `Repairer._parse_response`; the historical `@v1` contract remains unchanged.
 
-Recommendation: adapter first (to unblock live-LLM tests), then a follow-up PR that migrates 4b to the real interface and deletes the adapter.
+**Follow-up**: run the live-LLM smoke suite with the optional model dependencies installed and a real API key; a later cleanup may migrate the callers to the Phase 4a interface directly and delete this compatibility boundary.
 
-**Owner**: any agent; 1–2 hours.
-
-### 5.3 Phase 5b — the two mutation-test coverage gaps
+### 5.3 Phase 5b — the two mutation-test coverage gaps (**resolved 2026-09-01**)
 
 The mutation-test framework's first real run found two surviving `delete_line` mutants — spots where deleting a guard doesn't break any test in `tests/rules/`. These are real coverage gaps:
 
 - `src/rules/sections/_shared.py:138` — R-CTX-02 cell-type ancestor waiver.
 - `src/rules/sections/_shared.py:154` — R-CTX-05 assay-equivalence check.
 
-**Fix**: add tests to `tests/rules/test_r_ctx.py` that force each guard to fire. Then re-run `python -m eval.mutation` and confirm 15/15 killed for the two respective rule sections.
+**Resolution**: direct `RuleEngine` regressions in `tests/rules/test_r_ctx.py` now force each guard to fire. The post-fix mechanical pass killed all 18 mutation variants in `src/rules/sections/_shared.py`, including the two formerly surviving `delete_line` mutants.
 
-**Owner**: any agent; 30 min.
+**Follow-up**: retain these regressions whenever the context comparator or assay-equivalence table changes; re-run the full 31-site sweep before reporting a Phase 5 empirical result.
 
 ### 5.4 Live LLM smoke test (BLOCKS the empirical claim)
 
-No real LLM has ever been called through this system end-to-end. Once §5.2 lands:
+No real LLM has ever been called through this system end-to-end. The adapter is now ready; with the optional model dependencies installed:
 
 - Point `Proposer` at an OpenAI-compatible endpoint using the `OPENAI_API_KEY` or `ANTHROPIC_API_KEY` env var (already wired in `src/model_manager/config.yaml`).
 - Run 10 hand-authored real biology questions.
@@ -273,7 +269,7 @@ cd bio-claim-firewall
 python -m eval.mutation --limit 10 --report eval/mutation/reports/latest.md
 ```
 
-Full run (all 31 sites × 3 mutators = 93 mutants) takes ~30 min in a subprocess-isolated sweep. Every mutant runs in a `tempfile.TemporaryDirectory()` copy of the source tree — the real tree is never touched. Output is a Markdown table; the two known survivors are documented in §5.3.
+Full run (all 31 sites × 3 mutators = 93 mutants) takes ~30 min in a subprocess-isolated sweep. Every mutant runs in a `tempfile.TemporaryDirectory()` copy of the source tree — the real tree is never touched. Output is a Markdown table. The targeted six-site `_shared.py` pass completed on 2026-09-01 with 18/18 mutants killed; run the full sweep before any Phase 5 empirical claim.
 
 ### 6.4 Add a new fault code (the spec-bump process)
 
@@ -344,10 +340,9 @@ For a new agent picking this up:
 If time-boxed to one session, in this order:
 
 1. **Read this file + `spec/`** (~15 min).
-2. **Fix §5.3 (mutation-test coverage gaps)** (~30 min). Small, satisfying, moves the coverage number.
-3. **Ship §5.2 (Phase 4c adapter)** (~1–2 h). Unblocks live-LLM tests.
-4. **Run §5.4 (live LLM smoke test)** on 5 hand-authored real questions (~1 h). This is the first time the whole pipeline has been exercised end-to-end.
-5. **Branch + commit + PR + squash-merge each step** per `AGENTS.md`. Do not stockpile.
+2. **Run §5.4 (live LLM smoke test)** on 5 hand-authored real questions (~1 h). This is the first time the whole pipeline has been exercised end-to-end.
+3. **Run the full 31-site mutation sweep** before reporting any Phase 5 empirical result.
+4. **Branch + commit + PR + squash-merge each step** per `AGENTS.md`. Do not stockpile.
 
 If Jawaun has cleared §5.1 (MIDAS legal), also stub out `pyproject.toml` under `bio-claim-firewall/` for Path A packaging — trivial, high-leverage.
 

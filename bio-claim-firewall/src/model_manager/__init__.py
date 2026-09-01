@@ -11,11 +11,15 @@ deliberately NOT dispatchable through this package — see manager.py.
 from __future__ import annotations
 
 from .errors import ModelManagerError
+from .adapter import AdapterChatResponse, ModelManagerAdapter, adapt_model_manager
 from .manager import ModelManager, Provider
 from .types import ChatRequest, ChatResponse
 
 __all__ = [
     "ModelManager",
+    "ModelManagerAdapter",
+    "AdapterChatResponse",
+    "adapt_model_manager",
     "Provider",
     "PromptManager",
     "ChatRequest",

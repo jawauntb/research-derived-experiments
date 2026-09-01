@@ -48,7 +48,7 @@ def test_full_loop_logged_as_one_line_with_records_in_order(
     assert first_verify["reasons"]
 
     assert repair_record["proposed_claim"]["claim_id"] == accepted_claim["claim_id"]
-    assert repair_record["prompt_ref"] == "repairer/claim_repair@v1"
+    assert repair_record["prompt_ref"] == "repairer/claim_repair@v2"
     assert repair_record["note"] == "fixed"
 
     assert second_verify["verdict"] == "ACCEPTED_CONDITIONALLY"

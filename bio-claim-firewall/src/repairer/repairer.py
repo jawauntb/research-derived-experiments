@@ -21,38 +21,30 @@ from typing import Any
 from .errors import RepairerError
 from .types import RepairResult
 
-try:  # pragma: no cover - exercised once Phase 4a lands `src/model_manager`
-    from model_manager import ChatRequest, ChatResponse, ModelManager
-except ImportError:  # pragma: no cover - fallback path, exercised today
-    from dataclasses import dataclass
-    from typing import Protocol, runtime_checkable
+try:  # pragma: no cover - exercised by the bare-package adapter tests
+    from model_manager import ModelManager, adapt_model_manager
+except ImportError:
+    try:  # pragma: no cover - exercised by the src-package adapter test
+        from src.model_manager import ModelManager, adapt_model_manager
+    except ImportError:  # pragma: no cover - lightweight fake fallback
+        from typing import Protocol, runtime_checkable
 
-    @dataclass(frozen=True)
-    class ChatResponse:  # type: ignore[no-redef]
-        content: str
-        provider: str
-        model: str
-        prompt_ref: str
-        prompt_version: str
-        latency_ms: int
-        tokens_prompt: int
-        tokens_completion: int
+        @runtime_checkable
+        class ModelManager(Protocol):  # type: ignore[no-redef]
+            def call(
+                self,
+                task: str,
+                user_msg: str,
+                *,
+                system_msg: str | None = None,
+                max_tokens: int | None = None,
+                temperature: float | None = None,
+                timeout_s: float | None = None,
+                prompt_ref: str | None = None,
+            ) -> Any: ...
 
-    ChatRequest = Any  # type: ignore[assignment,misc]
-
-    @runtime_checkable
-    class ModelManager(Protocol):  # type: ignore[no-redef]
-        def call(
-            self,
-            task: str,
-            user_msg: str,
-            *,
-            system_msg: str | None = None,
-            max_tokens: int | None = None,
-            temperature: float | None = None,
-            timeout_s: float | None = None,
-            prompt_ref: str | None = None,
-        ) -> ChatResponse: ...
+        def adapt_model_manager(manager: Any) -> Any:
+            return manager
 
 
 _SPEC_DIR = Path(__file__).resolve().parents[2] / "spec"
@@ -81,8 +73,8 @@ class Repairer:
     on any string in the response.
     """
 
-    def __init__(self, mm: ModelManager, prompt_ref: str = "repairer/claim_repair@v1") -> None:
-        self.mm = mm
+    def __init__(self, mm: ModelManager, prompt_ref: str = "repairer/claim_repair@v2") -> None:
+        self.mm = adapt_model_manager(mm)
         self.prompt_ref = prompt_ref
         self._required_fields = _load_required_top_level_fields()
 
