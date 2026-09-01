@@ -102,7 +102,7 @@ Anything starting with `computer` (configurable) is a command, not a note:
 | `computer click seven` | click badge 7 (spelled-out numbers work) |
 | `computer click sign in` | click by visible text |
 | `computer recalibrate` | rerun gaze calibration |
-| `computer pause` / `resume` | stop and restart the camera |
+| `computer pause` / `resume` | stop watching: camera off, screen buffer cleared |
 | `computer dwell on` / `off` | toggle gaze-driven scrolling |
 | `computer new section <title>` | start a new heading in today's file |
 
@@ -179,7 +179,7 @@ module imports — and the whole test suite runs — on any platform.
 ## Tests
 
 ```bash
-python -m pytest tests -q     # 382 tests, no macOS or hardware needed
+python -m pytest tests -q     # 387 tests, no macOS or hardware needed
 ```
 
 Coordinate conversions, fixation detection, the calibration fit and gate, entry
@@ -197,7 +197,7 @@ purpose:
 | **Vision OCR** (`ocr.py`) | **on** | When the frontmost app is not Chrome, OCRs the gaze crop so PDFs and native apps get a "Looking at" line too. Rendered as `**Looking at (OCR):**`, because OCR of a screenshot is weaker evidence than the live DOM and the note should say so. Local; it only reads a capture that was being saved anyway. |
 | **Multi-display** (`displays.py`) | on | Enumerates screens, resolves which one the gaze landed on, and keeps one calibration per display. Handles monitors placed left of or above the built-in screen, where macOS gives them **negative** origin coordinates. A display rearranged in System Settings gets its calibration offset rather than invalidated. |
 | **Dwell scrolling** (`dwell.py`) | **off** | Gaze resting in the top/bottom 15% for 400 ms scrolls a chunk. After firing it *latches*: the same zone cannot fire again until you actually look away, so parking your eyes at the end of a paragraph while thinking does not run away with the page. `computer dwell on` to try it. |
-| **Pre-note screen buffer** (`screenbuffer.py`) | **off** | A rolling in-memory buffer so "note that" can capture what already scrolled off, saved beside the entry as `HHMMSS.before.png`. Frames never touch disk unless a note fires, and the buffer is capped by both age and total bytes. |
+| **Pre-note screen buffer** (`screenbuffer.py`) | **off** | A rolling in-memory buffer so "note that" can capture what already scrolled off, saved beside the entry as `HHMMSS.before.png`. Frames never touch disk unless a note fires. The window expires against the clock, not against arrivals, so a slept display or a revoked permission cannot freeze stale screen in memory; `computer pause` clears it outright. |
 
 The buffer is off by default for a reason: it is the only component that records
 *before* you speak, and intentional capture is the design, not a limitation.

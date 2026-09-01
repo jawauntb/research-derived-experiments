@@ -218,9 +218,6 @@ def test_pause_and_resume_control_the_camera():
     assert gaze.running
 
 
-def test_pause_without_a_gaze_engine_reports_rather_than_crashing():
-    assert CommandRouter().dispatch(parse_command("computer pause")) == "gaze engine unavailable"
-
 
 # -- dwell scrolling ----------------------------------------------------
 def test_dwell_can_be_toggled_by_voice():
@@ -250,3 +247,48 @@ def test_the_public_scroll_helper_is_what_dwell_uses():
     router = CommandRouter(bridge=FakeBridge(page))
     assert "scrolled" in router.scroll(400.0)
     assert page.wheel == [(0, 400)]
+
+
+def test_pause_clears_the_pre_note_buffer_not_just_the_camera():
+    """"Pause" has to mean forget: leaving a minute of buffered screen in
+    memory is not what someone asking the machine to stop watching expects."""
+
+    class FakeBuffer:
+        def __init__(self):
+            self.running = True
+            self.frames = ["a", "b", "c"]
+
+        def stop(self):
+            self.running = False
+
+        def clear(self):
+            self.frames = []
+
+        def start(self):
+            self.running = True
+            return True
+
+    class FakeGaze:
+        def __init__(self):
+            self.running = True
+
+        def stop(self):
+            self.running = False
+
+        def start(self):
+            self.running = True
+            return type("S", (), {"reason": "running"})()
+
+    buffer, gaze = FakeBuffer(), FakeGaze()
+    router = CommandRouter(gaze=gaze, buffer=buffer)
+    result = router.dispatch(parse_command("computer pause"))
+    assert buffer.frames == []
+    assert not buffer.running and not gaze.running
+    assert "cleared" in result
+
+    router.dispatch(parse_command("computer resume"))
+    assert buffer.running and gaze.running
+
+
+def test_pause_with_nothing_running_says_so():
+    assert CommandRouter().dispatch(parse_command("computer pause")) == "nothing to pause"

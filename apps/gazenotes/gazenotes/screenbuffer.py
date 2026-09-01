@@ -137,22 +137,33 @@ class ScreenBuffer:
 
     # -- the window -----------------------------------------------------
     def add(self, data: bytes, t: float | None = None) -> BufferedFrame:
-        """Store one frame and evict whatever no longer fits."""
+        """Store one frame and evict whatever no longer fits.
+
+        ``t`` is expected to be on this buffer's own clock; a frame stamped
+        outside the window is evicted immediately, by the same rule as any
+        other stale frame.
+        """
         frame = BufferedFrame(self._clock() if t is None else t, data)
         with self._lock:
             self._frames.append(frame)
             self._bytes += frame.nbytes
-            self._evict_locked(frame.t)
+            self._evict_locked()
         return frame
 
-    def _evict_locked(self, now: float) -> None:
+    def _evict_locked(self) -> None:
         """Oldest-first on both axes: age, then total bytes.
+
+        Age is measured against the **clock**, not against the newest frame.
+        Keying it off arrivals would mean a stalled capture — a slept display,
+        a revoked permission — froze eviction too, leaving minutes of screen
+        resident in a buffer documented as holding seconds. The window is a
+        promise about what is in memory *now*, so it has to expire on its own.
 
         The byte cap is enforced strictly, even when that empties the buffer —
         a single frame larger than the whole budget is dropped rather than
         quietly held, because the cap is a promise about resident memory.
         """
-        cutoff = now - self.seconds
+        cutoff = self._clock() - self.seconds
         while self._frames and self._frames[0].t < cutoff:
             self._bytes -= self._frames.popleft().nbytes
         while self._frames and self._bytes > self.max_bytes:
@@ -166,6 +177,7 @@ class ScreenBuffer:
         answer — it shows whatever they scrolled to next.
         """
         with self._lock:
+            self._evict_locked()
             best: BufferedFrame | None = None
             for frame in self._frames:
                 if frame.t <= t and (best is None or frame.t >= best.t):
@@ -174,6 +186,7 @@ class ScreenBuffer:
 
     def snapshot(self) -> list[BufferedFrame]:
         with self._lock:
+            self._evict_locked()
             return list(self._frames)
 
     def clear(self) -> None:
@@ -184,10 +197,12 @@ class ScreenBuffer:
     @property
     def bytes_held(self) -> int:
         with self._lock:
+            self._evict_locked()
             return self._bytes
 
     def __len__(self) -> int:
         with self._lock:
+            self._evict_locked()
             return len(self._frames)
 
     # -- the one way out ------------------------------------------------

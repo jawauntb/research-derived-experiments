@@ -63,6 +63,7 @@ class Daemon:
             recalibrate=self.recalibrate,
             new_section=self.new_section,
             dwell=self.dwell,
+            buffer=self.buffer,
         )
         self.watcher = None
         self.last_status = "starting"
@@ -189,13 +190,13 @@ class Daemon:
         return f"new section: {heading}"
 
     def toggle_gaze(self) -> None:
-        if self.gaze is None:
-            return
-        if self.gaze.status.available:
-            self.gaze.stop()
-            self.set_status("gaze paused")
-        else:
-            self.set_status(self.gaze.start().reason)
+        """Menu-bar pause/resume, routed through the same handler as the voice
+        command so the screen buffer is cleared either way."""
+        from .commands import Command
+
+        running = self.gaze is not None and self.gaze.status.available
+        name = "pause" if running else "resume"
+        self.set_status(self.router.dispatch(Command(name)))
 
     def set_status(self, text: str) -> None:
         self.last_status = text

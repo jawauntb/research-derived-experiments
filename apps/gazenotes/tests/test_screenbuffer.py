@@ -24,7 +24,13 @@ class FakeClock:
 
 
 def buffer_of(frames, **kwargs) -> ScreenBuffer:
-    """A buffer pre-filled with ``(t, data)`` pairs and no live capture."""
+    """A buffer pre-filled with ``(t, data)`` pairs and no live capture.
+
+    The clock is pinned to the newest frame, because age eviction runs against
+    the clock: a synthetic timeline has to share it or every frame reads as
+    expired the moment it is added.
+    """
+    kwargs.setdefault("clock", lambda: max((t for t, _ in frames), default=0.0))
     buffer = ScreenBuffer(capture=lambda: None, **kwargs)
     for t, data in frames:
         buffer.add(data, t)
@@ -217,3 +223,54 @@ def test_reads_and_writes_can_race_without_corrupting_the_window():
 
     # Quiescent again: the byte count must match what survived, not what was added.
     assert buffer.bytes_held == len(buffer) * 64
+
+
+# -- the window expires on its own ---------------------------------------
+def test_a_stalled_capture_does_not_freeze_the_window():
+    """The rolling window is a promise about what is in memory *now*.
+
+    If eviction only ran when a frame arrived, a slept display or a revoked
+    screen-recording permission would freeze it, leaving minutes of screen
+    resident in a buffer documented as holding seconds.
+    """
+    clock = FakeClock(1000.0)
+    buffer = ScreenBuffer(capture=lambda: None, seconds=60.0, clock=clock)
+    for offset in range(0, 60, 10):
+        buffer.add(PNG + bytes([offset]), 1000.0 + offset)
+    assert len(buffer) == 6
+
+    clock.t = 1000.0 + 60 + 45  # capture has produced nothing for 45 s
+    assert len(buffer) < 6
+    for frame in buffer.snapshot():
+        assert clock() - frame.t <= 60.0
+
+
+def test_everything_expires_once_the_window_has_fully_passed():
+    clock = FakeClock(500.0)
+    buffer = ScreenBuffer(capture=lambda: None, seconds=10.0, clock=clock)
+    buffer.add(PNG, 500.0)
+    assert buffer.bytes_held > 0
+
+    clock.t = 600.0
+    assert len(buffer) == 0
+    assert buffer.bytes_held == 0
+    assert buffer.snapshot() == []
+
+
+def test_a_stale_frame_is_never_served_to_a_note():
+    clock = FakeClock(200.0)
+    buffer = ScreenBuffer(capture=lambda: None, seconds=30.0, clock=clock)
+    buffer.add(PNG, 200.0)
+    assert buffer.frame_at(205.0) is not None
+
+    clock.t = 400.0
+    # Asking about the moment it was captured must still refuse: the frame is
+    # long past the window and should no longer be in memory at all.
+    assert buffer.frame_at(205.0) is None
+
+
+def test_a_frame_stamped_outside_the_window_is_rejected_on_arrival():
+    clock = FakeClock(1000.0)
+    buffer = ScreenBuffer(capture=lambda: None, seconds=60.0, clock=clock)
+    buffer.add(PNG, 100.0)  # fifteen minutes old
+    assert len(buffer) == 0

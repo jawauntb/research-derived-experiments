@@ -187,6 +187,7 @@ class CommandRouter:
         recalibrate: Callable[[], str] | None = None,
         new_section: Callable[[str], str] | None = None,
         dwell=None,
+        buffer=None,
         badge_limit: int = 60,
         badge_timeout_ms: int = 10_000,
     ) -> None:
@@ -196,6 +197,7 @@ class CommandRouter:
         self._recalibrate = recalibrate
         self._new_section = new_section
         self.dwell = dwell
+        self.buffer = buffer
         self.badge_limit = badge_limit
         self.badge_timeout_ms = badge_timeout_ms
 
@@ -324,16 +326,30 @@ class CommandRouter:
         return self.dwell.set_enabled(False)
 
     def _do_pause(self, command: Command, window_title: str) -> str:
-        """Stop the camera. Nothing else pauses: notes are already opt-in."""
-        if self.gaze is None:
-            return "gaze engine unavailable"
-        self.gaze.stop()
-        return "gaze paused"
+        """Stop watching: the camera, and the pre-note buffer with it.
+
+        "Pause" has to mean *forget*, not just "stop adding" — leaving a minute
+        of already-buffered screen in memory is not what someone asking the
+        machine to stop watching them expects.
+        """
+        paused = []
+        if self.buffer is not None:
+            self.buffer.stop()
+            self.buffer.clear()
+            paused.append("screen buffer cleared")
+        if self.gaze is not None:
+            self.gaze.stop()
+            paused.append("gaze paused")
+        return ", ".join(paused) if paused else "nothing to pause"
 
     def _do_resume(self, command: Command, window_title: str) -> str:
-        if self.gaze is None:
-            return "gaze engine unavailable"
-        return self.gaze.start().reason
+        resumed = []
+        if self.buffer is not None:
+            self.buffer.start()
+            resumed.append("screen buffer running")
+        if self.gaze is not None:
+            resumed.append(self.gaze.start().reason)
+        return ", ".join(resumed) if resumed else "nothing to resume"
 
     def _do_unknown(self, command: Command, window_title: str) -> str:
         return f"did not understand {command.argument!r}"

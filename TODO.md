@@ -366,7 +366,7 @@ recommended cross-article sequence and the status (`new`, `partial`, or
 ## gazenotes app (2026-09-01)
 
 Local macOS gaze + voice note capture (`apps/gazenotes/`). Phases 0–6 of the
-handoff design are implemented and covered by 382 headless tests.
+handoff design are implemented and covered by 387 headless tests.
 
 - [x] Phase 0: package scaffold, `pyproject.toml`, `gazenotes doctor` that
       attempts each access so macOS TCC prompts fire from the right process.
