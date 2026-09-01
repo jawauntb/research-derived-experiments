@@ -95,11 +95,21 @@ class ModelManagerAdapter:
     def _variables_for_task(self, task: str, user_msg: str) -> dict[str, Any]:
         payload = self._load_payload(task, user_msg)
         if task == "proposer":
-            self._require_keys(task, payload, "question", "evidence_records", "context_hints")
-            return payload
+            self._require_keys(
+                task, payload, "question", "evidence_records", "context_hints"
+            )
+            return {
+                "question": payload["question"],
+                "evidence_records": self._prompt_records(
+                    task, payload["evidence_records"]
+                ),
+                "context_hints": payload["context_hints"],
+            }
 
         if task == "repairer":
-            self._require_keys(task, payload, "failed_claim", "verdict", "evidence_records")
+            self._require_keys(
+                task, payload, "failed_claim", "verdict", "evidence_records"
+            )
             verdict = payload["verdict"]
             if not isinstance(verdict, dict):
                 self._invalid_request(task, "'verdict' must be a JSON object")
@@ -110,7 +120,9 @@ class ModelManagerAdapter:
                 "failed_claim": payload["failed_claim"],
                 "fault_code": verdict.get("fault_code", "UNKNOWN"),
                 "reasons": [self._reason_text(reason) for reason in reasons],
-                "evidence_records": payload["evidence_records"],
+                "evidence_records": self._prompt_records(
+                    task, payload["evidence_records"]
+                ),
             }
 
         self._invalid_request(task, "only proposer and repairer are model tasks")
@@ -133,15 +145,46 @@ class ModelManagerAdapter:
     def _require_keys(self, task: str, payload: dict[str, Any], *keys: str) -> None:
         missing = [key for key in keys if key not in payload]
         if missing:
-            self._invalid_request(task, f"user_msg is missing required key(s): {', '.join(missing)}")
+            self._invalid_request(
+                task, f"user_msg is missing required key(s): {', '.join(missing)}"
+            )
+
+    def _prompt_records(self, task: str, records: Any) -> list[dict[str, Any]]:
+        """Give versioned templates a stable ``id`` without mutating evidence.
+
+        Phase 4b fakes historically supplied ``id`` while frozen evidence
+        records use the schema's canonical ``evidence_id``. Prompt templates
+        render the short ``id`` name, so the adapter derives it only for the
+        prompt payload and rejects an ambiguous record before provider dispatch.
+        """
+        if not isinstance(records, list):
+            self._invalid_request(task, "'evidence_records' must be a JSON array")
+
+        rendered: list[dict[str, Any]] = []
+        for record in records:
+            if not isinstance(record, dict):
+                self._invalid_request(
+                    task, "each evidence record must be a JSON object"
+                )
+            identifier = record.get("id", record.get("evidence_id"))
+            if not isinstance(identifier, str) or not identifier:
+                self._invalid_request(
+                    task, "each evidence record must have string id or evidence_id"
+                )
+            rendered.append({**record, "id": identifier})
+        return rendered
 
     def _invalid_request(self, task: str, message: str) -> NoReturn:
-        raise ModelManagerError("adapter_invalid_request", task=task, stage="adapter", message=message)
+        raise ModelManagerError(
+            "adapter_invalid_request", task=task, stage="adapter", message=message
+        )
 
     def _adapt_response(self, task: str, response: Any) -> AdapterChatResponse:
         task_cfg = self._manager.config["tasks"][task]
         provider_cfg = self._manager.config["providers"][task_cfg["provider"]]
-        meta = response.meta if isinstance(getattr(response, "meta", None), dict) else {}
+        meta = (
+            response.meta if isinstance(getattr(response, "meta", None), dict) else {}
+        )
         usage_value = meta.get("usage")
         usage: dict[str, Any] = usage_value if isinstance(usage_value, dict) else {}
         prompt_ref = response.prompt_ref or task_cfg.get("prompt_ref") or ""
@@ -149,12 +192,21 @@ class ModelManagerAdapter:
 
         return AdapterChatResponse(
             content=response.content,
-            provider=str(meta.get("provider") or provider_cfg.get("type") or task_cfg["provider"]),
-            model=str(meta.get("model") or task_cfg.get("model") or provider_cfg.get("model") or ""),
+            provider=str(
+                meta.get("provider") or provider_cfg.get("type") or task_cfg["provider"]
+            ),
+            model=str(
+                meta.get("model")
+                or task_cfg.get("model")
+                or provider_cfg.get("model")
+                or ""
+            ),
             prompt_ref=prompt_ref,
             prompt_version=prompt_version,
             latency_ms=_latency_ms(meta),
-            tokens_prompt=_token_count(usage.get("prompt_tokens", meta.get("prompt_eval_count"))),
+            tokens_prompt=_token_count(
+                usage.get("prompt_tokens", meta.get("prompt_eval_count"))
+            ),
             tokens_completion=_token_count(
                 usage.get("completion_tokens", meta.get("eval_count"))
             ),
@@ -171,8 +223,10 @@ def adapt_model_manager(manager: Any) -> Any:
 
     if isinstance(manager, ModelManagerAdapter):
         return manager
-    if hasattr(manager, "config") and hasattr(manager, "_providers") and callable(
-        getattr(manager, "call", None)
+    if (
+        hasattr(manager, "config")
+        and hasattr(manager, "_providers")
+        and callable(getattr(manager, "call", None))
     ):
         return ModelManagerAdapter(manager)
     return manager

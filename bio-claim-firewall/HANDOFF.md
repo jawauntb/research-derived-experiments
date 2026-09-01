@@ -179,8 +179,15 @@ The mutation-test framework's first real run found two surviving `delete_line` m
 
 No real LLM has ever been called through this system end-to-end. The adapter is now ready; with the optional model dependencies installed:
 
+**Preregistered runner**: `python -m eval.smoke --preflight` validates the
+frozen six-source data root, provider SDK, prompt dependencies, and configured
+credential without touching a provider. The fixed five-case manifest lives in
+`eval/smoke/questions.json`; the audit card is
+`docs/preregistration/bio_claim_firewall_phase_5_smoke_2026-09-01.md`. Actual
+trajectory and summary receipts stay local under `eval/smoke_trajectories/`.
+
 - Point `Proposer` at an OpenAI-compatible endpoint using the `OPENAI_API_KEY` or `ANTHROPIC_API_KEY` env var (already wired in `src/model_manager/config.yaml`).
-- Run 10 hand-authored real biology questions.
+- Run the preregistered five hand-authored real biology questions once, then expand to 10 only in a separately recorded run.
 - Assert every returned claim JSON is schema-valid (proposer contract).
 - Assert every verdict is one of the four types.
 - Assert every accepted claim's `derivation` cites a real evidence id in the frozen Replogle snapshot.

@@ -1,0 +1,51 @@
+{
+  "schema_version": "0.1.0",
+  "study_id": "phase5-live-model-smoke",
+  "cases": [
+    {
+      "case_id": "SMOKE-01",
+      "question": "Within the supplied Replogle 2022 K562 CRISPRi evidence, does MED19 knockdown increase GYPB expression?",
+      "selector": {
+        "subject_id": "HGNC:29600",
+        "object_id": "HGNC:4703",
+        "effect_sign": "positive"
+      }
+    },
+    {
+      "case_id": "SMOKE-02",
+      "question": "Within the supplied Replogle 2022 K562 CRISPRi evidence, does MED12 knockdown increase ASAH1 expression?",
+      "selector": {
+        "subject_id": "HGNC:11957",
+        "object_id": "HGNC:735",
+        "effect_sign": "positive"
+      }
+    },
+    {
+      "case_id": "SMOKE-03",
+      "question": "Within the supplied Replogle 2022 K562 CRISPRi evidence, does MED30 knockdown increase ASAH1 expression?",
+      "selector": {
+        "subject_id": "HGNC:23032",
+        "object_id": "HGNC:735",
+        "effect_sign": "positive"
+      }
+    },
+    {
+      "case_id": "SMOKE-04",
+      "question": "Within the supplied Replogle 2022 K562 CRISPRi evidence, does MED10 knockdown increase BSG expression?",
+      "selector": {
+        "subject_id": "HGNC:28760",
+        "object_id": "HGNC:1116",
+        "effect_sign": "positive"
+      }
+    },
+    {
+      "case_id": "SMOKE-05",
+      "question": "Within the supplied Replogle 2022 K562 CRISPRi evidence, does HSPA9 knockdown increase TPT1 expression?",
+      "selector": {
+        "subject_id": "HGNC:5244",
+        "object_id": "HGNC:12022",
+        "effect_sign": "positive"
+      }
+    }
+  ]
+}
