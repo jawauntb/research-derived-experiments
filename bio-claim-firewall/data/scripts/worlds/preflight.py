@@ -15,14 +15,20 @@ CONTRACTS = ROOT / "data" / "manifests" / "worlds"
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--world", help="world_id to inspect; default is every contract")
+    parser.add_argument(
+        "--world", help="world_id to inspect; default is every contract"
+    )
     args = parser.parse_args()
     paths = sorted(CONTRACTS.glob("*.json"))
     if args.world:
         paths = [path for path in paths if path.stem == args.world]
     if not paths:
         parser.error("no matching world contract")
-    print(json.dumps([preflight_contract(path) for path in paths], indent=2, sort_keys=True))
+    print(
+        json.dumps(
+            [preflight_contract(path) for path in paths], indent=2, sort_keys=True
+        )
+    )
     return 0
 
 

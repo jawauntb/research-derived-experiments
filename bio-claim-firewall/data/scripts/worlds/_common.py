@@ -17,11 +17,31 @@ from pathlib import Path
 from typing import Any
 
 CONTRACT_STATES = frozenset(
-    {"RESEARCHED", "RESEARCHED_DEFERRED", "FROZEN", "PREFLIGHT_PASSED", "EVALUATED", "ADMITTED", "WITHHELD_LICENSE", "WITHHELD_INTEGRITY", "WITHHELD_SCIENTIFIC"}
+    {
+        "RESEARCHED",
+        "RESEARCHED_DEFERRED",
+        "FROZEN",
+        "PREFLIGHT_PASSED",
+        "EVALUATED",
+        "ADMITTED",
+        "WITHHELD_LICENSE",
+        "WITHHELD_INTEGRITY",
+        "WITHHELD_SCIENTIFIC",
+    }
 )
 SOURCE_KINDS = frozenset({"immutable_release", "rolling_snapshot"})
 GATE_STATES = frozenset({"pass", "fail", "unknown", "not_run"})
-REQUIRED_CONTRACT_FIELDS = ("schema_version", "world_id", "version", "rank", "modality", "state", "sources", "fatal_gates", "evidence_paths")
+REQUIRED_CONTRACT_FIELDS = (
+    "schema_version",
+    "world_id",
+    "version",
+    "rank",
+    "modality",
+    "state",
+    "sources",
+    "fatal_gates",
+    "evidence_paths",
+)
 
 
 class ContractError(ValueError):
@@ -31,7 +51,9 @@ class ContractError(ValueError):
 class SourceIntegrityError(RuntimeError):
     """A downloaded byte sequence cannot be admitted to the retained cache."""
 
-    def __init__(self, code: str, message: str, *, new_version_required: bool = False) -> None:
+    def __init__(
+        self, code: str, message: str, *, new_version_required: bool = False
+    ) -> None:
         super().__init__(message)
         self.code = code
         self.new_version_required = new_version_required
@@ -39,7 +61,9 @@ class SourceIntegrityError(RuntimeError):
 
 def canonical_json(value: Any) -> bytes:
     """Stable UTF-8 JSON bytes used for contract and derived-artifact digests."""
-    return json.dumps(value, ensure_ascii=True, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return json.dumps(
+        value, ensure_ascii=True, sort_keys=True, separators=(",", ":")
+    ).encode("utf-8")
 
 
 def sha256_bytes(value: bytes) -> str:
@@ -56,7 +80,11 @@ def sha256_file(path: Path) -> str:
 
 def contract_digest(contract: Mapping[str, Any]) -> str:
     """Digest a contract independent of its optional self-digest field."""
-    payload = {key: value for key, value in contract.items() if key not in {"contract_sha256", "generated_at"}}
+    payload = {
+        key: value
+        for key, value in contract.items()
+        if key not in {"contract_sha256", "generated_at"}
+    }
     return sha256_bytes(canonical_json(payload))
 
 
@@ -81,7 +109,11 @@ def validate_contract(contract: Mapping[str, Any], *, path: Path | None = None) 
         raise ContractError(f"{label}: world_id must be a non-empty string")
     if not isinstance(contract["version"], str) or not contract["version"]:
         raise ContractError(f"{label}: version must be a non-empty string")
-    if isinstance(contract["rank"], bool) or not isinstance(contract["rank"], int) or contract["rank"] < 1:
+    if (
+        isinstance(contract["rank"], bool)
+        or not isinstance(contract["rank"], int)
+        or contract["rank"] < 1
+    ):
         raise ContractError(f"{label}: rank must be a positive integer")
     if contract["state"] not in CONTRACT_STATES:
         raise ContractError(f"{label}: unsupported state {contract['state']!r}")
@@ -92,20 +124,40 @@ def validate_contract(contract: Mapping[str, Any], *, path: Path | None = None) 
     for source in sources:
         if not isinstance(source, dict):
             raise ContractError(f"{label}: every source must be an object")
-        for field in ("source_id", "official_url", "source_kind", "license", "custody", "refresh_cadence", "staleness_horizon"):
+        for field in (
+            "source_id",
+            "official_url",
+            "source_kind",
+            "license",
+            "custody",
+            "refresh_cadence",
+            "staleness_horizon",
+        ):
             if field not in source:
                 raise ContractError(f"{label}: source missing {field!r}")
         source_id = source["source_id"]
         if not isinstance(source_id, str) or not source_id or source_id in seen_sources:
             raise ContractError(f"{label}: source_id must be unique and non-empty")
         seen_sources.add(source_id)
-        if not isinstance(source["official_url"], str) or not source["official_url"].startswith("https://"):
+        if not isinstance(source["official_url"], str) or not source[
+            "official_url"
+        ].startswith("https://"):
             raise ContractError(f"{label}: official_url must be an HTTPS URL")
         if source["source_kind"] not in SOURCE_KINDS:
-            raise ContractError(f"{label}: unsupported source_kind {source['source_kind']!r}")
+            raise ContractError(
+                f"{label}: unsupported source_kind {source['source_kind']!r}"
+            )
         license_info = source["license"]
-        if not isinstance(license_info, dict) or not {"id", "status", "reference_url", "redistribution", "commercial_demo"}.issubset(license_info):
-            raise ContractError(f"{label}: license must include id/status/reference_url/redistribution/commercial_demo")
+        if not isinstance(license_info, dict) or not {
+            "id",
+            "status",
+            "reference_url",
+            "redistribution",
+            "commercial_demo",
+        }.issubset(license_info):
+            raise ContractError(
+                f"{label}: license must include id/status/reference_url/redistribution/commercial_demo"
+            )
         if license_info["status"] not in {"verified", "unknown", "failed"}:
             raise ContractError(f"{label}: invalid license status")
     gates = contract["fatal_gates"]
@@ -113,7 +165,11 @@ def validate_contract(contract: Mapping[str, Any], *, path: Path | None = None) 
         raise ContractError(f"{label}: fatal_gates must be a non-empty list")
     gate_ids: set[str] = set()
     for gate in gates:
-        if not isinstance(gate, dict) or not isinstance(gate.get("id"), str) or gate["id"] in gate_ids:
+        if (
+            not isinstance(gate, dict)
+            or not isinstance(gate.get("id"), str)
+            or gate["id"] in gate_ids
+        ):
             raise ContractError(f"{label}: fatal gates need unique object ids")
         gate_ids.add(gate["id"])
         if gate.get("status") not in GATE_STATES:
@@ -126,8 +182,14 @@ def preflight_contract(contract_path: Path) -> dict[str, Any]:
     """Return a deterministic, no-network readiness record for one contract."""
     contract = load_contract(contract_path)
     gates = tuple(gate["status"] for gate in contract["fatal_gates"])
-    failures = [gate["id"] for gate in contract["fatal_gates"] if gate["status"] == "fail"]
-    unknown = [gate["id"] for gate in contract["fatal_gates"] if gate["status"] in {"unknown", "not_run"}]
+    failures = [
+        gate["id"] for gate in contract["fatal_gates"] if gate["status"] == "fail"
+    ]
+    unknown = [
+        gate["id"]
+        for gate in contract["fatal_gates"]
+        if gate["status"] in {"unknown", "not_run"}
+    ]
     return {
         "world_id": contract["world_id"],
         "version": contract["version"],
@@ -162,35 +224,83 @@ def acquire_bytes(
     if destination.exists():
         existing_sha = sha256_file(destination)
         if expected_sha256 and existing_sha != expected_sha256:
-            code = "IMMUTABLE_DRIFT" if source_kind == "immutable_release" else "ROLLING_DRIFT_NEW_VERSION_REQUIRED"
-            raise SourceIntegrityError(code, f"cached bytes at {destination} do not match expected digest", new_version_required=source_kind == "rolling_snapshot")
-        return {"status": "cached", "path": str(destination), "sha256": existing_sha, "changed": False}
+            code = (
+                "IMMUTABLE_DRIFT"
+                if source_kind == "immutable_release"
+                else "ROLLING_DRIFT_NEW_VERSION_REQUIRED"
+            )
+            raise SourceIntegrityError(
+                code,
+                f"cached bytes at {destination} do not match expected digest",
+                new_version_required=source_kind == "rolling_snapshot",
+            )
+        return {
+            "status": "cached",
+            "path": str(destination),
+            "sha256": existing_sha,
+            "changed": False,
+        }
     if fetcher is None:
+
         def fetcher(target: str) -> bytes:
             with urllib.request.urlopen(target, timeout=60) as response:
                 return response.read()
+
     payload = fetcher(url)
     if not isinstance(payload, bytes):
         raise TypeError("fetcher must return bytes")
     digest = sha256_bytes(payload)
     if expected_sha256 and digest != expected_sha256:
-        raise SourceIntegrityError("FETCH_HASH_MISMATCH", f"downloaded bytes from {url} do not match expected digest")
+        raise SourceIntegrityError(
+            "FETCH_HASH_MISMATCH",
+            f"downloaded bytes from {url} do not match expected digest",
+        )
     destination.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile(prefix=f".{destination.name}.", dir=destination.parent, delete=False) as handle:
+    with tempfile.NamedTemporaryFile(
+        prefix=f".{destination.name}.", dir=destination.parent, delete=False
+    ) as handle:
         handle.write(payload)
         temp_path = Path(handle.name)
     os.replace(temp_path, destination)
-    return {"status": "fetched", "path": str(destination), "sha256": digest, "changed": True}
+    return {
+        "status": "fetched",
+        "path": str(destination),
+        "sha256": digest,
+        "changed": True,
+    }
 
 
 def fixture_manifest(root: Path) -> dict[str, Any]:
     """Build a stable inventory for a bounded fixture directory."""
     root = Path(root)
     files = []
-    for path in sorted(item for item in root.rglob("*") if item.is_file() and item.name != "fixture-manifest.json"):
-        files.append({"path": path.relative_to(root).as_posix(), "sha256": sha256_file(path), "bytes": path.stat().st_size})
+    for path in sorted(
+        item
+        for item in root.rglob("*")
+        if item.is_file() and item.name != "fixture-manifest.json"
+    ):
+        files.append(
+            {
+                "path": path.relative_to(root).as_posix(),
+                "sha256": sha256_file(path),
+                "bytes": path.stat().st_size,
+            }
+        )
     payload = {"schema_version": "1.0.0", "files": files}
     return {**payload, "sha256": sha256_bytes(canonical_json(payload))}
 
 
-__all__ = ["CONTRACT_STATES", "ContractError", "SourceIntegrityError", "acquire_bytes", "canonical_json", "contract_digest", "fixture_manifest", "load_contract", "preflight_contract", "sha256_bytes", "sha256_file", "validate_contract"]
+__all__ = [
+    "CONTRACT_STATES",
+    "ContractError",
+    "SourceIntegrityError",
+    "acquire_bytes",
+    "canonical_json",
+    "contract_digest",
+    "fixture_manifest",
+    "load_contract",
+    "preflight_contract",
+    "sha256_bytes",
+    "sha256_file",
+    "validate_contract",
+]

@@ -50,6 +50,15 @@ class ApolloDiscoveryError(RuntimeError):
     """Raised when a bounded read-only Apollo request cannot complete."""
 
 
+class _RejectRedirects(urllib.request.HTTPRedirectHandler):
+    """Never forward an authenticated Apollo request to another URL."""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):  # noqa: ANN001, ARG002
+        raise ApolloDiscoveryError(
+            "Apollo redirect refused before forwarding credentials"
+        )
+
+
 def _secure_write_json(path: Path, payload: Any) -> None:
     path.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
@@ -79,12 +88,19 @@ def _post_json(
         method="POST",
     )
     try:
-        with urllib.request.urlopen(request, timeout=timeout_seconds) as response:
+        opener = urllib.request.build_opener(_RejectRedirects())
+        with opener.open(request, timeout=timeout_seconds) as response:
             value = json.loads(response.read().decode("utf-8"))
+    except ApolloDiscoveryError:
+        raise
     except urllib.error.HTTPError as exc:
-        raise ApolloDiscoveryError(f"Apollo request failed with HTTP {exc.code}") from None
+        raise ApolloDiscoveryError(
+            f"Apollo request failed with HTTP {exc.code}"
+        ) from None
     except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
-        raise ApolloDiscoveryError(f"Apollo request failed: {type(exc).__name__}") from None
+        raise ApolloDiscoveryError(
+            f"Apollo request failed: {type(exc).__name__}"
+        ) from None
 
     if not isinstance(value, dict):
         raise ApolloDiscoveryError("Apollo response was not a JSON object")
@@ -140,7 +156,11 @@ def search_role_categories(
 
 def _organizations(response: dict[str, Any]) -> list[dict[str, Any]]:
     value = response.get("organizations", [])
-    return [item for item in value if isinstance(item, dict)] if isinstance(value, list) else []
+    return (
+        [item for item in value if isinstance(item, dict)]
+        if isinstance(value, list)
+        else []
+    )
 
 
 def _people(response: dict[str, Any]) -> list[dict[str, Any]]:
@@ -161,12 +181,16 @@ def _people_count(response: dict[str, Any]) -> int:
         if isinstance(value, list):
             return len([item for item in value if isinstance(item, dict)])
     pagination = response.get("pagination")
-    if isinstance(pagination, dict) and isinstance(pagination.get("total_entries"), int):
+    if isinstance(pagination, dict) and isinstance(
+        pagination.get("total_entries"), int
+    ):
         return pagination["total_entries"]
     return 0
 
 
-def private_account_rows(response: dict[str, Any], *, wedge: str) -> list[dict[str, Any]]:
+def private_account_rows(
+    response: dict[str, Any], *, wedge: str
+) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     for organization in _organizations(response):
         domain = organization.get("primary_domain") or organization.get("website_url")
@@ -221,7 +245,7 @@ def _deduplicate_account_rows(rows: Iterable[dict[str, Any]]) -> list[dict[str, 
                 # sent to a role query, so retain it as a private row only.
                 result.append(row)
                 continue
-            key = f"domain:{str(domain).strip().casefold().rstrip('/') }"
+            key = f"domain:{str(domain).strip().casefold().rstrip('/')}"
         if key in seen:
             continue
         seen.add(key)
@@ -295,11 +319,15 @@ def run_bounded_discovery(
     if not 1 <= per_wedge <= 25:
         raise ValueError("per_wedge must be between 1 and 25")
     allowed_root = private_root or PRIVATE_OUTPUT_ROOT
-    destination = _constrained_output_dir(output_dir or allowed_root, private_root=allowed_root)
+    destination = _constrained_output_dir(
+        output_dir or allowed_root, private_root=allowed_root
+    )
     all_rows: list[dict[str, Any]] = []
     raw_dir = destination / "raw"
     for wedge, tags in DEFAULT_WEDGES.items():
-        response = search_organizations(keyword_tags=tags, per_page=per_wedge, api_key=api_key)
+        response = search_organizations(
+            keyword_tags=tags, per_page=per_wedge, api_key=api_key
+        )
         _secure_write_json(raw_dir / f"{wedge}.json", response)
         all_rows.extend(private_account_rows(response, wedge=wedge))
 

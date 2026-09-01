@@ -69,31 +69,31 @@
         </aside>
 
         <div class="receipt-stage" aria-live="polite">
-          <div class="stage-topline"><span class="status-label">Selected world</span><span id="selected-world-label">Clinical Trials / SEC · fixture release 2026.09</span></div>
+          <div class="stage-topline"><span class="status-label">Selected world</span><span id="selected-world-label">Clinical Trials / SEC · 2025–2026 filing window</span></div>
           <div class="claim-card">
-            <div class="claim-meta"><span id="claim-type" class="claim-type">TRIAL_DISCLOSURE</span><span id="claim-as-of">as of 14 Nov 2025</span></div>
-            <p id="claim-text">“The registered trial NCT00000001 was completed as of 14 Nov 2025.”</p>
-            <div class="claim-fields" id="claim-fields"><span>overall_status: <b>COMPLETED</b></span><span>registry: <b>NCT00000001</b></span></div>
+            <div class="claim-meta"><span id="claim-type" class="claim-type">TRIAL_DISCLOSURE</span><span id="claim-as-of">as of 03 Jun 2026</span></div>
+            <p id="claim-text">“The SEC exhibit identifies TTX-MC138 as trial NCT06260774, consistent with the registry as of 03 Jun 2026.”</p>
+            <div class="claim-fields" id="claim-fields"><span>nct_id: <b>NCT06260774</b></span><span>sponsor: <b>TransCode Therapeutics</b></span></div>
           </div>
           <div class="preset-row" aria-labelledby="preset-title">
             <div class="subhead-row"><h3 id="preset-title">Choose an exact fixture</h3><span class="tiny-label">curated, not typed</span></div>
             <div id="preset-list" class="preset-list">
-              <button type="button" class="preset active" data-receipt="trial-positive" aria-pressed="true"><span class="preset-icon good">✓</span><span><strong>Positive</strong><small>status matches</small></span></button>
-              <button type="button" class="preset" data-receipt="trial-rejected" aria-pressed="false"><span class="preset-icon bad">×</span><span><strong>Rejected</strong><small>status conflicts</small></span></button>
-              <button type="button" class="preset" data-receipt="trial-inconclusive" aria-pressed="false"><span class="preset-icon maybe">?</span><span><strong>Inconclusive</strong><small>record unavailable</small></span></button>
+              <button type="button" class="preset active" data-receipt="trial-positive" aria-pressed="true"><span class="preset-icon good">✓</span><span><strong>Accepted</strong><small>identity consistent</small></span></button>
+              <button type="button" class="preset" data-receipt="trial-rejected" aria-pressed="false"><span class="preset-icon bad">×</span><span><strong>Rejected</strong><small>sponsor conflicts</small></span></button>
+              <button type="button" class="preset" data-receipt="trial-inconclusive" aria-pressed="false"><span class="preset-icon maybe">?</span><span><strong>Inconclusive</strong><small>accession absent</small></span></button>
               <button type="button" class="preset" data-receipt="trial-error" aria-pressed="false"><span class="preset-icon error">!</span><span><strong>Checker error</strong><small>integrity gate</small></span></button>
             </div>
           </div>
           <article id="result-card" class="result-card accepted" aria-labelledby="result-title">
             <div class="result-summary">
               <div id="result-symbol" class="result-symbol" aria-hidden="true">✓</div>
-              <div><p class="result-label">Receipt outcome</p><h3 id="result-title">ACCEPTED <span id="verified-label" class="verified">bundle consistent</span></h3><p id="result-summary">The cited disclosure matches the frozen registry status.</p></div>
+              <div><p class="result-label">Receipt outcome</p><h3 id="result-title">ACCEPTED <span id="verified-label" class="verified">bundle consistent</span></h3><p id="result-summary">The selected claim matches the frozen evidence record.</p></div>
             </div>
-            <div class="result-scope"><span class="scope-label">Scope</span><p id="result-scope">Consistent with the cited registry status at the declared time; not a claim about efficacy, safety, or current status.</p></div>
-            <details open><summary>Show the winning rule and citation</summary><div class="details-content"><div class="rule-block"><span class="detail-label">Winning rule</span><strong id="rule-title">Cited disclosure matches frozen status</strong><p id="rule-rationale">The asserted status equals the value in the selected, locator-bound registry record at the declared clock.</p></div><div class="citation-block"><span class="detail-label">Citation</span><p id="citation">ClinicalTrials.gov · NCT00000001 · overall_status</p><code id="citation-ref">fixture://clinical-trials-sec/record-001</code></div></div></details>
+            <div class="result-scope"><span class="scope-label">Scope</span><p id="result-scope">The filing's trial identity is consistent with the timestamped registry record; this is not an efficacy, safety, investment, or corporate-truth claim.</p></div>
+            <details open><summary>Show the winning rule and citation</summary><div class="details-content"><div class="rule-block"><span class="detail-label">Winning rule</span><strong id="rule-title">Disclosure identity is consistent</strong><p id="rule-rationale">The exact NCT ID, sponsor, intervention, accession, exhibit locator, hashed span, and source clocks align.</p></div><div class="citation-block"><span class="detail-label">Citation</span><p id="citation">ClinicalTrials.gov + SEC EDGAR · NCT06260774 · accession 0001104659-26-069810 · EX-99.1</p><code id="citation-ref">https://www.sec.gov/Archives/edgar/data/1829635/000110465926069810/tm2616719d1_ex99-1.htm</code></div></div></details>
             <details><summary>Inspect receipt metadata</summary><pre id="receipt-json" class="receipt-json"></pre></details>
           </article>
-          <p id="fixture-status" class="fixture-status">Fixture loaded locally · bundle consistency digest <code>ced629f4…</code></p>
+          <p id="fixture-status" class="fixture-status">Fixture loaded locally · bundle consistency digest <code>pending…</code></p>
         </div>
       </div>
     </section>
@@ -105,7 +105,7 @@
         <article class="catalog-card admitted"><div class="catalog-top"><span class="world-mark clinical">CT</span><span class="state-badge">ADMITTED</span></div><h3>Clinical Trials / SEC</h3><p>Trial disclosure integrity</p><small>translational / commercial</small></article>
         <article class="catalog-card admitted"><div class="catalog-top"><span class="world-mark targets">OT</span><span class="state-badge">ADMITTED</span></div><h3>Open Targets</h3><p>Target–disease evidence</p><small>translational</small></article>
         <article class="catalog-card admitted"><div class="catalog-top"><span class="world-mark arc">AV</span><span class="state-badge">ADMITTED</span></div><h3>Arc VCC</h3><p>Perturbational expression</p><small>perturbational</small></article>
-        <article class="catalog-card withheld"><div class="catalog-top"><span class="world-mark neuro">NV</span><span class="state-badge">WITHHELD</span></div><h3>NeuroVault</h3><p>Review in progress</p><small>Spatial controls remain under review.</small></article>
+        <article class="catalog-card deferred"><div class="catalog-top"><span class="world-mark neuro">NV</span><span class="state-badge">DEFERRED</span></div><h3>NeuroVault</h3><p>Review in progress</p><small>Spatial controls remain under review.</small></article>
         <article class="catalog-card deferred"><div class="catalog-top"><span class="world-mark fly">FC</span><span class="state-badge">DEFERRED</span></div><h3>FlyWire / Codex</h3><p>Research only</p><small>Public-display terms unresolved.</small></article>
       </div>
       <p class="worlds-note"><span aria-hidden="true">↳</span> Withheld and deferred worlds publish their reviewed state and reason only — never evidence-derived fields.</p>
@@ -120,7 +120,7 @@
     <section class="cta panel"><div><p class="eyebrow">Built for the next careful question</p><h2>Bring one decision memo you do not want to overstate.</h2></div><a class="button button-primary" href="mailto:jawaun.brown95@gmail.com?subject=Bio%20Claim%20Firewall%20design%20partner">Request a design-partner conversation <span aria-hidden="true">↗</span></a></section>
   </main>
 
-  <noscript><section class="noscript-fallback" aria-label="Receipt without JavaScript"><p class="eyebrow">Static fallback · exact fixture</p><h2>Clinical Trials / SEC — ACCEPTED</h2><p>“The registered trial NCT00000001 was completed as of 14 Nov 2025.” The cited disclosure matches the frozen registry status.</p><p><strong>Scope:</strong> Consistent with the cited registry status at the declared time; not a claim about efficacy, safety, or current status.</p><p><strong>Citation:</strong> ClinicalTrials.gov · NCT00000001 · overall_status</p><p><strong>Receipt:</strong> trial-positive · world digest: demo-2026-09-01</p><p>Other world states: Open Targets and Arc VCC are admitted fixtures. NeuroVault is withheld for spatial review. FlyWire / Codex is deferred pending public-display terms.</p><a class="button button-primary" href="mailto:jawaun.brown95@gmail.com?subject=Bio%20Claim%20Firewall%20design%20partner">Request a pilot</a></section></noscript>
+  <noscript><section class="noscript-fallback" aria-label="Receipt without JavaScript"><p class="eyebrow">Static fallback · exact fixture</p><h2>Clinical Trials / SEC — ACCEPTED</h2><p>“The SEC exhibit identifies TTX-MC138 as trial NCT06260774, consistent with the registry as of 03 Jun 2026.” The selected identity claim matches the frozen evidence record.</p><p><strong>Scope:</strong> Identity consistency only—not efficacy, safety, investment advice, or corporate truth.</p><p><strong>Citation:</strong> ClinicalTrials.gov + SEC EDGAR · NCT06260774 · accession 0001104659-26-069810 · EX-99.1</p><p><strong>Receipt:</strong> trial-positive · world digest: f9a3c368585e982824cb6c180267b782f6c3b14c1793f95379686f3bdbbcfdd1</p><p>Other world states: Open Targets and Arc VCC are admitted fixtures. NeuroVault and FlyWire / Codex are deferred and publish no evidence-derived fields.</p><a class="button button-primary" href="mailto:jawaun.brown95@gmail.com?subject=Bio%20Claim%20Firewall%20design%20partner">Request a pilot</a></section></noscript>
 
   <footer><span>Bio Claim Firewall</span><span>Bounded evidence, inspectable receipts.</span><a href="mailto:jawaun.brown95@gmail.com">jawaun.brown95@gmail.com</a></footer>
   <script src="fixture.js" defer></script>

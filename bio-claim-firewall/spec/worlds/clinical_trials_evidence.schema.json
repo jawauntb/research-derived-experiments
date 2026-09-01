@@ -19,7 +19,7 @@
     },
     {
       "type": "object", "additionalProperties": false,
-      "required": ["record_id", "source", "nct_id", "cik", "sponsor", "intervention", "sec_accession", "exhibit_locator", "span_locator", "asserted_span_sha256", "human_confirmed", "accepted_at"],
+      "required": ["record_id", "source", "nct_id", "cik", "sponsor", "intervention", "sec_accession", "exhibit_locator", "span_locator", "asserted_span_sha256", "identity_span_locator", "identity_span_sha256", "review_artifact_sha256", "relationship_reviewed", "reviewer_role", "accepted_at"],
       "properties": {
         "record_id": {"type": "string", "minLength": 1},
         "source": {"const": "sec-edgar-submissions-and-archives"},
@@ -31,7 +31,11 @@
         "exhibit_locator": {"type": "string", "minLength": 1},
         "span_locator": {"type": "string", "minLength": 1},
         "asserted_span_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-        "human_confirmed": {"const": true},
+        "identity_span_locator": {"type": "string", "minLength": 1},
+        "identity_span_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "review_artifact_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "relationship_reviewed": {"const": true},
+        "reviewer_role": {"type": "string", "minLength": 1},
         "accepted_at": {"type": "string", "format": "date-time", "pattern": "Z$"}
       }
     }

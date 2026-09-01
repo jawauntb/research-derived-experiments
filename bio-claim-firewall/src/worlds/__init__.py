@@ -17,6 +17,8 @@ from .registry import (
     WorldRegistryError,
     get_world,
     list_worlds,
+    receipt_world_digest,
+    validate_world_artifacts,
 )
 
 __all__ = [
@@ -31,4 +33,6 @@ __all__ = [
     "WorldRegistryError",
     "get_world",
     "list_worlds",
+    "receipt_world_digest",
+    "validate_world_artifacts",
 ]

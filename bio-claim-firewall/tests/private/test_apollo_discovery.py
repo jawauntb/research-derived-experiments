@@ -3,6 +3,8 @@ from __future__ import annotations
 import importlib.util
 import json
 import stat
+import threading
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 import pytest
@@ -24,6 +26,54 @@ SPEC.loader.exec_module(apollo)
 def test_post_rejects_non_search_endpoint() -> None:
     with pytest.raises(apollo.ApolloDiscoveryError, match="not read-allowlisted"):
         apollo._post_json("/contacts", {}, api_key="test")
+
+
+def test_post_refuses_redirect_without_forwarding_api_key(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    received: list[str | None] = []
+
+    class TargetHandler(BaseHTTPRequestHandler):
+        def do_GET(self) -> None:  # noqa: N802
+            received.append(self.headers.get("x-api-key"))
+            self.send_response(200)
+            self.end_headers()
+
+        def log_message(self, format: str, *args: object) -> None:  # noqa: A002
+            return
+
+    target = ThreadingHTTPServer(("127.0.0.1", 0), TargetHandler)
+
+    class RedirectHandler(BaseHTTPRequestHandler):
+        def do_POST(self) -> None:  # noqa: N802
+            self.send_response(302)
+            self.send_header(
+                "Location", f"http://127.0.0.1:{target.server_port}/stolen"
+            )
+            self.end_headers()
+
+        def log_message(self, format: str, *args: object) -> None:  # noqa: A002
+            return
+
+    redirect = ThreadingHTTPServer(("127.0.0.1", 0), RedirectHandler)
+    threads = [
+        threading.Thread(target=server.serve_forever, daemon=True)
+        for server in (target, redirect)
+    ]
+    for thread in threads:
+        thread.start()
+    monkeypatch.setattr(
+        apollo, "APOLLO_BASE_URL", f"http://127.0.0.1:{redirect.server_port}"
+    )
+    try:
+        with pytest.raises(apollo.ApolloDiscoveryError, match="redirect refused"):
+            apollo._post_json(apollo.ORGANIZATION_SEARCH_PATH, {}, api_key="test")
+        assert received == []
+    finally:
+        redirect.shutdown()
+        target.shutdown()
+        redirect.server_close()
+        target.server_close()
 
 
 def test_private_rows_are_aggregated_without_identity_fields() -> None:
@@ -81,7 +131,9 @@ def test_secure_write_uses_owner_only_permissions(tmp_path: Path) -> None:
     assert stat.S_IMODE(target.stat().st_mode) == 0o600
 
 
-def test_bounded_run_rejects_output_outside_explicit_private_root(tmp_path: Path) -> None:
+def test_bounded_run_rejects_output_outside_explicit_private_root(
+    tmp_path: Path,
+) -> None:
     with pytest.raises(apollo.ApolloDiscoveryError, match="private root"):
         apollo.run_bounded_discovery(
             tmp_path / "outside",
@@ -91,7 +143,9 @@ def test_bounded_run_rejects_output_outside_explicit_private_root(tmp_path: Path
         )
 
 
-def test_bounded_run_intercepts_organizations_then_deduped_role_search(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_bounded_run_intercepts_organizations_then_deduped_role_search(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     calls: list[tuple[str, dict[str, object]]] = []
 
     def fake_organizations(**kwargs: object) -> dict[str, object]:
@@ -104,7 +158,11 @@ def test_bounded_run_intercepts_organizations_then_deduped_role_search(tmp_path:
             ]
         else:
             organizations = [
-                {"id": "org-1", "name": "One duplicate", "primary_domain": "one.example"},
+                {
+                    "id": "org-1",
+                    "name": "One duplicate",
+                    "primary_domain": "one.example",
+                },
             ]
         return {"organizations": organizations}
 
@@ -125,7 +183,12 @@ def test_bounded_run_intercepts_organizations_then_deduped_role_search(tmp_path:
         private_root=output_root,
     )
 
-    assert [kind for kind, _ in calls] == ["organizations", "organizations", "organizations", "people"]
+    assert [kind for kind, _ in calls] == [
+        "organizations",
+        "organizations",
+        "organizations",
+        "people",
+    ]
     people_call = calls[-1][1]
     assert people_call["organization_ids"] == ["org-1", "org-2"]
     assert people_call["titles"] == apollo.ROLE_CATEGORIES

@@ -50,12 +50,34 @@ def test_fixture_metadata_is_real_hash_bound_and_split_disjoint() -> None:
     [
         ({}, "ACCEPTED", "ARC-H1-001"),
         ({"direction": "decreases"}, "REJECTED", "ARC-H1-002"),
-        ({"perturbed_gene": "MED12", "response_gene": "PODXL", "direction": "decreases"}, "ACCEPTED", "ARC-H1-001"),
-        ({"perturbed_gene": "STAT1", "response_gene": "HADHA", "direction": "null"}, "ACCEPTED", "ARC-H1-001"),
-        ({"perturbed_gene": "STAT1", "response_gene": "HADHA", "direction": "increases"}, "REJECTED", "ARC-H1-003"),
+        (
+            {
+                "perturbed_gene": "MED12",
+                "response_gene": "PODXL",
+                "direction": "decreases",
+            },
+            "ACCEPTED",
+            "ARC-H1-001",
+        ),
+        (
+            {"perturbed_gene": "STAT1", "response_gene": "HADHA", "direction": "null"},
+            "ACCEPTED",
+            "ARC-H1-001",
+        ),
+        (
+            {
+                "perturbed_gene": "STAT1",
+                "response_gene": "HADHA",
+                "direction": "increases",
+            },
+            "REJECTED",
+            "ARC-H1-003",
+        ),
     ],
 )
-def test_organic_direction_controls(adapter: ArcVCCAdapter, changes: dict[str, object], outcome: str, rule: str) -> None:
+def test_organic_direction_controls(
+    adapter: ArcVCCAdapter, changes: dict[str, object], outcome: str, rule: str
+) -> None:
     result = adapter.check(claim(**changes))
     assert result.outcome == outcome
     assert result.winning_rule and result.winning_rule["id"] == rule
@@ -69,7 +91,9 @@ def test_receipt_is_stable_and_run_metadata_free(adapter: ArcVCCAdapter) -> None
     assert first["receipt"]["receipt_id"] == first["receipt"]["receipt_id"]
     assert "issued_at" not in first["receipt"]
     assert len(first["receipt"]["canonical_payload"]["world_digest"]) == 64
-    assert first["source_hashes"] == first["receipt"]["canonical_payload"]["source_hashes"]
+    assert (
+        first["source_hashes"] == first["receipt"]["canonical_payload"]["source_hashes"]
+    )
 
 
 @pytest.mark.parametrize(
@@ -82,7 +106,9 @@ def test_receipt_is_stable_and_run_metadata_free(adapter: ArcVCCAdapter) -> None
         {"perturbed_gene": "GENE_X"},
     ],
 )
-def test_scope_and_identity_mutations_do_not_accept(adapter: ArcVCCAdapter, changes: dict[str, object]) -> None:
+def test_scope_and_identity_mutations_do_not_accept(
+    adapter: ArcVCCAdapter, changes: dict[str, object]
+) -> None:
     result = adapter.check(claim(**changes))
     assert result.outcome in {"INCONCLUSIVE", "REJECTED"}
     assert result.outcome != "ACCEPTED"
@@ -111,17 +137,39 @@ def test_corruption_fails_closed(tmp_path: Path) -> None:
     assert result.outcome == "CHECKER_ERROR"
 
 
+def test_metadata_tamper_fails_registered_artifact_binding(tmp_path: Path) -> None:
+    destination = tmp_path / "arc_vcc"
+    destination.mkdir()
+    for name in ("metadata.json", "measurements.jsonl"):
+        (destination / name).write_bytes((FIXTURE / name).read_bytes())
+    metadata = json.loads((destination / "metadata.json").read_text(encoding="utf-8"))
+    metadata["retrieval_at"] = "2099-01-01T00:00:00Z"
+    (destination / "metadata.json").write_text(json.dumps(metadata), encoding="utf-8")
+
+    with pytest.raises(ArcVCCIntegrityError, match="artifact hashes"):
+        load_fixture(destination)
+
+
 def test_split_leakage_fails_closed(tmp_path: Path) -> None:
     destination = tmp_path / "arc_vcc"
     destination.mkdir()
     for name in ("metadata.json", "measurements.jsonl"):
         (destination / name).write_bytes((FIXTURE / name).read_bytes())
-    rows = [json.loads(line) for line in (destination / "measurements.jsonl").read_text().splitlines()]
+    rows = [
+        json.loads(line)
+        for line in (destination / "measurements.jsonl").read_text().splitlines()
+    ]
     rows.append({**rows[0], "measurement_id": "leak", "split": "locked_holdout"})
-    payload = "\n".join(json.dumps(row, separators=(",", ":"), sort_keys=True) for row in rows) + "\n"
+    payload = (
+        "\n".join(
+            json.dumps(row, separators=(",", ":"), sort_keys=True) for row in rows
+        )
+        + "\n"
+    )
     (destination / "measurements.jsonl").write_text(payload, encoding="utf-8")
     metadata = json.loads((destination / "metadata.json").read_text())
     import hashlib
+
     metadata["measurement_sha256"] = hashlib.sha256(payload.encode()).hexdigest()
     metadata["row_count"] = 7
     (destination / "metadata.json").write_text(json.dumps(metadata), encoding="utf-8")

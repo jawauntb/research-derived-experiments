@@ -1,11 +1,13 @@
 {
-  "integrity_sha256": "b498e911cff14ce96dec0655ecd6ce55319dc38c9fb740325c7ab5aa0414c7f0",
+  "integrity_sha256": "fcd3a320b3488513b1f609ca279dab600aa49cc7a436165d8fef45f51b473c6c",
   "provenance": {
     "clinicaltrials_attribution": "ClinicalTrials.gov, U.S. National Library of Medicine",
     "clinicaltrials_url": "https://clinicaltrials.gov/api/v2/studies/NCT06260774",
     "modifications": "Selected sponsor, intervention, status, and data-clock fields into a compact derived identity record; no raw response text is redistributed.",
     "processing_date": "2026-09-01",
     "raw_sources_committed": false,
+    "review_artifact": "experiments/evidence_worlds/preregistration/clinical-trials-sec-review.json",
+    "review_artifact_sha256": "0d389e7d00a70e104056ddc831e7f2ce086257ae8cc1e4f6648c330c438b74d2",
     "sec_filing_accepted_at": "2026-06-03T08:08:44Z",
     "sec_url": "https://www.sec.gov/Archives/edgar/data/1829635/000110465926069810/tm2616719d1_ex99-1.htm",
     "window_end": "2026-09-01T23:59:59Z",
@@ -26,17 +28,21 @@
       "asserted_span_sha256": "1ec3a0b235e0653bbced4f641d97df751f475020f5e18f72a71b5d354b973f33",
       "cik": "0001829635",
       "exhibit_locator": "EX-99.1#NCT06260774",
-      "human_confirmed": true,
+      "identity_span_locator": "EX-99.1:title",
+      "identity_span_sha256": "c4d3dac4e39dc0d86718ce08e63794f9c707eefe350cfc749c7693706ecf663e",
       "intervention": "TTX-MC138",
       "nct_id": "NCT06260774",
       "record_id": "sec:0001104659-26-069810:EX-99.1:NCT06260774",
+      "relationship_reviewed": true,
+      "review_artifact_sha256": "0d389e7d00a70e104056ddc831e7f2ce086257ae8cc1e4f6648c330c438b74d2",
+      "reviewer_role": "agent_operator_under_human_direction",
       "sec_accession": "0001104659-26-069810",
       "source": "sec-edgar-submissions-and-archives",
       "span_locator": "EX-99.1:sentence[NCT06260774]",
       "sponsor": "TransCode Therapeutics"
     }
   ],
-  "schema_version": "clinical-trials-sec-ledger-0.1",
+  "schema_version": "clinical-trials-sec-ledger-0.2",
   "source_hashes": {
     "clinicaltrials-gov-api-v2": "1c04f811b0300bbba0b56caaade1dfb5c78808169c152924024594124493345e",
     "sec-edgar-submissions-and-archives": "873c321bc7a918f4e7ad2cee5cde2de814376a864f1fece3e0c483cc8911a80e"

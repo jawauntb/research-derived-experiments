@@ -19,7 +19,7 @@ SRC = ROOT / "src"
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
-from worlds.clinical_trials.adapter import load_fixture
+from worlds.clinical_trials.adapter import load_fixture  # noqa: E402
 
 WORLD_VERSION = "2025-09-01_2026-09-01"
 NCT_ID = "NCT06260774"
@@ -31,6 +31,11 @@ SEC_ACCEPTED_AT = "2026-06-03T08:08:44Z"
 CT_ACCEPTED_AT = "2025-10-02T00:00:00Z"
 EXHIBIT_LOCATOR = "EX-99.1#NCT06260774"
 SPAN_LOCATOR = "EX-99.1:sentence[NCT06260774]"
+IDENTITY_SPAN_LOCATOR = "EX-99.1:title"
+IDENTITY_SPAN = (
+    "TransCode Therapeutics Successfully Completes Phase 1a Clinical Trial, Reports Safety and "
+    "Stabilization Data for TTX-MC138 in Metastatic Cancer"
+)
 ASSERTED_SPAN = (
     "Further information about the trial is available at www.clinicaltrials.gov , "
     "(NCT Identifier: NCT06260774)."
@@ -47,7 +52,13 @@ class _Text(HTMLParser):
 
 
 def _canonical(value: object) -> bytes:
-    return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()
+    return json.dumps(
+        value,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+        allow_nan=False,
+    ).encode()
 
 
 def _digest(value: object) -> str:
@@ -60,7 +71,52 @@ def _html_text(path: Path) -> str:
     return " ".join(" ".join(parser.parts).split())
 
 
-def build(ct_source: Path, sec_source: Path, destination: Path) -> dict[str, object]:
+def _review(path: Path, sec_hash: str) -> tuple[dict[str, object], str]:
+    raw = path.read_bytes()
+    try:
+        review = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise ValueError(
+            "clinical disclosure review artifact is not valid JSON"
+        ) from exc
+    expected = {
+        "schema_version": "clinical-trials-sec-review-0.1",
+        "world_id": "clinical-trials-sec",
+        "world_version": WORLD_VERSION,
+        "sec_source_sha256": sec_hash,
+        "cik": CIK,
+        "sec_accession": ACCESSION,
+        "nct_id": NCT_ID,
+        "sponsor": SPONSOR,
+        "intervention": INTERVENTION,
+        "exhibit_locator": EXHIBIT_LOCATOR,
+        "identity_span_locator": IDENTITY_SPAN_LOCATOR,
+        "identity_span_sha256": hashlib.sha256(IDENTITY_SPAN.encode()).hexdigest(),
+        "nct_span_locator": SPAN_LOCATOR,
+        "nct_span_sha256": hashlib.sha256(ASSERTED_SPAN.encode()).hexdigest(),
+        "relationship_confirmed": True,
+    }
+    if not isinstance(review, dict) or any(
+        review.get(key) != value for key, value in expected.items()
+    ):
+        raise ValueError(
+            "clinical disclosure review is missing the exact preregistered identity relationship"
+        )
+    for field in (
+        "review_id",
+        "reviewed_at",
+        "reviewer_role",
+        "review_method",
+        "scope_exclusion",
+    ):
+        if not isinstance(review.get(field), str) or not review[field].strip():
+            raise ValueError(f"clinical disclosure review is missing {field}")
+    return review, hashlib.sha256(raw).hexdigest()
+
+
+def build(
+    ct_source: Path, sec_source: Path, review_artifact: Path, destination: Path
+) -> dict[str, object]:
     ct_raw = ct_source.read_bytes()
     sec_raw = sec_source.read_bytes()
     study = json.loads(ct_raw).get("protocolSection", {})
@@ -69,13 +125,21 @@ def build(ct_source: Path, sec_source: Path, destination: Path) -> dict[str, obj
     sponsor = study.get("sponsorCollaboratorsModule", {}).get("leadSponsor", {})
     interventions = study.get("armsInterventionsModule", {}).get("interventions", [])
     names = {row.get("name") for row in interventions if isinstance(row, dict)}
-    if identity.get("nctId") != NCT_ID or sponsor.get("name") != SPONSOR or INTERVENTION not in names:
-        raise ValueError("ClinicalTrials.gov identity does not match the preregistered trial")
+    if (
+        identity.get("nctId") != NCT_ID
+        or sponsor.get("name") != SPONSOR
+        or INTERVENTION not in names
+    ):
+        raise ValueError(
+            "ClinicalTrials.gov identity does not match the preregistered trial"
+        )
     if status.get("lastUpdatePostDateStruct", {}).get("date") != "2025-10-02":
         raise ValueError("ClinicalTrials.gov data clock changed")
+    sec_hash = hashlib.sha256(sec_raw).hexdigest()
+    review, review_hash = _review(review_artifact, sec_hash)
     filing_text = _html_text(sec_source)
-    if ASSERTED_SPAN not in filing_text or INTERVENTION not in filing_text or SPONSOR not in filing_text:
-        raise ValueError("human-confirmed SEC identity span or context disappeared")
+    if ASSERTED_SPAN not in filing_text or IDENTITY_SPAN not in filing_text:
+        raise ValueError("reviewed SEC identity or NCT locator span disappeared")
     span_hash = hashlib.sha256(ASSERTED_SPAN.encode()).hexdigest()
     records = [
         {
@@ -98,17 +162,21 @@ def build(ct_source: Path, sec_source: Path, destination: Path) -> dict[str, obj
             "exhibit_locator": EXHIBIT_LOCATOR,
             "span_locator": SPAN_LOCATOR,
             "asserted_span_sha256": span_hash,
-            "human_confirmed": True,
+            "identity_span_locator": IDENTITY_SPAN_LOCATOR,
+            "identity_span_sha256": review["identity_span_sha256"],
+            "review_artifact_sha256": review_hash,
+            "relationship_reviewed": True,
+            "reviewer_role": review["reviewer_role"],
             "accepted_at": SEC_ACCEPTED_AT,
         },
     ]
     fixture: dict[str, object] = {
-        "schema_version": "clinical-trials-sec-ledger-0.1",
+        "schema_version": "clinical-trials-sec-ledger-0.2",
         "world_id": "clinical-trials-sec",
         "version": WORLD_VERSION,
         "source_hashes": {
             "clinicaltrials-gov-api-v2": hashlib.sha256(ct_raw).hexdigest(),
-            "sec-edgar-submissions-and-archives": hashlib.sha256(sec_raw).hexdigest(),
+            "sec-edgar-submissions-and-archives": sec_hash,
         },
         "records": records,
         "provenance": {
@@ -121,12 +189,19 @@ def build(ct_source: Path, sec_source: Path, destination: Path) -> dict[str, obj
             "window_start": "2025-09-01T00:00:00Z",
             "window_end": "2026-09-01T23:59:59Z",
             "raw_sources_committed": False,
+            "review_artifact": "experiments/evidence_worlds/preregistration/clinical-trials-sec-review.json",
+            "review_artifact_sha256": review_hash,
         },
     }
-    integrity_payload = {key: fixture[key] for key in ("schema_version", "world_id", "version", "source_hashes", "records")}
+    integrity_payload = {
+        key: fixture[key]
+        for key in ("schema_version", "world_id", "version", "source_hashes", "records")
+    }
     fixture["integrity_sha256"] = _digest(integrity_payload)
     destination.parent.mkdir(parents=True, exist_ok=True)
-    destination.write_text(json.dumps(fixture, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    destination.write_text(
+        json.dumps(fixture, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
     load_fixture(destination)
     return fixture
 
@@ -136,9 +211,23 @@ def main() -> int:
     parser.add_argument("destination", type=Path)
     parser.add_argument("--clinicaltrials-source", required=True, type=Path)
     parser.add_argument("--sec-source", required=True, type=Path)
+    parser.add_argument("--review-artifact", required=True, type=Path)
     args = parser.parse_args()
-    fixture = build(args.clinicaltrials_source, args.sec_source, args.destination)
-    print(json.dumps({"record_count": len(fixture["records"]), "source_hashes": fixture["source_hashes"]}, sort_keys=True))
+    fixture = build(
+        args.clinicaltrials_source,
+        args.sec_source,
+        args.review_artifact,
+        args.destination,
+    )
+    records = fixture["records"]
+    if not isinstance(records, list):  # pragma: no cover - guaranteed by build
+        raise TypeError("generated records must be a list")
+    print(
+        json.dumps(
+            {"record_count": len(records), "source_hashes": fixture["source_hashes"]},
+            sort_keys=True,
+        )
+    )
     return 0
 
 

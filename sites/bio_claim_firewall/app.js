@@ -7,7 +7,7 @@
   const resultCard = document.getElementById("result-card");
   let worlds = [];
   let receipts = [];
-  let selectedWorldId = "clinical_trials_sec";
+  let selectedWorldId = "clinical-trials-sec";
 
   const text = (value) => (value == null ? "" : String(value));
   const make = (tag, className, content) => {
@@ -122,19 +122,24 @@
     const claim = receipt.normalized_claim || {};
     const world = worlds.find((item) => item.id === receipt.world_id);
     const claimType = {
-      clinical_trials_sec: "TRIAL_DISCLOSURE",
-      open_targets: "TARGET_DISEASE_ASSOCIATION",
-      arc_vcc: "PERTURBATION_DIRECTION",
+      "clinical-trials-sec": "TRIAL_DISCLOSURE",
+      "open-targets": "TARGET_DISEASE_ASSOCIATION",
+      "arc-vcc": "PERTURBATION_DIRECTION",
     }[receipt.world_id] || "BOUNDED_CLAIM";
     let claimText;
-    if (receipt.world_id === "clinical_trials_sec") claimText = `“The registered trial ${claim.registry_id} was ${claim.asserted_value?.toLowerCase()} as of ${formatDate(claim.as_of)}.”`;
-    else if (receipt.world_id === "open_targets") claimText = `“${claim.target_id} has a ${claim.association_type} association with ${claim.disease_id} in release ${claim.release}.”`;
-    else claimText = `“Perturbing ${claim.perturbed_gene} ${claim.direction} expression of ${claim.measured_gene} in assay ${claim.assay}.”`;
+    if (receipt.world_id === "clinical-trials-sec") claimText = `“The SEC exhibit identifies ${claim.intervention} as trial ${claim.nct_id}, consistent with the registry as of ${formatDate(claim.as_of)}.”`;
+    else if (receipt.world_id === "open-targets") claimText = `“${claim.target_id} has a ${claim.evidence_source} association with ${claim.disease_id} in release ${claim.release}.”`;
+    else claimText = `“Perturbing ${claim.perturbed_gene} ${claim.direction} expression of ${claim.response_gene} in assay ${claim.assay}.”`;
     document.getElementById("claim-type").textContent = claimType;
     document.getElementById("claim-text").textContent = claimText;
     document.getElementById("claim-as-of").textContent = claim.as_of ? `as of ${formatDate(claim.as_of)}` : (claim.release ? `release ${claim.release}` : `assay ${claim.assay}`);
     const fields = document.getElementById("claim-fields");
-    fields.replaceChildren(...Object.entries(claim).slice(0, 2).map(([key, value]) => {
+    const displayKeys = {
+      "clinical-trials-sec": ["nct_id", "sponsor"],
+      "open-targets": ["target_id", "disease_id"],
+      "arc-vcc": ["perturbed_gene", "response_gene"],
+    }[receipt.world_id] || Object.keys(claim).slice(0, 2);
+    fields.replaceChildren(...displayKeys.map((key) => [key, claim[key]]).map(([key, value]) => {
       const span = make("span"); span.append(document.createTextNode(`${key}: `), make("b", null, value)); return span;
     }));
     document.getElementById("selected-world-label").textContent = `${world.title} · ${world.version_label}`;
@@ -151,8 +156,13 @@
     document.getElementById("rule-title").textContent = receipt.winning_rule?.title || "No rule issued";
     document.getElementById("rule-rationale").textContent = receipt.winning_rule?.rationale || receipt.reason || receipt.error?.message || "The checker stopped before rule evaluation.";
     const citation = receipt.citations?.[0];
-    document.getElementById("citation").textContent = citation ? `${citation.source} · ${citation.locator}` : "No citation issued for this outcome.";
-    document.getElementById("citation-ref").textContent = citation?.reference || "No evidence reference issued.";
+    const sourceReference = receipt.source_reference;
+    document.getElementById("citation").textContent = citation
+      ? `${citation.source} · ${citation.locator}`
+      : sourceReference
+        ? `${sourceReference.label} · ${sourceReference.locator}`
+        : "No citation issued for this outcome.";
+    document.getElementById("citation-ref").textContent = citation?.reference || sourceReference?.reference || "No evidence reference issued.";
     document.getElementById("receipt-json").textContent = JSON.stringify(receipt, null, 2);
     document.getElementById("verified-label").textContent = "checking bundle consistency…";
     document.getElementById("fixture-status").classList.remove("bad");
@@ -177,9 +187,9 @@
     return receipt.error?.message || "The integrity prerequisite failed before a scientific outcome could be issued.";
   }
 
-  function formatDate(value) { const date = new Date(`${value}T00:00:00Z`); return Number.isNaN(date.getTime()) ? text(value) : date.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric", timeZone: "UTC" }); }
-  function worldMark(id) { return { clinical_trials_sec: "CT", open_targets: "OT", arc_vcc: "AV", neurovault: "NV", flywire_connectome: "FC" }[id] || "·"; }
-  function worldClass(id) { return { clinical_trials_sec: "clinical", open_targets: "targets", arc_vcc: "arc", neurovault: "neuro", flywire_connectome: "fly" }[id] || "clinical"; }
+  function formatDate(value) { const date = new Date(String(value).includes("T") ? value : `${value}T00:00:00Z`); return Number.isNaN(date.getTime()) ? text(value) : date.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric", timeZone: "UTC" }); }
+  function worldMark(id) { return { "clinical-trials-sec": "CT", "open-targets": "OT", "arc-vcc": "AV", neurovault: "NV", flywire_connectome: "FC" }[id] || "·"; }
+  function worldClass(id) { return { "clinical-trials-sec": "clinical", "open-targets": "targets", "arc-vcc": "arc", neurovault: "neuro", flywire_connectome: "fly" }[id] || "clinical"; }
   function catalogClass(state) { return state === "ADMITTED" ? "admitted" : state.includes("DEFERRED") ? "deferred" : "withheld"; }
   function displayState(state) { return state.replaceAll("_", " "); }
   function catalogState(state) { return state === "ADMITTED" ? state : state.includes("DEFERRED") ? "DEFERRED" : "WITHHELD"; }

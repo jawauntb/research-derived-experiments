@@ -16,8 +16,7 @@ from evidence.snapshot import SnapshotBundle
 from worlds import K562_WORLD
 
 _SOURCE_HASHES = {
-    contract.source: contract.sha256
-    for contract in K562_WORLD.source_contracts
+    contract.source: contract.sha256 for contract in K562_WORLD.source_contracts
 }
 
 

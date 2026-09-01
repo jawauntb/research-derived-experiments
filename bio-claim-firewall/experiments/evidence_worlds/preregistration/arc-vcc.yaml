@@ -6,7 +6,9 @@ target_and_decision: "Assess perturbation-to-response direction in the declared 
 representation: "Perturbed gene, response gene, assay, train/validation split, summary statistic, direction, threshold; interventional measurement, not State inference."
 data_clock: "Arc cell-eval2 0.16.0 real H1 subset pinned at commit ddfc5df73c997b2f113a560bd863fb068f2b453a; development/locked-holdout rows frozen before evaluation."
 assumptions: ["All claim fields are explicit.", "Held-out validation is untouched during tuning.", "State model code and weights are excluded from scope and custody."]
-fatal_gates: [dataset_license_scope, official_release_identity, split_integrity_no_leakage, complete_hashes_and_schema, organic_controls, world_isolation]
-controls: [positive_held_out_direction, negative_sign_reversal_or_absent_response, null_unsupported_assay_or_threshold, corruption_changed_measurement_bytes, cross_world_isolation]
-evidence_paths: {contract: "data/manifests/worlds/arc-vcc.json", acquisition: "data/scripts/worlds/arc_vcc_acquire.py", raw: "data/raw/arc-vcc/", derived: "tests/fixtures/worlds/arc_vcc/", results: "experiments/evidence_worlds/results/arc-vcc/"}
+registered_source_hashes: {arc-cell-eval2-h1-vcc-real-subset: "eb36c766cbf76353f9981cb3a3aa32137622d1de53b29d861c483742bcd4dec7", arc-vcc-derived-ledger: "4bd9c5fef5060ca500eac08af06ad9ecae3b4957382893f46e392c6193809853"}
+fatal_gates: [dataset_license_scope, official_release_identity, split_integrity_no_leakage, complete_hashes_and_schema, organic_positive_negative_null_controls, world_isolation_and_fail_closed]
+controls: [arc-positive-heldout, arc-negative-sign-reversal, arc-null-unsupported-record, arc-corrupted-measurement-bytes, arc-cross-world-claim]
+locked_control_corpus: "experiments/evidence_worlds/preregistration/pilot_control_corpus.json#arc-vcc"
+evidence_paths: {contract: "data/manifests/worlds/arc-vcc.json", source_terms_review: "experiments/evidence_worlds/preregistration/source-terms-review.json", acquisition: "data/scripts/worlds/arc_vcc_acquire.py", raw: "data/raw/arc-vcc/", derived: "tests/fixtures/worlds/arc_vcc/", results: "experiments/evidence_worlds/results/arc-vcc/"}
 initial_state: "RESEARCHED"

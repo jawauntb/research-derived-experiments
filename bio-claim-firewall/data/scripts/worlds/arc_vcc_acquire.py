@@ -65,7 +65,10 @@ def download_source(destination: Path) -> Path:
         if len(payload) != SOURCE_BYTES:
             raise ValueError(f"Arc source byte count changed: {len(payload)}")
         destination.write_bytes(payload)
-    if destination.stat().st_size != SOURCE_BYTES or sha256(destination) != SOURCE_SHA256:
+    if (
+        destination.stat().st_size != SOURCE_BYTES
+        or sha256(destination) != SOURCE_SHA256
+    ):
         raise ValueError("Arc source bytes do not match the pinned official sample")
     return destination
 
@@ -83,7 +86,9 @@ def derive_rows(source: Path) -> list[dict[str, Any]]:
         import anndata as ad
         import numpy as np
     except ImportError as exc:
-        raise RuntimeError("Arc fixture derivation requires `pip install anndata`") from exc
+        raise RuntimeError(
+            "Arc fixture derivation requires `pip install anndata`"
+        ) from exc
 
     dataset = ad.read_h5ad(source)
     if dataset.shape != (600, 1000):
@@ -105,7 +110,9 @@ def derive_rows(source: Path) -> list[dict[str, Any]]:
     control_mean = matrix[control_mask].mean(axis=0)
     gene_index = {str(gene): index for index, gene in enumerate(dataset.var_names)}
     rows: list[dict[str, Any]] = []
-    for ordinal, (perturbed_gene, response_gene, split) in enumerate(MEASUREMENT_PLAN, start=1):
+    for ordinal, (perturbed_gene, response_gene, split) in enumerate(
+        MEASUREMENT_PLAN, start=1
+    ):
         if response_gene not in gene_index:
             raise ValueError(f"planned response gene disappeared: {response_gene}")
         perturbed_mask = labels == perturbed_gene
@@ -183,7 +190,9 @@ def main() -> int:
     parser.add_argument("destination", type=Path)
     parser.add_argument("--source", type=Path)
     args = parser.parse_args()
-    source = args.source or args.destination.parent / "raw" / "H1-VCC-2025-training.h5ad"
+    source = (
+        args.source or args.destination.parent / "raw" / "H1-VCC-2025-training.h5ad"
+    )
     if args.source is None:
         download_source(source)
     metadata = build_fixture(source, args.destination)

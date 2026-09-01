@@ -96,10 +96,16 @@ def check_natural_language_claim(
     except WorldRegistryError as exc:
         raise ClaimCheckInputError(str(exc)) from exc
     if not isinstance(question, str) or not question.strip():
-        raise ClaimCheckInputError("natural-language claim must be a non-empty sentence")
+        raise ClaimCheckInputError(
+            "natural-language claim must be a non-empty sentence"
+        )
     if len(question) > _MAX_QUESTION_CHARS:
-        raise ClaimCheckInputError(f"natural-language claim exceeds {_MAX_QUESTION_CHARS:,} character limit")
-    parsed, interpretation = _parse_world_question(question.strip(), manager, world.claim_fields, world.parser_schema)
+        raise ClaimCheckInputError(
+            f"natural-language claim exceeds {_MAX_QUESTION_CHARS:,} character limit"
+        )
+    parsed, interpretation = _parse_world_question(
+        question.strip(), manager, world.claim_fields, world.parser_schema
+    )
     result = check_claim(
         bundle,
         world.world_id,
@@ -162,20 +168,33 @@ def _parse_world_question(
 ) -> tuple[dict[str, str], dict[str, str]]:
     response = manager.call(
         task=_PARSER_TASK,
-        variables={"question": question, "schema": json.dumps(dict(parser_schema), sort_keys=True)},
+        variables={
+            "question": question,
+            "schema": json.dumps(dict(parser_schema), sort_keys=True),
+        },
     )
     content = getattr(response, "content", None)
     if not isinstance(content, str):
-        raise ClaimCheckInputError("natural-language parser did not return the selected world's claim JSON")
+        raise ClaimCheckInputError(
+            "natural-language parser did not return the selected world's claim JSON"
+        )
     try:
         parsed = json.loads(content)
     except json.JSONDecodeError as exc:
-        raise ClaimCheckInputError("natural-language parser did not return the selected world's claim JSON") from exc
+        raise ClaimCheckInputError(
+            "natural-language parser did not return the selected world's claim JSON"
+        ) from exc
     required = frozenset(claim_fields)
     if not isinstance(parsed, dict) or set(parsed) != required:
-        raise ClaimCheckInputError("natural-language parser returned fields outside the selected world's claim schema")
-    if any(not isinstance(parsed[key], str) or not parsed[key].strip() for key in required):
-        raise ClaimCheckInputError("natural-language parser returned an empty claim field")
+        raise ClaimCheckInputError(
+            "natural-language parser returned fields outside the selected world's claim schema"
+        )
+    if any(
+        not isinstance(parsed[key], str) or not parsed[key].strip() for key in required
+    ):
+        raise ClaimCheckInputError(
+            "natural-language parser returned an empty claim field"
+        )
     components = {key: parsed[key].strip() for key in claim_fields}
     return components, _interpretation_metadata(response, question, components)
 

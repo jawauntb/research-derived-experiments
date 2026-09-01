@@ -6,7 +6,12 @@ from types import SimpleNamespace
 
 import pytest
 from claim_checker import natural_language
-from claim_checker.service import ClaimCheckInputError, ClaimCheckResult, check_claim
+from claim_checker.service import (
+    ClaimCheckInputError,
+    ClaimCheckResult,
+    _adapter_result_to_claim_check,
+    check_claim,
+)
 from evidence import EvidenceError
 from evidence.loader import load_bundle
 from worlds import (
@@ -18,6 +23,7 @@ from worlds import (
     World,
     WorldRegistry,
     WorldRegistryError,
+    receipt_world_digest,
 )
 
 FIXTURES = Path(__file__).parents[1] / "fixtures" / "worlds"
@@ -32,12 +38,17 @@ def test_k562_world_is_explicitly_registered_and_immutable():
         world.source_allowlist += ("other",)  # type: ignore[misc]
     with pytest.raises(WorldRegistryError, match="version"):
         WORLD_REGISTRY.resolve("replogle-k562", None)
+    with pytest.raises(TypeError):
+        ARC_VCC_WORLD.artifact_hashes["other"] = "0" * 64  # type: ignore[index]
 
 
 def test_real_world_contracts_are_registered_with_closed_adapter_ids():
     assert WORLD_REGISTRY.resolve("arc-vcc", "2025-h1-measurements") == ARC_VCC_WORLD
     assert WORLD_REGISTRY.resolve("open-targets", "26.06") == OPEN_TARGETS_WORLD
-    assert WORLD_REGISTRY.resolve("clinical-trials-sec", "2025-09-01_2026-09-01") == CLINICAL_TRIALS_WORLD
+    assert (
+        WORLD_REGISTRY.resolve("clinical-trials-sec", "2025-09-01_2026-09-01")
+        == CLINICAL_TRIALS_WORLD
+    )
     assert {world.adapter for world in WORLD_REGISTRY.worlds} == {
         "k562",
         "arc_vcc",
@@ -96,6 +107,66 @@ def test_registered_adapters_check_explicit_real_fixture_paths():
         assert result.receipt is not None
         assert result.verdict["world_id"] == world_id
         assert result.verdict["world_version"] == version
+        world = WORLD_REGISTRY.resolve(world_id, version)
+        expected_hashes = {
+            contract.source: contract.sha256 for contract in world.source_contracts
+        }
+        assert result.receipt["canonical_payload"][
+            "world_digest"
+        ] == receipt_world_digest(world, expected_hashes)
+
+
+def test_generic_boundary_rejects_tampered_adapter_receipt() -> None:
+    fixture = FIXTURES / "open_targets" / "release-26.06.json"
+    claim = {
+        "target_id": "ENSG00000141510",
+        "disease_id": "MONDO_0018875",
+        "evidence_source": "uniprot_variants",
+        "release": "26.06",
+    }
+    from worlds.open_targets import OpenTargetsAdapter
+
+    result = OpenTargetsAdapter(fixture).check(claim)
+    result.receipt["canonical_payload"]["world_digest"] = "0" * 64  # type: ignore[index]
+
+    with pytest.raises(WorldRegistryError, match="not bound"):
+        _adapter_result_to_claim_check(result, OPEN_TARGETS_WORLD)
+
+
+def test_generic_boundary_requires_receipt_and_semantic_parity() -> None:
+    fixture = FIXTURES / "open_targets" / "release-26.06.json"
+    claim = {
+        "target_id": "ENSG00000141510",
+        "disease_id": "MONDO_0018875",
+        "evidence_source": "uniprot_variants",
+        "release": "26.06",
+        "confidence_language": "causal",
+    }
+    from worlds.open_targets import OpenTargetsAdapter
+
+    rejected_result = OpenTargetsAdapter(fixture).check(claim)
+    normalized = _adapter_result_to_claim_check(rejected_result, OPEN_TARGETS_WORLD)
+    assert normalized.verdict["verdict"] == "REJECTED"
+    rejected = rejected_result.as_dict()
+    no_receipt = dict(rejected)
+    no_receipt.pop("receipt")
+    with pytest.raises(WorldRegistryError, match="no valid receipt"):
+        _adapter_result_to_claim_check(
+            SimpleNamespace(as_dict=lambda: no_receipt), OPEN_TARGETS_WORLD
+        )
+
+    forged_acceptance = dict(rejected)
+    forged_acceptance.update(
+        {
+            "verdict": "ACCEPTED_CONDITIONALLY",
+            "outcome": "ACCEPTED",
+            "reason_code": "FORGED_ACCEPT",
+        }
+    )
+    with pytest.raises(WorldRegistryError, match="disagrees"):
+        _adapter_result_to_claim_check(
+            SimpleNamespace(as_dict=lambda: forged_acceptance), OPEN_TARGETS_WORLD
+        )
 
 
 def test_registered_adapter_rejects_wrong_world_version_and_corrupt_fixture(tmp_path):
@@ -115,9 +186,7 @@ def test_registered_adapter_rejects_wrong_world_version_and_corrupt_fixture(tmp_
     assert wrong_version.verdict["verdict"] == "CHECKER_ERROR"
     assert wrong_version.verdict["checker_error"]["stage"] == "load_snapshot"
 
-    corrupted = json.loads(
-        (root / "open_targets" / "release-26.06.json").read_text()
-    )
+    corrupted = json.loads((root / "open_targets" / "release-26.06.json").read_text())
     corrupted["records"][0]["score"] = 0.0
     corrupt_path = tmp_path / "release-26.06.json"
     corrupt_path.write_text(json.dumps(corrupted))
@@ -182,7 +251,9 @@ def test_receipt_v2_payload_is_stable_and_excludes_run_metadata(monkeypatch):
         evidence={"evidence_id": "source:record"},
         verdict={"verdict": "INCONCLUSIVE", "issued_at": "run-local"},
     )
-    monkeypatch.setattr("claim_checker.service._run_k562_adapter", lambda *args, **kwargs: result)
+    monkeypatch.setattr(
+        "claim_checker.service._run_k562_adapter", lambda *args, **kwargs: result
+    )
 
     first = check_claim(bundle, "example", "1", result.claim, registry=registry)
     second = check_claim(bundle, "example", "1", result.claim, registry=registry)
@@ -214,7 +285,12 @@ def test_parser_receives_only_question_and_selected_schema_and_rejects_injection
 
     with pytest.raises(ClaimCheckInputError, match="outside"):
         natural_language.check_natural_language_claim(
-            SimpleNamespace(), "example", "1", "A increases B", Manager(), registry=registry
+            SimpleNamespace(),
+            "example",
+            "1",
+            "A increases B",
+            Manager(),
+            registry=registry,
         )
     assert calls and set(calls[0]["variables"]) == {"question", "schema"}
     assert "evidence" not in calls[0]["variables"]["schema"]
@@ -229,7 +305,9 @@ def test_source_mismatch_fails_before_adapter_runs(monkeypatch):
     )
     monkeypatch.setattr(
         "claim_checker.service._run_k562_adapter",
-        lambda *args, **kwargs: pytest.fail("adapter must not run before source isolation"),
+        lambda *args, **kwargs: pytest.fail(
+            "adapter must not run before source isolation"
+        ),
     )
 
     result = check_claim(

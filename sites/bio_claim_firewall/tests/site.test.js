@@ -1,5 +1,6 @@
 const assert = require("node:assert/strict");
 const crypto = require("node:crypto");
+const childProcess = require("node:child_process");
 const fs = require("node:fs");
 const http = require("node:http");
 const path = require("node:path");
@@ -42,6 +43,10 @@ it("has stable SHA-256 canonical digests for every fixture", () => {
 
 it("keeps every receipt bound to a registered admitted world", () => {
     const worlds = new Map(worldsData.worlds.map((world) => [world.id, world]));
+    assert.deepEqual(
+      new Set(worldsData.worlds.filter((world) => world.state === "ADMITTED").map((world) => world.id)),
+      new Set(["clinical-trials-sec", "open-targets", "arc-vcc"]),
+    );
     for (const receipt of receiptsData.receipts) {
       const world = worlds.get(receipt.world_id);
       assert.ok(world, receipt.receipt_id);
@@ -50,8 +55,65 @@ it("keeps every receipt bound to a registered admitted world", () => {
     }
 });
 
+it("is generated from the passing readiness artifact and is not stale", () => {
+    assert.equal(worldsData.generated_from, "bio-claim-firewall/experiments/evidence_worlds/results/pilot_readiness.json");
+    assert.equal(receiptsData.generated_from, worldsData.generated_from);
+    const result = childProcess.spawnSync("python3", [path.join(root, "export_real_receipts.py"), "--check"], { encoding: "utf8" });
+    assert.equal(result.status, 0, result.stderr || result.stdout);
+});
+
+it("publishes real admitted identifiers without demo placeholders", () => {
+    const serialized = JSON.stringify({ worldsData, receiptsData });
+    for (const expected of ["NCT06260774", "ENSG00000141510", "MONDO_0018875", "STAT1", "TAGLN"]) assert.match(serialized, new RegExp(expected));
+    assert.doesNotMatch(serialized, /NCT00000001|GENE_A|GENE_B|fixture:\/\/|demo-2026/i);
+    for (const receipt of receiptsData.receipts) {
+      assert.match(receipt.engine_receipt_id, /^[a-f0-9]{64}$/);
+      if (receipt.outcome === "CHECKER_ERROR") {
+        assert.equal(receipt.world_digest, null);
+        assert.match(receipt.selected_world_context_digest, /^[a-f0-9]{64}$/);
+      } else {
+        assert.match(receipt.world_digest, /^[a-f0-9]{64}$/);
+        assert.equal(receipt.selected_world_context_digest, undefined);
+      }
+    }
+});
+
+it("keeps source hashes, evidence citations, and world identities consistent", () => {
+    const expectedSources = {
+      "clinical-trials-sec": new Set(["clinicaltrials-gov-api-v2", "sec-edgar-submissions-and-archives"]),
+      "open-targets": new Set(["open-targets-graphql-26-06"]),
+      "arc-vcc": new Set(["arc-cell-eval2-h1-vcc-real-subset", "arc-vcc-derived-ledger"]),
+    };
+    for (const receipt of receiptsData.receipts) {
+      if (receipt.outcome === "CHECKER_ERROR") {
+        assert.deepEqual(receipt.source_hashes, {});
+        continue;
+      }
+      assert.deepEqual(new Set(Object.keys(receipt.source_hashes)), expectedSources[receipt.world_id]);
+      for (const citation of receipt.citations) {
+        assert.ok(citation.engine_id, receipt.receipt_id);
+        assert.ok(citation.reference.startsWith("https://"), receipt.receipt_id);
+        const evidence = JSON.stringify(receipt.evidence || {});
+        assert.match(evidence, new RegExp(citation.engine_id.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+      }
+    }
+});
+
+it("does not inject positive evidence into unresolved or corrupt outcomes", () => {
+    for (const receipt of receiptsData.receipts.filter((item) => ["INCONCLUSIVE", "CHECKER_ERROR"].includes(item.outcome))) {
+      assert.deepEqual(receipt.citations, [], receipt.receipt_id);
+      assert.equal(receipt.source_reference, null, receipt.receipt_id);
+      assert.match(receipt.scope, /^No evidence scope was established/, receipt.receipt_id);
+      assert.equal(receipt.evidence, null, receipt.receipt_id);
+    }
+    for (const receipt of receiptsData.receipts.filter((item) => item.world_id === "arc-vcc")) {
+      assert.deepEqual(receipt.citations, [], receipt.receipt_id);
+      assert.match(receipt.source_reference.label, /does not issue citation IDs/);
+    }
+});
+
 it("publishes only reviewed state and reason for non-admitted worlds", () => {
-    const allowed = new Set(["id", "title", "short_title", "modality", "state", "version", "version_label", "description", "capability", "scope", "source_contract", "source_clock", "gate_reason", "receipt_ids", "default_receipt"]);
+    const allowed = new Set(["id", "presentation_id", "title", "short_title", "modality", "state", "version", "world_digest", "version_label", "description", "capability", "scope", "source_contract", "source_clock", "gate_reason", "receipt_ids", "default_receipt"]);
     for (const world of worldsData.worlds.filter((item) => item.state !== "ADMITTED")) {
       assert.deepEqual(world.receipt_ids, [], world.id);
       assert.equal(world.default_receipt, null, world.id);
@@ -64,8 +126,11 @@ it("publishes only reviewed state and reason for non-admitted worlds", () => {
 });
 
 it("represents all four outcome states in the admitted trial fixture", () => {
-    const outcomes = new Set(receiptsData.receipts.filter((receipt) => receipt.world_id === "clinical_trials_sec").map((receipt) => receipt.outcome));
+    const outcomes = new Set(receiptsData.receipts.filter((receipt) => receipt.world_id === "clinical-trials-sec").map((receipt) => receipt.outcome));
     assert.deepEqual(outcomes, new Set(["ACCEPTED", "REJECTED", "INCONCLUSIVE", "CHECKER_ERROR"]));
+    for (const receipt of receiptsData.receipts.filter((item) => item.world_id === "clinical-trials-sec")) {
+      assert.equal(receipt.checker_version, "clinical-trials-sec/0.2.0", receipt.receipt_id);
+    }
 });
 
 it("serves only the explicit GET/HEAD allowlist with restrictive headers", async () => {
@@ -121,12 +186,24 @@ it("has a no-JavaScript default receipt and pilot path", () => {
     assert.match(html, /mailto:jawaun\.brown95@gmail\.com\?subject=Bio%20Claim%20Firewall%20design%20partner/);
     assert.match(html, /<script src="fixture\.js" defer><\/script>/);
     assert.match(html, /<script src="app\.js" defer><\/script>/);
+
+    const defaultWorld = worldsData.worlds.find((world) => world.id === "clinical-trials-sec");
+    const defaultReceipt = receiptsData.receipts.find((receipt) => receipt.receipt_id === defaultWorld.default_receipt);
+    assert.match(html, new RegExp(`world digest: ${defaultReceipt.world_digest}`));
+
+    const noScript = html.match(/<noscript>([\s\S]*?)<\/noscript>/)?.[1] || "";
+    for (const world of worldsData.worlds.filter((item) => item.state !== "ADMITTED")) {
+      const publicState = world.state.includes("DEFERRED") ? "DEFERRED" : "WITHHELD";
+      const escapedTitle = world.title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      assert.match(html, new RegExp(`<span class="state-badge">${publicState}</span></div><h3>${escapedTitle}</h3>`), world.id);
+      assert.match(noScript, new RegExp(`${escapedTitle}[\\s\\S]*${publicState}`, "i"), world.id);
+    }
 });
 
 it("updates the claim type when switching evidence worlds", () => {
     const app = fs.readFileSync(path.join(root, "app.js"), "utf8");
-    assert.match(app, /open_targets:\s*"TARGET_DISEASE_ASSOCIATION"/);
-    assert.match(app, /arc_vcc:\s*"PERTURBATION_DIRECTION"/);
+    assert.match(app, /"open-targets":\s*"TARGET_DISEASE_ASSOCIATION"/);
+    assert.match(app, /"arc-vcc":\s*"PERTURBATION_DIRECTION"/);
     assert.match(app, /getElementById\("claim-type"\)\.textContent = claimType/);
 });
 

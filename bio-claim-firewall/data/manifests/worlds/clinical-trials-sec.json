@@ -5,7 +5,7 @@
   "rank": 1,
   "modality": "translational_disclosure",
   "state": "ADMITTED",
-  "decision": "Check a human-confirmed, locator-cited disclosure assertion against registered trial status/results available at the disclosure timestamp; do not infer efficacy.",
+  "decision": "Check a separately reviewed, locator-cited disclosure identity relationship against the registered trial identity available at the disclosure timestamp; do not infer efficacy.",
   "claim_contract": {
     "object": "trial_disclosure_assertion",
     "required_fields": ["nct_id", "sponsor", "intervention", "sec_accession", "exhibit_locator", "asserted_span_sha256", "as_of"],
@@ -43,8 +43,8 @@
       "artifact_paths": ["raw/clinical-trials-sec/sec/*.json", "raw/clinical-trials-sec/sec/*.txt"]
     }
   ],
-  "transformation": {"command": "python3 data/scripts/worlds/clinical_trials_fixture.py tests/fixtures/worlds/clinical_trials/fixture.json --clinicaltrials-source data/raw/clinical-trials-sec/clinicaltrials-gov/NCT06260774.json --sec-source data/raw/clinical-trials-sec/sec/0001104659-26-069810-ex99-1.html", "derived_artifact": "tests/fixtures/worlds/clinical_trials/fixture.json", "schema_version": "clinical-trials-sec-ledger-0.1", "row_count": 2, "sha256": "f054a3800d4ee1fef6787bf7c55a4a3894c3b560ff450caa05d9589a81c05dd9"},
-  "material_assumptions": ["NCT/sponsor/intervention joins are exact or inconclusive.", "Human confirmation is required before an asserted span enters the ledger.", "A registry match does not establish efficacy or corporate truth."],
+  "transformation": {"command": "python3 data/scripts/worlds/clinical_trials_fixture.py tests/fixtures/worlds/clinical_trials/fixture.json --clinicaltrials-source data/raw/clinical-trials-sec/clinicaltrials-gov/NCT06260774.json --sec-source data/raw/clinical-trials-sec/sec/0001104659-26-069810-ex99-1.html --review-artifact experiments/evidence_worlds/preregistration/clinical-trials-sec-review.json", "derived_artifact": "tests/fixtures/worlds/clinical_trials/fixture.json", "schema_version": "clinical-trials-sec-ledger-0.2", "row_count": 2, "sha256": "e8a7f5836e9fa0aa2a38b24f51bf4e4e2db1b2c744ad61e6078c8be24e5d0e6d"},
+  "material_assumptions": ["NCT/sponsor/intervention joins are exact or inconclusive.", "A separate, hash-bound operator review is required before an identity relationship enters the ledger.", "A registry match does not establish efficacy or corporate truth."],
   "fatal_gates": [
     {"id": "official_source_identity", "status": "pass"},
     {"id": "license_and_custody", "status": "pass"},
@@ -54,6 +54,6 @@
     {"id": "world_isolation_and_fail_closed", "status": "pass"}
   ],
   "decisive_controls": {"positive": "matching NCT and SEC assertion at or before as_of", "negative": "wrong sponsor/intervention or post-as_of result", "null": "missing accession/locator or ambiguous identity", "corruption": "modified response bytes", "isolation": "Open Targets/Arc records cannot satisfy this claim"},
-  "evidence_paths": {"audit_card": "experiments/evidence_worlds/preregistration/clinical-trials-sec.yaml", "manifest": "data/manifests/worlds/clinical-trials-sec.json", "raw": "data/raw/clinical-trials-sec/", "derived": "data/derived/clinical-trials-sec/", "results": "experiments/evidence_worlds/results/clinical-trials-sec/"},
+  "evidence_paths": {"audit_card": "experiments/evidence_worlds/preregistration/clinical-trials-sec.yaml", "review": "experiments/evidence_worlds/preregistration/clinical-trials-sec-review.json", "manifest": "data/manifests/worlds/clinical-trials-sec.json", "raw": "data/raw/clinical-trials-sec/", "derived": "data/derived/clinical-trials-sec/", "results": "experiments/evidence_worlds/results/clinical-trials-sec/"},
   "public_policy": "No raw filing, quoted span, person data, or live source response is public; only sanitized receipts after all gates pass."
 }

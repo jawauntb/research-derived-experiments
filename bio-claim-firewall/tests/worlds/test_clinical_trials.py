@@ -1,15 +1,23 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
 from worlds.clinical_trials import (
     ClinicalTrialsAdapter,
+    ClinicalTrialsClaim,
     OutcomeKind,
     check_clinical_trials_claim,
 )
 
-FIXTURE = Path(__file__).parents[1] / "fixtures" / "worlds" / "clinical_trials" / "fixture.json"
+FIXTURE = (
+    Path(__file__).parents[1]
+    / "fixtures"
+    / "worlds"
+    / "clinical_trials"
+    / "fixture.json"
+)
 
 
 def _claim(**changes: object) -> dict[str, object]:
@@ -27,26 +35,71 @@ def _claim(**changes: object) -> dict[str, object]:
     return value
 
 
-def test_exact_human_confirmed_timestamped_match_is_accepted_and_stable() -> None:
+def test_exact_separately_reviewed_timestamped_match_is_accepted_and_stable() -> None:
     adapter = ClinicalTrialsAdapter(FIXTURE)
     first = adapter.check(_claim())
     second = adapter.check(_claim())
     assert first.verdict is OutcomeKind.ACCEPTED_CONDITIONALLY
     assert first.outcome == "ACCEPTED"
-    assert first.evidence is not None and first.evidence["human_confirmed"] is True
+    assert (
+        first.evidence is not None and first.evidence["relationship_reviewed"] is True
+    )
+    assert len(first.evidence["review_artifact_sha256"]) == 64
     assert first.receipt == second.receipt
 
 
 def test_identity_and_span_mutations_are_rejected() -> None:
     adapter = ClinicalTrialsAdapter(FIXTURE)
-    assert adapter.check(_claim(sponsor="Different Sponsor")).reason_code == "SPONSOR_MISMATCH"
-    assert adapter.check(_claim(asserted_span_sha256="b" * 64)).reason_code == "ASSERTED_SPAN_MISMATCH"
+    assert (
+        adapter.check(_claim(sponsor="Different Sponsor")).reason_code
+        == "SPONSOR_MISMATCH"
+    )
+    assert (
+        adapter.check(_claim(asserted_span_sha256="b" * 64)).reason_code
+        == "ASSERTED_SPAN_MISMATCH"
+    )
+
+
+def test_cross_nct_source_pair_is_rejected_despite_recomputed_fixture_integrity(
+    tmp_path: Path,
+) -> None:
+    fixture = json.loads(FIXTURE.read_text(encoding="utf-8"))
+    sec_record = next(
+        record
+        for record in fixture["records"]
+        if record["source"] == "sec-edgar-submissions-and-archives"
+    )
+    sec_record["nct_id"] = "NCT99999999"
+    payload = {
+        key: fixture[key]
+        for key in ("schema_version", "world_id", "version", "source_hashes", "records")
+    }
+    canonical = json.dumps(
+        payload,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+        allow_nan=False,
+    ).encode("utf-8")
+    fixture["integrity_sha256"] = hashlib.sha256(canonical).hexdigest()
+    path = tmp_path / "fixture.json"
+    path.write_text(json.dumps(fixture), encoding="utf-8")
+
+    result = check_clinical_trials_claim(_claim(), path)
+
+    assert result.verdict is OutcomeKind.CHECKER_ERROR
 
 
 def test_post_cutoff_and_missing_identity_are_inconclusive() -> None:
     adapter = ClinicalTrialsAdapter(FIXTURE)
-    assert adapter.check(_claim(as_of="2026-06-03T08:08:00Z")).verdict is OutcomeKind.INCONCLUSIVE
-    assert adapter.check(_claim(sec_accession="0001104659-26-069899")).reason_code == "IDENTITY_NOT_RESOLVED"
+    assert (
+        adapter.check(_claim(as_of="2026-06-03T08:08:00Z")).verdict
+        is OutcomeKind.INCONCLUSIVE
+    )
+    assert (
+        adapter.check(_claim(sec_accession="0001104659-26-069899")).reason_code
+        == "IDENTITY_NOT_RESOLVED"
+    )
 
 
 def test_foreign_world_and_corrupt_fixture_fail_closed(tmp_path: Path) -> None:
@@ -57,4 +110,77 @@ def test_foreign_world_and_corrupt_fixture_fail_closed(tmp_path: Path) -> None:
     corrupted["records"][0]["sponsor"] = "tampered"
     path = tmp_path / "fixture.json"
     path.write_text(json.dumps(corrupted), encoding="utf-8")
-    assert check_clinical_trials_claim(_claim(), path).verdict is OutcomeKind.CHECKER_ERROR
+    assert (
+        check_clinical_trials_claim(_claim(), path).verdict is OutcomeKind.CHECKER_ERROR
+    )
+
+    typed_foreign = ClinicalTrialsClaim(
+        nct_id="NCT06260774",
+        sponsor="TransCode Therapeutics",
+        intervention="TTX-MC138",
+        sec_accession="0001104659-26-069810",
+        cik="0001829635",
+        exhibit_locator="EX-99.1#NCT06260774",
+        asserted_span_sha256="1ec3a0b235e0653bbced4f641d97df751f475020f5e18f72a71b5d354b973f33",
+        as_of="2026-06-03T08:09:00Z",
+        world_id="open-targets",
+        world_version="26.06",
+    )
+    assert adapter.check(typed_foreign).verdict is OutcomeKind.CHECKER_ERROR
+
+
+def test_missing_separate_review_binding_fails_closed(tmp_path: Path) -> None:
+    fixture = json.loads(FIXTURE.read_text(encoding="utf-8"))
+    sec_record = next(
+        record
+        for record in fixture["records"]
+        if record["source"] == "sec-edgar-submissions-and-archives"
+    )
+    sec_record.pop("review_artifact_sha256")
+    payload = {
+        key: fixture[key]
+        for key in ("schema_version", "world_id", "version", "source_hashes", "records")
+    }
+    canonical = json.dumps(
+        payload,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+        allow_nan=False,
+    ).encode("utf-8")
+    fixture["integrity_sha256"] = hashlib.sha256(canonical).hexdigest()
+    path = tmp_path / "fixture.json"
+    path.write_text(json.dumps(fixture), encoding="utf-8")
+
+    assert (
+        check_clinical_trials_claim(_claim(), path).verdict is OutcomeKind.CHECKER_ERROR
+    )
+
+
+def test_self_consistent_forged_reviewed_relationship_is_rejected(
+    tmp_path: Path,
+) -> None:
+    fixture = json.loads(FIXTURE.read_text(encoding="utf-8"))
+    for record in fixture["records"]:
+        record["sponsor"] = "Forged Sponsor"
+        record["intervention"] = "FORGED-DRUG"
+    payload = {
+        key: fixture[key]
+        for key in ("schema_version", "world_id", "version", "source_hashes", "records")
+    }
+    canonical = json.dumps(
+        payload,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+        allow_nan=False,
+    ).encode("utf-8")
+    fixture["integrity_sha256"] = hashlib.sha256(canonical).hexdigest()
+    path = tmp_path / "fixture.json"
+    path.write_text(json.dumps(fixture), encoding="utf-8")
+
+    result = check_clinical_trials_claim(
+        _claim(sponsor="Forged Sponsor", intervention="FORGED-DRUG"), path
+    )
+
+    assert result.verdict is OutcomeKind.CHECKER_ERROR

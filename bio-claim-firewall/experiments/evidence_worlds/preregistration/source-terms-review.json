@@ -1,0 +1,49 @@
+{
+  "schema_version": "bio-claim-firewall-source-terms-review-0.1",
+  "reviewed_at": "2026-09-02T00:20:00Z",
+  "reviewer_role": "agent_operator_under_human_direction",
+  "review_method": "Compared each bounded public-demo source declaration to its official terms or license page and recorded the exact registry license identifier and reference URL.",
+  "scope_exclusion": "This is a source-terms and attribution check for the bounded public demo, not legal advice and not a guarantee that every future use is permitted.",
+  "sources": [
+    {
+      "world_id": "clinical-trials-sec",
+      "world_version": "2025-09-01_2026-09-01",
+      "source_id": "clinicaltrials-gov-api-v2",
+      "license_id": "ClinicalTrials.gov-terms-2023-01-31",
+      "official_url": "https://clinicaltrials.gov/data-api/api",
+      "terms_reference_url": "https://clinicaltrials.gov/about-site/terms-conditions",
+      "bounded_demo_obligation": "Attribute ClinicalTrials.gov, state the processing date and modifications, and do not imply NLM endorsement.",
+      "review_status": "operator_terms_reviewed"
+    },
+    {
+      "world_id": "clinical-trials-sec",
+      "world_version": "2025-09-01_2026-09-01",
+      "source_id": "sec-edgar-submissions-and-archives",
+      "license_id": "SEC-EDGAR-public-access",
+      "official_url": "https://www.sec.gov/search-filings/edgar-application-programming-interfaces",
+      "terms_reference_url": "https://www.sec.gov/search-filings/edgar-search-assistance/accessing-edgar-data",
+      "bounded_demo_obligation": "Cite the filing and comply with SEC fair-access requirements; do not imply SEC endorsement.",
+      "review_status": "operator_terms_reviewed"
+    },
+    {
+      "world_id": "open-targets",
+      "world_version": "26.06",
+      "source_id": "open-targets-graphql-26-06",
+      "license_id": "CC0-1.0",
+      "official_url": "https://platform-docs.opentargets.org/data-access/graphql-api",
+      "terms_reference_url": "https://platform-docs.opentargets.org/data-access/datasets",
+      "bounded_demo_obligation": "Preserve release and source attribution even though the platform data is declared CC0.",
+      "review_status": "operator_terms_reviewed"
+    },
+    {
+      "world_id": "arc-vcc",
+      "world_version": "2025-h1-measurements",
+      "source_id": "arc-cell-eval2-h1-vcc-real-subset",
+      "license_id": "MIT",
+      "official_url": "https://github.com/ArcInstitute/cell-eval2/blob/ddfc5df73c997b2f113a560bd863fb068f2b453a/docs/data/H1-VCC-2025-training.h5ad",
+      "terms_reference_url": "https://github.com/ArcInstitute/cell-eval2/blob/ddfc5df73c997b2f113a560bd863fb068f2b453a/LICENSE",
+      "bounded_demo_obligation": "Retain the MIT notice and Arc/cell-eval2 attribution; State model artifacts remain excluded.",
+      "review_status": "operator_terms_reviewed"
+    }
+  ]
+}

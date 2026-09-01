@@ -16,7 +16,16 @@ import math
 from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Literal
+from typing import Any, Literal, cast
+
+from audit import canonicalize_for_hash
+
+from worlds.registry import (
+    WorldRegistryError,
+    get_world,
+    receipt_world_digest,
+    validate_world_artifacts,
+)
 
 ARC_VCC_WORLD_ID = "arc-vcc"
 ARC_VCC_WORLD_VERSION = "2025-h1-measurements"
@@ -42,17 +51,12 @@ class ArcVCCIntegrityError(ValueError):
 
 
 def _canonical_json(value: Any) -> bytes:
-    return json.dumps(value, ensure_ascii=True, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return canonicalize_for_hash(value)
 
 
 def _world_digest(source_hashes: Mapping[str, str]) -> str:
-    payload = {
-        "world_id": ARC_VCC_WORLD_ID,
-        "world_version": ARC_VCC_WORLD_VERSION,
-        "source_hashes": dict(sorted(source_hashes.items())),
-        "adapter_schema": _FIXTURE_SCHEMA_VERSION,
-    }
-    return hashlib.sha256(_canonical_json(payload)).hexdigest()
+    world = get_world(ARC_VCC_WORLD_ID, ARC_VCC_WORLD_VERSION)
+    return receipt_world_digest(world, source_hashes)
 
 
 def _sha256(path: Path) -> str:
@@ -77,7 +81,11 @@ def _require_sha(value: Any, field: str) -> str:
 
 
 def _finite_number(value: Any, field: str) -> float:
-    if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(float(value)):
+    if (
+        isinstance(value, bool)
+        or not isinstance(value, (int, float))
+        or not math.isfinite(float(value))
+    ):
         raise ArcVCCIntegrityError(f"{field} must be a finite number")
     return float(value)
 
@@ -86,7 +94,7 @@ def _direction(value: Any) -> Direction:
     value = _require_text(value, "direction").casefold()
     if value not in _DIRECTIONS:
         raise ArcVCCIntegrityError(f"unsupported direction {value!r}")
-    return value  # type: ignore[return-value]
+    return cast(Direction, value)
 
 
 @dataclass(frozen=True, slots=True)
@@ -117,17 +125,36 @@ class FixtureMetadata:
     @classmethod
     def from_mapping(cls, raw: Mapping[str, Any]) -> FixtureMetadata:
         required = {
-            "world_id", "world_version", "schema_version", "source_id", "official_url",
-            "license", "release", "retrieval_at", "measurement_sha256", "row_count",
-            "assay", "statistic", "threshold", "tuning_split", "evaluation_split",
-            "source_kind", "provenance_note", "raw_source_sha256", "raw_source_bytes",
+            "world_id",
+            "world_version",
+            "schema_version",
+            "source_id",
+            "official_url",
+            "license",
+            "release",
+            "retrieval_at",
+            "measurement_sha256",
+            "row_count",
+            "assay",
+            "statistic",
+            "threshold",
+            "tuning_split",
+            "evaluation_split",
+            "source_kind",
+            "provenance_note",
+            "raw_source_sha256",
+            "raw_source_bytes",
             "source_commit",
         }
         missing = sorted(required - set(raw))
         if missing:
             raise ArcVCCIntegrityError(f"metadata missing required fields: {missing}")
         row_count = raw["row_count"]
-        if isinstance(row_count, bool) or not isinstance(row_count, int) or row_count < 1:
+        if (
+            isinstance(row_count, bool)
+            or not isinstance(row_count, int)
+            or row_count < 1
+        ):
             raise ArcVCCIntegrityError("row_count must be a positive integer")
         raw_source_bytes = raw["raw_source_bytes"]
         if (
@@ -145,8 +172,12 @@ class FixtureMetadata:
             license=_require_text(raw["license"], "license"),
             release=_require_text(raw["release"], "release"),
             retrieval_at=_require_text(raw["retrieval_at"], "retrieval_at"),
-            measurement_sha256=_require_sha(raw["measurement_sha256"], "measurement_sha256"),
-            raw_source_sha256=_require_sha(raw["raw_source_sha256"], "raw_source_sha256"),
+            measurement_sha256=_require_sha(
+                raw["measurement_sha256"], "measurement_sha256"
+            ),
+            raw_source_sha256=_require_sha(
+                raw["raw_source_sha256"], "raw_source_sha256"
+            ),
             raw_source_bytes=raw_source_bytes,
             source_commit=_require_text(raw["source_commit"], "source_commit"),
             row_count=row_count,
@@ -159,18 +190,29 @@ class FixtureMetadata:
             provenance_note=_require_text(raw["provenance_note"], "provenance_note"),
         )
         if metadata.official_url != ARC_VCC_OFFICIAL_URL:
-            raise ArcVCCIntegrityError("fixture source URL is not the registered Arc VCC release")
+            raise ArcVCCIntegrityError(
+                "fixture source URL is not the registered Arc VCC release"
+            )
         if metadata.source_id != ARC_VCC_SOURCE_ID:
-            raise ArcVCCIntegrityError("fixture source identity is not the registered Arc VCC release")
+            raise ArcVCCIntegrityError(
+                "fixture source identity is not the registered Arc VCC release"
+            )
         if metadata.license != "MIT":
-            raise ArcVCCIntegrityError("Arc fixture requires the source repository's MIT license")
+            raise ArcVCCIntegrityError(
+                "Arc fixture requires the source repository's MIT license"
+            )
         if metadata.schema_version != _FIXTURE_SCHEMA_VERSION:
             raise ArcVCCIntegrityError("unsupported Arc fixture schema version")
         if metadata.source_kind != "official_real_subset":
             raise ArcVCCIntegrityError("unsupported Arc fixture source kind")
         if metadata.source_commit != ARC_VCC_SOURCE_COMMIT:
-            raise ArcVCCIntegrityError("Arc fixture source commit is not the registered release")
-        if metadata.tuning_split not in _SPLITS or metadata.evaluation_split not in _SPLITS:
+            raise ArcVCCIntegrityError(
+                "Arc fixture source commit is not the registered release"
+            )
+        if (
+            metadata.tuning_split not in _SPLITS
+            or metadata.evaluation_split not in _SPLITS
+        ):
             raise ArcVCCIntegrityError("metadata declares an unknown split")
         if metadata.tuning_split == metadata.evaluation_split:
             raise ArcVCCIntegrityError("tuning and evaluation splits must differ")
@@ -220,13 +262,23 @@ class Measurement:
     @classmethod
     def from_mapping(cls, raw: Mapping[str, Any], *, threshold: float) -> Measurement:
         required = {
-            "measurement_id", "perturbed_gene", "response_gene", "assay", "split",
-            "summary_statistic", "value", "direction", "source_row",
-            "perturbed_cells", "control_cells",
+            "measurement_id",
+            "perturbed_gene",
+            "response_gene",
+            "assay",
+            "split",
+            "summary_statistic",
+            "value",
+            "direction",
+            "source_row",
+            "perturbed_cells",
+            "control_cells",
         }
         missing = sorted(required - set(raw))
         if missing:
-            raise ArcVCCIntegrityError(f"measurement missing required fields: {missing}")
+            raise ArcVCCIntegrityError(
+                f"measurement missing required fields: {missing}"
+            )
         perturbed_cells = raw["perturbed_cells"]
         control_cells = raw["control_cells"]
         for value, field in (
@@ -241,18 +293,30 @@ class Measurement:
             response_gene=_require_text(raw["response_gene"], "response_gene"),
             assay=_require_text(raw["assay"], "assay"),
             split=_require_text(raw["split"], "split"),
-            summary_statistic=_require_text(raw["summary_statistic"], "summary_statistic"),
+            summary_statistic=_require_text(
+                raw["summary_statistic"], "summary_statistic"
+            ),
             value=_finite_number(raw["value"], "value"),
             direction=_direction(raw["direction"]),
             source_row=_require_text(raw["source_row"], "source_row"),
             perturbed_cells=perturbed_cells,
             control_cells=control_cells,
         )
-        derived: Direction = "increases" if measurement.value > threshold else "decreases" if measurement.value < -threshold else "null"
+        derived: Direction = (
+            "increases"
+            if measurement.value > threshold
+            else "decreases"
+            if measurement.value < -threshold
+            else "null"
+        )
         if measurement.direction != derived:
-            raise ArcVCCIntegrityError(f"measurement {measurement.measurement_id!r} has an inconsistent direction")
+            raise ArcVCCIntegrityError(
+                f"measurement {measurement.measurement_id!r} has an inconsistent direction"
+            )
         if measurement.split not in _SPLITS:
-            raise ArcVCCIntegrityError(f"measurement {measurement.measurement_id!r} has an unknown split")
+            raise ArcVCCIntegrityError(
+                f"measurement {measurement.measurement_id!r} has an unknown split"
+            )
         return measurement
 
     def as_dict(self) -> dict[str, Any]:
@@ -284,24 +348,42 @@ class ArcVCCClaim:
     world_version: str = ARC_VCC_WORLD_VERSION
 
     @classmethod
-    def from_mapping(cls, raw: Mapping[str, Any], *, expected_world_id: str = ARC_VCC_WORLD_ID, expected_world_version: str = ARC_VCC_WORLD_VERSION) -> ArcVCCClaim:
+    def from_mapping(
+        cls,
+        raw: Mapping[str, Any],
+        *,
+        expected_world_id: str = ARC_VCC_WORLD_ID,
+        expected_world_version: str = ARC_VCC_WORLD_VERSION,
+    ) -> ArcVCCClaim:
         if not isinstance(raw, Mapping):
             raise TypeError("Arc VCC claim must be an object")
-        required = {"perturbed_gene", "response_gene", "summary_statistic", "direction", "threshold", "assay", "split"}
+        required = {
+            "perturbed_gene",
+            "response_gene",
+            "summary_statistic",
+            "direction",
+            "threshold",
+            "assay",
+            "split",
+        }
         missing = sorted(required - set(raw))
         if missing:
             raise ValueError(f"Arc VCC claim missing required fields: {missing}")
         world_id = raw.get("world_id", expected_world_id)
         world_version = raw.get("world_version", expected_world_version)
         if world_id != expected_world_id or world_version != expected_world_version:
-            raise ArcVCCIntegrityError("claim world identity does not match the selected Arc VCC fixture")
+            raise ArcVCCIntegrityError(
+                "claim world identity does not match the selected Arc VCC fixture"
+            )
         split = _require_text(raw["split"], "split")
         if split not in _SPLITS:
             raise ValueError(f"unsupported split {split!r}")
         return cls(
             perturbed_gene=_require_text(raw["perturbed_gene"], "perturbed_gene"),
             response_gene=_require_text(raw["response_gene"], "response_gene"),
-            summary_statistic=_require_text(raw["summary_statistic"], "summary_statistic"),
+            summary_statistic=_require_text(
+                raw["summary_statistic"], "summary_statistic"
+            ),
             direction=_direction(raw["direction"]),
             threshold=_finite_number(raw["threshold"], "threshold"),
             assay=_require_text(raw["assay"], "assay"),
@@ -361,14 +443,18 @@ def _read_json(path: Path) -> Any:
     try:
         return json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
-        raise ArcVCCIntegrityError(f"cannot read JSON fixture file {path}: {exc}") from exc
+        raise ArcVCCIntegrityError(
+            f"cannot read JSON fixture file {path}: {exc}"
+        ) from exc
 
 
 def _read_measurements(path: Path, *, threshold: float) -> tuple[Measurement, ...]:
     try:
         lines = path.read_text(encoding="utf-8").splitlines()
     except OSError as exc:
-        raise ArcVCCIntegrityError(f"cannot read measurement ledger {path}: {exc}") from exc
+        raise ArcVCCIntegrityError(
+            f"cannot read measurement ledger {path}: {exc}"
+        ) from exc
     rows: list[Measurement] = []
     for line_number, line in enumerate(lines, start=1):
         if not line.strip():
@@ -376,16 +462,22 @@ def _read_measurements(path: Path, *, threshold: float) -> tuple[Measurement, ..
         try:
             raw = json.loads(line)
         except json.JSONDecodeError as exc:
-            raise ArcVCCIntegrityError(f"malformed measurement JSON at line {line_number}") from exc
+            raise ArcVCCIntegrityError(
+                f"malformed measurement JSON at line {line_number}"
+            ) from exc
         if not isinstance(raw, Mapping):
-            raise ArcVCCIntegrityError(f"measurement line {line_number} is not an object")
+            raise ArcVCCIntegrityError(
+                f"measurement line {line_number} is not an object"
+            )
         rows.append(Measurement.from_mapping(raw, threshold=threshold))
     return tuple(rows)
 
 
 def _validate_rows(metadata: FixtureMetadata, rows: tuple[Measurement, ...]) -> None:
     if len(rows) != metadata.row_count:
-        raise ArcVCCIntegrityError(f"metadata row_count={metadata.row_count} but ledger has {len(rows)} rows")
+        raise ArcVCCIntegrityError(
+            f"metadata row_count={metadata.row_count} but ledger has {len(rows)} rows"
+        )
     ids = [row.measurement_id for row in rows]
     if len(set(ids)) != len(ids):
         raise ArcVCCIntegrityError("measurement ids must be unique")
@@ -397,7 +489,9 @@ def _validate_rows(metadata: FixtureMetadata, rows: tuple[Measurement, ...]) -> 
             raise ArcVCCIntegrityError(f"split leakage for measurement key {key!r}")
         keys[key] = row.split
         if row.assay != metadata.assay or row.summary_statistic != metadata.statistic:
-            raise ArcVCCIntegrityError("fixture contains an assay/statistic outside its declared scope")
+            raise ArcVCCIntegrityError(
+                "fixture contains an assay/statistic outside its declared scope"
+            )
 
 
 def load_fixture(root: Path) -> _Fixture:
@@ -413,13 +507,30 @@ def load_fixture(root: Path) -> _Fixture:
     metadata = FixtureMetadata.from_mapping(raw_metadata)
     actual_measurement_sha = _sha256(measurements_path)
     if actual_measurement_sha != metadata.measurement_sha256:
-        raise ArcVCCIntegrityError("measurement ledger hash does not match fixture metadata")
+        raise ArcVCCIntegrityError(
+            "measurement ledger hash does not match fixture metadata"
+        )
     rows = _read_measurements(measurements_path, threshold=metadata.threshold)
     _validate_rows(metadata, rows)
     source_hashes = {
         metadata.source_id: metadata.raw_source_sha256,
         "arc-vcc-derived-ledger": actual_measurement_sha,
     }
+    bundle_digest = hashlib.sha256(
+        _canonical_json(
+            {
+                "measurement_sha256": actual_measurement_sha,
+                "metadata_sha256": _sha256(metadata_path),
+            }
+        )
+    ).hexdigest()
+    try:
+        validate_world_artifacts(
+            get_world(ARC_VCC_WORLD_ID, ARC_VCC_WORLD_VERSION),
+            {"arc-vcc-fixture-bundle": bundle_digest},
+        )
+    except WorldRegistryError as exc:
+        raise ArcVCCIntegrityError(str(exc)) from exc
     return _Fixture(metadata=metadata, measurements=rows, source_hashes=source_hashes)
 
 
@@ -447,8 +558,13 @@ class ArcVCCAdapter:
     """Bounded deterministic checker for one explicitly selected Arc fixture."""
 
     def __init__(self, fixture: _Fixture, *, checker_version: str = "0.1.0") -> None:
-        if fixture.metadata.world_id != ARC_VCC_WORLD_ID or fixture.metadata.world_version != ARC_VCC_WORLD_VERSION:
-            raise ArcVCCIntegrityError("fixture world identity is not the registered Arc VCC H1 world")
+        if (
+            fixture.metadata.world_id != ARC_VCC_WORLD_ID
+            or fixture.metadata.world_version != ARC_VCC_WORLD_VERSION
+        ):
+            raise ArcVCCIntegrityError(
+                "fixture world identity is not the registered Arc VCC H1 world"
+            )
         self._fixture = fixture
         self.checker_version = checker_version
 
@@ -467,9 +583,18 @@ class ArcVCCAdapter:
     def check(self, claim: ArcVCCClaim | Mapping[str, Any]) -> ArcVCCResult:
         """Check a claim; malformed identity/corrupt fixture always fails closed."""
         try:
-            normalized = claim if isinstance(claim, ArcVCCClaim) else ArcVCCClaim.from_mapping(claim)
-            if normalized.world_id != self.metadata.world_id or normalized.world_version != self.metadata.world_version:
-                raise ArcVCCIntegrityError("claim world identity does not match fixture")
+            normalized = (
+                claim
+                if isinstance(claim, ArcVCCClaim)
+                else ArcVCCClaim.from_mapping(claim)
+            )
+            if (
+                normalized.world_id != self.metadata.world_id
+                or normalized.world_version != self.metadata.world_version
+            ):
+                raise ArcVCCIntegrityError(
+                    "claim world identity does not match fixture"
+                )
             return self._evaluate(normalized)
         except ArcVCCIntegrityError as exc:
             return self._result("CHECKER_ERROR", None, None, str(exc), None)
@@ -477,9 +602,20 @@ class ArcVCCAdapter:
             return self._result("INCONCLUSIVE", None, None, str(exc), None)
 
     def _evaluate(self, claim: ArcVCCClaim) -> ArcVCCResult:
-        if claim.assay != self.metadata.assay or claim.summary_statistic != self.metadata.statistic:
-            return self._result("INCONCLUSIVE", claim, None, "claim is outside the frozen Arc H1 assay/statistic scope", None)
-        if not math.isclose(claim.threshold, self.metadata.threshold, rel_tol=0.0, abs_tol=1e-12):
+        if (
+            claim.assay != self.metadata.assay
+            or claim.summary_statistic != self.metadata.statistic
+        ):
+            return self._result(
+                "INCONCLUSIVE",
+                claim,
+                None,
+                "claim is outside the frozen Arc H1 assay/statistic scope",
+                None,
+            )
+        if not math.isclose(
+            claim.threshold, self.metadata.threshold, rel_tol=0.0, abs_tol=1e-12
+        ):
             return self._result(
                 "INCONCLUSIVE",
                 claim,
@@ -488,7 +624,8 @@ class ArcVCCAdapter:
                 None,
             )
         matches = tuple(
-            row for row in self._fixture.measurements
+            row
+            for row in self._fixture.measurements
             if row.perturbed_gene == claim.perturbed_gene
             and row.response_gene == claim.response_gene
             and row.assay == claim.assay
@@ -496,9 +633,21 @@ class ArcVCCAdapter:
             and row.split == claim.split
         )
         if not matches:
-            return self._result("INCONCLUSIVE", claim, None, "no measurement exists in the requested Arc H1 split", None)
+            return self._result(
+                "INCONCLUSIVE",
+                claim,
+                None,
+                "no measurement exists in the requested Arc H1 split",
+                None,
+            )
         if len(matches) != 1:
-            return self._result("CHECKER_ERROR", claim, None, "fixture has multiple measurements for the exact claim key", None)
+            return self._result(
+                "CHECKER_ERROR",
+                claim,
+                None,
+                "fixture has multiple measurements for the exact claim key",
+                None,
+            )
         row = matches[0]
         evidence = {
             "record_id": row.measurement_id,
@@ -514,12 +663,37 @@ class ArcVCCAdapter:
             "control_cells": row.control_cells,
         }
         if claim.direction == row.direction:
-            return self._result("ACCEPTED", claim, evidence, "frozen measurement supports the asserted direction", {"id": "ARC-H1-001", "title": "Declared H1 direction matches record"})
+            return self._result(
+                "ACCEPTED",
+                claim,
+                evidence,
+                "frozen measurement supports the asserted direction",
+                {"id": "ARC-H1-001", "title": "Declared H1 direction matches record"},
+            )
         if row.direction == "null":
-            return self._result("REJECTED", claim, evidence, "measurement is below the frozen threshold and has no directional response", {"id": "ARC-H1-003", "title": "H1 threshold yields null response"})
-        return self._result("REJECTED", claim, evidence, "frozen measurement reports the opposite direction", {"id": "ARC-H1-002", "title": "Declared H1 direction conflicts"})
+            return self._result(
+                "REJECTED",
+                claim,
+                evidence,
+                "measurement is below the frozen threshold and has no directional response",
+                {"id": "ARC-H1-003", "title": "H1 threshold yields null response"},
+            )
+        return self._result(
+            "REJECTED",
+            claim,
+            evidence,
+            "frozen measurement reports the opposite direction",
+            {"id": "ARC-H1-002", "title": "Declared H1 direction conflicts"},
+        )
 
-    def _result(self, outcome: Outcome, claim: ArcVCCClaim | None, evidence: dict[str, Any] | None, reason: str, winning_rule: dict[str, str] | None) -> ArcVCCResult:
+    def _result(
+        self,
+        outcome: Outcome,
+        claim: ArcVCCClaim | None,
+        evidence: dict[str, Any] | None,
+        reason: str,
+        winning_rule: dict[str, str] | None,
+    ) -> ArcVCCResult:
         claim_dict = claim.as_dict() if claim is not None else None
         payload = {
             "receipt_version": "2",
@@ -537,14 +711,35 @@ class ArcVCCAdapter:
             "schema_version": ARC_VCC_SCHEMA_VERSION,
         }
         receipt_id = hashlib.sha256(_canonical_json(payload)).hexdigest()
-        receipt = {"receipt_version": "2", "receipt_id": receipt_id, "canonical_payload": payload}
-        return ArcVCCResult(outcome, claim_dict, evidence, reason, winning_rule, self.metadata.world_id, self.metadata.world_version, dict(sorted(self._fixture.source_hashes.items())), receipt)
+        receipt = {
+            "receipt_version": "2",
+            "receipt_id": receipt_id,
+            "canonical_payload": payload,
+        }
+        return ArcVCCResult(
+            outcome,
+            claim_dict,
+            evidence,
+            reason,
+            winning_rule,
+            self.metadata.world_id,
+            self.metadata.world_version,
+            dict(sorted(self._fixture.source_hashes.items())),
+            receipt,
+        )
 
 
-def check_arc_vcc_claim(root: Path, claim: ArcVCCClaim | Mapping[str, Any], *, checker_version: str = "0.1.0") -> ArcVCCResult:
+def check_arc_vcc_claim(
+    root: Path,
+    claim: ArcVCCClaim | Mapping[str, Any],
+    *,
+    checker_version: str = "0.1.0",
+) -> ArcVCCResult:
     """Convenience function for callers that keep fixture custody outside git."""
     try:
-        return ArcVCCAdapter.from_path(root, checker_version=checker_version).check(claim)
+        return ArcVCCAdapter.from_path(root, checker_version=checker_version).check(
+            claim
+        )
     except ArcVCCIntegrityError as exc:
         # A receipt-compatible error is useful to batch callers, even when the
         # fixture cannot be loaded far enough to establish its source hashes.
@@ -552,7 +747,6 @@ def check_arc_vcc_claim(root: Path, claim: ArcVCCClaim | Mapping[str, Any], *, c
             "receipt_version": "2",
             "world_id": ARC_VCC_WORLD_ID,
             "world_version": ARC_VCC_WORLD_VERSION,
-            "world_digest": _world_digest({}),
             "source_hashes": {},
             "claim": dict(claim) if isinstance(claim, Mapping) else None,
             "evidence": None,
@@ -564,13 +758,37 @@ def check_arc_vcc_claim(root: Path, claim: ArcVCCClaim | Mapping[str, Any], *, c
             "schema_version": ARC_VCC_SCHEMA_VERSION,
         }
         receipt_id = hashlib.sha256(_canonical_json(payload)).hexdigest()
-        receipt = {"receipt_version": "2", "receipt_id": receipt_id, "canonical_payload": payload}
-        return ArcVCCResult("CHECKER_ERROR", None, None, str(exc), None, ARC_VCC_WORLD_ID, ARC_VCC_WORLD_VERSION, {}, receipt)
+        receipt = {
+            "receipt_version": "2",
+            "receipt_id": receipt_id,
+            "canonical_payload": payload,
+        }
+        return ArcVCCResult(
+            "CHECKER_ERROR",
+            None,
+            None,
+            str(exc),
+            None,
+            ARC_VCC_WORLD_ID,
+            ARC_VCC_WORLD_VERSION,
+            {},
+            receipt,
+        )
 
 
 __all__ = [
-    "ARC_VCC_OFFICIAL_URL", "ARC_VCC_RULE_VERSION", "ARC_VCC_SCHEMA_VERSION",
-    "ARC_VCC_SOURCE_COMMIT", "ARC_VCC_SOURCE_ID", "ArcVCCAdapter", "ArcVCCClaim",
-    "ArcVCCIntegrityError", "ArcVCCResult", "FixtureMetadata", "Measurement",
-    "check_arc_vcc_claim", "load_fixture", "validate_fixture",
+    "ARC_VCC_OFFICIAL_URL",
+    "ARC_VCC_RULE_VERSION",
+    "ARC_VCC_SCHEMA_VERSION",
+    "ARC_VCC_SOURCE_COMMIT",
+    "ARC_VCC_SOURCE_ID",
+    "ArcVCCAdapter",
+    "ArcVCCClaim",
+    "ArcVCCIntegrityError",
+    "ArcVCCResult",
+    "FixtureMetadata",
+    "Measurement",
+    "check_arc_vcc_claim",
+    "load_fixture",
+    "validate_fixture",
 ]

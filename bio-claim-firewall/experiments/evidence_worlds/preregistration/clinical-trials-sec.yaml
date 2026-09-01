@@ -2,11 +2,13 @@ schema_version: "1.0.0"
 world_id: "clinical-trials-sec"
 version: "2025-09-01_2026-09-01"
 rank: 1
-target_and_decision: "Assess whether a human-confirmed disclosure assertion is consistent with registered status/results available at its disclosure time."
-representation: "NCT ID, sponsor, intervention, SEC CIK/accession/exhibit locator, hashed asserted span, RFC3339 UTC as_of; registered disclosure, not efficacy."
+target_and_decision: "Assess whether a separately reviewed disclosure identity relationship is consistent with the registered trial identity available at its disclosure time."
+representation: "NCT ID, sponsor, intervention, SEC CIK/accession/exhibit locator, hashed identity and NCT spans, review-artifact hash, RFC3339 UTC as_of; registered disclosure, not efficacy."
 data_clock: "ClinicalTrials.gov API v2 and SEC EDGAR rolling sources; 2025-09-01..2026-09-01 window; cutoff at source acceptance time."
-assumptions: ["Exact identity joins or inconclusive.", "Human confirmation precedes ledger entry.", "Post-as_of records cannot support a prior assertion."]
-fatal_gates: [official_source_identity, license_and_custody, timestamp_cutoff_no_time_travel, complete_hashes_and_schema, organic_controls, world_isolation]
-controls: [positive_matching_timestamped_assertion, negative_wrong_identity_or_post_cutoff, null_missing_locator_or_ambiguous_join, corruption_changed_response_bytes, cross_world_isolation]
-evidence_paths: {contract: "data/manifests/worlds/clinical-trials-sec.json", acquisition: "data/scripts/worlds/clinical_trials_fixture.py", raw: "data/raw/clinical-trials-sec/", derived: "tests/fixtures/worlds/clinical_trials/", results: "experiments/evidence_worlds/results/clinical-trials-sec/"}
+assumptions: ["Exact identity joins or inconclusive.", "A separate scope-limited review artifact precedes ledger entry.", "Post-as_of records cannot support a prior assertion."]
+registered_source_hashes: {clinicaltrials-gov-api-v2: "1c04f811b0300bbba0b56caaade1dfb5c78808169c152924024594124493345e", sec-edgar-submissions-and-archives: "873c321bc7a918f4e7ad2cee5cde2de814376a864f1fece3e0c483cc8911a80e"}
+fatal_gates: [official_source_identity, license_and_custody, timestamp_cutoff_no_time_travel, complete_hashes_and_schema, organic_positive_negative_null_controls, world_isolation_and_fail_closed]
+controls: [clinical-trials-positive-timestamped-join, clinical-trials-negative-sponsor-mismatch, clinical-trials-null-post-cutoff, clinical-trials-corrupted-registry-bytes, clinical-trials-cross-world-claim]
+locked_control_corpus: "experiments/evidence_worlds/preregistration/pilot_control_corpus.json#clinical-trials-sec"
+evidence_paths: {contract: "data/manifests/worlds/clinical-trials-sec.json", review: "experiments/evidence_worlds/preregistration/clinical-trials-sec-review.json", source_terms_review: "experiments/evidence_worlds/preregistration/source-terms-review.json", acquisition: "data/scripts/worlds/clinical_trials_fixture.py", raw: "data/raw/clinical-trials-sec/", derived: "tests/fixtures/worlds/clinical_trials/", results: "experiments/evidence_worlds/results/clinical-trials-sec/"}
 initial_state: "RESEARCHED"

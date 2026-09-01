@@ -1,323 +1,421 @@
 {
-  "schema_version": "receipt-v2",
-  "generated_from": "sanitized demo placeholders; replace with exported receipts when U5 is complete",
+  "generated_from": "bio-claim-firewall/experiments/evidence_worlds/results/pilot_readiness.json",
   "receipts": [
     {
+      "canonical_digest": "619503722db3613bfebf92c6cc97d68d135a939736b01ee92ca2d3af12bd4e0f",
+      "checker_version": "clinical-trials-sec/0.2.0",
+      "citations": [
+        {
+          "engine_id": "ctgov:NCT06260774:2025-10-02",
+          "locator": "ctgov:NCT06260774:2025-10-02",
+          "reference": "https://clinicaltrials.gov/study/NCT06260774",
+          "source": "ClinicalTrials.gov"
+        },
+        {
+          "engine_id": "sec:0001104659-26-069810:EX-99.1:NCT06260774",
+          "locator": "sec:0001104659-26-069810:EX-99.1:NCT06260774",
+          "reference": "https://www.sec.gov/Archives/edgar/data/1829635/000110465926069810/tm2616719d1_ex99-1.htm",
+          "source": "ClinicalTrials.gov + SEC EDGAR"
+        }
+      ],
+      "engine_receipt_id": "6307ec23e2abedcf17debb306e7d81b22cfeb48a231eb2ae15fd263e59095e54",
+      "evidence": {
+        "as_of": "2026-06-03T08:09:00Z",
+        "asserted_span_sha256": "1ec3a0b235e0653bbced4f641d97df751f475020f5e18f72a71b5d354b973f33",
+        "cik": "0001829635",
+        "exhibit_locator": "EX-99.1#NCT06260774",
+        "identity_span_locator": "EX-99.1:title",
+        "identity_span_sha256": "c4d3dac4e39dc0d86718ce08e63794f9c707eefe350cfc749c7693706ecf663e",
+        "nct_id": "NCT06260774",
+        "registry_record_id": "ctgov:NCT06260774:2025-10-02",
+        "relationship_reviewed": true,
+        "review_artifact_sha256": "0d389e7d00a70e104056ddc831e7f2ce086257ae8cc1e4f6648c330c438b74d2",
+        "reviewer_role": "agent_operator_under_human_direction",
+        "sec_accession": "0001104659-26-069810",
+        "sec_record_id": "sec:0001104659-26-069810:EX-99.1:NCT06260774",
+        "span_locator": "EX-99.1:sentence[NCT06260774]"
+      },
+      "license": "ClinicalTrials.gov terms (processed 2026-09-01) + SEC EDGAR public filing",
+      "normalized_claim": {
+        "as_of": "2026-06-03T08:09:00Z",
+        "asserted_span_sha256": "1ec3a0b235e0653bbced4f641d97df751f475020f5e18f72a71b5d354b973f33",
+        "cik": "0001829635",
+        "exhibit_locator": "EX-99.1#NCT06260774",
+        "intervention": "TTX-MC138",
+        "nct_id": "NCT06260774",
+        "sec_accession": "0001104659-26-069810",
+        "sponsor": "TransCode Therapeutics"
+      },
+      "outcome": "ACCEPTED",
+      "preset_label": "Accepted · identity consistent",
+      "reason": "The separately reviewed disclosure locator and span are consistent with timestamped registry identity.",
+      "reason_code": "REGISTERED_DISCLOSURE_CONSISTENT",
       "receipt_id": "trial-positive",
-      "world_id": "clinical_trials_sec",
-      "world_version": "demo-2026-09-01",
-      "world_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      "preset_label": "Positive · status matches",
-      "outcome": "ACCEPTED",
-      "normalized_claim": {
-        "record_kind": "trial_disclosure",
-        "registry_id": "NCT00000001",
-        "asserted_field": "overall_status",
-        "asserted_value": "COMPLETED",
-        "as_of": "2025-11-14"
-      },
-      "winning_rule": {
-        "id": "CT-STATUS-001",
-        "title": "Cited disclosure matches frozen status",
-        "rationale": "The asserted status equals the value in the selected, locator-bound registry record at the declared clock."
-      },
-      "scope": "Consistent with the cited registry status at the declared time; not a claim about efficacy, safety, or current status.",
-      "citations": [
-        {
-          "source": "ClinicalTrials.gov",
-          "locator": "NCT00000001 · overall_status",
-          "reference": "fixture://clinical-trials-sec/record-001"
-        }
-      ],
-      "evidence": {
-        "record_id": "record-001",
-        "comparison": "COMPLETED = COMPLETED"
-      },
+      "retrieval_clock": "2026-09-01T22:37:00Z",
+      "rule_version": null,
+      "schema_version_claim": "2.0.0",
+      "scope": "The filing's trial identity is consistent with the timestamped registry record; this is not an efficacy, safety, investment, or corporate-truth claim.",
       "source_hashes": {
-        "clinicaltrials_snapshot": "1111111111111111111111111111111111111111111111111111111111111111",
-        "derived_ledger": "2222222222222222222222222222222222222222222222222222222222222222"
+        "clinicaltrials-gov-api-v2": "1c04f811b0300bbba0b56caaade1dfb5c78808169c152924024594124493345e",
+        "sec-edgar-submissions-and-archives": "873c321bc7a918f4e7ad2cee5cde2de814376a864f1fece3e0c483cc8911a80e"
       },
-      "license": "ClinicalTrials.gov public data terms",
-      "retrieval_clock": "2026-09-01T00:00:00-04:00",
-      "checker_version": "demo-checker-v2",
-      "rule_version": "clinical-trials-rules-v1",
-      "schema_version_claim": "clinical-trials-claim-v1",
-      "canonical_digest": "6d87f75c3a6f68455010c7810471ac374a84083e5a602f577c7b495921d8cebf"
+      "source_reference": null,
+      "winning_rule": {
+        "id": "CTSEC.CONSISTENCY.01",
+        "rationale": "The exact NCT ID, sponsor, intervention, accession, exhibit locator, hashed span, and source clocks align.",
+        "title": "Disclosure identity is consistent"
+      },
+      "world_digest": "f9a3c368585e982824cb6c180267b782f6c3b14c1793f95379686f3bdbbcfdd1",
+      "world_id": "clinical-trials-sec",
+      "world_version": "2025-09-01_2026-09-01"
     },
     {
+      "canonical_digest": "41810be0e41b92369e1ad3391f137ed804d222509288785d6adddea1069e0ef0",
+      "checker_version": "clinical-trials-sec/0.2.0",
+      "citations": [
+        {
+          "engine_id": "ctgov:NCT06260774:2025-10-02",
+          "locator": "ctgov:NCT06260774:2025-10-02",
+          "reference": "https://clinicaltrials.gov/study/NCT06260774",
+          "source": "ClinicalTrials.gov"
+        },
+        {
+          "engine_id": "sec:0001104659-26-069810:EX-99.1:NCT06260774",
+          "locator": "sec:0001104659-26-069810:EX-99.1:NCT06260774",
+          "reference": "https://www.sec.gov/Archives/edgar/data/1829635/000110465926069810/tm2616719d1_ex99-1.htm",
+          "source": "ClinicalTrials.gov + SEC EDGAR"
+        }
+      ],
+      "engine_receipt_id": "6ac8ecb8ae71d8337f5227a799bbd0c7be19bc8d190d7bfe0387f9a42116294d",
+      "evidence": {
+        "record_ids": [
+          "ctgov:NCT06260774:2025-10-02",
+          "sec:0001104659-26-069810:EX-99.1:NCT06260774"
+        ],
+        "source_hashes": {
+          "clinicaltrials-gov-api-v2": "1c04f811b0300bbba0b56caaade1dfb5c78808169c152924024594124493345e",
+          "sec-edgar-submissions-and-archives": "873c321bc7a918f4e7ad2cee5cde2de814376a864f1fece3e0c483cc8911a80e"
+        }
+      },
+      "license": "ClinicalTrials.gov terms (processed 2026-09-01) + SEC EDGAR public filing",
+      "normalized_claim": {
+        "as_of": "2026-06-03T08:09:00Z",
+        "asserted_span_sha256": "1ec3a0b235e0653bbced4f641d97df751f475020f5e18f72a71b5d354b973f33",
+        "cik": "0001829635",
+        "exhibit_locator": "EX-99.1#NCT06260774",
+        "intervention": "TTX-MC138",
+        "nct_id": "NCT06260774",
+        "sec_accession": "0001104659-26-069810",
+        "sponsor": "Different Sponsor"
+      },
+      "outcome": "REJECTED",
+      "preset_label": "Rejected · sponsor conflicts",
+      "reason": "The declared sponsor does not match both timestamped source records.",
+      "reason_code": "SPONSOR_MISMATCH",
       "receipt_id": "trial-rejected",
-      "world_id": "clinical_trials_sec",
-      "world_version": "demo-2026-09-01",
-      "world_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      "preset_label": "Rejected · status conflicts",
-      "outcome": "REJECTED",
-      "normalized_claim": {
-        "record_kind": "trial_disclosure",
-        "registry_id": "NCT00000001",
-        "asserted_field": "overall_status",
-        "asserted_value": "RECRUITING",
-        "as_of": "2025-11-14"
-      },
-      "winning_rule": {
-        "id": "CT-STATUS-002",
-        "title": "Cited disclosure conflicts with frozen status",
-        "rationale": "The asserted status differs from the value in the selected, locator-bound registry record."
-      },
-      "scope": "The assertion is rejected for this registry record and time window; this does not infer why the values differ.",
-      "citations": [
-        {
-          "source": "ClinicalTrials.gov",
-          "locator": "NCT00000001 · overall_status",
-          "reference": "fixture://clinical-trials-sec/record-001"
-        }
-      ],
-      "evidence": {
-        "record_id": "record-001",
-        "comparison": "RECRUITING ≠ COMPLETED"
-      },
+      "retrieval_clock": "2026-09-01T22:37:00Z",
+      "rule_version": null,
+      "schema_version_claim": "2.0.0",
+      "scope": "The filing's trial identity is consistent with the timestamped registry record; this is not an efficacy, safety, investment, or corporate-truth claim.",
       "source_hashes": {
-        "clinicaltrials_snapshot": "1111111111111111111111111111111111111111111111111111111111111111",
-        "derived_ledger": "2222222222222222222222222222222222222222222222222222222222222222"
+        "clinicaltrials-gov-api-v2": "1c04f811b0300bbba0b56caaade1dfb5c78808169c152924024594124493345e",
+        "sec-edgar-submissions-and-archives": "873c321bc7a918f4e7ad2cee5cde2de814376a864f1fece3e0c483cc8911a80e"
       },
-      "license": "ClinicalTrials.gov public data terms",
-      "retrieval_clock": "2026-09-01T00:00:00-04:00",
-      "checker_version": "demo-checker-v2",
-      "rule_version": "clinical-trials-rules-v1",
-      "schema_version_claim": "clinical-trials-claim-v1",
-      "canonical_digest": "ca962d874d20664a96589c5eb41d7f08b851ac9ae4f7e6dd16ee65d40ed05d39"
+      "source_reference": null,
+      "winning_rule": {
+        "id": "CTSEC.IDENTITY.01",
+        "rationale": "The declared sponsor does not match both timestamped source records.",
+        "title": "Sponsor identity conflicts"
+      },
+      "world_digest": "f9a3c368585e982824cb6c180267b782f6c3b14c1793f95379686f3bdbbcfdd1",
+      "world_id": "clinical-trials-sec",
+      "world_version": "2025-09-01_2026-09-01"
     },
     {
-      "receipt_id": "trial-inconclusive",
-      "world_id": "clinical_trials_sec",
-      "world_version": "demo-2026-09-01",
-      "world_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      "preset_label": "Inconclusive · record unavailable",
+      "canonical_digest": "08360da673c99167c185dae38e83d613ff1d3ce82a5c0e778d2f091c284ab75d",
+      "checker_version": "clinical-trials-sec/0.2.0",
+      "citations": [],
+      "engine_receipt_id": "e8e610cbd05efb07bceae2e407aa512a36c2ddc6362ee2cc3903214b3804510b",
+      "evidence": null,
+      "license": "ClinicalTrials.gov terms (processed 2026-09-01) + SEC EDGAR public filing",
+      "normalized_claim": {
+        "as_of": "2026-06-03T08:09:00Z",
+        "asserted_span_sha256": "1ec3a0b235e0653bbced4f641d97df751f475020f5e18f72a71b5d354b973f33",
+        "cik": "0001829635",
+        "exhibit_locator": "EX-99.1#NCT06260774",
+        "intervention": "TTX-MC138",
+        "nct_id": "NCT06260774",
+        "sec_accession": "0001104659-26-069899",
+        "sponsor": "TransCode Therapeutics"
+      },
       "outcome": "INCONCLUSIVE",
-      "normalized_claim": {
-        "record_kind": "trial_disclosure",
-        "registry_id": "NCT00000099",
-        "asserted_field": "overall_status",
-        "asserted_value": "ACTIVE_NOT_RECRUITING",
-        "as_of": "2025-11-14"
-      },
-      "winning_rule": {
-        "id": "CT-INTEGRITY-004",
-        "title": "Evidence is not answerable",
-        "rationale": "The selected registry record is absent from the frozen compact fixture, so no status comparison is issued."
-      },
-      "scope": "No verdict is issued when the selected evidence is absent or cannot be uniquely resolved.",
-      "citations": [],
-      "reason": "No unique frozen record for NCT00000099 at the declared clock.",
+      "preset_label": "Inconclusive · accession absent",
+      "reason": "The exact NCT and SEC accession could not both be resolved.",
+      "reason_code": "IDENTITY_NOT_RESOLVED",
+      "receipt_id": "trial-inconclusive",
+      "retrieval_clock": "2026-09-01T22:37:00Z",
+      "rule_version": null,
+      "schema_version_claim": "2.0.0",
+      "scope": "No evidence scope was established because the requested claim was unresolved.",
       "source_hashes": {
-        "clinicaltrials_snapshot": "1111111111111111111111111111111111111111111111111111111111111111",
-        "derived_ledger": "2222222222222222222222222222222222222222222222222222222222222222"
+        "clinicaltrials-gov-api-v2": "1c04f811b0300bbba0b56caaade1dfb5c78808169c152924024594124493345e",
+        "sec-edgar-submissions-and-archives": "873c321bc7a918f4e7ad2cee5cde2de814376a864f1fece3e0c483cc8911a80e"
       },
-      "license": "ClinicalTrials.gov public data terms",
-      "retrieval_clock": "2026-09-01T00:00:00-04:00",
-      "checker_version": "demo-checker-v2",
-      "rule_version": "clinical-trials-rules-v1",
-      "schema_version_claim": "clinical-trials-claim-v1",
-      "canonical_digest": "cab82cd003d4918e6c7e159b50a040ff32e63c028645aa57815cc27ccd343e72"
+      "source_reference": null,
+      "winning_rule": {
+        "id": "NO_RULE",
+        "rationale": "The exact NCT and SEC accession cannot both be resolved in the frozen fixture.",
+        "title": "Evidence is not answerable"
+      },
+      "world_digest": "f9a3c368585e982824cb6c180267b782f6c3b14c1793f95379686f3bdbbcfdd1",
+      "world_id": "clinical-trials-sec",
+      "world_version": "2025-09-01_2026-09-01"
     },
     {
-      "receipt_id": "trial-error",
-      "world_id": "clinical_trials_sec",
-      "world_version": "demo-2026-09-01",
-      "world_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      "preset_label": "Error · integrity gate",
-      "outcome": "CHECKER_ERROR",
-      "normalized_claim": {
-        "record_kind": "trial_disclosure",
-        "registry_id": "NCT00000001",
-        "asserted_field": "overall_status",
-        "asserted_value": "COMPLETED",
-        "as_of": "2025-11-14"
-      },
-      "winning_rule": {
-        "id": "CT-INTEGRITY-001",
-        "title": "Evidence integrity gate stopped checking",
-        "rationale": "A changed source digest must fail closed before evidence comparison."
-      },
-      "scope": "No scientific outcome is available because the evidence integrity prerequisite failed.",
+      "canonical_digest": "eaceb32b09b4abd397b6d32849758b1f3bdf0b77d213206ed66e80c750caadad",
+      "checker_version": "clinical-trials-sec/0.2.0",
       "citations": [],
+      "engine_receipt_id": "08d36b1282b7fd190a32c2c99d4dc6ae7e1033dbbc132ff47951b8943595bef9",
       "error": {
-        "code": "EVIDENCE_HASH_MISMATCH",
-        "message": "The source bytes do not match the registered digest."
+        "code": "CORRUPT_EVIDENCE",
+        "message": "clinical-trials fixture integrity digest mismatch"
       },
-      "source_hashes": {
-        "clinicaltrials_snapshot": "3333333333333333333333333333333333333333333333333333333333333333",
-        "derived_ledger": "2222222222222222222222222222222222222222222222222222222222222222"
+      "evidence": null,
+      "license": "ClinicalTrials.gov terms (processed 2026-09-01) + SEC EDGAR public filing",
+      "normalized_claim": {
+        "as_of": "2026-06-03T08:09:00Z",
+        "asserted_span_sha256": "1ec3a0b235e0653bbced4f641d97df751f475020f5e18f72a71b5d354b973f33",
+        "cik": "0001829635",
+        "exhibit_locator": "EX-99.1#NCT06260774",
+        "intervention": "TTX-MC138",
+        "nct_id": "NCT06260774",
+        "sec_accession": "0001104659-26-069810",
+        "sponsor": "TransCode Therapeutics"
       },
-      "license": "ClinicalTrials.gov public data terms",
-      "retrieval_clock": "2026-09-01T00:00:00-04:00",
-      "checker_version": "demo-checker-v2",
-      "rule_version": "clinical-trials-rules-v1",
-      "schema_version_claim": "clinical-trials-claim-v1",
-      "canonical_digest": "161a91050381fe7bcd8a6799e5c02d95112ba3ea377b163fd5fa14aa1902c691"
+      "outcome": "CHECKER_ERROR",
+      "preset_label": "Checker error · integrity stopped",
+      "reason": "clinical-trials fixture integrity digest mismatch",
+      "reason_code": "CORRUPT_EVIDENCE",
+      "receipt_id": "trial-error",
+      "retrieval_clock": "2026-09-01T22:37:00Z",
+      "rule_version": null,
+      "schema_version_claim": "2.0.0",
+      "scope": "No evidence scope was established because fixture integrity failed before checking.",
+      "selected_world_context_digest": "f9a3c368585e982824cb6c180267b782f6c3b14c1793f95379686f3bdbbcfdd1",
+      "source_hashes": {},
+      "source_reference": null,
+      "winning_rule": {
+        "id": "NO_RULE",
+        "rationale": "A changed compact fixture fails closed before claim evaluation.",
+        "title": "Evidence integrity gate stopped checking"
+      },
+      "world_digest": null,
+      "world_id": "clinical-trials-sec",
+      "world_version": "2025-09-01_2026-09-01"
     },
     {
+      "canonical_digest": "7fec0881322ac4d3eacc7e591b40a48a1e5de51436889a6f9537bd78d741143a",
+      "checker_version": "open-targets/0.1.0",
+      "citations": [
+        {
+          "engine_id": "ot:ENSG00000141510:MONDO_0018875:uniprot_variants",
+          "locator": "ot:ENSG00000141510:MONDO_0018875:uniprot_variants",
+          "reference": "https://platform.opentargets.org/target/ENSG00000141510/associations/MONDO_0018875",
+          "source": "Open Targets 26.06"
+        }
+      ],
+      "engine_receipt_id": "5f2ce81ae9d0f7ee2d611b7a2a68946a41aa45dd35f725d50d4ef5dff964aa0b",
+      "evidence": {
+        "disease_id": "MONDO_0018875",
+        "evidence_source": "uniprot_variants",
+        "record_id": "ot:ENSG00000141510:MONDO_0018875:uniprot_variants",
+        "release": "26.06",
+        "score": 0.9919541334408821,
+        "score_definition": "Open Targets 26.06 source-defined datasource association score.",
+        "source": "open-targets-graphql-26-06",
+        "target_id": "ENSG00000141510"
+      },
+      "license": "Open Targets Platform data · CC0 1.0",
+      "normalized_claim": {
+        "disease_id": "MONDO_0018875",
+        "evidence_source": "uniprot_variants",
+        "release": "26.06",
+        "target_id": "ENSG00000141510"
+      },
+      "outcome": "ACCEPTED",
+      "preset_label": "Accepted · association present",
+      "reason": "The exact source-specific target-disease association exists in Open Targets release 26.06.",
+      "reason_code": "SOURCE_SPECIFIC_ASSOCIATION_PRESENT",
       "receipt_id": "targets-positive",
-      "world_id": "open_targets",
-      "world_version": "demo-2026-09-01",
-      "world_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-      "preset_label": "Positive · association present",
-      "outcome": "ACCEPTED",
-      "normalized_claim": {
-        "target_id": "ENSG00000141510",
-        "disease_id": "EFO_0000249",
-        "association_type": "genetic",
-        "release": "26.06"
-      },
-      "winning_rule": {
-        "id": "OT-ASSOC-001",
-        "title": "Release-bound association is present",
-        "rationale": "The specified target, disease, association type, and release resolve to the cited compact record."
-      },
-      "scope": "Association evidence in Open Targets release 26.06; not a causal, clinical, or efficacy claim.",
-      "citations": [
-        {
-          "source": "Open Targets",
-          "locator": "ENSG00000141510 → EFO_0000249 · genetic",
-          "reference": "fixture://open-targets/association-001"
-        }
-      ],
-      "evidence": {
-        "record_id": "association-001",
-        "score_band": "reported"
-      },
+      "retrieval_clock": "2026-09-01T22:31:00Z",
+      "rule_version": null,
+      "schema_version_claim": "2.0.0",
+      "scope": "A source-specific association in Open Targets 26.06; not causality, clinical efficacy, or a treatment recommendation.",
       "source_hashes": {
-        "open_targets_release": "4444444444444444444444444444444444444444444444444444444444444444",
-        "derived_ledger": "5555555555555555555555555555555555555555555555555555555555555555"
+        "open-targets-graphql-26-06": "8e9299d18b7c9089b0cfe8c59183d9bedf1694cb69f8357fba580ec3a43badf4"
       },
-      "license": "Open Targets CC0 release terms",
-      "retrieval_clock": "2026-09-01T00:00:00-04:00",
-      "checker_version": "demo-checker-v2",
-      "rule_version": "open-targets-rules-v1",
-      "schema_version_claim": "open-targets-claim-v1",
-      "canonical_digest": "fb081c301edc0c6daca3ccd907ec12b0cc36932fd1c11d5227fa315451bb8df8"
+      "source_reference": null,
+      "winning_rule": {
+        "id": "OT.ASSOCIATION.02",
+        "rationale": "The exact target, disease, datasource, and release resolve to the cited compact record.",
+        "title": "Release-bound association is present"
+      },
+      "world_digest": "08c936ed591a4ebe6186961ff48e955385341dd0c70ca28d9381481bd7dcbcbe",
+      "world_id": "open-targets",
+      "world_version": "26.06"
     },
     {
-      "receipt_id": "targets-rejected",
-      "world_id": "open_targets",
-      "world_version": "demo-2026-09-01",
-      "world_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-      "preset_label": "Rejected · causal overclaim",
+      "canonical_digest": "eec929ce6d067cd39af685bf5410cf8c0e0e1f020823544d48cdd87c7de2abd5",
+      "checker_version": "open-targets/0.1.0",
+      "citations": [],
+      "engine_receipt_id": "790ef2611d902deb2fd1dd7cc104929f3c998ddf734a5fd689a7247bcac76dfa",
+      "evidence": null,
+      "license": "Open Targets Platform data · CC0 1.0",
+      "normalized_claim": {
+        "confidence_language": "causal efficacy",
+        "disease_id": "MONDO_0018875",
+        "evidence_source": "uniprot_variants",
+        "release": "26.06",
+        "target_id": "ENSG00000141510"
+      },
       "outcome": "REJECTED",
-      "normalized_claim": {
-        "target_id": "ENSG00000141510",
-        "disease_id": "EFO_0000249",
-        "association_type": "causal_efficacy",
-        "release": "26.06"
-      },
-      "winning_rule": {
-        "id": "OT-SCOPE-003",
-        "title": "Claim exceeds association semantics",
-        "rationale": "The selected release records an association, not causal efficacy."
-      },
-      "scope": "The causal or efficacy wording is outside this world's declared evidence semantics.",
-      "citations": [
-        {
-          "source": "Open Targets",
-          "locator": "ENSG00000141510 → EFO_0000249 · genetic",
-          "reference": "fixture://open-targets/association-001"
-        }
-      ],
-      "evidence": {
-        "record_id": "association-001",
-        "observed_association_type": "genetic"
-      },
+      "preset_label": "Rejected · causal overclaim",
+      "reason": "The release row does not license causal, efficacy, or universal language.",
+      "reason_code": "UNSUPPORTED_CLAIM_SCOPE",
+      "receipt_id": "targets-rejected",
+      "retrieval_clock": "2026-09-01T22:31:00Z",
+      "rule_version": null,
+      "schema_version_claim": "2.0.0",
+      "scope": "A source-specific association in Open Targets 26.06; not causality, clinical efficacy, or a treatment recommendation.",
       "source_hashes": {
-        "open_targets_release": "4444444444444444444444444444444444444444444444444444444444444444",
-        "derived_ledger": "5555555555555555555555555555555555555555555555555555555555555555"
+        "open-targets-graphql-26-06": "8e9299d18b7c9089b0cfe8c59183d9bedf1694cb69f8357fba580ec3a43badf4"
       },
-      "license": "Open Targets CC0 release terms",
-      "retrieval_clock": "2026-09-01T00:00:00-04:00",
-      "checker_version": "demo-checker-v2",
-      "rule_version": "open-targets-rules-v1",
-      "schema_version_claim": "open-targets-claim-v1",
-      "canonical_digest": "000359bc1fba679229a5d4e8bf4b63d6052d9c34e6c1ca662d32cdbae18ed5f8"
+      "source_reference": null,
+      "winning_rule": {
+        "id": "OT.SCOPE.03",
+        "rationale": "The selected release records an association, not causal efficacy.",
+        "title": "Claim exceeds association semantics"
+      },
+      "world_digest": "08c936ed591a4ebe6186961ff48e955385341dd0c70ca28d9381481bd7dcbcbe",
+      "world_id": "open-targets",
+      "world_version": "26.06"
     },
     {
-      "receipt_id": "arc-positive",
-      "world_id": "arc_vcc",
-      "world_version": "demo-2026-09-01",
-      "world_digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
-      "preset_label": "Positive · expression rises",
-      "outcome": "ACCEPTED",
-      "normalized_claim": {
-        "perturbed_gene": "GENE_A",
-        "measured_gene": "GENE_B",
+      "canonical_digest": "e068b0f5c3e35ee4e03a55542c4b2adf93c3438f026e1ea01f5d1b8712e185c0",
+      "checker_version": "0.1.0",
+      "citations": [],
+      "engine_receipt_id": "bf65885c4a5d0a5ed2e994331547941cf582e6c5da6faed2824711aa1a1aae0d",
+      "evidence": {
         "assay": "H1",
-        "direction": "increases"
+        "control_cells": 100,
+        "observed_direction": "increases",
+        "perturbed_cells": 100,
+        "record_id": "arc-h1-real-002",
+        "source": "arc-cell-eval2-h1-vcc-real-subset",
+        "source_row": "H1-VCC-2025-training.h5ad:target_gene=STAT1;response_gene=TAGLN;var_index=576",
+        "split": "locked_holdout",
+        "summary_statistic": "log2_fold_change_mean_raw_counts_pseudocount_1",
+        "threshold": 0.25,
+        "value": 0.577988734679
+      },
+      "license": "ArcInstitute/cell-eval2 · MIT",
+      "normalized_claim": {
+        "assay": "H1",
+        "direction": "increases",
+        "perturbed_gene": "STAT1",
+        "response_gene": "TAGLN",
+        "split": "locked_holdout",
+        "summary_statistic": "log2_fold_change_mean_raw_counts_pseudocount_1",
+        "threshold": 0.25,
+        "world_id": "arc-vcc",
+        "world_version": "2025-h1-measurements"
+      },
+      "outcome": "ACCEPTED",
+      "preset_label": "Accepted · direction matches",
+      "reason": "frozen measurement supports the asserted direction",
+      "reason_code": "ARC-H1-001",
+      "receipt_id": "arc-positive",
+      "retrieval_clock": "2026-09-01T22:22:00Z",
+      "rule_version": "arc-vcc-rules-v1",
+      "schema_version_claim": "arc-vcc-claim-v1",
+      "scope": "A mean raw-count log2 fold-change direction in the real H1 subset; not a STATE prediction, mechanism, or universal biological law.",
+      "source_hashes": {
+        "arc-cell-eval2-h1-vcc-real-subset": "eb36c766cbf76353f9981cb3a3aa32137622d1de53b29d861c483742bcd4dec7",
+        "arc-vcc-derived-ledger": "4bd9c5fef5060ca500eac08af06ad9ecae3b4957382893f46e392c6193809853"
+      },
+      "source_reference": {
+        "label": "Source reference (the Arc adapter does not issue citation IDs)",
+        "locator": "real H1 subset · STAT1 → TAGLN · 100 perturbed / 100 controls",
+        "reference": "https://raw.githubusercontent.com/ArcInstitute/cell-eval2/ddfc5df73c997b2f113a560bd863fb068f2b453a/docs/data/H1-VCC-2025-training.h5ad",
+        "source": "Arc Institute cell-eval2"
       },
       "winning_rule": {
         "id": "ARC-H1-001",
-        "title": "Declared H1 direction matches record",
-        "rationale": "The selected perturbation record supports the asserted direction within assay H1."
+        "rationale": "The locked-holdout real measurement supports the asserted direction at the preregistered threshold.",
+        "title": "Declared H1 direction matches"
       },
-      "scope": "A frozen H1 measurement for this gene pair; not a general causal or cross-assay claim.",
-      "citations": [
-        {
-          "source": "Arc VCC",
-          "locator": "H1 · GENE_A → GENE_B",
-          "reference": "fixture://arc-vcc/measurement-001"
-        }
-      ],
-      "evidence": {
-        "record_id": "measurement-001",
-        "observed_direction": "increases"
-      },
-      "source_hashes": {
-        "arc_vcc_measurements": "6666666666666666666666666666666666666666666666666666666666666666",
-        "derived_ledger": "7777777777777777777777777777777777777777777777777777777777777777"
-      },
-      "license": "Arc VCC CC0 dataset terms",
-      "retrieval_clock": "2026-09-01T00:00:00-04:00",
-      "checker_version": "demo-checker-v2",
-      "rule_version": "arc-vcc-rules-v1",
-      "schema_version_claim": "arc-vcc-claim-v1",
-      "canonical_digest": "7f48ca84994071cc7c194aff37e3ddf4e757b62a9345ecb54ab5008bf73496d1"
+      "world_digest": "193c76897b57e42afeb50cfbc53c8e9a7fa75ef4b5e17a4914cec2aa2d69dc28",
+      "world_id": "arc-vcc",
+      "world_version": "2025-h1-measurements"
     },
     {
-      "receipt_id": "arc-rejected",
-      "world_id": "arc_vcc",
-      "world_version": "demo-2026-09-01",
-      "world_digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
-      "preset_label": "Rejected · direction conflicts",
-      "outcome": "REJECTED",
-      "normalized_claim": {
-        "perturbed_gene": "GENE_A",
-        "measured_gene": "GENE_B",
+      "canonical_digest": "a4c6f0136522a2d8935c812723a35d3965e78fe622018bf7469e865709a52f10",
+      "checker_version": "0.1.0",
+      "citations": [],
+      "engine_receipt_id": "1844692dcaecf53f4205457a64aa99afb81cab52e9b481c76c4a6f2f9336a3f1",
+      "evidence": {
         "assay": "H1",
-        "direction": "decreases"
+        "control_cells": 100,
+        "observed_direction": "increases",
+        "perturbed_cells": 100,
+        "record_id": "arc-h1-real-002",
+        "source": "arc-cell-eval2-h1-vcc-real-subset",
+        "source_row": "H1-VCC-2025-training.h5ad:target_gene=STAT1;response_gene=TAGLN;var_index=576",
+        "split": "locked_holdout",
+        "summary_statistic": "log2_fold_change_mean_raw_counts_pseudocount_1",
+        "threshold": 0.25,
+        "value": 0.577988734679
+      },
+      "license": "ArcInstitute/cell-eval2 · MIT",
+      "normalized_claim": {
+        "assay": "H1",
+        "direction": "decreases",
+        "perturbed_gene": "STAT1",
+        "response_gene": "TAGLN",
+        "split": "locked_holdout",
+        "summary_statistic": "log2_fold_change_mean_raw_counts_pseudocount_1",
+        "threshold": 0.25,
+        "world_id": "arc-vcc",
+        "world_version": "2025-h1-measurements"
+      },
+      "outcome": "REJECTED",
+      "preset_label": "Rejected · direction conflicts",
+      "reason": "frozen measurement reports the opposite direction",
+      "reason_code": "ARC-H1-002",
+      "receipt_id": "arc-rejected",
+      "retrieval_clock": "2026-09-01T22:22:00Z",
+      "rule_version": "arc-vcc-rules-v1",
+      "schema_version_claim": "arc-vcc-claim-v1",
+      "scope": "A mean raw-count log2 fold-change direction in the real H1 subset; not a STATE prediction, mechanism, or universal biological law.",
+      "source_hashes": {
+        "arc-cell-eval2-h1-vcc-real-subset": "eb36c766cbf76353f9981cb3a3aa32137622d1de53b29d861c483742bcd4dec7",
+        "arc-vcc-derived-ledger": "4bd9c5fef5060ca500eac08af06ad9ecae3b4957382893f46e392c6193809853"
+      },
+      "source_reference": {
+        "label": "Source reference (the Arc adapter does not issue citation IDs)",
+        "locator": "real H1 subset · STAT1 → TAGLN · 100 perturbed / 100 controls",
+        "reference": "https://raw.githubusercontent.com/ArcInstitute/cell-eval2/ddfc5df73c997b2f113a560bd863fb068f2b453a/docs/data/H1-VCC-2025-training.h5ad",
+        "source": "Arc Institute cell-eval2"
       },
       "winning_rule": {
         "id": "ARC-H1-002",
-        "title": "Declared H1 direction conflicts",
-        "rationale": "The selected perturbation record reports the opposite direction within assay H1."
+        "rationale": "The locked-holdout real measurement reports the opposite direction.",
+        "title": "Declared H1 direction conflicts"
       },
-      "scope": "The assertion is rejected for this gene pair and assay; it does not infer a mechanism.",
-      "citations": [
-        {
-          "source": "Arc VCC",
-          "locator": "H1 · GENE_A → GENE_B",
-          "reference": "fixture://arc-vcc/measurement-001"
-        }
-      ],
-      "evidence": {
-        "record_id": "measurement-001",
-        "observed_direction": "increases"
-      },
-      "source_hashes": {
-        "arc_vcc_measurements": "6666666666666666666666666666666666666666666666666666666666666666",
-        "derived_ledger": "7777777777777777777777777777777777777777777777777777777777777777"
-      },
-      "license": "Arc VCC CC0 dataset terms",
-      "retrieval_clock": "2026-09-01T00:00:00-04:00",
-      "checker_version": "demo-checker-v2",
-      "rule_version": "arc-vcc-rules-v1",
-      "schema_version_claim": "arc-vcc-claim-v1",
-      "canonical_digest": "482af01ddef76a83aa6d9ec040a9da9b6ae5e7171633f14bf5a8d7c5cf0e7716"
+      "world_digest": "193c76897b57e42afeb50cfbc53c8e9a7fa75ef4b5e17a4914cec2aa2d69dc28",
+      "world_id": "arc-vcc",
+      "world_version": "2025-h1-measurements"
     }
-  ]
+  ],
+  "schema_version": "receipt-v2"
 }

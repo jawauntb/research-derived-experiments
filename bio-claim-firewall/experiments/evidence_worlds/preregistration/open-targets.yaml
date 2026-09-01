@@ -6,7 +6,9 @@ target_and_decision: "Assess a source-specific target-disease association in imm
 representation: "Exact target/disease identifiers, evidence source, source-defined score, and release; association only, not causality or efficacy."
 data_clock: "Open Targets GraphQL release 26.06 response retrieved 2026-09-01; a later release or changed response is a new world version; raw bytes remain outside git."
 assumptions: ["Identifiers resolve within the pinned release.", "Score semantics are not pooled across evidence sources.", "Causal, efficacy, universal, and wrong-release language is out of scope."]
-fatal_gates: [official_release_identity, license_and_redistribution, complete_hashes_and_schema, score_semantics, organic_controls, world_isolation]
-controls: [positive_release_row, negative_absent_or_wrong_source, null_missing_score_or_id, corruption_changed_release_bytes, cross_world_isolation]
-evidence_paths: {contract: "data/manifests/worlds/open-targets.json", acquisition: "data/scripts/worlds/open_targets_fixture.py", raw: "data/raw/open-targets/", derived: "tests/fixtures/worlds/open_targets/", results: "experiments/evidence_worlds/results/open-targets/"}
+registered_source_hashes: {open-targets-graphql-26-06: "8e9299d18b7c9089b0cfe8c59183d9bedf1694cb69f8357fba580ec3a43badf4"}
+fatal_gates: [official_release_identity, license_and_redistribution, complete_hashes_and_schema, release_and_score_semantics, organic_positive_negative_null_controls, world_isolation_and_fail_closed]
+controls: [open-targets-positive-release-row, open-targets-negative-score-mismatch, open-targets-null-absent-disease, open-targets-corrupted-release-bytes, open-targets-cross-world-claim]
+locked_control_corpus: "experiments/evidence_worlds/preregistration/pilot_control_corpus.json#open-targets"
+evidence_paths: {contract: "data/manifests/worlds/open-targets.json", source_terms_review: "experiments/evidence_worlds/preregistration/source-terms-review.json", acquisition: "data/scripts/worlds/open_targets_fixture.py", raw: "data/raw/open-targets/", derived: "tests/fixtures/worlds/open_targets/", results: "experiments/evidence_worlds/results/open-targets/"}
 initial_state: "RESEARCHED"

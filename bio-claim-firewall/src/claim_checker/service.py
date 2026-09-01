@@ -23,7 +23,14 @@ from normalize.errors import NormalizationError
 from rules.sections._shared import RELATION_CANONICAL_SIGN
 from verifier import verify
 from verifier.config import VerifierConfig
-from worlds import K562_WORLD, WORLD_REGISTRY, World, WorldRegistry, WorldRegistryError
+from worlds import (
+    K562_WORLD,
+    WORLD_REGISTRY,
+    World,
+    WorldRegistry,
+    WorldRegistryError,
+    receipt_world_digest,
+)
 
 _K562_CELL_TYPE = "CL:0000988"
 _K562_CELL_LINE = "CLO:0007059"
@@ -57,13 +64,23 @@ class ClaimCheckResult:
         return result
 
 
-def _checker_error(message: str, *, stage: str = "load_snapshot", claim: Any = None, checker_version: str = "0.1.0") -> ClaimCheckResult:
+def _checker_error(
+    message: str,
+    *,
+    stage: str = "load_snapshot",
+    claim: Any = None,
+    checker_version: str = "0.1.0",
+) -> ClaimCheckResult:
     return ClaimCheckResult(
         claim=claim if isinstance(claim, dict) else None,
         evidence=None,
         verdict={
             "verdict": "CHECKER_ERROR",
-            "checker_error": {"stage": stage, "message": message, "exception_class": "WorldBindingError"},
+            "checker_error": {
+                "stage": stage,
+                "message": message,
+                "exception_class": "WorldBindingError",
+            },
             "checker_version": checker_version,
         },
     )
@@ -85,22 +102,29 @@ def _world_source_hashes(bundle: Any, world: World) -> dict[str, str]:
     for source in sorted(actual):
         manifest = manifests[source]
         digest = getattr(manifest, "sha256", None)
-        if not isinstance(digest, str) or len(digest) != 64 or any(c not in "0123456789abcdef" for c in digest):
-            raise WorldRegistryError(f"source {source!r} has a partial or invalid digest")
+        if (
+            not isinstance(digest, str)
+            or len(digest) != 64
+            or any(c not in "0123456789abcdef" for c in digest)
+        ):
+            raise WorldRegistryError(
+                f"source {source!r} has a partial or invalid digest"
+            )
         contract = expected.get(source)
-        if contract is not None and contract.sha256 is not None and digest != contract.sha256:
-            raise WorldRegistryError(f"source {source!r} digest does not match registered world")
+        if (
+            contract is not None
+            and contract.sha256 is not None
+            and digest != contract.sha256
+        ):
+            raise WorldRegistryError(
+                f"source {source!r} digest does not match registered world"
+            )
         hashes[source] = digest
     if expected and set(expected) != actual:
-        raise WorldRegistryError(f"world {world.world_key} has incomplete source contracts")
+        raise WorldRegistryError(
+            f"world {world.world_key} has incomplete source contracts"
+        )
     return hashes
-
-
-def _world_digest(world: World, source_hashes: Mapping[str, str]) -> str:
-    # The registry digest is immutable; this second digest binds the concrete
-    # loaded manifests as well and is what appears in a receipt.
-    payload = {"registered_world_digest": world.digest, "sources": dict(sorted(source_hashes.items()))}
-    return hashlib.sha256(canonicalize_for_hash(payload)).hexdigest()
 
 
 def _issued_at() -> str:
@@ -118,19 +142,48 @@ def _attach_receipt(
     strict_bundle: bool = False,
 ) -> ClaimCheckResult:
     try:
-        source_hashes = _world_source_hashes(bundle, world) if strict_bundle else dict(
-            sorted(getattr(getattr(bundle, "ledger", None), "snapshot_hashes", dict)().items())
+        source_hashes = (
+            _world_source_hashes(bundle, world)
+            if strict_bundle
+            else dict(
+                sorted(
+                    getattr(
+                        getattr(bundle, "ledger", None), "snapshot_hashes", dict
+                    )().items()
+                )
+            )
         )
-        world_digest = _world_digest(world, source_hashes)
+        world_digest = receipt_world_digest(world, source_hashes)
     except Exception as exc:  # noqa: BLE001 - receipt construction must fail closed
         if strict_bundle:
             return _checker_error(str(exc), claim=result.claim)
-        source_hashes = dict(sorted(getattr(getattr(bundle, "ledger", None), "snapshot_hashes", dict)().items()))
+        source_hashes = dict(
+            sorted(
+                getattr(
+                    getattr(bundle, "ledger", None), "snapshot_hashes", dict
+                )().items()
+            )
+        )
         world_digest = world.digest
 
     # Only deterministic content enters this payload.  ``issued_at``, parser
     # provenance, and the verifier's run-local id remain outside it.
-    outcome = {key: value for key, value in result.verdict.items() if key not in {"issued_at", "verdict_id", "receipt_id", "receipt_version", "world_id", "world_version", "world_digest", "source_hashes", "canonical_payload"}}
+    outcome = {
+        key: value
+        for key, value in result.verdict.items()
+        if key
+        not in {
+            "issued_at",
+            "verdict_id",
+            "receipt_id",
+            "receipt_version",
+            "world_id",
+            "world_version",
+            "world_digest",
+            "source_hashes",
+            "canonical_payload",
+        }
+    }
     payload = {
         "receipt_version": "2",
         "world_id": world.world_id,
@@ -164,10 +217,14 @@ def _attach_receipt(
             "canonical_payload": payload,
         }
     )
-    return ClaimCheckResult(claim=result.claim, evidence=result.evidence, verdict=verdict, receipt=receipt)
+    return ClaimCheckResult(
+        claim=result.claim, evidence=result.evidence, verdict=verdict, receipt=receipt
+    )
 
 
-def _run_k562_adapter(bundle: Any, claim: Mapping[str, Any], *, checker_version: str) -> ClaimCheckResult:
+def _run_k562_adapter(
+    bundle: Any, claim: Mapping[str, Any], *, checker_version: str
+) -> ClaimCheckResult:
     if set(claim) != set(K562_WORLD.claim_fields):
         raise ClaimCheckInputError(
             "world claim must contain exactly subject, object, and direction"
@@ -192,7 +249,9 @@ def _adapter_result_to_claim_check(result: Any, world: World) -> ClaimCheckResul
     """
     payload = result.as_dict()
     if not isinstance(payload, Mapping):
-        raise WorldRegistryError(f"adapter {world.adapter!r} returned a non-object result")
+        raise WorldRegistryError(
+            f"adapter {world.adapter!r} returned a non-object result"
+        )
     source_hashes = payload.get("source_hashes")
     if source_hashes is None:
         source_hashes = payload.get("snapshot_hashes")
@@ -207,6 +266,14 @@ def _adapter_result_to_claim_check(result: Any, world: World) -> ClaimCheckResul
     if actual != expected:
         raise WorldRegistryError(
             f"adapter {world.adapter!r} source hashes do not match registered world"
+        )
+    expected_world_digest = receipt_world_digest(world, actual)
+    if (
+        payload.get("world_id") != world.world_id
+        or payload.get("world_version") != world.version
+    ):
+        raise WorldRegistryError(
+            f"adapter {world.adapter!r} returned a foreign world identity"
         )
 
     verdict_name = payload.get("verdict")
@@ -229,13 +296,67 @@ def _adapter_result_to_claim_check(result: Any, world: World) -> ClaimCheckResul
         if key in payload:
             verdict[key] = payload[key]
     receipt = payload.get("receipt")
-    if receipt is not None and not isinstance(receipt, Mapping):
-        raise WorldRegistryError(f"adapter {world.adapter!r} returned an invalid receipt")
+    if not isinstance(receipt, Mapping):
+        raise WorldRegistryError(f"adapter {world.adapter!r} returned no valid receipt")
+    canonical = receipt.get("canonical_payload")
+    if not isinstance(canonical, Mapping):
+        raise WorldRegistryError(
+            f"adapter {world.adapter!r} receipt has no canonical payload"
+        )
+    canonical_hashes = canonical.get("source_hashes", canonical.get("snapshot_hashes"))
+    if (
+        receipt.get("receipt_version") != "2"
+        or canonical.get("world_id") != world.world_id
+        or canonical.get("world_version") != world.version
+        or canonical.get("world_digest") != expected_world_digest
+        or not isinstance(canonical_hashes, Mapping)
+        or dict(canonical_hashes) != expected
+    ):
+        raise WorldRegistryError(
+            f"adapter {world.adapter!r} receipt is not bound to the registered world"
+        )
+    expected_receipt_id = hashlib.sha256(
+        canonicalize_for_hash(dict(canonical))
+    ).hexdigest()
+    if receipt.get("receipt_id") != expected_receipt_id:
+        raise WorldRegistryError(f"adapter {world.adapter!r} receipt digest is invalid")
+
+    canonical_verdict = canonical.get("verdict", canonical.get("outcome"))
+    parity_pairs = {
+        "claim": (payload.get("claim"), canonical.get("claim")),
+        "evidence": (payload.get("evidence"), canonical.get("evidence")),
+        "verdict": (payload.get("verdict"), canonical_verdict),
+    }
+    if "outcome" in payload:
+        parity_pairs["outcome"] = (payload["outcome"], canonical.get("outcome"))
+    if "message" in payload:
+        parity_pairs["message"] = (payload["message"], canonical.get("message"))
+    if "reason" in payload:
+        parity_pairs["reason"] = (
+            payload["reason"],
+            canonical.get("reason", canonical.get("message")),
+        )
+    for field in ("reason_code", "winning_rule", "citations", "checker_version"):
+        if field in payload:
+            parity_pairs[field] = (payload[field], canonical.get(field))
+    mismatches = sorted(
+        field
+        for field, (top_level, bound) in parity_pairs.items()
+        if top_level != bound
+    )
+    if mismatches:
+        raise WorldRegistryError(
+            f"adapter {world.adapter!r} output disagrees with its receipt: {mismatches}"
+        )
     return ClaimCheckResult(
-        claim=dict(payload["claim"]) if isinstance(payload.get("claim"), Mapping) else None,
-        evidence=dict(payload["evidence"]) if isinstance(payload.get("evidence"), Mapping) else None,
+        claim=dict(payload["claim"])
+        if isinstance(payload.get("claim"), Mapping)
+        else None,
+        evidence=dict(payload["evidence"])
+        if isinstance(payload.get("evidence"), Mapping)
+        else None,
         verdict=verdict,
-        receipt=dict(receipt) if isinstance(receipt, Mapping) else None,
+        receipt=dict(receipt),
     )
 
 
@@ -309,7 +430,9 @@ def check_claim(
     try:
         world = registry.resolve(world_id, world_version)
         if claim is not None and claim_fields:
-            raise ClaimCheckInputError("provide either claim or world claim fields, not both")
+            raise ClaimCheckInputError(
+                "provide either claim or world claim fields, not both"
+            )
         if claim is None and claim_fields:
             # Permit convenient keyword usage while keeping the closed field
             # set enforced by _run_k562_adapter (object_ is accepted as a
@@ -337,9 +460,18 @@ def check_claim(
             )
         return result
     except (WorldRegistryError, ClaimCheckInputError) as exc:
-        return _checker_error(str(exc), claim=dict(claim) if isinstance(claim, Mapping) else None, checker_version=checker_version)
+        return _checker_error(
+            str(exc),
+            claim=dict(claim) if isinstance(claim, Mapping) else None,
+            checker_version=checker_version,
+        )
     except Exception as exc:  # noqa: BLE001 - fail closed at the world boundary
-        return _checker_error(str(exc), claim=dict(claim) if isinstance(claim, Mapping) else None, stage="run_rules", checker_version=checker_version)
+        return _checker_error(
+            str(exc),
+            claim=dict(claim) if isinstance(claim, Mapping) else None,
+            stage="run_rules",
+            checker_version=checker_version,
+        )
 
 
 # Descriptive alias used by callers that prefer the protocol name.

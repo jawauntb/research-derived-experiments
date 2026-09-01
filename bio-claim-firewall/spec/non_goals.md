@@ -17,12 +17,12 @@ What this project is not, and what it will not become without an explicit re-aut
 
 Deferred until the deterministic checker has earned empirical value (Phase 5 release gates passed on the pilot world):
 
-- **Direct MIDAS source reuse in published commits.** Verbal permission is enough to unblock scaffolding and private branches. Before any MIDAS-derived code lands in a commit intended to be published, the paper trail in `PROVENANCE.md` must include a LICENSE on upstream or an archived written permission.
+- **Removing MIDAS attribution from derived code.** Reuse is authorized and the private permission record stays outside git; public artifacts must preserve the source headers and attribution recorded in `PROVENANCE.md`.
 - **Full Lean / Coq formalization of the rule engine.** Deferred until (a) the rule set has stabilized under adversarial testing and (b) the rule engine's TCB is small enough that formalization is a bounded job. Formalizing a moving target is anti-productive.
 - **Cross-species claims.** The pilot world is human. Adding mouse or another species requires its own ontology snapshots, its own alias tables, and its own adversarial suite; deferred.
-- **Non-perturbation evidence types beyond the initial four `record_type`s.** No functional-genomics screen aggregators, no clinical trial results, no imaging assays until the pilot's core loop is validated.
+- **Unscoped cross-world truth aggregation.** Clinical-trial disclosure identity and target–disease association worlds are now admitted as isolated contracts; they must never be merged with perturbation evidence into a context-free truth score.
 - **Uncertainty quantification beyond the confidence ladder.** No Bayesian posteriors, no calibrated probabilities in the verdict. `ACCEPTED_CONDITIONALLY` carries scope conditions, not probabilities. Calibration is measured at eval time (Phase 5), not asserted in the verdict.
-- **Public API.** No hosted service. No inbound webhooks. Local CLI only until Phase 5 gates pass.
+- **Public arbitrary-claim API.** The hosted surface is a credential-free curated receipt demo. No inbound claim execution, live model call, webhook, or visitor-data collection is admitted by the bounded-pilot decision.
 
 ## Prohibited moves
 

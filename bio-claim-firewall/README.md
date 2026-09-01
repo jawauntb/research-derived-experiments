@@ -23,7 +23,66 @@ The verifier returns exactly one of:
 
 It does not prove biology. It proves that an accepted claim obeys a locked formal and evidence contract. See [`spec/non_goals.md`](spec/non_goals.md).
 
-## Use it now: local K562 claim checker
+## Current product boundary
+
+Bio Claim Firewall now has four registered real-data worlds: the original
+Replogle 2022 K562 checker plus three newly admitted pilot worlds:
+
+- ClinicalTrials.gov + SEC disclosure identity;
+- Open Targets 26.06 source-specific target–disease associations; and
+- Arc Institute cell-eval2 real H1 perturbation measurements.
+
+The three new worlds passed all 18 fatal gates and 15 locked positive,
+negative, null, corruption, and cross-world controls. That earns
+`READY_FOR_BOUNDED_PILOT`, not a universal truth, authenticity, causality,
+efficacy, or clinical-use claim. NeuroVault and FlyWire/Codex remain visibly
+deferred because their spatial or public-display prerequisites are unresolved.
+The readiness receipt now requires exact registry-bound official, terms, and
+scenario URLs and a preregistered 90-day freshness window for the operator
+reviews. It still distinguishes those declared locators and pilot roles from
+demonstrated customer usefulness or live-page availability; the latter must be
+learned in the design-partner pilot.
+See
+[`experiments/evidence_worlds/results/pilot_readiness.md`](experiments/evidence_worlds/results/pilot_readiness.md).
+
+The generic Python boundary is `claim_checker.service.check_claim`: callers
+select an exact world and version, provide its explicit fixture path, and pass
+a structured claim. The registry rejects unknown fields, cross-world fixtures,
+source-hash drift, and receipts that do not recompute against the registered
+world digest before rule evaluation. Each admitted world also pins the derived
+fixture/bundle hash, so coordinated edits cannot pass by recomputing a local
+integrity field while retaining old source hashes. The Clinical Trials/SEC fixture is also
+bound to a separate, scope-limited review artifact with exact identity/NCT span
+hashes; it does not claim human review or efficacy. The public demo is generated from
+these same adapters by `sites/bio_claim_firewall/export_real_receipts.py` and
+intentionally accepts no arbitrary input.
+
+The bounded source-terms review is locked at
+[`experiments/evidence_worlds/preregistration/source-terms-review.json`](experiments/evidence_worlds/preregistration/source-terms-review.json).
+It records exact official and terms references plus demo obligations, and must
+be current relative to each world's retrieval clock and the locked evaluation
+date. It is explicitly not legal advice or permission for an unbounded future
+use.
+
+Live bounded demo:
+[`bio-claim-firewall-demo-production.up.railway.app`](https://bio-claim-firewall-demo-production.up.railway.app)
+
+Run any admitted structured world through the same CLI boundary (hyphenated
+registry IDs are required):
+
+```bash
+PYTHONPATH=bio-claim-firewall/src uv run --no-sync python -m claim_checker \
+  --world-id open-targets --world-version 26.06 \
+  --fixture bio-claim-firewall/tests/fixtures/worlds/open_targets/release-26.06.json \
+  --claim-json '{"target_id":"ENSG00000141510","disease_id":"MONDO_0018875","evidence_source":"uniprot_variants","release":"26.06"}' \
+  --json
+```
+
+`--claim-json` and `--fixture` are the explicit structured route for Arc VCC,
+Open Targets, and Clinical Trials/SEC. The legacy K562 positional and
+`--claim`/`--data-root` routes remain supported.
+
+## Use it now: natural-language K562 claim checker
 
 The current useful surface is deliberately narrow: check whether one claimed
 direction for a perturbed gene and measured gene is supported by **one exact,
@@ -75,7 +134,9 @@ checker version and the hashes of the frozen snapshots inspected.
 - [x] **Phase 3 — Deterministic verifier.** Audit ledger, normalize, evidence loader, 30-rule cascade, top-level `verify()` composer. Fail-closed. (#539, #540, #541)
 - [x] **Phase 4 preview — Untrusted model interfaces.** `Proposer` + `Repairer` + `Orchestrator` + `TrajectoryLogger`; MIDAS-derived `ModelManager` now connects through its prompt-rendering compatibility adapter. One configured OpenAI model has traversed the fixed five-case smoke path. (#542, #548)
 - [x] **Phase 5a — Mutation-test framework.** 31 mutation sites discovered; direct R-CTX-02 and R-CTX-05 regressions close the two first-run coverage gaps, with all 18 `_shared.py` context mutants killed. (#542)
-- [ ] **Phase 5b — Live-LLM end-to-end + adversarial + empirical suites + independent blinded audit.** The five-case live smoke passed as a narrow operational result; adversarial, multi-model, empirical, and blinded-review gates remain. See [`eval/smoke/RESULTS_2026-09-01.md`](eval/smoke/RESULTS_2026-09-01.md) and [`HANDOFF.md`](HANDOFF.md) §5.
+- [x] **Evidence-world bounded pilot.** Clinical Trials/SEC, Open Targets, and Arc VCC are admitted after 18/18 fatal gates and 15/15 locked controls; NeuroVault and FlyWire/Codex are preserved as deferred.
+- [x] **Public curated demo + private buyer discovery.** Eight adapter-generated receipts, five honest world states, a no-collection email CTA, and an aggregate-only Apollo result (15 organizations, 25 role candidates, no outreach).
+- [ ] **Publication gate.** Independent blinded review, broader real-workflow evaluation, multi-model adversarial evaluation, and calibrated empirical usefulness remain required before a paper-level general claim.
 
 **New agent picking this up: read [`HANDOFF.md`](HANDOFF.md) first.**
 

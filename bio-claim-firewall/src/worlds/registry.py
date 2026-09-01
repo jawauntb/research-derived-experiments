@@ -26,12 +26,24 @@ class SourceContract:
     source: str
     sha256: str | None = None
     license: str | None = None
+    official_url: str | None = None
+    terms_reference_url: str | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.source, str) or not self.source.strip():
             raise WorldRegistryError("source contract requires a non-empty source")
         if self.sha256 is not None and not _SHA256_RE.fullmatch(self.sha256):
-            raise WorldRegistryError(f"source {self.source!r} has a partial or invalid sha256")
+            raise WorldRegistryError(
+                f"source {self.source!r} has a partial or invalid sha256"
+            )
+        for field_name in ("official_url", "terms_reference_url"):
+            value = getattr(self, field_name)
+            if value is not None and (
+                not isinstance(value, str) or not value.startswith("https://")
+            ):
+                raise WorldRegistryError(
+                    f"source {self.source!r} has an invalid {field_name}"
+                )
 
     def as_dict(self) -> dict[str, str]:
         value = {"source": self.source}
@@ -39,6 +51,10 @@ class SourceContract:
             value["sha256"] = self.sha256
         if self.license is not None:
             value["license"] = self.license
+        if self.official_url is not None:
+            value["official_url"] = self.official_url
+        if self.terms_reference_url is not None:
+            value["terms_reference_url"] = self.terms_reference_url
         return value
 
 
@@ -50,32 +66,73 @@ class World:
     version: str
     source_allowlist: tuple[str, ...] = ()
     source_contracts: tuple[SourceContract, ...] = ()
+    artifact_hashes: Mapping[str, str] = field(default_factory=dict)
+    scenario_locators: Mapping[str, str] = field(default_factory=dict)
     modality: str = "unknown"
     description: str = ""
     claim_fields: tuple[str, ...] = ("subject", "object", "direction")
     capabilities: tuple[str, ...] = ("check_structured_claim",)
     adapter: str = "k562"
-    parser_schema: Mapping[str, Any] = field(default_factory=dict, repr=False, compare=False)
+    parser_schema: Mapping[str, Any] = field(
+        default_factory=dict, repr=False, compare=False
+    )
 
     def __post_init__(self) -> None:
         if not self.world_id or not self.version:
             raise WorldRegistryError("world_id and version are required")
         sources = tuple(self.source_allowlist)
         contracts = tuple(self.source_contracts)
+        artifacts = dict(self.artifact_hashes)
+        scenario_locators = dict(self.scenario_locators)
         if len(sources) != len(set(sources)):
-            raise WorldRegistryError(f"world {self.world_id!r} has duplicate source allowlist entries")
+            raise WorldRegistryError(
+                f"world {self.world_id!r} has duplicate source allowlist entries"
+            )
         contract_names = tuple(contract.source for contract in contracts)
         if len(contract_names) != len(set(contract_names)):
-            raise WorldRegistryError(f"world {self.world_id!r} has duplicate source contracts")
+            raise WorldRegistryError(
+                f"world {self.world_id!r} has duplicate source contracts"
+            )
         if sources and contracts and set(sources) != set(contract_names):
-            raise WorldRegistryError(f"world {self.world_id!r} source allowlist and contracts differ")
-        if not self.claim_fields or len(set(self.claim_fields)) != len(self.claim_fields):
-            raise WorldRegistryError(f"world {self.world_id!r} has invalid claim fields")
+            raise WorldRegistryError(
+                f"world {self.world_id!r} source allowlist and contracts differ"
+            )
+        if not self.claim_fields or len(set(self.claim_fields)) != len(
+            self.claim_fields
+        ):
+            raise WorldRegistryError(
+                f"world {self.world_id!r} has invalid claim fields"
+            )
+        if any(
+            not isinstance(name, str)
+            or not name.strip()
+            or not isinstance(digest, str)
+            or not _SHA256_RE.fullmatch(digest)
+            for name, digest in artifacts.items()
+        ):
+            raise WorldRegistryError(
+                f"world {self.world_id!r} has an invalid artifact hash contract"
+            )
+        if any(
+            source not in sources
+            or not isinstance(locator, str)
+            or not locator.startswith("https://")
+            for source, locator in scenario_locators.items()
+        ):
+            raise WorldRegistryError(
+                f"world {self.world_id!r} has an invalid scenario locator contract"
+            )
         object.__setattr__(self, "source_allowlist", sources)
         object.__setattr__(self, "source_contracts", contracts)
+        object.__setattr__(self, "artifact_hashes", MappingProxyType(artifacts))
+        object.__setattr__(
+            self, "scenario_locators", MappingProxyType(scenario_locators)
+        )
         object.__setattr__(self, "claim_fields", tuple(self.claim_fields))
         object.__setattr__(self, "capabilities", tuple(self.capabilities))
-        object.__setattr__(self, "parser_schema", MappingProxyType(dict(self.parser_schema)))
+        object.__setattr__(
+            self, "parser_schema", MappingProxyType(dict(self.parser_schema))
+        )
 
     @property
     def world_key(self) -> str:
@@ -84,17 +141,24 @@ class World:
     @property
     def digest(self) -> str:
         """Stable digest of the registered contract, excluding run metadata."""
-        payload = {
+        payload: dict[str, Any] = {
             "world_id": self.world_id,
             "version": self.version,
             "modality": self.modality,
             "description": self.description,
-            "source_contracts": [c.as_dict() for c in sorted(self.source_contracts, key=lambda c: c.source)],
+            "source_contracts": [
+                c.as_dict()
+                for c in sorted(self.source_contracts, key=lambda c: c.source)
+            ],
             "claim_fields": list(self.claim_fields),
             "capabilities": list(self.capabilities),
             "adapter": self.adapter,
             "parser_schema": dict(self.parser_schema),
         }
+        if self.artifact_hashes:
+            payload["artifact_hashes"] = dict(sorted(self.artifact_hashes.items()))
+        if self.scenario_locators:
+            payload["scenario_locators"] = dict(sorted(self.scenario_locators.items()))
         return hashlib.sha256(canonicalize_for_hash(payload)).hexdigest()
 
     def as_dict(self) -> dict[str, Any]:
@@ -107,6 +171,8 @@ class World:
             "description": self.description,
             "source_allowlist": list(self.source_allowlist),
             "source_contracts": [c.as_dict() for c in self.source_contracts],
+            "artifact_hashes": dict(sorted(self.artifact_hashes.items())),
+            "scenario_locators": dict(sorted(self.scenario_locators.items())),
             "claim_fields": list(self.claim_fields),
             "capabilities": list(self.capabilities),
             "adapter": self.adapter,
@@ -131,15 +197,43 @@ K562_WORLD = World(
         "reactome.2026_pilot",
     ),
     source_contracts=(
-        SourceContract("cellline.2026_pilot", "2812b130349fdf85a32ad4192064a14cc9a4241ec61eabb6dfefdebc6ffb7fee", "CC-BY-4.0"),
-        SourceContract("cellontology.2026_pilot", "d0801ecac3cae19b03c6d2b839bc01914941c14de4c1abf4b0e33401e9e6e3d7", "CC-BY-4.0"),
-        SourceContract("hgnc.2026_pilot", "8a3627d7257bf3787580c8737aefeaa8741213fe7e4725ccdd5a131734737bab", "CC0-1.0"),
-        SourceContract("ncbitaxon.2026_pilot", "4bab09bbc0900954a13ab2fd396bf15047ca3e717aee550620ef2ab372cefc9b", "Public-Domain"),
-        SourceContract("perturbseq.replogle_2022", "2f1a951c23b8685091ee3979300fce582c61cab1fa9970b5cad332872734bfb8", "CC0-1.0"),
-        SourceContract("reactome.2026_pilot", "fa31cf7f2a994e27d1f33cd4f25b31fb5cb070e0a3aa645c80ea19565d79fdea", "CC0-1.0"),
+        SourceContract(
+            "cellline.2026_pilot",
+            "2812b130349fdf85a32ad4192064a14cc9a4241ec61eabb6dfefdebc6ffb7fee",
+            "CC-BY-4.0",
+        ),
+        SourceContract(
+            "cellontology.2026_pilot",
+            "d0801ecac3cae19b03c6d2b839bc01914941c14de4c1abf4b0e33401e9e6e3d7",
+            "CC-BY-4.0",
+        ),
+        SourceContract(
+            "hgnc.2026_pilot",
+            "8a3627d7257bf3787580c8737aefeaa8741213fe7e4725ccdd5a131734737bab",
+            "CC0-1.0",
+        ),
+        SourceContract(
+            "ncbitaxon.2026_pilot",
+            "4bab09bbc0900954a13ab2fd396bf15047ca3e717aee550620ef2ab372cefc9b",
+            "Public-Domain",
+        ),
+        SourceContract(
+            "perturbseq.replogle_2022",
+            "2f1a951c23b8685091ee3979300fce582c61cab1fa9970b5cad332872734bfb8",
+            "CC0-1.0",
+        ),
+        SourceContract(
+            "reactome.2026_pilot",
+            "fa31cf7f2a994e27d1f33cd4f25b31fb5cb070e0a3aa645c80ea19565d79fdea",
+            "CC0-1.0",
+        ),
     ),
     claim_fields=("subject", "object", "direction"),
-    capabilities=("check_structured_claim", "check_natural_language", "resolve_hgnc_labels"),
+    capabilities=(
+        "check_structured_claim",
+        "check_natural_language",
+        "resolve_hgnc_labels",
+    ),
     adapter="k562",
     parser_schema={
         "type": "object",
@@ -173,6 +267,8 @@ ARC_VCC_WORLD = World(
             "arc-cell-eval2-h1-vcc-real-subset",
             "eb36c766cbf76353f9981cb3a3aa32137622d1de53b29d861c483742bcd4dec7",
             "MIT",
+            "https://github.com/ArcInstitute/cell-eval2/blob/ddfc5df73c997b2f113a560bd863fb068f2b453a/docs/data/H1-VCC-2025-training.h5ad",
+            "https://github.com/ArcInstitute/cell-eval2/blob/ddfc5df73c997b2f113a560bd863fb068f2b453a/LICENSE",
         ),
         SourceContract(
             "arc-vcc-derived-ledger",
@@ -180,6 +276,9 @@ ARC_VCC_WORLD = World(
             "internal-derived",
         ),
     ),
+    artifact_hashes={
+        "arc-vcc-fixture-bundle": "2f226349ecfc9d5a598236342b3b35212d0531dd011573ffeb23317f067325b8",
+    },
     claim_fields=(
         "perturbed_gene",
         "response_gene",
@@ -231,8 +330,16 @@ OPEN_TARGETS_WORLD = World(
             "open-targets-graphql-26-06",
             "8e9299d18b7c9089b0cfe8c59183d9bedf1694cb69f8357fba580ec3a43badf4",
             "CC0-1.0",
+            "https://platform-docs.opentargets.org/data-access/graphql-api",
+            "https://platform-docs.opentargets.org/data-access/datasets",
         ),
     ),
+    artifact_hashes={
+        "open-targets-derived-ledger": "069f3db029b7ba3e6b21e682ae4b1c9448a227b3224853075e9b77b03704176e",
+    },
+    scenario_locators={
+        "open-targets-graphql-26-06": "https://platform.opentargets.org/target/ENSG00000141510/associations/MONDO_0018875",
+    },
     claim_fields=(
         "target_id",
         "disease_id",
@@ -274,19 +381,34 @@ CLINICAL_TRIALS_WORLD = World(
     version="2025-09-01_2026-09-01",
     modality="translational_disclosure",
     description="Timestamped ClinicalTrials.gov and SEC disclosure identity consistency.",
-    source_allowlist=("clinicaltrials-gov-api-v2", "sec-edgar-submissions-and-archives"),
+    source_allowlist=(
+        "clinicaltrials-gov-api-v2",
+        "sec-edgar-submissions-and-archives",
+    ),
     source_contracts=(
         SourceContract(
             "clinicaltrials-gov-api-v2",
             "1c04f811b0300bbba0b56caaade1dfb5c78808169c152924024594124493345e",
             "ClinicalTrials.gov-terms-2023-01-31",
+            "https://clinicaltrials.gov/data-api/api",
+            "https://clinicaltrials.gov/about-site/terms-conditions",
         ),
         SourceContract(
             "sec-edgar-submissions-and-archives",
             "873c321bc7a918f4e7ad2cee5cde2de814376a864f1fece3e0c483cc8911a80e",
             "SEC-EDGAR-public-access",
+            "https://www.sec.gov/search-filings/edgar-application-programming-interfaces",
+            "https://www.sec.gov/search-filings/edgar-search-assistance/accessing-edgar-data",
         ),
     ),
+    artifact_hashes={
+        "clinical-trials-sec-derived-ledger": "fcd3a320b3488513b1f609ca279dab600aa49cc7a436165d8fef45f51b473c6c",
+        "clinical-trials-sec-review": "0d389e7d00a70e104056ddc831e7f2ce086257ae8cc1e4f6648c330c438b74d2",
+    },
+    scenario_locators={
+        "clinicaltrials-gov-api-v2": "https://clinicaltrials.gov/study/NCT06260774",
+        "sec-edgar-submissions-and-archives": "https://www.sec.gov/Archives/edgar/data/1829635/000110465926069810/tm2616719d1_ex99-1.htm",
+    },
     claim_fields=(
         "nct_id",
         "sponsor",
@@ -340,7 +462,9 @@ class WorldRegistry:
         for world in entries:
             key = (world.world_id, world.version)
             if key in seen:
-                raise WorldRegistryError(f"duplicate world registration: {world.world_key}")
+                raise WorldRegistryError(
+                    f"duplicate world registration: {world.world_key}"
+                )
             seen.add(key)
         self._worlds = entries
         self._by_key = MappingProxyType({(w.world_id, w.version): w for w in entries})
@@ -353,11 +477,15 @@ class WorldRegistry:
         if not isinstance(world_id, str) or not world_id.strip():
             raise WorldRegistryError("world_id is required")
         if not isinstance(world_version, str) or not world_version.strip():
-            raise WorldRegistryError("world_version is required for explicit world binding")
+            raise WorldRegistryError(
+                "world_version is required for explicit world binding"
+            )
         try:
             return self._by_key[(world_id, world_version)]
         except KeyError as exc:
-            raise WorldRegistryError(f"unknown world or version: {world_id}/{world_version}") from exc
+            raise WorldRegistryError(
+                f"unknown world or version: {world_id}/{world_version}"
+            ) from exc
 
 
 WORLD_REGISTRY = WorldRegistry(
@@ -365,9 +493,43 @@ WORLD_REGISTRY = WorldRegistry(
 )
 
 
-def get_world(world_id: str, world_version: str | None = None, *, registry: WorldRegistry = WORLD_REGISTRY) -> World:
+def get_world(
+    world_id: str,
+    world_version: str | None = None,
+    *,
+    registry: WorldRegistry = WORLD_REGISTRY,
+) -> World:
     return registry.resolve(world_id, world_version)
 
 
 def list_worlds(*, registry: WorldRegistry = WORLD_REGISTRY) -> tuple[World, ...]:
     return registry.worlds
+
+
+def receipt_world_digest(world: World, source_hashes: Mapping[str, str]) -> str:
+    """Bind a receipt to both the registered contract and exact source bytes."""
+    actual = dict(source_hashes)
+    expected = {
+        contract.source: contract.sha256
+        for contract in world.source_contracts
+        if contract.sha256 is not None
+    }
+    if actual != expected or set(actual) != set(world.source_allowlist):
+        raise WorldRegistryError(
+            f"source hashes do not exactly match registered world {world.world_key}"
+        )
+    payload = {
+        "registered_world_digest": world.digest,
+        "sources": dict(sorted(actual.items())),
+    }
+    return hashlib.sha256(canonicalize_for_hash(payload)).hexdigest()
+
+
+def validate_world_artifacts(world: World, artifact_hashes: Mapping[str, str]) -> None:
+    """Require loaded derived artifacts to equal the immutable world contract."""
+    actual = dict(artifact_hashes)
+    expected = dict(world.artifact_hashes)
+    if actual != expected:
+        raise WorldRegistryError(
+            f"artifact hashes do not exactly match registered world {world.world_key}"
+        )
