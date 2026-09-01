@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "world_id": "clinical-trials-sec",
-  "version": "2025-disclosure-pilot",
+  "version": "2025-09-01_2026-09-01",
   "rank": 1,
   "modality": "translational_disclosure",
   "state": "RESEARCHED",
@@ -15,7 +15,7 @@
   "data_clock": {
     "window": "2025-09-01/2026-09-01",
     "as_of_rule": "Only registry records and SEC submissions accepted at or before the asserted disclosure timestamp may support a check.",
-    "retrieval_at": null,
+    "retrieval_at": "2026-09-01T22:37:00Z",
     "snapshot_policy": "Retain exact response bytes and accession/registry timestamps outside git; a changed re-fetch creates a new version."
   },
   "sources": [
@@ -43,7 +43,7 @@
       "artifact_paths": ["raw/clinical-trials-sec/sec/*.json", "raw/clinical-trials-sec/sec/*.txt"]
     }
   ],
-  "transformation": {"command": "python3 data/scripts/worlds/acquire_fixture.py --world clinical-trials-sec", "derived_artifact": "derived/clinical-trials-sec/disclosure-ledger.jsonl", "schema_version": "clinical-trials-sec-ledger-0.1", "row_count": null, "sha256": null},
+  "transformation": {"command": "python3 data/scripts/worlds/clinical_trials_fixture.py tests/fixtures/worlds/clinical_trials/fixture.json --clinicaltrials-source data/raw/clinical-trials-sec/clinicaltrials-gov/NCT06260774.json --sec-source data/raw/clinical-trials-sec/sec/0001104659-26-069810-ex99-1.html", "derived_artifact": "tests/fixtures/worlds/clinical_trials/fixture.json", "schema_version": "clinical-trials-sec-ledger-0.1", "row_count": 2, "sha256": "9274d0e9cc323a8d0a2bc640dfec2ba59858741fd45d1fedfe96ac4c1ec33da2"},
   "material_assumptions": ["NCT/sponsor/intervention joins are exact or inconclusive.", "Human confirmation is required before an asserted span enters the ledger.", "A registry match does not establish efficacy or corporate truth."],
   "fatal_gates": [
     {"id": "official_source_identity", "status": "not_run"},

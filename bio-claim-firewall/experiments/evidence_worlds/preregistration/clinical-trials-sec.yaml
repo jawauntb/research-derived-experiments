@@ -1,6 +1,6 @@
 schema_version: "1.0.0"
 world_id: "clinical-trials-sec"
-version: "2025-disclosure-pilot"
+version: "2025-09-01_2026-09-01"
 rank: 1
 target_and_decision: "Assess whether a human-confirmed disclosure assertion is consistent with registered status/results available at its disclosure time."
 representation: "NCT ID, sponsor, intervention, SEC CIK/accession/exhibit locator, hashed asserted span, RFC3339 UTC as_of; registered disclosure, not efficacy."
@@ -8,5 +8,5 @@ data_clock: "ClinicalTrials.gov API v2 and SEC EDGAR rolling sources; 2025-09-01
 assumptions: ["Exact identity joins or inconclusive.", "Human confirmation precedes ledger entry.", "Post-as_of records cannot support a prior assertion."]
 fatal_gates: [official_source_identity, license_and_custody, timestamp_cutoff_no_time_travel, complete_hashes_and_schema, organic_controls, world_isolation]
 controls: [positive_matching_timestamped_assertion, negative_wrong_identity_or_post_cutoff, null_missing_locator_or_ambiguous_join, corruption_changed_response_bytes, cross_world_isolation]
-evidence_paths: {contract: "data/manifests/worlds/clinical-trials-sec.json", acquisition: "data/scripts/worlds/acquire_fixture.py --world clinical-trials-sec", raw: "data/raw/clinical-trials-sec/", derived: "data/derived/clinical-trials-sec/", results: "experiments/evidence_worlds/results/clinical-trials-sec/"}
+evidence_paths: {contract: "data/manifests/worlds/clinical-trials-sec.json", acquisition: "data/scripts/worlds/clinical_trials_fixture.py", raw: "data/raw/clinical-trials-sec/", derived: "tests/fixtures/worlds/clinical_trials/", results: "experiments/evidence_worlds/results/clinical-trials-sec/"}
 initial_state: "RESEARCHED"

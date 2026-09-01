@@ -8,5 +8,5 @@ data_clock: "Codex portal is rolling; dataset and snapshot must be pinned; chang
 assumptions: ["Unknown internal-use terms stop at RESEARCHED.", "Unknown public-display terms prevent public evidence and yield WITHHELD_LICENSE only after lawful local freeze.", "Cell-type joins and edge aggregation remain source-specific."]
 fatal_gates: [internal_use_license, public_display_license, official_snapshot_identity, complete_hashes_and_schema, organic_controls, world_isolation]
 controls: [positive_directed_edge_above_threshold, negative_reversed_or_wrong_edge, null_unresolved_terms_or_snapshot, corruption_changed_static_bytes, cross_world_isolation]
-evidence_paths: {contract: "data/manifests/worlds/flywire-codex.json", acquisition: "data/scripts/worlds/acquire_fixture.py --world flywire-codex", raw: "data/raw/flywire-codex/", derived: "data/derived/flywire-codex/", results: "experiments/evidence_worlds/results/flywire-codex/"}
-initial_state: "RESEARCHED"
+evidence_paths: {contract: "data/manifests/worlds/flywire-codex.json", acquisition: null, raw: "data/raw/flywire-codex/", derived: null, results: "experiments/evidence_worlds/results/flywire-codex/"}
+initial_state: "RESEARCHED_DEFERRED"

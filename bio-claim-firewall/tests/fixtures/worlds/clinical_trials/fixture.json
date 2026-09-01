@@ -1,0 +1,43 @@
+{
+  "integrity_sha256": "b498e911cff14ce96dec0655ecd6ce55319dc38c9fb740325c7ab5aa0414c7f0",
+  "provenance": {
+    "clinicaltrials_url": "https://clinicaltrials.gov/api/v2/studies/NCT06260774",
+    "raw_sources_committed": false,
+    "sec_filing_accepted_at": "2026-06-03T08:08:44Z",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/1829635/000110465926069810/tm2616719d1_ex99-1.htm",
+    "window_end": "2026-09-01T23:59:59Z",
+    "window_start": "2025-09-01T00:00:00Z"
+  },
+  "records": [
+    {
+      "accepted_at": "2025-10-02T00:00:00Z",
+      "intervention": "TTX-MC138",
+      "nct_id": "NCT06260774",
+      "record_id": "ctgov:NCT06260774:2025-10-02",
+      "source": "clinicaltrials-gov-api-v2",
+      "sponsor": "TransCode Therapeutics",
+      "status": "ACTIVE_NOT_RECRUITING"
+    },
+    {
+      "accepted_at": "2026-06-03T08:08:44Z",
+      "asserted_span_sha256": "1ec3a0b235e0653bbced4f641d97df751f475020f5e18f72a71b5d354b973f33",
+      "cik": "0001829635",
+      "exhibit_locator": "EX-99.1#NCT06260774",
+      "human_confirmed": true,
+      "intervention": "TTX-MC138",
+      "nct_id": "NCT06260774",
+      "record_id": "sec:0001104659-26-069810:EX-99.1:NCT06260774",
+      "sec_accession": "0001104659-26-069810",
+      "source": "sec-edgar-submissions-and-archives",
+      "span_locator": "EX-99.1:sentence[NCT06260774]",
+      "sponsor": "TransCode Therapeutics"
+    }
+  ],
+  "schema_version": "clinical-trials-sec-ledger-0.1",
+  "source_hashes": {
+    "clinicaltrials-gov-api-v2": "1c04f811b0300bbba0b56caaade1dfb5c78808169c152924024594124493345e",
+    "sec-edgar-submissions-and-archives": "873c321bc7a918f4e7ad2cee5cde2de814376a864f1fece3e0c483cc8911a80e"
+  },
+  "version": "2025-09-01_2026-09-01",
+  "world_id": "clinical-trials-sec"
+}

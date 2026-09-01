@@ -8,5 +8,5 @@ data_clock: "NeuroVault rolling API catalog; selected metadata/coordinate record
 assumptions: ["Map and collection identity must match.", "No implicit atlas conversion or resampling.", "Diagnosis, subject-level, causal, and thresholded-only interpretations are out of scope."]
 fatal_gates: [map_and_collection_identity, coordinate_space_policy, license_and_custody, complete_hashes_and_schema, organic_controls, world_isolation]
 controls: [positive_matching_map_region_coordinate, negative_wrong_collection_or_space, null_metadata_without_reported_spatial_evidence, corruption_changed_metadata_bytes, cross_world_isolation]
-evidence_paths: {contract: "data/manifests/worlds/neurovault.json", acquisition: "data/scripts/worlds/acquire_fixture.py --world neurovault", raw: "data/raw/neurovault/", derived: "data/derived/neurovault/", results: "experiments/evidence_worlds/results/neurovault/"}
+evidence_paths: {contract: "data/manifests/worlds/neurovault.json", acquisition: null, raw: "data/raw/neurovault/", derived: null, results: "experiments/evidence_worlds/results/neurovault/"}
 initial_state: "RESEARCHED_DEFERRED"

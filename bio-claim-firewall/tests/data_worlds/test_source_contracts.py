@@ -11,7 +11,7 @@ SCRIPTS = Path(__file__).resolve().parents[2] / "data" / "scripts" / "worlds"
 if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
-from _common import (  # noqa: E402
+from _common import (
     SourceIntegrityError,
     acquire_bytes,
     contract_digest,
@@ -20,7 +20,6 @@ from _common import (  # noqa: E402
     preflight_contract,
 )
 
-
 ROOT = Path(__file__).resolve().parents[2]
 CONTRACTS = ROOT / "data" / "manifests" / "worlds"
 EXPECTED_WORLDS = {
@@ -28,7 +27,7 @@ EXPECTED_WORLDS = {
     "open-targets": "RESEARCHED",
     "arc-vcc": "RESEARCHED",
     "neurovault": "RESEARCHED_DEFERRED",
-    "flywire-codex": "RESEARCHED",
+    "flywire-codex": "RESEARCHED_DEFERRED",
 }
 
 
@@ -58,7 +57,7 @@ def test_preflight_is_no_network_and_reports_unresolved_gates():
     first = preflight_contract(CONTRACTS / "flywire-codex.json")
     second = preflight_contract(CONTRACTS / "flywire-codex.json")
     assert first == second
-    assert first["state"] == "RESEARCHED"
+    assert first["state"] == "RESEARCHED_DEFERRED"
     assert "internal_use_license" in first["fatal_gate_unknown_or_not_run"]
     assert first["ready_for_acquisition"] is False
 

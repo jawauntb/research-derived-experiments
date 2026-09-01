@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bio-claim-firewall/spec/worlds/open_targets_claim.schema.json",
+  "title": "Open Targets source-specific association claim",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["target_id", "disease_id", "evidence_source", "release"],
+  "properties": {
+    "claim_id": {"type": "string", "minLength": 1},
+    "target_id": {"type": "string", "minLength": 1},
+    "disease_id": {"type": "string", "minLength": 1},
+    "evidence_source": {"type": "string", "minLength": 1},
+    "release": {"type": "string", "const": "26.06"},
+    "score": {"type": "number"},
+    "score_threshold": {"type": "number"},
+    "assertion_type": {"type": "string", "minLength": 1},
+    "confidence_language": {"type": "string", "minLength": 1}
+  }
+}

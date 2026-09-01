@@ -1,0 +1,22 @@
+{
+  "assay": "H1",
+  "evaluation_split": "locked_holdout",
+  "license": "MIT",
+  "measurement_sha256": "4bd9c5fef5060ca500eac08af06ad9ecae3b4957382893f46e392c6193809853",
+  "official_url": "https://raw.githubusercontent.com/ArcInstitute/cell-eval2/ddfc5df73c997b2f113a560bd863fb068f2b453a/docs/data/H1-VCC-2025-training.h5ad",
+  "provenance_note": "Six deterministic records derived from ArcInstitute/cell-eval2's committed real 600-cell H1 sample; no model predictions, STATE code, weights, or challenge answer files are included.",
+  "raw_source_bytes": 4991092,
+  "raw_source_sha256": "eb36c766cbf76353f9981cb3a3aa32137622d1de53b29d861c483742bcd4dec7",
+  "release": "cell-eval2 0.16.0 / H1-VCC-2025 real training subset",
+  "retrieval_at": "2026-09-01T22:22:00Z",
+  "row_count": 6,
+  "schema_version": "arc-vcc-measurement-ledger-0.1",
+  "source_commit": "ddfc5df73c997b2f113a560bd863fb068f2b453a",
+  "source_id": "arc-cell-eval2-h1-vcc-real-subset",
+  "source_kind": "official_real_subset",
+  "statistic": "log2_fold_change_mean_raw_counts_pseudocount_1",
+  "threshold": 0.25,
+  "tuning_split": "development",
+  "world_id": "arc-vcc",
+  "world_version": "2025-h1-measurements"
+}

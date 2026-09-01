@@ -4,7 +4,7 @@ registry_policy: "Explicit world and version selection is required; directory di
 generated_by: "data/scripts/worlds/preflight.py"
 worlds:
   - world_id: "clinical-trials-sec"
-    version: "2025-disclosure-pilot"
+    version: "2025-09-01_2026-09-01"
     rank: 1
     modality: "translational_disclosure"
     state: "RESEARCHED"
