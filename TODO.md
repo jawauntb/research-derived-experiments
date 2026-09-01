@@ -362,3 +362,32 @@ free-floating suggestions. Start at [the backlog index](docs/primers/backlogs/RE
 then work each article list in its own source order. The index records the
 recommended cross-article sequence and the status (`new`, `partial`, or
 `existing`) of every item.
+
+## gazenotes app (2026-09-01)
+
+Local macOS gaze + voice note capture (`apps/gazenotes/`). Phases 0–5 of the
+handoff design are implemented and covered by 226 headless tests.
+
+- [x] Phase 0: package scaffold, `pyproject.toml`, `gazenotes doctor` that
+      attempts each access so macOS TCC prompts fire from the right process.
+- [x] Phase 1: Superwhisper watcher → screenshot → daily markdown + sidecar,
+      menu bar with a headless fallback.
+- [x] Phase 2: gaze engine — face-mesh features, dependency-free ridge
+      calibration with a 120 pt acceptance gate, one-euro smoothing, ring
+      buffer, fixation binning.
+- [x] Phase 3: Chrome enrichment over CDP — `elementFromPoint`, quoted passage,
+      `#:~:text=` link, element-clipped screenshot.
+- [x] Phase 4: voice commands (scroll, numbered click overlay, recalibrate, new
+      section) with a system fallback outside Chrome.
+- [x] Phase 5: idempotent nightly summary; default backend is heuristics, so the
+      pipeline never requires the network. `launchd` agent shipped.
+- [ ] **Verify on the target machine before trusting any of it**: the real
+      Superwhisper recordings path and retention setting, gaze accuracy after
+      calibration (the Phase 2 acceptance criterion is 90% correct screen-third
+      over 20 trials), and CDP coordinate conversion against a debug overlay.
+- [ ] Phase 6 (not started): rolling pre-note screen buffer, Apple Vision OCR
+      for PDFs and native apps, dwell scrolling, computer-use fallback outside
+      the browser, multi-display tracking, `.app` packaging for a stable TCC
+      bundle ID.
+- [ ] Do not add ambient always-on capture. Intentional capture is the design,
+      not a limitation to fix.

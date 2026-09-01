@@ -123,6 +123,7 @@ explicit Modal images and independent research commands may still use `uvx`.
 | Inquiry Black Box app | `apps/inquiry-black-box/` | Bun workspaces: Electron desktop, Chrome MV3, optional Bun cloud API | Local package; cloud on Railway; batch on Modal | Local-first; privacy-gated sync |
 | Coherence testbench | `coherence-testbench/` | Own Python 3.12 project + Modal jobs | Modal for gates; optional Railway site | **Not** in root `run_quality_checks.py`; Phase 3 **frozen** |
 | Bio Claim Firewall | `bio-claim-firewall/` | Local Python 3.12; deterministic rule-engine verifier | Local CLI only (no hosted service) | **Phase 1 landed** (schemas + fault taxonomy + inference rules + non-goals). Phase 3 verifier plumbing in progress. Runs against a frozen, hash-verified snapshot of ontologies + one perturbation evidence source. LLM output is data, never executable code. Architecturally MIDAS-adjacent (typed steps, Generate→Execute→Analyse contract, JSONL trajectory log) with reuse permission recorded in `bio-claim-firewall/PROVENANCE.md`. |
+| gazenotes | `apps/gazenotes/` | Local Python 3.11+ macOS daemon (menu bar + CLI) | Local install only (no hosted service) | Hands-free gaze-contextualised note capture. Superwhisper transcript → gaze fixation → screenshot/DOM crop → daily markdown. Dependency-free pure core with lazy macOS/MediaPipe/Playwright adapters; the whole test suite runs headless on Linux. Runs in the root quality gate via `apps/gazenotes/tests`. |
 
 ### 2.2 Grounded-harness research surfaces
 
@@ -1647,17 +1648,20 @@ command reuses that environment through `uv run --no-sync`:
 
 1. `pytest -q tests` over all 191 root test files (torch, numpy, scikit-learn,
    matplotlib, reportlab, pypdf, pytest)
-2. `compileall` on `scripts`, `experiments`, `tests`
-3. `publication_guard.py`
-4. `validate_evidence_registry.py`
-5. `validate_claim_registry.py` (including bidirectional claim/evidence edges)
-6. `validate_experiment_manifest.py` (registry coverage gate, then every discovered manifest)
-7. `validate_gate_verdict.py` (auto-discovers canonical verdicts)
-8. `validate_public_artifact_envelopes.py` (declared public digest sidecars)
-9. `check_primer_metadata.py` for all six HTML/PDF pairs
-10. `gen_provenance.py --check` (non-mutating freshness check)
-11. `ruff check .`
-12. `ty check` on `scripts`, `experiments`, and `tests` (configured exclusions remain in `pyproject.toml`)
+2. `pytest -q apps/gazenotes/tests` — the gazenotes app suite; its core is
+   dependency-free, so it runs in the same environment and needs no macOS,
+   camera, or browser
+3. `compileall` on `scripts`, `experiments`, `tests`, `apps/gazenotes/gazenotes`
+4. `publication_guard.py`
+5. `validate_evidence_registry.py`
+6. `validate_claim_registry.py` (including bidirectional claim/evidence edges)
+7. `validate_experiment_manifest.py` (registry coverage gate, then every discovered manifest)
+8. `validate_gate_verdict.py` (auto-discovers canonical verdicts)
+9. `validate_public_artifact_envelopes.py` (declared public digest sidecars)
+10. `check_primer_metadata.py` for all six HTML/PDF pairs
+11. `gen_provenance.py --check` (non-mutating freshness check)
+12. `ruff check .`
+13. `ty check` on `scripts`, `experiments`, and `tests` (configured exclusions remain in `pyproject.toml`)
 
 GitHub sets `QUALITY_PYTEST_WORKERS=auto`; the wrapper caps pytest-xdist at four
 workers, uses `--dist loadscope`, disables worker restarts, and sets OpenMP,
@@ -1702,6 +1706,39 @@ Pre-register kill_criterion.yaml (committed BEFORE data touch)
 
 **Current status (2026-07):** EEG attention binary **KILL**; eyetrack branches
 **INCONCLUSIVE**; Phase 3 build **FROZEN**. See `coherence-testbench/POST_MORTEM.md`.
+
+### 5.7 gazenotes operating model
+
+```text
+Superwhisper ──transcript files──► watcher ──► command? ──► commands (CDP / Quartz)
+                                      │
+FaceTime cam ──30 fps──► gaze engine ─┤  (ring buffer, in memory, never persisted)
+                                      ▼
+                                  pipeline
+                                    1. full screenshot FIRST (the screen moves)
+                                    2. dominant fixation over [t_start-2s, t_end]
+                                    3. Chrome frontmost? → elementFromPoint over CDP
+                                    4. image: element shot > gaze band crop > full frame
+                                      ▼
+                          ~/GazeNotes/YYYY-MM-DD.md
+                                    + captures/YYYY-MM-DD/HHMMSS{.png,.full.png,.json}
+                                      ▼
+                          gazenotes nightly → idempotent `## Summary` block
+```
+
+**Capture boundary:** nothing is recorded until the user speaks. No ambient
+screen or audio recording, and gaze samples live only in a 5-second in-memory
+ring buffer. The default configuration makes **no** network calls, including
+the nightly pass (`backend = "none"`, heuristics only).
+
+**Degradation contract:** every enrichment step is wrapped. A covered webcam,
+an uncalibrated display, a closed Chrome, or a dropped CDP connection
+downgrades an entry (full-screen capture, no quoted passage) but never loses
+the note. Calibration refuses to save a fit worse than 120 pt median error,
+because a confidently wrong crop is worse than no crop.
+
+**Concurrency:** the daemon and the nightly pass share an advisory `flock` on
+`~/GazeNotes/.gazenotes.lock`, so a summary rewrite can never race an append.
 
 ---
 
