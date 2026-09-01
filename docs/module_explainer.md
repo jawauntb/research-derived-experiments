@@ -25,6 +25,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `.cursor/skills/lea/` | Repo skill for standing up Lea and banking proved vs verified Lean |
 | `sites/` | Public static sites (atlas, Inquiry landing, Envelope Guard) |
 | `apps/inquiry-black-box/` | Local-first Inquiry product monorepo (Bun/Electron/MV3) |
+| `apps/gazenotes/` | Local macOS gaze + voice note-capture daemon (Python 3.11+, own `pyproject.toml`, 387 headless tests) |
 | `coherence-testbench/` | Separate EEG/eyetrack Phase-0 GO/KILL project |
 | `bio-claim-firewall/` | Proof-carrying biological claim system. Phase 1 spec + Phase 2 real pilot world + Phase 3 verifier + Phase 4 proposer/repairer + Phase 5a mutation harness landed. Locked JSON schemas, closed fault taxonomy, deterministic rule cascade; MIDAS-adjacent architecture with permission (`bio-claim-firewall/PROVENANCE.md`). Modules: `src/audit/` (append-only ledger); `src/normalize/` (CURIE canonicalization + `Snapshot` protocol); `src/evidence/` (hash-verified snapshot loader; labels); `src/rules/` (30-rule cascade with `# MUTATION-POINT:` markers); `src/verifier/` (top-level composer, fail-closed); `src/model_manager/` (MIDAS-derived provider + prompt system, Phase 4c adapter that renders configured task prompts and maps response provenance; tasks {proposer, checker, repairer}; keys read from env only); `src/proposer/` + `src/repairer/` + `src/orchestrator/` + `src/trajectory/` (Phase 4 untrusted-model interfaces + repair loop + JSONL log); `prompts/**/v*/` (versioned Jinja2 templates; repairer `v2` supplies the current parser-compatible JSON contract, while `v1` remains historical); `eval/mutation/` (Phase 5a runner that AST-mutates each rule and re-runs tests; direct R-CTX-02/R-CTX-05 regressions close the first-run gaps, and all 18 `_shared.py` context mutants now kill); `data/` (Phase 2 frozen pilot world — HGNC 45,045 genes, NCBI Taxonomy, Cell Ontology 3,335 terms, Cell Line Ontology, Reactome 2,012 pathways, Replogle 2022 Perturb-seq 9,400 records — reproducible from `data/scripts/download_*.py` + `data/manifests/`; ~70MB local, permissive licenses). Adversarial claim + synthetic-world fixture pack under `tests/fixtures/`; module contract in `src/INTERFACES.md`; MIDAS reuse plan in `PHASE_4_PLAN.md`. |
 | `data/` | Gitignored raw data; committed exception `data/paper_b/` |
@@ -1018,7 +1019,7 @@ Raw outputs stay under `artifacts/` until summarized.
 | `validate_public_artifact_envelopes.py` | Validate declared public digest sidecars against tracked public bytes and embedded raw-source receipts | Reads manifest `envelope_path` entries and `*.envelope.json`; portable contract in `schemas/public_artifact_envelope.schema.json` |
 | `check_primer_metadata.py` | Require matching titles across all six primer HTML `<title>` values and PDF metadata | Needs `pdfinfo` (`poppler-utils` in CI) |
 | `regen.py` | List/reproduce experiments from the registered primary run, print documented Modal commands, or verify allowlisted clean-clone CPU recipes | `list`, `<name>`, `--deps`, `verify-clean-clone`, `--verify-clean-clone` |
-| `run_quality_checks.py` | Locked `quality` sync → pytest → compileall → publication guard → four research-contract validators → primer metadata → provenance freshness → Ruff → ty; all post-sync commands use `uv run --no-sync` | Exit code; canonical local/CI root gate; local pytest serial by default, CI/opt-in local pytest bounded to four `loadscope` xdist workers with native math-library thread caps |
+| `run_quality_checks.py` | Locked `quality` sync → pytest → gazenotes app pytest → compileall → publication guard → four research-contract validators → primer metadata → provenance freshness → Ruff → ty; all post-sync commands use `uv run --no-sync` | Exit code; canonical local/CI root gate; local pytest serial by default, CI/opt-in local pytest bounded to four `loadscope` xdist workers with native math-library thread caps |
 | `publication_guard.py` | Block tracked secrets, forbidden paths, oversized files; exposes a tested text-signature helper | Exit code |
 | `env_probe.py` | Report env var presence/length only | `--json` |
 | `build_information_limited_discovery_pdf.py` | Deterministic ReportLab renderer for the Information-Limited Discovery paper; normalizes the paper's finite LaTeX vocabulary, adds page furniture, and mirrors exact bytes to the paper archive locations | In: `papers/information_limited_discovery/paper.md`; out: paper-local PDF, `papers/pdf/` copy, optional existing local Metaphysics archive |
@@ -1480,6 +1481,83 @@ Phase-0 GO/KILL bench for cross-subject cognitive-state decoding on BBBD.
 python3 scripts/run_phase0.py --smoke
 # Full gate: doppler … modal run modal_jobs/train.py --config config/phase0.yaml
 ```
+
+
+### 6.5 `apps/gazenotes/` — full catalog
+
+Hands-free note capture for macOS: Superwhisper supplies *what was said*, the
+webcam estimates *where the user was looking*, and a screenshot or the live DOM
+supplies *what they were looking at*. Output is plain markdown + PNG + JSON in
+`~/GazeNotes/`. Entry point `gazenotes` (`python -m gazenotes`).
+
+The package splits into a **dependency-free pure core** and thin **platform
+adapters** that import Quartz, MediaPipe/OpenCV, Playwright and rumps lazily, so
+every module imports and the whole suite runs headless on Linux.
+
+#### Core modules (`gazenotes/`)
+
+| File | Responsibility |
+|---|---|
+| `config.py` | `config.toml` → typed `Config`/`NightlyConfig`; annotated default writer |
+| `geometry.py` | Quartz / Cocoa / pixel conversions; one internal convention (quartz logical points); gaze crop-band rule |
+| `events.py` | `NoteEvent`, `GazeSample`, `Fixation`, `AppContext`, `BrowserContext`, `Capture` |
+| `watcher.py` | Superwhisper recordings folder → `NoteEvent`; tolerant `meta.json` parsing; watchdog when installed, polling otherwise |
+| `screen.py` | Quartz adapter: frontmost app/window, `screencapture`, Retina-aware crop; `NullScreen` off-platform |
+| `browser.py` | Playwright/CDP: `elementFromPoint` extraction, `#:~:text=` fragment links, element screenshots, page selection |
+| `ocr.py` | Apple Vision OCR: the "Looking at" line outside Chrome. Pure `reading_order`/`passage_from_lines` core; Vision's bottom-left normalised coordinates are converted to reading order here |
+| `displays.py` | Display enumeration, gaze→display and window→display resolution, per-display calibration keys. Handles the negative origins macOS gives monitors placed left of or above the built-in screen |
+| `dwell.py` | Gaze-driven scrolling: pure `DwellScroller.decide` plus a thin `DwellDriver`. Latches the fired zone until an observed look-away, so a resting gaze cannot run away with the page. Off by default |
+| `screenbuffer.py` | Rolling in-memory pre-note screen buffer, bounded by both age and total bytes. Frames reach disk only through `write_frame_at`. Off by default |
+| `commands.py` | Transcript → `Command` (pure); `CommandRouter` executes against Chrome or the system; numbered link overlay |
+| `pipeline.py` | `NoteProcessor` — one spoken note in, one written entry out; screenshot-first ordering and every degradation path |
+| `notes.py` | Daily markdown file, entry formatting, sidecar JSON, collision-safe capture stems, purge |
+| `nightly.py` | Heuristic summary, to-do extraction, cross-day links, idempotent summary block; pluggable LLM backend (default `none`) |
+| `lock.py` | Advisory `flock` shared by the daemon and the nightly pass |
+| `daemon.py` | Wires screen + gaze + browser + notes; routes commands vs notes |
+| `doctor.py` | Permission/dependency checks that *attempt* each access so macOS TCC prompts fire |
+| `menubar.py` | rumps status item with a headless fallback |
+| `cli.py` / `__main__.py` | `run · doctor · displays · calibrate · nightly · chrome · purge · config` |
+| `packaging/setup_app.py` | py2app build script (import-safe, testable without py2app) giving the app a stable `com.gazenotes.app` bundle id so macOS TCC grants survive rebuilds. **Written on Linux, never executed** — see `packaging/README.md` |
+
+#### Gaze subpackage (`gazenotes/gaze/`)
+
+| File | Responsibility |
+|---|---|
+| `features.py` | MediaPipe face-mesh landmarks → 10-d feature vector (iris ratios, head-pose proxies, face box); blink detection |
+| `regress.py` | Dependency-free ridge regression over degree-2 polynomial features; calibration JSON keyed per display |
+| `calibrate.py` | Dot scheduling, fit, 120 pt acceptance gate, Tkinter fullscreen UI |
+| `model.py` | One-euro filter, 5 s in-memory ring buffer, fixation binning, blink hold, per-sample confidence |
+| `capture.py` | Camera thread; frame → screen-space sample; reports why gaze is unavailable |
+
+#### Tests (`apps/gazenotes/tests/`, 387 tests, no macOS or hardware)
+
+| File | Covers |
+|---|---|
+| `test_coords.py` | Coordinate conversions, Retina scaling, crop clamping, external-display origins |
+| `test_fixation.py` | Ring buffer, fixation detection, blink holds, one-euro filter, ridge fit + calibration gate |
+| `test_features.py` | Landmark maths on synthetic faces; frame → sample path of the engine |
+| `test_notes.py` | Entry rendering and omissions, sidecar contents, daily file management, purge |
+| `test_watcher.py` | Superwhisper schema variants, timestamps, stability check, no-replay-on-start |
+| `test_browser.py` | Text fragments, page selection, DOM payload conversion, chrome-point rejection |
+| `test_commands.py` | Command parsing (dictation punctuation, spelled numbers, homophones) and routing |
+| `test_nightly.py` | To-do heuristics, summary placement, idempotency, cross-day links, no-network default |
+| `test_pipeline.py` | End-to-end capture and every degradation path; daemon/nightly lock |
+| `test_config_and_cli.py` | Config defaults and coercion, doctor report, CLI surface, purge confirmation, display listing |
+| `test_ocr.py` | Reading order across Vision's inverted y-axis, passage assembly, confidence filtering, unavailability |
+| `test_displays.py` | Negative-origin layouts, straddling windows, mixed scale factors, calibrated/uncalibrated splits |
+| `test_dwell.py` | Sustained-dwell requirement, zone latching, cooldown, blink tolerance, stale-buffer safety |
+| `test_screenbuffer.py` | Age and byte eviction, at-or-before frame selection, that nothing reaches disk unbidden |
+| `test_packaging.py` | Bundle id, plist keys, `LSUIElement`, version tracking, import-safety of the build script |
+
+```bash
+cd apps/gazenotes && pip install -e '.[all]' && gazenotes doctor
+python3 -m pytest apps/gazenotes/tests -q   # also runs inside scripts/run_quality_checks.py
+```
+
+Also ships `launchd/com.gazenotes.nightly.plist` for the 23:30 summary pass, and
+`EXTRACTION_HANDOFF.md` — the zero-context brief for lifting the app into its
+own standalone repo (provenance, `git subtree split` recipe, and the macOS
+bring-up order for everything a Linux build could not verify).
 
 ---
 

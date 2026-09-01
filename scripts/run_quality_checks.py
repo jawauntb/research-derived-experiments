@@ -75,7 +75,14 @@ def quality_steps(
             None,
         ),
         (pytest_command, pytest_environment),
-        (UV_PYTHON + ["-m", "compileall", "scripts", "experiments", "tests"], None),
+        # The gazenotes app keeps its own suite; its core is dependency-free so
+        # it runs in the same environment as the research tests.
+        (UV_PYTHON + ["-m", "pytest", "-q", "apps/gazenotes/tests"], None),
+        (
+            UV_PYTHON
+            + ["-m", "compileall", "scripts", "experiments", "tests", "apps/gazenotes/gazenotes"],
+            None,
+        ),
         (UV_PYTHON + ["scripts/publication_guard.py"], None),
         (UV_PYTHON + ["scripts/validate_evidence_registry.py"], None),
         (UV_PYTHON + ["scripts/validate_claim_registry.py"], None),

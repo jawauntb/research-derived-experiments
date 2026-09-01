@@ -1,0 +1,53 @@
+[project]
+name = "gazenotes"
+version = "0.1.0"
+description = "Hands-free, gaze-contextualised note capture for macOS"
+requires-python = ">=3.11"
+authors = [{ name = "Jawaun Brown" }]
+license = { text = "MIT" }
+readme = "README.md"
+dependencies = []
+
+[project.optional-dependencies]
+# The pure core has no dependencies at all; each capability is opt-in so a
+# missing one degrades a feature instead of breaking the daemon.
+macos = [
+    "pyobjc-framework-Quartz>=10.0",
+    "pyobjc-framework-Cocoa>=10.0",
+    "pyobjc-framework-ApplicationServices>=10.0",
+    "rumps>=0.4",
+]
+gaze = [
+    "opencv-python>=4.9",
+    "mediapipe>=0.10.9",
+    "numpy>=1.26",
+]
+browser = ["playwright>=1.41"]
+watch = ["watchdog>=4.0"]
+# Apple Vision OCR: the "Looking at" line for PDFs and native apps.
+ocr = ["pyobjc-framework-Vision>=10.0", "pyobjc-framework-Quartz>=10.0"]
+# Build a .app so macOS TCC grants attach to a stable bundle id.
+packaging = ["py2app>=0.28"]
+all = ["gazenotes[macos,gaze,browser,watch,ocr]"]
+dev = ["pytest>=8.0", "ruff>=0.4"]
+
+[project.scripts]
+gazenotes = "gazenotes.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["gazenotes*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 110
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B"]
+ignore = ["E501"]

@@ -491,9 +491,11 @@ QUALITY_PYTEST_WORKERS=auto python3 scripts/run_quality_checks.py
 
 Coverage boundaries are unchanged: the wrapper runs all 72 root test files, including
 scientific and PDF artifact-builder tests, `unittest.TestCase` tests, and
-pytest-native fixtures and marks. After pytest it compiles the Python trees,
-applies the publication guard, validates the evidence, claim,
-experiment-manifest, and gate-verdict contracts, checks all six primer HTML/PDF
-metadata pairs, verifies generated provenance without mutating it, and runs
-Ruff plus ty. The root gate still excludes the Inquiry, coherence-testbench,
-Haskell/Cabal, and site-specific suites; those retain their own workflows.
+pytest-native fixtures and marks. It then runs the `apps/gazenotes` suite, whose
+core is dependency-free and needs no macOS, camera, or browser. After pytest it
+compiles the Python trees, applies the publication guard, validates the
+evidence, claim, experiment-manifest, and gate-verdict contracts, checks all six
+primer HTML/PDF metadata pairs, verifies generated provenance without mutating
+it, and runs Ruff plus ty. The root gate still excludes the Inquiry,
+coherence-testbench, Haskell/Cabal, and site-specific suites; those retain their
+own workflows.
