@@ -1,7 +1,10 @@
 {
   "integrity_sha256": "b498e911cff14ce96dec0655ecd6ce55319dc38c9fb740325c7ab5aa0414c7f0",
   "provenance": {
+    "clinicaltrials_attribution": "ClinicalTrials.gov, U.S. National Library of Medicine",
     "clinicaltrials_url": "https://clinicaltrials.gov/api/v2/studies/NCT06260774",
+    "modifications": "Selected sponsor, intervention, status, and data-clock fields into a compact derived identity record; no raw response text is redistributed.",
+    "processing_date": "2026-09-01",
     "raw_sources_committed": false,
     "sec_filing_accepted_at": "2026-06-03T08:08:44Z",
     "sec_url": "https://www.sec.gov/Archives/edgar/data/1829635/000110465926069810/tm2616719d1_ex99-1.htm",

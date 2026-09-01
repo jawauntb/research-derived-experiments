@@ -114,6 +114,9 @@ def build(ct_source: Path, sec_source: Path, destination: Path) -> dict[str, obj
         "provenance": {
             "clinicaltrials_url": f"https://clinicaltrials.gov/api/v2/studies/{NCT_ID}",
             "sec_url": "https://www.sec.gov/Archives/edgar/data/1829635/000110465926069810/tm2616719d1_ex99-1.htm",
+            "clinicaltrials_attribution": "ClinicalTrials.gov, U.S. National Library of Medicine",
+            "processing_date": "2026-09-01",
+            "modifications": "Selected sponsor, intervention, status, and data-clock fields into a compact derived identity record; no raw response text is redistributed.",
             "sec_filing_accepted_at": SEC_ACCEPTED_AT,
             "window_start": "2025-09-01T00:00:00Z",
             "window_end": "2026-09-01T23:59:59Z",
