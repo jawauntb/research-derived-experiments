@@ -1554,7 +1554,10 @@ cd apps/gazenotes && pip install -e '.[all]' && gazenotes doctor
 python3 -m pytest apps/gazenotes/tests -q   # also runs inside scripts/run_quality_checks.py
 ```
 
-Also ships `launchd/com.gazenotes.nightly.plist` for the 23:30 summary pass.
+Also ships `launchd/com.gazenotes.nightly.plist` for the 23:30 summary pass, and
+`EXTRACTION_HANDOFF.md` — the zero-context brief for lifting the app into its
+own standalone repo (provenance, `git subtree split` recipe, and the macOS
+bring-up order for everything a Linux build could not verify).
 
 ---
 

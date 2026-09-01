@@ -49,6 +49,11 @@ These are load-bearing; the code enforces them.
   dropped — the note still gets written, just with less context. Every
   enrichment step is wrapped; a failure downgrades an entry, it never loses one.
 
+> **Extracting this into its own repo?** Start with
+> [EXTRACTION_HANDOFF.md](EXTRACTION_HANDOFF.md) — provenance, the
+> `git subtree split` recipe, and the bring-up order for everything that a
+> Linux build could not verify.
+
 ## Install
 
 ```bash
