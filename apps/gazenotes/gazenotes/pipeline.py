@@ -20,7 +20,7 @@ import logging
 from pathlib import Path
 
 from .config import Config
-from .events import AppContext, Capture, NoteEvent
+from .events import AppContext, Capture, NoteEvent, OcrContext
 from .geometry import Point, Rect, gaze_crop_rect
 from .lock import notes_lock
 from .notes import DailyNotes
@@ -41,12 +41,18 @@ class NoteProcessor:
         notes: DailyNotes | None = None,
         gaze=None,
         bridge=None,
+        buffer=None,
+        displays=None,
     ) -> None:
         self.config = config
         self.screen = screen
         self.notes = notes or DailyNotes(config.notes_dir)
         self.gaze = gaze
         self.bridge = bridge
+        self.buffer = buffer
+        """Optional rolling pre-note screen buffer; ``None`` when disabled."""
+        self.displays = displays
+        """Optional zero-arg callable returning the current display list."""
 
     # -- public ---------------------------------------------------------
     def process(self, event: NoteEvent) -> Capture:
@@ -62,8 +68,19 @@ class NoteProcessor:
         capture.screenshot_full = shot
         capture.screenshot = shot
 
+        # Second, before any enrichment: the screen as it was when they began
+        # speaking. "Note that" is usually about something already scrolling
+        # away, and this is the only record of it.
+        if self.buffer is not None:
+            before = self._guard(
+                "pre-note frame",
+                lambda: self.buffer.write_frame_at(event.t_start, directory / f"{stem}.before.png"),
+            )
+            capture.screenshot_before = before
+
         capture.app = self._guard("frontmost app", self.screen.frontmost)
         capture.fixation = self._guard("gaze", lambda: self._fixation(event))
+        capture.display = self._guard("display", lambda: self._display_key(capture.fixation)) or ""
 
         window = self._window_rect(capture.app)
         if (
@@ -83,6 +100,11 @@ class NoteProcessor:
             )
 
         self._attach_image(capture, directory, stem)
+
+        # OCR is the non-browser fallback for "Looking at", so it only runs
+        # when the DOM gave us nothing.
+        if self.config.ocr_enabled and capture.browser is None and capture.screenshot is not None:
+            capture.ocr = self._guard("ocr", lambda: self._ocr(capture.screenshot))
 
         if not self.config.keep_full_screenshot and capture.screenshot_full is not None:
             if capture.screenshot != capture.screenshot_full:
@@ -116,6 +138,23 @@ class NoteProcessor:
             )
             return None
         return fixation
+
+    def _display_key(self, fixation) -> str:
+        """Which display the gaze landed on, for the sidecar and calibration."""
+        if fixation is None or self.displays is None:
+            return ""
+        from .displays import display_for_point
+
+        display = display_for_point(Point(fixation.x, fixation.y), self.displays())
+        return display.key if display is not None else ""
+
+    @staticmethod
+    def _ocr(image: Path) -> OcrContext | None:
+        """Read the capture with Apple Vision. Absent on any other platform."""
+        from .ocr import looking_at
+
+        text = looking_at(image)
+        return OcrContext(text=text) if text else None
 
     @staticmethod
     def _window_rect(app: AppContext | None) -> Rect | None:

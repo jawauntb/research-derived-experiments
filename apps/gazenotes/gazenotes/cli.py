@@ -37,8 +37,13 @@ def build_parser() -> argparse.ArgumentParser:
     sub.add_parser("run", help="run the daemon (default)")
     sub.add_parser("doctor", help="check permissions and dependencies")
 
-    calibrate = sub.add_parser("calibrate", help="calibrate gaze on this display")
+    calibrate = sub.add_parser("calibrate", help="calibrate gaze on a display")
     calibrate.add_argument("--points", type=int, default=9, choices=(9, 16))
+    calibrate.add_argument(
+        "--display", default=None, help="display key to calibrate (see `gazenotes displays`)"
+    )
+
+    sub.add_parser("displays", help="list displays and their calibration status")
 
     nightly = sub.add_parser("nightly", help="write the summary block for a day")
     nightly.add_argument("date", nargs="?", default="today")
@@ -104,11 +109,17 @@ def cmd_calibrate(args, config: Config) -> int:
 
     from .gaze.calibrate import show_calibration_ui
 
+    target = _pick_display(daemon, args.display)
+    if target is None:
+        print(f"No display matching {args.display!r}. Try `gazenotes displays`.", file=sys.stderr)
+        return 1
+    daemon.gaze.screen = target.bounds
+
     result = show_calibration_ui(
-        daemon.display_rect(),
+        target.bounds,
         daemon.gaze.current_features,
         calibration_path=config.calibration_path,
-        display_key=daemon.display_key(),
+        display_key=target.key,
         plan=CalibrationPlan(points=args.points),
     )
     daemon.gaze.stop()
@@ -118,6 +129,35 @@ def cmd_calibrate(args, config: Config) -> int:
         return 0
     print(f"Calibration rejected: {result.reason}", file=sys.stderr)
     return 1
+
+
+def cmd_displays(args, config: Config) -> int:
+    from .displays import calibrated_displays, enumerate_displays
+
+    displays = enumerate_displays()
+    calibrated = {display.key for display in calibrated_displays(config.calibration_path, displays)}
+    for display in displays:
+        mark = "calibrated" if display.key in calibrated else "NOT calibrated"
+        main = " (main)" if display.is_main else ""
+        bounds = display.bounds
+        print(
+            f"{display.key}{main}\n"
+            f"    bounds {bounds.x:g},{bounds.y:g} {bounds.w:g}x{bounds.h:g} "
+            f"@{display.scale:g}x — {mark}"
+        )
+    if not displays:
+        print("No displays found.")
+    return 0
+
+
+def _pick_display(daemon, wanted: str | None):
+    """The display to calibrate: the named one, else the main one."""
+    displays = daemon.displays
+    if not displays:
+        return None
+    if wanted is None:
+        return next((d for d in displays if d.is_main), displays[0])
+    return next((d for d in displays if d.key == wanted), None)
 
 
 def cmd_nightly(args, config: Config) -> int:
@@ -187,6 +227,7 @@ _COMMANDS = {
     "run": cmd_run,
     "doctor": cmd_doctor,
     "calibrate": cmd_calibrate,
+    "displays": cmd_displays,
     "nightly": cmd_nightly,
     "chrome": cmd_chrome,
     "purge": cmd_purge,

@@ -168,10 +168,51 @@ def check_notes_dir(config: Config) -> Check:
 
 
 def check_calibration(config: Config) -> Check:
+    """Report per display: an external monitor needs its own fit."""
+    from .displays import enumerate_displays, uncalibrated_displays
+
     path = config.calibration_path
+    displays = enumerate_displays()
     if not path.is_file():
         return Check("Gaze calibration", WARN, "not calibrated", "Run `gazenotes calibrate`")
-    return Check("Gaze calibration", OK, str(path))
+    pending = uncalibrated_displays(path, displays)
+    if pending:
+        names = ", ".join(display.key for display in pending)
+        return Check(
+            "Gaze calibration",
+            WARN,
+            f"{len(displays) - len(pending)}/{len(displays)} displays calibrated; missing {names}",
+            "Run `gazenotes calibrate` on each display",
+        )
+    return Check("Gaze calibration", OK, f"{len(displays)} display(s) calibrated")
+
+
+def check_displays() -> Check:
+    """Enumerate displays, so a multi-monitor setup is visible in the report."""
+    from .displays import enumerate_displays
+
+    displays = enumerate_displays()
+    described = ", ".join(
+        f"{display.key}@{display.scale:g}x" + (" (main)" if display.is_main else "")
+        for display in displays
+    )
+    return Check("Displays", OK, described or "none found")
+
+
+def check_vision_ocr(config: Config) -> Check:
+    """Apple Vision powers 'Looking at' outside Chrome."""
+    from .ocr import vision_available
+
+    if not config.ocr_enabled:
+        return Check("Vision OCR", OK, "disabled in config")
+    if vision_available():
+        return Check("Vision OCR", OK, "available")
+    return Check(
+        "Vision OCR",
+        WARN,
+        "unavailable; notes outside Chrome will have no quoted passage",
+        "pip install 'gazenotes[ocr]' (macOS only)",
+    )
 
 
 def run_checks(config: Config) -> list[Check]:
@@ -182,7 +223,9 @@ def run_checks(config: Config) -> list[Check]:
         check_screen_recording(),
         check_camera(),
         check_accessibility(),
+        check_displays(),
         check_calibration(config),
+        check_vision_ocr(config),
         check_chrome_cdp(config),
         _import_check("MediaPipe", "mediapipe", "pip install 'gazenotes[gaze]'"),
         _import_check("Playwright", "playwright", "pip install 'gazenotes[browser]' && playwright install"),

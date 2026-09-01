@@ -253,3 +253,37 @@ def test_an_uncalibrated_display_clears_any_previously_loaded_model(tmp_path):
     engine.model = linear_model()
     assert engine.load_calibration() is False
     assert engine.model is None
+
+
+def test_a_rearranged_display_shifts_predictions_by_its_origin_delta(tmp_path):
+    """Moving a monitor in System Settings must not invalidate its calibration.
+
+    The fit maps eye features to global screen coordinates, so a display whose
+    origin moved would otherwise put every prediction out by the whole width of
+    the other screen.
+    """
+    from gazenotes.gaze.regress import save_calibration
+
+    path = tmp_path / "calibration.json"
+    # Calibrated while the external sat to the RIGHT of the built-in display.
+    save_calibration(path, "ext", linear_model(), meta={"screen": [1728.0, 0.0, 2560.0, 1440.0]})
+
+    same_place = GazeEngine(screen=Rect(1728, 0, 2560, 1440), calibration_path=path, display_key="ext")
+    same_place.load_calibration()
+    moved = GazeEngine(screen=Rect(-2560, 0, 2560, 1440), calibration_path=path, display_key="ext")
+    moved.load_calibration()
+
+    face = synthetic_face(iris_x=0.5, iris_y=0.5)
+    before = same_place.sample_from_landmarks(face, 1.0)
+    after = moved.sample_from_landmarks(face, 1.0)
+    assert after.x == pytest.approx(before.x - (1728 - -2560))
+
+
+def test_a_calibration_without_stored_bounds_is_left_alone(tmp_path):
+    from gazenotes.gaze.regress import save_calibration
+
+    path = tmp_path / "calibration.json"
+    save_calibration(path, "main", linear_model())  # no screen meta
+    engine = GazeEngine(screen=Rect(0, 0, 1728, 1117), calibration_path=path, display_key="main")
+    engine.load_calibration()
+    assert engine._origin_delta == (0.0, 0.0)

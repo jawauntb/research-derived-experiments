@@ -74,6 +74,7 @@ class GazeEngine:
         self.model: RidgeModel | None = None
         self._reference_features: list[float] | None = None
         self._latest_features: list[float] | None = None
+        self._origin_delta: tuple[float, float] = (0.0, 0.0)
         self._filter_x = OneEuroFilter()
         self._filter_y = OneEuroFilter()
         self._thread: threading.Thread | None = None
@@ -110,6 +111,7 @@ class GazeEngine:
         self.model = RidgeModel.from_dict(entry)
         reference = entry.get("reference_features")
         self.set_reference_features(reference if isinstance(reference, list) else None)
+        self._origin_delta = self._origin_shift(entry.get("screen"))
         self._filter_x.reset()
         self._filter_y.reset()
         self.buffer.clear()
@@ -226,8 +228,9 @@ class GazeEngine:
 
         open_eyes = feat.eyes_open(landmarks)
         raw_x, raw_y = self.model.predict(vector)
-        x = self._filter_x(raw_x, t)
-        y = self._filter_y(raw_y, t)
+        dx, dy = self._origin_delta
+        x = self._filter_x(raw_x + dx, t)
+        y = self._filter_y(raw_y + dy, t)
 
         on_screen = self.screen.contains(Point(x, y))
         pose_ok = (
@@ -255,6 +258,27 @@ class GazeEngine:
     def current_features(self) -> list[float] | None:
         """The latest usable feature vector, or ``None`` if the face is lost."""
         return list(self._latest_features) if self._latest_features is not None else None
+
+    def _origin_shift(self, stored: object) -> tuple[float, float]:
+        """Offset to apply when the display has been rearranged since the fit.
+
+        The fit maps eye features to *global* screen coordinates, so moving a
+        monitor in System Settings — without moving it on the desk — shifts
+        every prediction by the change in the display's origin. Correcting for
+        that keeps a calibration usable across a rearrangement; a display that
+        physically moved needs a real recalibration, which the residual gate
+        cannot detect from here.
+        """
+        if not isinstance(stored, (list, tuple)) or len(stored) < 2:
+            return (0.0, 0.0)
+        try:
+            dx = self.screen.x - float(stored[0])
+            dy = self.screen.y - float(stored[1])
+        except (TypeError, ValueError):
+            return (0.0, 0.0)
+        if dx or dy:
+            log.info("display moved since calibration; offsetting gaze by (%+.0f, %+.0f)", dx, dy)
+        return (dx, dy)
 
     def set_reference_features(self, vector: Sequence[float] | None) -> None:
         """Record the head pose seen during calibration, for drift detection."""

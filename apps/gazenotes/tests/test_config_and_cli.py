@@ -212,3 +212,30 @@ def test_section_values_are_coerced_to_their_field_types():
 def test_ocr_defaults_on_because_it_only_reads_an_already_saved_capture():
     assert Config().ocr_enabled is True
     assert config_from_mapping({"ocr_enabled": False}).ocr_enabled is False
+
+
+def test_the_displays_command_reports_calibration_status(tmp_path, capsys):
+    args = cli.build_parser().parse_args(["displays"])
+    assert cli.cmd_displays(args, Config(notes_dir=tmp_path)) == 0
+    out = capsys.readouterr().out
+    assert "NOT calibrated" in out
+    assert "bounds" in out
+
+
+def test_calibrate_rejects_an_unknown_display_key():
+    from gazenotes.displays import Display
+    from gazenotes.geometry import Rect
+
+    class FakeDaemon:
+        displays = [Display(display_id=1, bounds=Rect(0, 0, 1728, 1117), scale=2.0, is_main=True)]
+
+    assert cli._pick_display(FakeDaemon(), "display9-800x600") is None
+    assert cli._pick_display(FakeDaemon(), None) is FakeDaemon.displays[0]
+    assert cli._pick_display(FakeDaemon(), "main-1728x1117") is FakeDaemon.displays[0]
+
+
+def test_dwell_and_ocr_checks_appear_in_the_doctor_report(tmp_path):
+    from gazenotes.doctor import run_checks
+
+    names = {check.name for check in run_checks(Config(notes_dir=tmp_path))}
+    assert {"Displays", "Vision OCR", "Gaze calibration"} <= names

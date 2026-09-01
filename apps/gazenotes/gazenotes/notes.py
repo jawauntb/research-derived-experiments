@@ -66,6 +66,10 @@ def format_entry(capture: Capture, capture_rel: Path | None = None) -> str:
 
     if capture.browser and capture.browser.text.strip():
         lines.append(f'**Looking at:** "…{_ellipsis(capture.browser.text)}…"')
+    elif capture.ocr and capture.ocr.text.strip():
+        # Labelled, because OCR of a screenshot is weaker evidence than the DOM
+        # and a reader should be able to tell which one they are looking at.
+        lines.append(f'**Looking at (OCR):** "…{_ellipsis(capture.ocr.text)}…"')
     if capture.browser and capture.browser.url:
         title = capture.browser.title.strip() or _host(capture.browser.url) or "source"
         link = capture.browser.fragment_url or capture.browser.url
@@ -80,6 +84,9 @@ def format_entry(capture: Capture, capture_rel: Path | None = None) -> str:
     trailer: list[str] = []
     if capture.fixation is not None:
         trailer.append(f"Gaze confidence: {capture.fixation.confidence:.2f}")
+    if capture.screenshot_before is not None:
+        rel = _relative(capture.screenshot_before, capture_rel)
+        trailer.append(f"[before speaking]({rel})")
     if capture.screenshot_full is not None:
         trailer.append(f"[full screen]({_relative(capture.screenshot_full, capture_rel)})")
     meta = capture.extra.get("sidecar")
@@ -148,6 +155,10 @@ def sidecar_dict(capture: Capture, notes_dir: Path | None = None) -> dict:
     if capture.crop is not None:
         x, y, w, h = capture.crop
         data["crop"] = {"x": round(x), "y": round(y), "w": round(w), "h": round(h)}
+    if capture.ocr is not None and capture.ocr.text.strip():
+        data["ocr"] = {"text": capture.ocr.text, "source": capture.ocr.source}
+    if capture.display:
+        data["display"] = capture.display
     if capture.browser is not None:
         data["browser"] = {
             "url": capture.browser.url,
@@ -164,6 +175,8 @@ def sidecar_dict(capture: Capture, notes_dir: Path | None = None) -> dict:
         data["screenshot"] = _relative(capture.screenshot, notes_dir)
     if capture.screenshot_full is not None:
         data["screenshot_full"] = _relative(capture.screenshot_full, notes_dir)
+    if capture.screenshot_before is not None:
+        data["screenshot_before"] = _relative(capture.screenshot_before, notes_dir)
     return data
 
 

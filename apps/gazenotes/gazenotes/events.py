@@ -7,7 +7,15 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-__all__ = ["NoteEvent", "GazeSample", "Fixation", "AppContext", "BrowserContext", "Capture"]
+__all__ = [
+    "NoteEvent",
+    "GazeSample",
+    "Fixation",
+    "AppContext",
+    "BrowserContext",
+    "OcrContext",
+    "Capture",
+]
 
 
 @dataclass(frozen=True)
@@ -62,6 +70,19 @@ class AppContext:
 
 
 @dataclass(frozen=True)
+class OcrContext:
+    """Text recovered from the capture by OCR, when the DOM was not available.
+
+    Kept separate from :class:`BrowserContext` so the note can say where its
+    quoted passage came from. OCR of a screenshot is weaker evidence than the
+    live DOM, and the entry should not pretend otherwise.
+    """
+
+    text: str
+    source: str = "vision"
+
+
+@dataclass(frozen=True)
 class BrowserContext:
     """What the DOM says was under the gaze point."""
 
@@ -82,7 +103,16 @@ class Capture:
     app: AppContext | None = None
     fixation: Fixation | None = None
     browser: BrowserContext | None = None
+    ocr: OcrContext | None = None
     screenshot: Path | None = None
+    screenshot_before: Path | None = None
+    """The screen as it was when speech began, from the rolling buffer.
+
+    Only present when the pre-note buffer is enabled; it is what makes "note
+    that" work for something that has already scrolled away.
+    """
+    display: str = ""
+    """Calibration key of the display the gaze fell on, when known."""
     screenshot_full: Path | None = None
     crop: tuple[float, float, float, float] | None = None
     extra: dict[str, Any] = field(default_factory=dict)

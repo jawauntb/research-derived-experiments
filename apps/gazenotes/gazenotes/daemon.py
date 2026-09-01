@@ -4,15 +4,19 @@ from __future__ import annotations
 
 import logging
 from datetime import date, datetime
+from pathlib import Path
 
 from .browser import ChromeBridge
 from .commands import CommandRouter, parse_command
 from .config import Config
+from .displays import Display, enumerate_displays, uncalibrated_displays
+from .dwell import DwellConfig, DwellDriver
 from .events import NoteEvent
 from .geometry import Rect
 from .notes import DailyNotes
 from .pipeline import NoteProcessor
 from .screen import get_screen
+from .screenbuffer import ScreenBuffer
 
 log = logging.getLogger(__name__)
 
@@ -27,13 +31,30 @@ class Daemon:
         self.screen = get_screen()
         self.notes = DailyNotes(config.notes_dir)
         self.bridge = ChromeBridge(config.chrome_cdp_url)
+        self.displays: list[Display] = enumerate_displays()
         self.gaze = self._build_gaze()
+        self.buffer = self._build_buffer()
         self.processor = NoteProcessor(
             config,
             screen=self.screen,
             notes=self.notes,
             gaze=self.gaze,
             bridge=self.bridge,
+            buffer=self.buffer,
+            displays=lambda: self.displays,
+        )
+        self.dwell = DwellDriver(
+            gaze=self.gaze,
+            screen=self.display_rect,
+            scroll=self._dwell_scroll,
+            config=DwellConfig(
+                zone_fraction=config.dwell.zone_fraction,
+                dwell_seconds=config.dwell.dwell_seconds,
+                cooldown_seconds=config.dwell.cooldown_seconds,
+                scroll_amount=config.dwell.scroll_amount,
+                min_confidence=config.dwell.min_confidence,
+            ),
+            enabled=config.dwell_scroll,
         )
         self.router = CommandRouter(
             bridge=self.bridge,
@@ -41,6 +62,7 @@ class Daemon:
             gaze=self.gaze,
             recalibrate=self.recalibrate,
             new_section=self.new_section,
+            dwell=self.dwell,
         )
         self.watcher = None
         self.last_status = "starting"
@@ -59,6 +81,36 @@ class Daemon:
             display_key=self.display_key(),
         )
 
+    def _build_buffer(self) -> ScreenBuffer | None:
+        """The pre-note buffer, or ``None`` when it is switched off.
+
+        Off is the default: this is the only component that records before the
+        user speaks, so it is opt-in rather than opt-out.
+        """
+        if not self.config.screen_buffer_enabled:
+            return None
+        return ScreenBuffer(
+            capture=self._capture_bytes,
+            seconds=self.config.screen_buffer_seconds,
+            interval=self.config.screen_buffer_interval,
+            max_bytes=int(self.config.screen_buffer_max_mb * 1024 * 1024),
+        )
+
+    def _capture_bytes(self) -> bytes | None:
+        """One screenshot as PNG bytes, never touching the notes directory."""
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "frame.png"
+            if self.screen.capture_full(path) is None:
+                return None
+            return path.read_bytes()
+
+    def _dwell_scroll(self, amount: float) -> str:
+        """Route a dwell scroll through the same path as a spoken one."""
+        app = self._guarded_frontmost()
+        return self.router.scroll(amount, window_title=app.window_title if app is not None else "")
+
     def display_rect(self) -> Rect:
         try:
             return self.screen.main_display()
@@ -67,9 +119,16 @@ class Daemon:
             return Rect(0, 0, 1440, 900)
 
     def display_key(self) -> str:
-        """Calibration key: one model per display geometry."""
+        """Calibration key for the display being calibrated or tracked."""
+        for display in self.displays:
+            if display.is_main:
+                return display.key
         rect = self.display_rect()
         return f"main-{int(rect.w)}x{int(rect.h)}"
+
+    def uncalibrated(self) -> list[Display]:
+        """Displays still needing ``gazenotes calibrate``."""
+        return uncalibrated_displays(self.config.calibration_path, self.displays)
 
     # -- events ---------------------------------------------------------
     def handle_event(self, event: NoteEvent) -> None:
@@ -143,10 +202,26 @@ class Daemon:
 
     # -- lifecycle ------------------------------------------------------
     def start_background(self) -> None:
-        """Start gaze; log rather than fail when it is unavailable."""
+        """Start gaze, the pre-note buffer and dwell scrolling, as configured.
+
+        Each is independent: none of them failing stops the others, and none of
+        them is required for a note to be captured.
+        """
         if self.gaze is not None:
             status = self.gaze.start()
             log.info("gaze: %s", status.reason)
+        if self.buffer is not None:
+            log.info(
+                "pre-note screen buffer: %.0f s at %.1f s intervals, cap %.0f MB",
+                self.config.screen_buffer_seconds,
+                self.config.screen_buffer_interval,
+                self.config.screen_buffer_max_mb,
+            )
+            self.buffer.start()
+        if self.config.dwell_scroll:
+            log.info("dwell scrolling: %s", self.dwell.start())
+        for display in self.uncalibrated():
+            log.warning("display %s is uncalibrated; run `gazenotes calibrate`", display.key)
         if not self.config.superwhisper_dir.is_dir():
             log.error(
                 "Superwhisper folder %s not found — run `gazenotes doctor`",
@@ -167,6 +242,10 @@ class Daemon:
     def stop(self) -> None:
         if self.watcher is not None:
             self.watcher.stop()
+        self.dwell.stop()
+        if self.buffer is not None:
+            self.buffer.stop()
+            self.buffer.clear()  # buffered frames never outlive the daemon
         if self.gaze is not None:
             self.gaze.stop()
         self.bridge.close()

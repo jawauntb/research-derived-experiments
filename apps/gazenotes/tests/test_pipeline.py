@@ -339,3 +339,107 @@ def test_the_element_bbox_is_recorded_as_viewport_geometry_not_as_a_screen_crop(
     sidecar = json.loads((tmp_path / "captures/2026-09-01/143022.json").read_text())
     assert "crop" not in sidecar
     assert sidecar["browser"]["bbox"] == {"x": 100.0, "y": 200.0, "width": 800.0, "height": 120.0}
+
+
+# -- Phase 6 integration ------------------------------------------------
+class FakeBuffer:
+    """Stands in for the rolling pre-note screen buffer."""
+
+    def __init__(self, *, has_frame=True):
+        self.has_frame = has_frame
+        self.asked_for: list[float] = []
+
+    def write_frame_at(self, t, destination):
+        self.asked_for.append(t)
+        if not self.has_frame:
+            return None
+        Path(destination).parent.mkdir(parents=True, exist_ok=True)
+        Path(destination).write_bytes(b"PNG-before")
+        return Path(destination)
+
+
+def test_the_pre_note_frame_is_taken_from_when_speech_began(tmp_path):
+    """'Note that' is usually about something already scrolling away."""
+    buffer = FakeBuffer()
+    processor = build(tmp_path, gaze=None)
+    processor.buffer = buffer
+    capture = processor.process(make_event())
+
+    event = make_event()
+    assert buffer.asked_for == [event.t_start]
+    assert capture.screenshot_before is not None
+    assert capture.screenshot_before.read_bytes() == b"PNG-before"
+    assert "[before speaking](captures/2026-09-01/143022.before.png)" in (
+        tmp_path / "2026-09-01.md"
+    ).read_text()
+
+
+def test_an_empty_pre_note_buffer_changes_nothing(tmp_path):
+    processor = build(tmp_path, gaze=None)
+    processor.buffer = FakeBuffer(has_frame=False)
+    capture = processor.process(make_event())
+    assert capture.screenshot_before is None
+    assert "before speaking" not in (tmp_path / "2026-09-01.md").read_text()
+
+
+def test_no_buffer_configured_means_no_pre_note_frame(tmp_path):
+    capture = build(tmp_path, gaze=None).process(make_event())
+    assert capture.screenshot_before is None
+    assert not (tmp_path / "captures/2026-09-01/143022.before.png").exists()
+
+
+def test_ocr_fills_looking_at_when_the_app_is_not_chrome(tmp_path, monkeypatch):
+    monkeypatch.setattr(
+        "gazenotes.ocr.looking_at",
+        lambda *_a, **_k: "the passage the OCR engine recovered from the screenshot",
+    )
+    screen = FakeScreen(app=AppContext("Preview", "com.apple.Preview", "arendt.pdf", (0, 25, 1400, 1000)))
+    capture = build(tmp_path, screen=screen, gaze=FakeGaze(Fixation(812, 540, 0.8, 40))).process(make_event())
+
+    assert capture.ocr is not None
+    text = (tmp_path / "2026-09-01.md").read_text()
+    # Labelled as OCR: it is weaker evidence than the DOM and must say so.
+    assert "**Looking at (OCR):**" in text
+    assert json.loads((tmp_path / "captures/2026-09-01/143022.json").read_text())["ocr"]["source"] == "vision"
+
+
+def test_ocr_is_skipped_when_the_dom_already_gave_us_the_passage(tmp_path, monkeypatch):
+    called = []
+    monkeypatch.setattr("gazenotes.ocr.looking_at", lambda *a, **k: called.append(1) or "x" * 60)
+    capture = build(
+        tmp_path,
+        gaze=FakeGaze(Fixation(812, 540, 0.8, 40)),
+        bridge=FakeBridge(BROWSER),
+    ).process(make_event())
+    assert capture.ocr is None
+    assert called == []
+
+
+def test_ocr_can_be_switched_off(tmp_path, monkeypatch):
+    monkeypatch.setattr("gazenotes.ocr.looking_at", lambda *a, **k: "x" * 60)
+    capture = build(tmp_path, gaze=None, ocr_enabled=False).process(make_event())
+    assert capture.ocr is None
+
+
+def test_ocr_failing_never_loses_the_note(tmp_path, monkeypatch):
+    def explode(*_a, **_k):
+        raise RuntimeError("Vision blew up")
+
+    monkeypatch.setattr("gazenotes.ocr.looking_at", explode)
+    capture = build(tmp_path, gaze=None).process(make_event())
+    assert capture.ocr is None
+    assert '"Worth pairing' in (tmp_path / "2026-09-01.md").read_text()
+
+
+def test_the_gaze_display_is_recorded_on_the_entry(tmp_path):
+    from gazenotes.displays import Display
+
+    built_in = Display(display_id=1, bounds=Rect(0, 0, 1728, 1117), scale=2.0, is_main=True)
+    external = Display(display_id=2, bounds=Rect(-2560, 0, 2560, 1440), scale=1.0, is_main=False)
+    processor = build(tmp_path, gaze=FakeGaze(Fixation(-500, 700, 0.8, 40)))
+    processor.displays = lambda: [built_in, external]
+    capture = processor.process(make_event())
+
+    # The gaze landed on the display to the LEFT, at negative x.
+    assert capture.display == external.key
+    assert json.loads((tmp_path / "captures/2026-09-01/143022.json").read_text())["display"] == external.key

@@ -111,6 +111,9 @@ def parse_command(transcript: str, prefix: str = "computer") -> Command | None:
         return Command("back")
     if head in {"forward"}:
         return Command("forward")
+    if head == "dwell" and len(rest) > 1:
+        return Command("dwell_on" if rest[1] in {"on", "start"} else "dwell_off")
+
     if head in {"pause", "stop"}:
         return Command("pause")
     if head in {"resume", "start"}:
@@ -183,6 +186,7 @@ class CommandRouter:
         gaze=None,
         recalibrate: Callable[[], str] | None = None,
         new_section: Callable[[str], str] | None = None,
+        dwell=None,
         badge_limit: int = 60,
         badge_timeout_ms: int = 10_000,
     ) -> None:
@@ -191,6 +195,7 @@ class CommandRouter:
         self.gaze = gaze
         self._recalibrate = recalibrate
         self._new_section = new_section
+        self.dwell = dwell
         self.badge_limit = badge_limit
         self.badge_timeout_ms = badge_timeout_ms
 
@@ -207,6 +212,10 @@ class CommandRouter:
     # -- scrolling ------------------------------------------------------
     def _page(self, window_title: str):
         return self.bridge.active_page(window_title) if self.bridge is not None else None
+
+    def scroll(self, amount: float, *, window_title: str = "") -> str:
+        """Scroll the frontmost target. Public so dwell scrolling shares it."""
+        return self._scroll(amount, window_title)
 
     def _scroll(self, amount: float, window_title: str) -> str:
         page = self._page(window_title)
@@ -303,6 +312,16 @@ class CommandRouter:
         if self._new_section is None:
             return "notes not available"
         return self._new_section(command.argument)
+
+    def _do_dwell_on(self, command: Command, window_title: str) -> str:
+        if self.dwell is None:
+            return "dwell scrolling unavailable"
+        return self.dwell.set_enabled(True)
+
+    def _do_dwell_off(self, command: Command, window_title: str) -> str:
+        if self.dwell is None:
+            return "dwell scrolling unavailable"
+        return self.dwell.set_enabled(False)
 
     def _do_pause(self, command: Command, window_title: str) -> str:
         """Stop the camera. Nothing else pauses: notes are already opt-in."""

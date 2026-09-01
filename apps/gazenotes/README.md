@@ -80,7 +80,9 @@ capability, and the daemon reports what is missing rather than refusing to run.
 ```bash
 gazenotes config --init   # write ~/GazeNotes/config.toml
 gazenotes doctor          # check permissions; grant what it asks for
+gazenotes displays        # what screens exist, and which are calibrated
 gazenotes calibrate       # 9 dots, ~15 seconds, once per display
+gazenotes calibrate --display display2-2560x1440   # ...and again per monitor
 gazenotes chrome          # relaunch Chrome with the CDP port open (optional)
 gazenotes run             # the daemon; menu-bar item if rumps is installed
 ```
@@ -101,6 +103,7 @@ Anything starting with `computer` (configurable) is a command, not a note:
 | `computer click sign in` | click by visible text |
 | `computer recalibrate` | rerun gaze calibration |
 | `computer pause` / `resume` | stop and restart the camera |
+| `computer dwell on` / `off` | toggle gaze-driven scrolling |
 | `computer new section <title>` | start a new heading in today's file |
 
 ### Nightly summary
@@ -155,13 +158,18 @@ gazenotes/
     model.py      one-euro filter, ring buffer, fixation detection
     capture.py    camera thread; frame → screen-space sample
   browser.py      Playwright/CDP: elementFromPoint, text fragments, element shots
+  ocr.py          Apple Vision: "Looking at" for PDFs and native apps
+  displays.py     display enumeration, gaze→display resolution, per-screen calibration
+  dwell.py        gaze-driven scrolling (off by default)
+  screenbuffer.py rolling in-memory pre-note screen buffer (off by default)
   commands.py     transcript → Command; execution against Chrome or the system
   pipeline.py     one note in, one entry out
   notes.py        daily file, entry formatting, sidecars, purge
   nightly.py      heuristic summary, to-dos, cross-day links
   lock.py         advisory lock shared by the daemon and the nightly pass
   daemon.py       wiring
-  cli.py          run · doctor · calibrate · nightly · chrome · purge · config
+  cli.py          run · doctor · displays · calibrate · nightly · chrome · purge · config
+packaging/        py2app build script — a stable bundle id so TCC grants stick
 ```
 
 The package splits into a **pure core** and thin **platform adapters**. Quartz,
@@ -171,7 +179,7 @@ module imports — and the whole test suite runs — on any platform.
 ## Tests
 
 ```bash
-python -m pytest tests -q     # 226 tests, no macOS or hardware needed
+python -m pytest tests -q     # 382 tests, no macOS or hardware needed
 ```
 
 Coordinate conversions, fixation detection, the calibration fit and gate, entry
@@ -179,9 +187,25 @@ formatting, Superwhisper schema variants, command parsing, text fragments, the
 nightly pass's idempotency, and the whole capture pipeline (including every
 degradation path) are covered with fakes.
 
+## Beyond the core capture loop
+
+Four extras sit on top of the Phase 1–5 pipeline. Two are **off by default** on
+purpose:
+
+| Feature | Default | What it does |
+|---|---|---|
+| **Vision OCR** (`ocr.py`) | **on** | When the frontmost app is not Chrome, OCRs the gaze crop so PDFs and native apps get a "Looking at" line too. Rendered as `**Looking at (OCR):**`, because OCR of a screenshot is weaker evidence than the live DOM and the note should say so. Local; it only reads a capture that was being saved anyway. |
+| **Multi-display** (`displays.py`) | on | Enumerates screens, resolves which one the gaze landed on, and keeps one calibration per display. Handles monitors placed left of or above the built-in screen, where macOS gives them **negative** origin coordinates. A display rearranged in System Settings gets its calibration offset rather than invalidated. |
+| **Dwell scrolling** (`dwell.py`) | **off** | Gaze resting in the top/bottom 15% for 400 ms scrolls a chunk. After firing it *latches*: the same zone cannot fire again until you actually look away, so parking your eyes at the end of a paragraph while thinking does not run away with the page. `computer dwell on` to try it. |
+| **Pre-note screen buffer** (`screenbuffer.py`) | **off** | A rolling in-memory buffer so "note that" can capture what already scrolled off, saved beside the entry as `HHMMSS.before.png`. Frames never touch disk unless a note fires, and the buffer is capped by both age and total bytes. |
+
+The buffer is off by default for a reason: it is the only component that records
+*before* you speak, and intentional capture is the design, not a limitation.
+Set `screen_buffer_seconds` if you want it.
+
 ## Status and limits
 
-Phases 0–5 of the design are implemented. What is **not** done, and what will
+Phases 0–6 of the design are implemented. What is **not** done, and what will
 bite you:
 
 - **Gaze accuracy is the risk.** Expect the "which third of the screen" level
@@ -198,9 +222,14 @@ bite you:
 - **One display.** Calibration is keyed by display geometry, so an external
   monitor gets its own model, but the daemon currently tracks the main display
   only.
-- **Not yet built:** the rolling pre-note screen buffer, OCR enrichment for
-  PDFs and native apps, dwell scrolling, a computer-use fallback outside the
-  browser, and `.app` packaging for a stable TCC bundle ID.
+- **The `.app` build is written but has never been run.** `packaging/` exists so
+  TCC grants attach to a stable bundle id instead of to your terminal, but it was
+  authored on Linux. Freezing mediapipe and opencv with py2app usually takes a
+  few iterations; `packaging/README.md` states exactly what is unverified.
+- **Vision OCR has never met real Vision.** Passage assembly, reading order and
+  confidence filtering are covered by tests; the pyobjc call sequence needs a Mac.
+- **Not yet built:** a computer-use agent fallback for commands in non-browser
+  apps.
 
 ## Privacy
 

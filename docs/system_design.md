@@ -1740,6 +1740,16 @@ because a confidently wrong crop is worse than no crop.
 **Concurrency:** the daemon and the nightly pass share an advisory `flock` on
 `~/GazeNotes/.gazenotes.lock`, so a summary rewrite can never race an append.
 
+**Optional layers (Phase 6).** Four extras sit on the capture loop; the two that
+would weaken the intentional-capture boundary are off by default:
+
+| Layer | Default | Boundary it respects |
+|---|---|---|
+| Vision OCR (`ocr.py`) | on | Reads a capture that was already being written; adds no new recording. Rendered as `**Looking at (OCR):**` so the entry never presents OCR as DOM evidence |
+| Multi-display (`displays.py`) | on | Pure resolution over the macOS global coordinate space, including the negative origins of screens placed left of or above the built-in one; one calibration per display, offset rather than discarded when a display is rearranged |
+| Dwell scrolling (`dwell.py`) | **off** | Acts on the page, so it stays opt-in; latches the fired zone until an observed look-away rather than re-firing on a resting gaze |
+| Pre-note buffer (`screenbuffer.py`) | **off** | The only component that records before the user speaks. In memory only, bounded by age *and* bytes, and cleared on daemon stop; frames reach disk solely via `write_frame_at` when a note fires |
+
 ---
 
 ## 6. Configuration & dependencies

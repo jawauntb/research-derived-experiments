@@ -220,3 +220,33 @@ def test_pause_and_resume_control_the_camera():
 
 def test_pause_without_a_gaze_engine_reports_rather_than_crashing():
     assert CommandRouter().dispatch(parse_command("computer pause")) == "gaze engine unavailable"
+
+
+# -- dwell scrolling ----------------------------------------------------
+def test_dwell_can_be_toggled_by_voice():
+    class FakeDwell:
+        def __init__(self):
+            self.enabled = False
+
+        def set_enabled(self, on):
+            self.enabled = on
+            return f"dwell scrolling {'on' if on else 'off'}"
+
+    dwell = FakeDwell()
+    router = CommandRouter(dwell=dwell)
+    assert parse_command("computer dwell on").name == "dwell_on"
+    assert router.dispatch(parse_command("computer dwell on")) == "dwell scrolling on"
+    assert dwell.enabled
+    assert router.dispatch(parse_command("computer dwell off")) == "dwell scrolling off"
+    assert not dwell.enabled
+
+
+def test_dwell_commands_report_when_the_driver_is_absent():
+    assert CommandRouter().dispatch(parse_command("computer dwell on")) == "dwell scrolling unavailable"
+
+
+def test_the_public_scroll_helper_is_what_dwell_uses():
+    page = FakePage()
+    router = CommandRouter(bridge=FakeBridge(page))
+    assert "scrolled" in router.scroll(400.0)
+    assert page.wheel == [(0, 400)]

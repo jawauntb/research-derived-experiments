@@ -24,7 +24,11 @@ gaze = [
 ]
 browser = ["playwright>=1.41"]
 watch = ["watchdog>=4.0"]
-all = ["gazenotes[macos,gaze,browser,watch]"]
+# Apple Vision OCR: the "Looking at" line for PDFs and native apps.
+ocr = ["pyobjc-framework-Vision>=10.0", "pyobjc-framework-Quartz>=10.0"]
+# Build a .app so macOS TCC grants attach to a stable bundle id.
+packaging = ["py2app>=0.28"]
+all = ["gazenotes[macos,gaze,browser,watch,ocr]"]
 dev = ["pytest>=8.0", "ruff>=0.4"]
 
 [project.scripts]
