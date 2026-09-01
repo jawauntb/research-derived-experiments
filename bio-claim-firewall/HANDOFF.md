@@ -24,8 +24,15 @@ The **mission is not** "an AI that knows biology." It **is** a system that preve
 | 4 | #541 | Phase 3 final: top-level `src/verifier/` composer (JSON-Schema validate → normalize → rule cascade → verdict format → audit append), fail-closed on every exception, `verify()` NEVER raises; plus fixture ↔ loader byte-format alignment | 53 |
 | 5 | #542 | Phase 4 preview + Phase 5a: `src/model_manager/` (MIDAS-derived provider + prompt system), `src/proposer/` + `src/repairer/` + `src/orchestrator/` + `src/trajectory/`, prompts, and the mutation-test framework under `eval/mutation/` | 39 + 8 |
 | 6 | #543 | Phase 2: **real biology data** — HGNC (45,045 genes), Cell Ontology (3,335 terms), Cell Line Ontology, NCBI Taxonomy, Reactome (2,012 pathways), Replogle 2022 Perturb-seq (9,400 records). All hash-verified, all permissively licensed, ~70 MB local. | 9 |
+| 7 | #545, #547, #548 | Mutation-gap fixes, the real-manager adapter, and a preregistered five-case live-model runner with immutable manifest and receipt gates. | See full-suite status below |
 
-**Full suite: 415 passed + 3 skipped. Ruff clean on the whole `bio-claim-firewall/` subtree.**
+**Live smoke: one OpenAI `gpt-4o-mini-2024-07-18` run completed all five fixed
+cases, all `ACCEPTED_CONDITIONALLY`; see
+[`eval/smoke/RESULTS_2026-09-01.md`](eval/smoke/RESULTS_2026-09-01.md). This is
+operational evidence only, not an empirical biology or safety result.**
+
+**Full suite: 492 passed + 9 skipped. Ruff is clean on the
+`bio-claim-firewall/` subtree.**
 
 **Load-bearing invariants that have held every commit:**
 
@@ -53,7 +60,7 @@ Ship the deterministic verifier as an importable Python package with the real bi
 1. `pyproject.toml` at `bio-claim-firewall/` root (currently uses the repo-wide root `pyproject.toml`). Namespace: `bio_claim_firewall`.
 2. Rename `src/*/` → `src/bio_claim_firewall/*/` (or add `pyproject.toml` `[tool.setuptools.packages.find]` config).
 3. `CHANGELOG.md` + semver.
-4. Public README with the honest limits (see §7 — no live LLM ever called end-to-end today).
+4. Public README with the honest limits (one narrow live smoke has run; see §7).
 5. MIDAS reuse written trace (see §5).
 
 ### Path B — Live claim-firewall API service
@@ -175,9 +182,13 @@ The mutation-test framework's first real run found two surviving `delete_line` m
 
 **Follow-up**: retain these regressions whenever the context comparator or assay-equivalence table changes; re-run the full 31-site sweep before reporting a Phase 5 empirical result.
 
-### 5.4 Live LLM smoke test (BLOCKS the empirical claim)
+### 5.4 Live LLM smoke test (initial operational gate passed; empirical claim still blocked)
 
-No real LLM has ever been called through this system end-to-end. The adapter is now ready; with the optional model dependencies installed:
+The first real end-to-end run completed on 2026-09-01: OpenAI
+`gpt-4o-mini-2024-07-18` produced one schema-valid claim for each fixed case,
+and all five received `ACCEPTED_CONDITIONALLY` without repair or a checker
+failure. The local receipts and their SHA-256 values are summarized in
+[`eval/smoke/RESULTS_2026-09-01.md`](eval/smoke/RESULTS_2026-09-01.md).
 
 **Preregistered runner**: `python -m eval.smoke --preflight` validates the
 frozen six-source data root, provider SDK, prompt dependencies, and configured
@@ -194,7 +205,8 @@ trajectory and summary receipts stay local under `eval/smoke_trajectories/`.
 
 Record trajectory under `bio-claim-firewall/eval/smoke_trajectories/<date>.jsonl`.
 
-**Owner**: any agent + API key access; 1–2 hours.
+**Remaining work**: preserve the one run as a smoke result; preregister the
+adversarial and multi-model suites before any empirical promotion.
 
 ### 5.5 Adversarial suite (BLOCKS the "eliminates unsupported claims" claim)
 
@@ -263,11 +275,12 @@ uv run --no-sync python -m pytest bio-claim-firewall/tests/data/ -q
 
 ```bash
 cd "/Users/jawaun/Research Derived Experiments"
-uv run --no-sync python -m pytest bio-claim-firewall/tests/ -q
-# Expected: 415 passed, 3 skipped
+uv run --with pyyaml --with pydantic python -m pytest bio-claim-firewall/tests/ -q
+# Expected: 492 passed, 9 skipped
 ```
 
-The 3 skips are documented: pyyaml YAML manifest happy-path (unavailable in the project venv), and two jsonschema-import-path variants (fallback validator covers both).
+The 9 skips are optional-dependency cases; the `uv` command above supplies the
+YAML and Pydantic dependencies needed for the runnable smoke path.
 
 ### 6.3 Run the mutation-test framework
 
@@ -366,4 +379,4 @@ Good luck. Everything the mission cared about — "prevent specific declared cla
 
 ### Bro
 
-This file is the "here's what's done and here's what's left" guide for the next agent. If someone new opens this project, they should read this first, then the spec files, then start on the small mutation-test gap and the LLM adapter, then run a live LLM through the checker for the first time ever. Everything else is either a demo idea or a launch decision that needs you.
+This file is the "here's what's done and here's what's left" guide for the next agent. If someone new opens this project, they should read this first, then the spec files, then use the recorded five-case live smoke as the narrow operational baseline. The next technical steps are the remaining broad mutation sweep, adversarial suite, and a larger live evaluation; launch decisions still need you.

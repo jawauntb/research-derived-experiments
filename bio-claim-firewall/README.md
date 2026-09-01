@@ -28,9 +28,9 @@ It does not prove biology. It proves that an accepted claim obeys a locked forma
 - [x] **Phase 1 — Spec.** Claim / evidence / verdict schemas, fault taxonomy, inference rules, non-goals. (#538)
 - [x] **Phase 2 — Frozen pilot world.** HGNC (45,045 genes), Cell Ontology, Cell Line Ontology, NCBI Taxonomy, Reactome, Replogle 2022 Perturb-seq (9,400 records). All hash-verified. (#543)
 - [x] **Phase 3 — Deterministic verifier.** Audit ledger, normalize, evidence loader, 30-rule cascade, top-level `verify()` composer. Fail-closed. (#539, #540, #541)
-- [x] **Phase 4 preview — Untrusted model interfaces.** `Proposer` + `Repairer` + `Orchestrator` + `TrajectoryLogger`; MIDAS-derived `ModelManager` now connects through its prompt-rendering compatibility adapter. No live-LLM smoke call has run yet. (#542)
+- [x] **Phase 4 preview — Untrusted model interfaces.** `Proposer` + `Repairer` + `Orchestrator` + `TrajectoryLogger`; MIDAS-derived `ModelManager` now connects through its prompt-rendering compatibility adapter. One configured OpenAI model has traversed the fixed five-case smoke path. (#542, #548)
 - [x] **Phase 5a — Mutation-test framework.** 31 mutation sites discovered; direct R-CTX-02 and R-CTX-05 regressions close the two first-run coverage gaps, with all 18 `_shared.py` context mutants killed. (#542)
-- [ ] **Phase 5b — Live-LLM end-to-end + adversarial + empirical suites + independent blinded audit.** The five-case smoke runner is preregistered but awaits a provider credential and model dependencies; see [`HANDOFF.md`](HANDOFF.md) §5.
+- [ ] **Phase 5b — Live-LLM end-to-end + adversarial + empirical suites + independent blinded audit.** The five-case live smoke passed as a narrow operational result; adversarial, multi-model, empirical, and blinded-review gates remain. See [`eval/smoke/RESULTS_2026-09-01.md`](eval/smoke/RESULTS_2026-09-01.md) and [`HANDOFF.md`](HANDOFF.md) §5.
 
 **New agent picking this up: read [`HANDOFF.md`](HANDOFF.md) first.**
 

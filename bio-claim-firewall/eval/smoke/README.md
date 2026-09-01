@@ -8,11 +8,16 @@ The runner verifies the committed question manifest's SHA-256 and requires
 exactly the six preregistered pilot sources, so a changed question set or data
 world cannot be labelled as this study.
 
+The first narrow operational run is recorded in
+[`RESULTS_2026-09-01.md`](RESULTS_2026-09-01.md). It does not promote a
+biological, safety, or cross-model claim.
+
 Run a no-network prerequisite check first:
 
 ```bash
 cd "/Users/jawaun/Research Derived Experiments/bio-claim-firewall"
-uv run --with openai --with pyyaml --with jinja2 --with pydantic \
+uv run --with openai --with httpx --with tenacity --with truststore \
+  --with pyyaml --with jinja2 --with pydantic \
   python -m eval.smoke --preflight
 ```
 
