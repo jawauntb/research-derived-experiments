@@ -4,7 +4,7 @@
   "version": "2025-09-01_2026-09-01",
   "rank": 1,
   "modality": "translational_disclosure",
-  "state": "RESEARCHED",
+  "state": "ADMITTED",
   "decision": "Check a human-confirmed, locator-cited disclosure assertion against registered trial status/results available at the disclosure timestamp; do not infer efficacy.",
   "claim_contract": {
     "object": "trial_disclosure_assertion",
@@ -46,12 +46,12 @@
   "transformation": {"command": "python3 data/scripts/worlds/clinical_trials_fixture.py tests/fixtures/worlds/clinical_trials/fixture.json --clinicaltrials-source data/raw/clinical-trials-sec/clinicaltrials-gov/NCT06260774.json --sec-source data/raw/clinical-trials-sec/sec/0001104659-26-069810-ex99-1.html", "derived_artifact": "tests/fixtures/worlds/clinical_trials/fixture.json", "schema_version": "clinical-trials-sec-ledger-0.1", "row_count": 2, "sha256": "f054a3800d4ee1fef6787bf7c55a4a3894c3b560ff450caa05d9589a81c05dd9"},
   "material_assumptions": ["NCT/sponsor/intervention joins are exact or inconclusive.", "Human confirmation is required before an asserted span enters the ledger.", "A registry match does not establish efficacy or corporate truth."],
   "fatal_gates": [
-    {"id": "official_source_identity", "status": "not_run"},
-    {"id": "license_and_custody", "status": "not_run"},
-    {"id": "timestamp_cutoff_no_time_travel", "status": "not_run"},
-    {"id": "complete_hashes_and_schema", "status": "not_run"},
-    {"id": "organic_positive_negative_null_controls", "status": "not_run"},
-    {"id": "world_isolation_and_fail_closed", "status": "not_run"}
+    {"id": "official_source_identity", "status": "pass"},
+    {"id": "license_and_custody", "status": "pass"},
+    {"id": "timestamp_cutoff_no_time_travel", "status": "pass"},
+    {"id": "complete_hashes_and_schema", "status": "pass"},
+    {"id": "organic_positive_negative_null_controls", "status": "pass"},
+    {"id": "world_isolation_and_fail_closed", "status": "pass"}
   ],
   "decisive_controls": {"positive": "matching NCT and SEC assertion at or before as_of", "negative": "wrong sponsor/intervention or post-as_of result", "null": "missing accession/locator or ambiguous identity", "corruption": "modified response bytes", "isolation": "Open Targets/Arc records cannot satisfy this claim"},
   "evidence_paths": {"audit_card": "experiments/evidence_worlds/preregistration/clinical-trials-sec.yaml", "manifest": "data/manifests/worlds/clinical-trials-sec.json", "raw": "data/raw/clinical-trials-sec/", "derived": "data/derived/clinical-trials-sec/", "results": "experiments/evidence_worlds/results/clinical-trials-sec/"},

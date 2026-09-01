@@ -7,21 +7,21 @@ worlds:
     version: "2025-09-01_2026-09-01"
     rank: 1
     modality: "translational_disclosure"
-    state: "RESEARCHED"
+    state: "ADMITTED"
     contract: "data/manifests/worlds/clinical-trials-sec.json"
     preregistration: "experiments/evidence_worlds/preregistration/clinical-trials-sec.yaml"
   - world_id: "open-targets"
     version: "26.06"
     rank: 2
     modality: "translational_association"
-    state: "RESEARCHED"
+    state: "ADMITTED"
     contract: "data/manifests/worlds/open-targets.json"
     preregistration: "experiments/evidence_worlds/preregistration/open-targets.yaml"
   - world_id: "arc-vcc"
     version: "2025-h1-measurements"
     rank: 3
     modality: "perturbational"
-    state: "RESEARCHED"
+    state: "ADMITTED"
     contract: "data/manifests/worlds/arc-vcc.json"
     preregistration: "experiments/evidence_worlds/preregistration/arc-vcc.yaml"
   - world_id: "neurovault"
@@ -35,6 +35,6 @@ worlds:
     version: "static-snapshot-pilot"
     rank: 5
     modality: "connectome_graph"
-    state: "RESEARCHED"
+    state: "RESEARCHED_DEFERRED"
     contract: "data/manifests/worlds/flywire-codex.json"
     preregistration: "experiments/evidence_worlds/preregistration/flywire-codex.yaml"

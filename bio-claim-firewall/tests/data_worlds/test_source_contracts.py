@@ -23,9 +23,9 @@ from _common import (
 ROOT = Path(__file__).resolve().parents[2]
 CONTRACTS = ROOT / "data" / "manifests" / "worlds"
 EXPECTED_WORLDS = {
-    "clinical-trials-sec": "RESEARCHED",
-    "open-targets": "RESEARCHED",
-    "arc-vcc": "RESEARCHED",
+    "clinical-trials-sec": "ADMITTED",
+    "open-targets": "ADMITTED",
+    "arc-vcc": "ADMITTED",
     "neurovault": "RESEARCHED_DEFERRED",
     "flywire-codex": "RESEARCHED_DEFERRED",
 }
