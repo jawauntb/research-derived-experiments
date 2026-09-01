@@ -44,6 +44,10 @@ tmp/
 !bio-claim-firewall/tests/data_worlds/
 !bio-claim-firewall/tests/data_worlds/**
 
+# Re-apply runtime ignores after the narrow data/test exceptions above.
+bio-claim-firewall/**/__pycache__/
+bio-claim-firewall/**/*.py[cod]
+
 # OS/editor noise.
 .DS_Store
 
