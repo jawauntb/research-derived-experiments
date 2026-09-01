@@ -13,14 +13,23 @@ import os
 import stat
 import urllib.error
 import urllib.request
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Any, Iterable
-
+from typing import Any
 
 APOLLO_BASE_URL = "https://api.apollo.io/api/v1"
 ORGANIZATION_SEARCH_PATH = "/mixed_companies/search"
 PEOPLE_SEARCH_PATH = "/mixed_people/api_search"
 ALLOWED_POST_PATHS = frozenset({ORGANIZATION_SEARCH_PATH, PEOPLE_SEARCH_PATH})
+PRIVATE_OUTPUT_ROOT = Path(__file__).resolve().parent / "artifacts" / "apollo_discovery"
+ROLE_CATEGORIES = (
+    "clinical intelligence",
+    "computational biology",
+    "scientific diligence",
+    "scientific platform",
+    "translational informatics",
+)
+ROLE_SEARCH_PAGE_SIZE = 25
 PROHIBITED_PUBLIC_FIELDS = frozenset(
     {
         "apollo_id",
@@ -117,6 +126,8 @@ def search_role_categories(
 
     if not 1 <= per_page <= 100:
         raise ValueError("per_page must be between 1 and 100")
+    if page < 1:
+        raise ValueError("page must be positive")
     payload = {
         "organization_ids": list(organization_ids),
         "person_titles": list(titles),
@@ -130,6 +141,29 @@ def search_role_categories(
 def _organizations(response: dict[str, Any]) -> list[dict[str, Any]]:
     value = response.get("organizations", [])
     return [item for item in value if isinstance(item, dict)] if isinstance(value, list) else []
+
+
+def _people(response: dict[str, Any]) -> list[dict[str, Any]]:
+    """Read Apollo's person candidates without projecting identity fields."""
+
+    for key in ("people", "contacts"):
+        value = response.get(key)
+        if isinstance(value, list):
+            return [item for item in value if isinstance(item, dict)]
+    return []
+
+
+def _people_count(response: dict[str, Any]) -> int:
+    """Count candidates from the collection Apollo actually returned."""
+
+    for key in ("people", "contacts"):
+        value = response.get(key)
+        if isinstance(value, list):
+            return len([item for item in value if isinstance(item, dict)])
+    pagination = response.get("pagination")
+    if isinstance(pagination, dict) and isinstance(pagination.get("total_entries"), int):
+        return pagination["total_entries"]
+    return 0
 
 
 def private_account_rows(response: dict[str, Any], *, wedge: str) -> list[dict[str, Any]]:
@@ -165,16 +199,63 @@ def aggregate_summary(rows: Iterable[dict[str, Any]]) -> dict[str, Any]:
         "account_count": len(materialized),
         "accounts_with_domain": with_domain,
         "counts_by_wedge": dict(sorted(wedges.items())),
-        "role_categories": [
-            "clinical intelligence",
-            "computational biology",
-            "scientific diligence",
-            "scientific platform",
-            "translational informatics",
-        ],
+        "role_categories": list(ROLE_CATEGORIES),
         "outreach_performed": False,
         "person_level_data_included": False,
     }
+
+
+def _deduplicate_account_rows(rows: Iterable[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Keep the first wedge assignment for each organization candidate."""
+
+    result: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for row in rows:
+        organization_id = row.get("organization_id")
+        if organization_id:
+            key = f"id:{organization_id}"
+        else:
+            domain = row.get("domain")
+            if not domain:
+                # No stable identity means it cannot safely be deduplicated or
+                # sent to a role query, so retain it as a private row only.
+                result.append(row)
+                continue
+            key = f"domain:{str(domain).strip().casefold().rstrip('/') }"
+        if key in seen:
+            continue
+        seen.add(key)
+        result.append(row)
+    return result
+
+
+def _constrained_output_dir(output_dir: Path, *, private_root: Path) -> Path:
+    root = private_root.resolve()
+    candidate = output_dir.resolve()
+    try:
+        candidate.relative_to(root)
+    except ValueError:
+        raise ApolloDiscoveryError(
+            f"Apollo output must be under the private root {root}"
+        ) from None
+    return candidate
+
+
+def _summary_with_role_counts(
+    rows: Iterable[dict[str, Any]],
+    *,
+    role_response: dict[str, Any] | None,
+    organization_ids: Iterable[str],
+) -> dict[str, Any]:
+    summary = aggregate_summary(rows)
+    if role_response is not None:
+        summary.update(
+            {
+                "organization_count_queried_for_roles": len(list(organization_ids)),
+                "role_candidate_count": _people_count(role_response),
+            }
+        )
+    return summary
 
 
 def assert_public_safe(payload: Any, *, path: str = "$") -> None:
@@ -198,18 +279,56 @@ DEFAULT_WEDGES = {
 }
 
 
-def run_bounded_discovery(output_dir: Path, *, api_key: str, per_wedge: int) -> dict[str, Any]:
+def run_bounded_discovery(
+    output_dir: Path | None = None,
+    *,
+    api_key: str,
+    per_wedge: int,
+    private_root: Path | None = None,
+) -> dict[str, Any]:
+    """Run bounded company and role searches, writing only private artifacts.
+
+    ``private_root`` exists for isolated tests; production callers must use the
+    module's explicit ``PRIVATE_OUTPUT_ROOT``.
+    """
+
+    if not 1 <= per_wedge <= 25:
+        raise ValueError("per_wedge must be between 1 and 25")
+    allowed_root = private_root or PRIVATE_OUTPUT_ROOT
+    destination = _constrained_output_dir(output_dir or allowed_root, private_root=allowed_root)
     all_rows: list[dict[str, Any]] = []
-    raw_dir = output_dir / "raw"
+    raw_dir = destination / "raw"
     for wedge, tags in DEFAULT_WEDGES.items():
         response = search_organizations(keyword_tags=tags, per_page=per_wedge, api_key=api_key)
         _secure_write_json(raw_dir / f"{wedge}.json", response)
         all_rows.extend(private_account_rows(response, wedge=wedge))
 
-    _secure_write_json(output_dir / "private_accounts.json", all_rows)
-    summary = aggregate_summary(all_rows)
+    all_rows = _deduplicate_account_rows(all_rows)
+    organization_ids = list(
+        dict.fromkeys(
+            str(row["organization_id"])
+            for row in all_rows
+            if row.get("organization_id")
+        )
+    )
+    role_response: dict[str, Any] | None = None
+    if organization_ids:
+        role_response = search_role_categories(
+            organization_ids=organization_ids,
+            titles=ROLE_CATEGORIES,
+            per_page=ROLE_SEARCH_PAGE_SIZE,
+            api_key=api_key,
+        )
+        _secure_write_json(raw_dir / "role_categories.json", role_response)
+
+    _secure_write_json(destination / "private_accounts.json", all_rows)
+    summary = _summary_with_role_counts(
+        all_rows,
+        role_response=role_response,
+        organization_ids=organization_ids,
+    )
     assert_public_safe(summary)
-    _secure_write_json(output_dir / "aggregate_summary.json", summary)
+    _secure_write_json(destination / "aggregate_summary.json", summary)
     return summary
 
 
@@ -218,7 +337,7 @@ def main() -> int:
     parser.add_argument(
         "--output-dir",
         type=Path,
-        default=Path("deepline/data/bio-claim-firewall-buyers"),
+        default=PRIVATE_OUTPUT_ROOT,
     )
     parser.add_argument("--per-wedge", type=int, default=5)
     args = parser.parse_args()

@@ -154,19 +154,19 @@
     document.getElementById("citation").textContent = citation ? `${citation.source} · ${citation.locator}` : "No citation issued for this outcome.";
     document.getElementById("citation-ref").textContent = citation?.reference || "No evidence reference issued.";
     document.getElementById("receipt-json").textContent = JSON.stringify(receipt, null, 2);
-    document.getElementById("verified-label").textContent = "checking digest…";
+    document.getElementById("verified-label").textContent = "checking bundle consistency…";
     document.getElementById("fixture-status").classList.remove("bad");
-    document.getElementById("fixture-status").textContent = `Fixture loaded locally · canonical receipt digest ${receipt.canonical_digest.slice(0, 8)}…`;
+    document.getElementById("fixture-status").textContent = `Fixture loaded locally · bundle consistency digest ${receipt.canonical_digest.slice(0, 8)}…`;
   }
 
   async function verifyDigest(receipt) {
     const expected = await globalThis.BioFirewallFixture?.digestReceipt(receipt);
     const verified = expected && expected === receipt.canonical_digest;
     const label = document.getElementById("verified-label");
-    label.textContent = verified ? "digest verified" : "digest mismatch";
+    label.textContent = verified ? "bundle consistent" : "bundle mismatch";
     if (!verified) {
       document.getElementById("fixture-status").classList.add("bad");
-      document.getElementById("fixture-status").textContent = "Fixture digest mismatch · no receipt should be trusted.";
+      document.getElementById("fixture-status").textContent = "Fixture bundle mismatch · consistency check failed; do not rely on this fixture.";
     }
   }
 

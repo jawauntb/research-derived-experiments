@@ -130,6 +130,15 @@ it("updates the claim type when switching evidence worlds", () => {
     assert.match(app, /getElementById\("claim-type"\)\.textContent = claimType/);
 });
 
+it("describes the static digest as bundle consistency, not authenticity", () => {
+    const app = fs.readFileSync(path.join(root, "app.js"), "utf8");
+    const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
+    assert.match(app, /bundle consistent/);
+    assert.match(app, /bundle mismatch/);
+    assert.match(html, /bundle consistent/);
+    assert.doesNotMatch(`${app}\n${html}`, /digest verified|authentic/i);
+});
+
 (async () => {
   let failures = 0;
   for (const test of tests) {

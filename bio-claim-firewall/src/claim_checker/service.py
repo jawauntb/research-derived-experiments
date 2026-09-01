@@ -9,20 +9,20 @@ returns ``INCONCLUSIVE`` instead of manufacturing a claim.
 
 from __future__ import annotations
 
-import uuid
 import hashlib
 import json
-from datetime import datetime, timezone
+import uuid
+from collections.abc import Mapping
 from dataclasses import dataclass
-from typing import Any, Mapping
+from datetime import UTC, datetime, timezone
+from typing import Any
 
+from audit import canonicalize_for_hash
 from normalize.errors import NormalizationError
 from rules.sections._shared import RELATION_CANONICAL_SIGN
 from verifier import verify
 from verifier.config import VerifierConfig
-from audit import canonicalize_for_hash
 from worlds import K562_WORLD, WORLD_REGISTRY, World, WorldRegistry, WorldRegistryError
-
 
 _K562_CELL_TYPE = "CL:0000988"
 _K562_CELL_LINE = "CLO:0007059"
@@ -103,7 +103,7 @@ def _world_digest(world: World, source_hashes: Mapping[str, str]) -> str:
 
 
 def _issued_at() -> str:
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     return now.strftime("%Y-%m-%dT%H:%M:%S.") + f"{now.microsecond // 1000:03d}Z"
 
 
@@ -118,13 +118,13 @@ def _attach_receipt(
 ) -> ClaimCheckResult:
     try:
         source_hashes = _world_source_hashes(bundle, world) if strict_bundle else dict(
-            sorted(getattr(getattr(bundle, "ledger", None), "snapshot_hashes", lambda: {})().items())
+            sorted(getattr(getattr(bundle, "ledger", None), "snapshot_hashes", dict)().items())
         )
         world_digest = _world_digest(world, source_hashes)
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001 - receipt construction must fail closed
         if strict_bundle:
             return _checker_error(str(exc), claim=result.claim)
-        source_hashes = dict(sorted(getattr(getattr(bundle, "ledger", None), "snapshot_hashes", lambda: {})().items()))
+        source_hashes = dict(sorted(getattr(getattr(bundle, "ledger", None), "snapshot_hashes", dict)().items()))
         world_digest = world.digest
 
     # Only deterministic content enters this payload.  ``issued_at``, parser
@@ -220,7 +220,7 @@ def check_claim(
         return _attach_receipt(result, world, bundle, checker_version=checker_version, strict_bundle=True)
     except (WorldRegistryError, ClaimCheckInputError) as exc:
         return _checker_error(str(exc), claim=dict(claim) if isinstance(claim, Mapping) else None, checker_version=checker_version)
-    except Exception as exc:  # fail closed at the world boundary
+    except Exception as exc:  # noqa: BLE001 - fail closed at the world boundary
         return _checker_error(str(exc), claim=dict(claim) if isinstance(claim, Mapping) else None, stage="run_rules", checker_version=checker_version)
 
 
@@ -447,6 +447,13 @@ def check_k562_claim(
     _internal: bool = False,
 ) -> ClaimCheckResult:
     """Compatibility wrapper that explicitly selects the registered K562 world."""
+    try:
+        # Keep the legacy surface bound to the same immutable world as the
+        # generic protocol.  This check must precede label resolution and
+        # rule evaluation so a same-shaped foreign bundle cannot participate.
+        _world_source_hashes(bundle, K562_WORLD)
+    except Exception as exc:  # noqa: BLE001 - compatibility boundary must fail closed
+        return _checker_error(str(exc), checker_version=checker_version)
     result = _check_k562_claim_impl(
         bundle, subject, object_, direction, checker_version=checker_version
     )
@@ -457,5 +464,5 @@ def check_k562_claim(
         K562_WORLD,
         bundle,
         checker_version=checker_version,
-        strict_bundle=False,
+        strict_bundle=True,
     )

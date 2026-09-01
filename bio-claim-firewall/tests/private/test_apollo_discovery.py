@@ -7,7 +7,6 @@ from pathlib import Path
 
 import pytest
 
-
 MODULE_PATH = Path(__file__).parents[2] / "private" / "apollo_discovery.py"
 TRACKED_SUMMARY_PATH = (
     Path(__file__).parents[2]
@@ -80,6 +79,62 @@ def test_secure_write_uses_owner_only_permissions(tmp_path: Path) -> None:
 
     assert json.loads(target.read_text()) == {"ok": True}
     assert stat.S_IMODE(target.stat().st_mode) == 0o600
+
+
+def test_bounded_run_rejects_output_outside_explicit_private_root(tmp_path: Path) -> None:
+    with pytest.raises(apollo.ApolloDiscoveryError, match="private root"):
+        apollo.run_bounded_discovery(
+            tmp_path / "outside",
+            api_key="test",
+            per_wedge=1,
+            private_root=tmp_path / "allowed",
+        )
+
+
+def test_bounded_run_intercepts_organizations_then_deduped_role_search(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    calls: list[tuple[str, dict[str, object]]] = []
+
+    def fake_organizations(**kwargs: object) -> dict[str, object]:
+        calls.append(("organizations", kwargs))
+        tags = kwargs["keyword_tags"]
+        if "clinical trials" in tags:
+            organizations = [
+                {"id": "org-1", "name": "One", "primary_domain": "one.example"},
+                {"id": "org-2", "name": "Two", "primary_domain": "two.example"},
+            ]
+        else:
+            organizations = [
+                {"id": "org-1", "name": "One duplicate", "primary_domain": "one.example"},
+            ]
+        return {"organizations": organizations}
+
+    def fake_people(**kwargs: object) -> dict[str, object]:
+        calls.append(("people", kwargs))
+        return {
+            "people": [{"id": "person-1"}, {"id": "person-2"}],
+            "pagination": {"total_entries": 99},
+        }
+
+    monkeypatch.setattr(apollo, "search_organizations", fake_organizations)
+    monkeypatch.setattr(apollo, "search_role_categories", fake_people)
+    output_root = tmp_path / "private"
+    summary = apollo.run_bounded_discovery(
+        output_root / "run",
+        api_key="test",
+        per_wedge=2,
+        private_root=output_root,
+    )
+
+    assert [kind for kind, _ in calls] == ["organizations", "organizations", "organizations", "people"]
+    people_call = calls[-1][1]
+    assert people_call["organization_ids"] == ["org-1", "org-2"]
+    assert people_call["titles"] == apollo.ROLE_CATEGORIES
+    assert summary["account_count"] == 2
+    assert summary["organization_count_queried_for_roles"] == 2
+    assert summary["role_candidate_count"] == 2
+    assert (output_root / "run" / "raw" / "role_categories.json").exists()
+    assert (output_root / "run" / "private_accounts.json").exists()
+    assert (output_root / "run" / "aggregate_summary.json").exists()
 
 
 def test_tracked_summary_is_aggregate_and_public_safe() -> None:
