@@ -97,6 +97,20 @@ class AuditLedger:
 
 Superseding: callers add `supersedes: <old verdict_id>` to the `verdict` dict; the new hash differs so the entry is accepted, the old one stays visible. Never delete, never rewrite.
 
+## `claim_checker` — bounded local K562 product surface
+
+```python
+from claim_checker import check_k562_claim, check_natural_language_k562_claim
+
+check_k562_claim(bundle, subject, object_, direction, *, checker_version="0.1.0")
+check_natural_language_k562_claim(bundle, question, manager, *, checker_version="0.1.0")
+```
+
+- `check_k562_claim()` resolves exact frozen HGNC labels/CURIEs and selects exactly one human, resting K-562 (`CL:0000988`, `CLO:0007059`) Replogle 2022 CRISPRi record. It accepts only `increases` or `decreases`; no record or multiple records returns `INCONCLUSIVE` without a constructed claim. A matched `null` effect reports that the source records no directional effect rather than claiming no record exists.
+- It sends the constructed claim through `verifier.verify()` and returns the claim, a citation-bearing evidence summary, and the untouched verdict. Every no-claim `INCONCLUSIVE` result still reports the checker version and frozen snapshot hashes that were inspected. It is a bounded record checker, not a general biology question-answering layer.
+- `check_natural_language_k562_claim()` accepts at most 2,000 characters and calls only the configured `claim_parser` task. Its untrusted output must be exactly the three strings `subject`, `object`, and `direction`; no model citation, confidence, or verdict crosses this boundary. The return object retains the original question plus parser/provider/prompt provenance separately from the deterministic result.
+- The CLI is `PYTHONPATH=bio-claim-firewall/src python -m claim_checker`; positional input is fully local once the frozen data root exists, while `--claim` additionally requires the optional OpenAI runtime and `OPENAI_API_KEY`. `--json` is machine-readable on both success and failure; a fail-closed `CHECKER_ERROR` exits `4` rather than signaling successful completion.
+
 ## Downstream modules (still to build)
 
 ### `rules` — Phase 3, dependent on normalize + evidence + fixtures

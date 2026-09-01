@@ -23,6 +23,51 @@ The verifier returns exactly one of:
 
 It does not prove biology. It proves that an accepted claim obeys a locked formal and evidence contract. See [`spec/non_goals.md`](spec/non_goals.md).
 
+## Use it now: local K562 claim checker
+
+The current useful surface is deliberately narrow: check whether one claimed
+direction for a perturbed gene and measured gene is supported by **one exact,
+frozen Replogle 2022 K562 CRISPRi record**. It is not a general biology
+chatbot, prediction system, or clinical tool. It gives a citation, the
+decisive verifier rule, and scope conditions when it can answer; it rejects a
+sign reversal and returns `INCONCLUSIVE` when no unique frozen record exists.
+
+First reproduce the gitignored pilot snapshot using
+[`data/README.md`](data/README.md). Then run the deterministic path (no model
+or network access after the local snapshot is present):
+
+```bash
+PYTHONPATH=bio-claim-firewall/src uv run --with pyyaml --with pydantic \
+  python -m claim_checker MED19 GYPB increases \
+  --data-root bio-claim-firewall/data
+```
+
+For a one-sentence input, add the optional untrusted OpenAI parser. It needs
+`OPENAI_API_KEY` in the environment and its optional runtime dependencies;
+the parser may only extract `subject`, `object`, and `direction`. The frozen
+ledger and deterministic verifier still decide the result.
+It refuses input longer than 2,000 characters before any provider call.
+
+```bash
+PYTHONPATH=bio-claim-firewall/src uv run \
+  --with openai --with httpx --with tenacity --with truststore \
+  --with pyyaml --with jinja2 --with pydantic \
+  python -m claim_checker \
+  --claim "Does MED19 knockdown increase GYPB expression in K562?" \
+  --data-root bio-claim-firewall/data
+```
+
+`--json` emits the original question and parsed fields (marked `untrusted_llm`),
+provenance for the versioned parser prompt, the constructed claim, exact
+evidence (including effect magnitude and whether significance was recorded),
+and verifier verdict (including its frozen snapshot hashes). No claim is
+accepted merely because a model parsed it. It uses exit `0` for a completed
+verdict (including `REJECTED` or `INCONCLUSIVE`), `2` for invalid input, `3`
+when the checker is unavailable, and `4` for fail-closed `CHECKER_ERROR`.
+`--json` is machine-readable for each of those outcomes, including argument,
+input, and availability errors. No-claim `INCONCLUSIVE` outcomes retain the
+checker version and the hashes of the frozen snapshots inspected.
+
 ## Phase status
 
 - [x] **Phase 1 — Spec.** Claim / evidence / verdict schemas, fault taxonomy, inference rules, non-goals. (#538)
