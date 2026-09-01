@@ -13,9 +13,11 @@ from model_manager import ModelManager
 
 from .natural_language import (
     NaturalLanguageClaimCheckResult,
+    check_natural_language_claim,
     check_natural_language_k562_claim,
 )
-from .service import ClaimCheckInputError, ClaimCheckResult, check_k562_claim
+from .service import ClaimCheckInputError, ClaimCheckResult, check_claim, check_k562_claim
+from worlds import WORLD_REGISTRY
 
 
 _FIREWALL_ROOT = Path(__file__).resolve().parents[2]
@@ -48,6 +50,8 @@ def _parser(*, json_mode: bool = False) -> argparse.ArgumentParser:
         help="One natural-language K562 gene-effect question; parsed by an untrusted LLM.",
     )
     parser.add_argument("--data-root", type=Path, default=_DEFAULT_DATA_ROOT)
+    parser.add_argument("--world-id", help="Registered evidence-world id.")
+    parser.add_argument("--world-version", help="Exact version of the registered evidence world.")
     parser.add_argument("--checker-version", default="0.1.0")
     parser.add_argument(
         "--model-config",
@@ -160,22 +164,43 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.claim is None and any(value is None for value in positional_values):
         parser.error("provide SUBJECT OBJECT DIRECTION, or use --claim")
     try:
-        bundle = load_bundle(args.data_root)
-        if args.claim is not None:
-            result = check_natural_language_k562_claim(
-                bundle,
-                args.claim,
-                ModelManager(args.model_config),
-                checker_version=args.checker_version,
-            )
+        if args.world_id is not None or args.world_version is not None:
+            world = WORLD_REGISTRY.resolve(args.world_id or "", args.world_version)
+            bundle = load_bundle(args.data_root, allowed_sources=world.source_allowlist)
+            if args.claim is not None:
+                result = check_natural_language_claim(
+                    bundle,
+                    world.world_id,
+                    world.version,
+                    args.claim,
+                    ModelManager(args.model_config),
+                    checker_version=args.checker_version,
+                )
+            else:
+                result = check_claim(
+                    bundle,
+                    world.world_id,
+                    world.version,
+                    {"subject": args.subject, "object": args.object, "direction": args.direction},
+                    checker_version=args.checker_version,
+                )
         else:
-            result = check_k562_claim(
-                bundle,
-                args.subject,
-                args.object,
-                args.direction,
-                checker_version=args.checker_version,
-            )
+            bundle = load_bundle(args.data_root)
+            if args.claim is not None:
+                result = check_natural_language_k562_claim(
+                    bundle,
+                    args.claim,
+                    ModelManager(args.model_config),
+                    checker_version=args.checker_version,
+                )
+            else:
+                result = check_k562_claim(
+                    bundle,
+                    args.subject,
+                    args.object,
+                    args.direction,
+                    checker_version=args.checker_version,
+                )
     except ClaimCheckInputError as exc:
         print(_error_output(json_mode=args.json, kind="input_error", message=str(exc)))
         return 2

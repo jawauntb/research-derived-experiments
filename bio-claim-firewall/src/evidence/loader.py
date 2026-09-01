@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any, Iterator
+from typing import Any, Iterable, Iterator
 
 from .errors import EvidenceError
 from .hashing import sha256_dir, sha256_file
@@ -174,7 +174,7 @@ def _load_evidence_source(
     return actual_hash
 
 
-def load_bundle(data_root: Path) -> SnapshotBundle:
+def load_bundle(data_root: Path, *, allowed_sources: Iterable[str] | None = None) -> SnapshotBundle:
     """Load, hash-verify, and return a SnapshotBundle for ``data_root``.
 
     Pure: given the same ``data_root`` on disk, deterministically returns
@@ -211,6 +211,12 @@ def load_bundle(data_root: Path) -> SnapshotBundle:
     # higher layer (or a future revision) rather than invented here.
     """
     data_root = Path(data_root)
+    # An allowlist is an explicit world boundary.  The historical no-argument
+    # call retains ambient loading for existing verifier fixtures; world-bound
+    # callers must pass the registered source set and get no source merging.
+    allowed = None if allowed_sources is None else frozenset(allowed_sources)
+    if allowed is not None and (not allowed or any(not isinstance(source, str) or not source for source in allowed)):
+        raise EvidenceError("HASH_MISMATCH", reason="invalid_source_allowlist")
     manifests_dir = data_root / "manifests"
     ontology_dir = data_root / "ontology_snapshots"
     evidence_dir = data_root / "evidence_records"
@@ -229,6 +235,18 @@ def load_bundle(data_root: Path) -> SnapshotBundle:
                 path=str(candidate_paths[0]),
             )
         manifests[manifest.source] = manifest
+
+    if allowed is not None:
+        loaded_sources = frozenset(manifests)
+        extra = sorted(loaded_sources - allowed)
+        missing = sorted(allowed - loaded_sources)
+        if extra or missing:
+            raise EvidenceError(
+                "HASH_MISMATCH",
+                reason="source_not_allowlisted",
+                extra_sources=extra,
+                missing_sources=missing,
+            )
 
     all_curies: set[str] = set()
     all_aliases: dict[str, str] = {}

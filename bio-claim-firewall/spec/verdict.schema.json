@@ -16,6 +16,27 @@
   ],
   "properties": {
     "schema_version": { "type": "string", "const": "0.1.0" },
+    "receipt_version": {
+      "description": "Receipt envelope version. Version 2 binds a named world and canonical payload; omitted for legacy verifier-only verdicts.",
+      "type": "string",
+      "const": "2"
+    },
+    "receipt_id": {
+      "description": "SHA-256 digest of the receipt-v2 canonical payload.",
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "world_id": { "type": "string", "minLength": 1 },
+    "world_version": { "type": "string", "minLength": 1 },
+    "world_digest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "source_hashes": {
+      "type": "object",
+      "additionalProperties": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+    },
+    "canonical_payload": {
+      "description": "Deterministic payload hashed into receipt_id. It excludes issued_at and parser-run metadata.",
+      "type": "object"
+    },
     "verdict_id": {
       "description": "SHA-256, first 32 hex chars, of the canonicalized (claim + verdict + derivation + snapshot_hashes + checker_version) tuple. Guarantees tamper-evidence in the ledger.",
       "type": "string",
