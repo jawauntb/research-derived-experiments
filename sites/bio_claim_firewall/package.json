@@ -1,0 +1,14 @@
+{
+  "name": "bio-claim-firewall-site",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A receipt-backed, bounded demo of Bio Claim Firewall.",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "PORT=3040 node server.js",
+    "test": "node tests/site.test.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 260" role="img" aria-labelledby="title desc">
+  <title id="title">Evidence streams entering a claim firewall</title>
+  <desc id="desc">Three source streams move toward a shield-shaped checkpoint and become a receipt.</desc>
+  <defs>
+    <linearGradient id="stream" x1="0" x2="1"><stop stop-color="#35d1b2"/><stop offset="1" stop-color="#ffbf69"/></linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <g fill="none" stroke="#6ee7d1" stroke-width="3" opacity=".9">
+    <path d="M40 60h210c34 0 38 70 78 70h60" stroke-dasharray="8 10"/>
+    <path d="M40 130h310" stroke-dasharray="8 10"/>
+    <path d="M40 200h210c34 0 38-70 78-70h60" stroke-dasharray="8 10"/>
+  </g>
+  <g fill="#d5fff7" font-family="ui-monospace,monospace" font-size="14">
+    <text x="40" y="52">registry</text><text x="40" y="122">filing</text><text x="40" y="192">measurement</text>
+  </g>
+  <path d="M390 42 495 81v72c0 44-41 72-105 98-64-26-105-54-105-98V81l105-39Z" fill="#092b31" stroke="#35d1b2" stroke-width="4"/>
+  <path d="m345 135 30 30 70-70" fill="none" stroke="#ffbf69" stroke-linecap="round" stroke-linejoin="round" stroke-width="13" filter="url(#glow)"/>
+  <path d="M518 130h88" stroke="url(#stream)" stroke-dasharray="8 10" stroke-width="4"/>
+  <rect x="614" y="101" width="76" height="58" rx="10" fill="#ffbf69"/>
+  <path d="M631 121h42M631 133h34M631 145h27" stroke="#092b31" stroke-linecap="round" stroke-width="5"/>
+</svg>
