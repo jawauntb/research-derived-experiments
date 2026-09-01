@@ -45,6 +45,16 @@ def _canonical_json(value: Any) -> bytes:
     return json.dumps(value, ensure_ascii=True, sort_keys=True, separators=(",", ":")).encode("utf-8")
 
 
+def _world_digest(source_hashes: Mapping[str, str]) -> str:
+    payload = {
+        "world_id": ARC_VCC_WORLD_ID,
+        "world_version": ARC_VCC_WORLD_VERSION,
+        "source_hashes": dict(sorted(source_hashes.items())),
+        "adapter_schema": _FIXTURE_SCHEMA_VERSION,
+    }
+    return hashlib.sha256(_canonical_json(payload)).hexdigest()
+
+
 def _sha256(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as handle:
@@ -515,6 +525,7 @@ class ArcVCCAdapter:
             "receipt_version": "2",
             "world_id": self.metadata.world_id,
             "world_version": self.metadata.world_version,
+            "world_digest": _world_digest(self._fixture.source_hashes),
             "source_hashes": dict(sorted(self._fixture.source_hashes.items())),
             "claim": claim_dict,
             "evidence": evidence,
@@ -541,6 +552,7 @@ def check_arc_vcc_claim(root: Path, claim: ArcVCCClaim | Mapping[str, Any], *, c
             "receipt_version": "2",
             "world_id": ARC_VCC_WORLD_ID,
             "world_version": ARC_VCC_WORLD_VERSION,
+            "world_digest": _world_digest({}),
             "source_hashes": {},
             "claim": dict(claim) if isinstance(claim, Mapping) else None,
             "evidence": None,

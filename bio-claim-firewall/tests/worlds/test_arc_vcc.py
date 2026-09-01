@@ -68,6 +68,7 @@ def test_receipt_is_stable_and_run_metadata_free(adapter: ArcVCCAdapter) -> None
     assert first == second
     assert first["receipt"]["receipt_id"] == first["receipt"]["receipt_id"]
     assert "issued_at" not in first["receipt"]
+    assert len(first["receipt"]["canonical_payload"]["world_digest"]) == 64
     assert first["source_hashes"] == first["receipt"]["canonical_payload"]["source_hashes"]
 
 
