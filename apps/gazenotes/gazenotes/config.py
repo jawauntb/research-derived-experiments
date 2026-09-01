@@ -46,10 +46,41 @@ min_gaze_confidence = 0.35
 # user was looking at when they began speaking".
 gaze_lookback_seconds = 2.0
 
+# OCR the gaze crop when the frontmost app is not Chrome, so PDFs and native
+# apps get a "Looking at" line too. Local (Apple Vision), and it only reads a
+# screenshot that was going to be saved anyway.
+ocr_enabled = true
+
+# Rolling in-memory screen buffer, so a note can capture what just scrolled
+# off. OFF by default (0 seconds): this is the one part of gazenotes that
+# records before you speak, so it is opt-in. Frames never touch disk unless a
+# note fires, and the buffer is capped by both age and total size.
+screen_buffer_seconds = 0.0
+screen_buffer_interval = 2.0
+screen_buffer_max_mb = 256.0
+
+[dwell]
+# Only used when dwell_scroll = true.
+zone_fraction = 0.15       # top/bottom band of the screen that triggers
+dwell_seconds = 0.4        # how long gaze must rest there
+cooldown_seconds = 1.5     # quiet period after each scroll
+scroll_amount = 400.0
+
 [nightly]
 backend = "none"   # none | local | api
 model = ""
 """
+
+
+@dataclass(frozen=True)
+class DwellSettings:
+    """Tuning for gaze-driven scrolling. Inert unless ``dwell_scroll`` is on."""
+
+    zone_fraction: float = 0.15
+    dwell_seconds: float = 0.4
+    cooldown_seconds: float = 1.5
+    scroll_amount: float = 400.0
+    min_confidence: float = 0.5
 
 
 @dataclass(frozen=True)
@@ -75,7 +106,18 @@ class Config:
     dwell_scroll: bool = False
     min_gaze_confidence: float = 0.35
     gaze_lookback_seconds: float = 2.0
+    ocr_enabled: bool = True
+    screen_buffer_seconds: float = 0.0
+    """0 disables the pre-note screen buffer. It is the only thing here that
+    records before the user speaks, so it stays opt-in."""
+    screen_buffer_interval: float = 2.0
+    screen_buffer_max_mb: float = 256.0
+    dwell: DwellSettings = field(default_factory=DwellSettings)
     nightly: NightlyConfig = field(default_factory=NightlyConfig)
+
+    @property
+    def screen_buffer_enabled(self) -> bool:
+        return self.screen_buffer_seconds > 0.0
 
     @property
     def captures_dir(self) -> Path:
@@ -105,24 +147,33 @@ def _coerce(name: str, value: Any, default: Any) -> Any:
     raise TypeError(f"unsupported config field {name!r}")
 
 
+SECTIONS: dict[str, type] = {"dwell": DwellSettings, "nightly": NightlyConfig}
+"""TOML table name → the dataclass it populates."""
+
+
+def _section_from_mapping(section: type, data: dict[str, Any]):
+    """Build one nested settings dataclass, coercing to each field's type."""
+    defaults = section()
+    kwargs = {
+        f.name: _coerce(f.name, data[f.name], getattr(defaults, f.name))
+        for f in fields(section)
+        if f.name in data
+    }
+    return section(**kwargs)
+
+
 def config_from_mapping(data: dict[str, Any]) -> Config:
     """Build a :class:`Config` from a parsed TOML mapping, ignoring unknowns."""
     defaults = Config()
     kwargs: dict[str, Any] = {}
     for f in fields(Config):
-        if f.name == "nightly":
+        if f.name in SECTIONS:
             continue
         if f.name in data:
             kwargs[f.name] = _coerce(f.name, data[f.name], getattr(defaults, f.name))
 
-    nightly_data = data.get("nightly") or {}
-    nightly_defaults = NightlyConfig()
-    nightly_kwargs = {
-        f.name: str(nightly_data[f.name])
-        for f in fields(NightlyConfig)
-        if f.name in nightly_data
-    }
-    kwargs["nightly"] = NightlyConfig(**{**vars(nightly_defaults), **nightly_kwargs})
+    for name, section in SECTIONS.items():
+        kwargs[name] = _section_from_mapping(section, data.get(name) or {})
     return Config(**kwargs)
 
 

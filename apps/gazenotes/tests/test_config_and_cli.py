@@ -177,3 +177,38 @@ def test_purge_on_an_empty_day_is_a_no_op(tmp_path, capsys):
     args = cli.build_parser().parse_args(["purge", "2026-09-01"])
     assert cli.cmd_purge(args, Config(notes_dir=tmp_path)) == 0
     assert "Nothing stored" in capsys.readouterr().out
+
+
+# -- Phase 6 settings ---------------------------------------------------
+def test_the_screen_buffer_is_off_unless_a_duration_is_configured():
+    # This is the only part of gazenotes that records before the user speaks,
+    # so a default install must not do it.
+    assert Config().screen_buffer_seconds == 0.0
+    assert Config().screen_buffer_enabled is False
+    assert config_from_mapping({"screen_buffer_seconds": 60}).screen_buffer_enabled is True
+
+
+def test_the_written_default_config_leaves_the_screen_buffer_off(tmp_path):
+    path = write_default_config(tmp_path / "config.toml")
+    assert load_config(path).screen_buffer_enabled is False
+    assert load_config(path).dwell_scroll is False
+
+
+def test_dwell_settings_are_a_section_with_their_own_defaults():
+    from gazenotes.config import DwellSettings
+
+    assert Config().dwell == DwellSettings()
+    tuned = config_from_mapping({"dwell": {"dwell_seconds": 0.8}})
+    assert tuned.dwell.dwell_seconds == 0.8
+    assert tuned.dwell.cooldown_seconds == DwellSettings().cooldown_seconds
+
+
+def test_section_values_are_coerced_to_their_field_types():
+    tuned = config_from_mapping({"dwell": {"zone_fraction": 1}, "nightly": {"backend": "local"}})
+    assert isinstance(tuned.dwell.zone_fraction, float)
+    assert tuned.nightly.backend == "local"
+
+
+def test_ocr_defaults_on_because_it_only_reads_an_already_saved_capture():
+    assert Config().ocr_enabled is True
+    assert config_from_mapping({"ocr_enabled": False}).ocr_enabled is False
