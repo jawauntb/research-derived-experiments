@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass(frozen=True)
 class PromptConfig:
-    #immutable prompt config
+    # immutable prompt config
     name: str
     version: str
     system_template: str
@@ -34,28 +34,28 @@ class PromptManager:
         self.prompts_dir = Path(prompts_dir)
         if not self.prompts_dir.exists():
             raise FileNotFoundError(f"Prompts dir not found: {self.prompts_dir}")
-        
+
         self.jinja_env = jinja2.Environment(
-            undefined=jinja2.StrictUndefined, #strict checking, but 'is defined' test still works
+            undefined=jinja2.StrictUndefined,  # strict checking, but 'is defined' test still works
             trim_blocks=True,
             lstrip_blocks=True,
-            cache_size=100, #cache compiled templates
+            cache_size=100,  # cache compiled templates
         )
         self._cache: Dict[str, PromptConfig] = {}
 
     def load_prompt(self, prompt_ref: str) -> PromptConfig:
         if prompt_ref in self._cache:
             return self._cache[prompt_ref]
-        
-        #parse ref
-        if '@' not in prompt_ref:
+
+        # parse ref
+        if "@" not in prompt_ref:
             raise ValueError(f"Invalid prompt reference: {prompt_ref}")
-        
-        path_parts, version = prompt_ref.rsplit('@', 1)
+
+        path_parts, version = prompt_ref.rsplit("@", 1)
         prompt_path = self.prompts_dir / path_parts / version
         if not prompt_path.exists():
             raise FileNotFoundError(f"Prompt not found: {prompt_path}")
-        
+
         config = self._load_config(prompt_path)
         system_template = self._load_template(prompt_path, "system.j2")
         user_template = self._load_template(prompt_path, "user.j2")
@@ -65,43 +65,34 @@ class PromptManager:
             version=version,
             system_template=system_template,
             user_template=user_template,
-            stop_sequences=config.get('stop_sequences'),
+            stop_sequences=config.get("stop_sequences"),
         )
 
         self._cache[prompt_ref] = prompt_config
         logger.info(f"Loaded prompt: {prompt_ref}")
         return prompt_config
 
-    def render(self, prompt_ref: str, variables: Dict[str, Any]) -> List[Dict[str, str]]:
-        print(f"PromptManager.render called with prompt_ref='{prompt_ref}'")
-        print(f"Variables: {list(variables.keys())}")
-        
+    def render(
+        self, prompt_ref: str, variables: Dict[str, Any]
+    ) -> List[Dict[str, str]]:
         config = self.load_prompt(prompt_ref)
-        print(f"Loaded prompt config: {config.name}@{config.version}")
-        
+
         try:
-            print(f"Rendering system template...")
-            system_content = self.jinja_env.from_string(config.system_template).render(**variables)
-            print(f"System content rendered, length: {len(system_content)}")
-            print(f"System content: {system_content[:200]}...")
-            
-            print(f"Rendering user template...")
-            user_content = self.jinja_env.from_string(config.user_template).render(**variables)
-            print(f"User content rendered, length: {len(user_content)}")
-            print(f"User content: {user_content[:200]}...")
-            
+            system_content = self.jinja_env.from_string(config.system_template).render(
+                **variables
+            )
+            user_content = self.jinja_env.from_string(config.user_template).render(
+                **variables
+            )
         except jinja2.UndefinedError as e:
-            print(f"Jinja undefined error: {e}")
             raise ValueError(f"Missing required variable in prompt {prompt_ref}: {e}")
-        except Exception as e:
-            print(f"Template rendering error: {e}")
+        except Exception:
             raise
 
         messages = [
-                {"role": "system", "content": system_content},
-                {"role": "user", "content": user_content},
-            ]
-        print(f"Returning {len(messages)} messages")
+            {"role": "system", "content": system_content},
+            {"role": "user", "content": user_content},
+        ]
         return messages
 
     def _load_config(self, prompt_path: Path) -> dict:
@@ -110,7 +101,7 @@ class PromptManager:
             return {}
         with open(config_path) as f:
             return yaml.safe_load(f) or {}
-        
+
     def _load_template(self, prompt_path: Path, template_name: str) -> str:
         template_path = prompt_path / template_name
         if not template_path.exists():

@@ -4,8 +4,8 @@
 
 Lifted/adapted from MIDAS's `src/models/` + `src/config/profiles.py` (see
 bio-claim-firewall/PROVENANCE.md): provider->model routing, versioned
-Jinja2 prompts, and task-based dispatch for the untrusted `proposer` and
-`repairer` tasks. `checker` (the deterministic rule engine) is
+Jinja2 prompts, and task-based dispatch for the untrusted `claim_parser`,
+`proposer`, and `repairer` tasks. `checker` (the deterministic rule engine) is
 deliberately NOT dispatchable through this package — see manager.py.
 """
 from __future__ import annotations

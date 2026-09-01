@@ -2,6 +2,7 @@
 tests; fixtures rewritten for bio-claim-firewall's flat provider-config
 shape (model lives on the provider entry, not the task — see
 config.yaml / manager.py's module docstring)."""
+
 from __future__ import annotations
 
 import pytest
@@ -101,7 +102,8 @@ tasks:
 """,
     )
     with pytest.raises(
-        ValueError, match="Task 'proposer' references unknown provider 'unknown_provider'"
+        ValueError,
+        match="Task 'proposer' references unknown provider 'unknown_provider'",
     ):
         ModelManager(cfg)
 
@@ -120,7 +122,8 @@ tasks:
 """,
     )
     with pytest.raises(
-        ValueError, match="Task 'proposer' references unknown provider 'openai_gpt4o_mini'"
+        ValueError,
+        match="Task 'proposer' references unknown provider 'openai_gpt4o_mini'",
     ):
         ModelManager(cfg)
 
@@ -140,9 +143,11 @@ def test_real_config_yaml_is_valid():
     validation (providers declared, tasks resolve to real providers)."""
     from pathlib import Path
 
-    real_config = Path(__file__).resolve().parents[2] / "src" / "model_manager" / "config.yaml"
+    real_config = (
+        Path(__file__).resolve().parents[2] / "src" / "model_manager" / "config.yaml"
+    )
     mgr = ModelManager(real_config)
-    assert set(mgr.config["tasks"]) == {"proposer", "repairer"}
+    assert set(mgr.config["tasks"]) == {"claim_parser", "proposer", "repairer"}
     for task_name, task_cfg in mgr.config["tasks"].items():
         assert task_cfg["provider"] in mgr.config["providers"]
     assert "checker" not in mgr.config["tasks"]

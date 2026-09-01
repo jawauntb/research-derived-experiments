@@ -1,0 +1,3 @@
+task: claim_parser
+version: v1
+description: 'Reduce one K562 gene-effect question to an exact three-field JSON object.'

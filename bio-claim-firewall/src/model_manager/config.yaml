@@ -23,6 +23,12 @@ providers:
     timeout_s: 60
 
 tasks:
+  claim_parser:
+    provider: openai_gpt4o_mini
+    prompt_ref: claim_parser/k562_gene_effect@v1
+    max_tokens: 100
+    temperature: 0.0
+    timeout_s: 30
   proposer:
     provider: openai_gpt4o_mini
     prompt_ref: proposer/claim_bundle@v1
