@@ -137,7 +137,7 @@ def test_shipped_proposer_prompt_renders():
     assert "example_source:0001" in messages[1]["content"]
 
 
-def test_shipped_repairer_prompt_renders():
+def test_shipped_repairer_v1_prompt_preserves_legacy_contract():
     """Sanity check the repairer prompt against the {failed_claim,
     fault_code, reasons, evidence_records} contract."""
     prompts_root = Path(__file__).resolve().parents[2] / "prompts"
@@ -152,5 +152,30 @@ def test_shipped_repairer_prompt_renders():
         },
     )
     assert len(messages) == 2
+    assert '"action": "repair"' in messages[0]["content"]
+    assert '"repaired_claim"' not in messages[0]["content"]
+    assert '"action": "abstain"' in messages[0]["content"]
+    assert '"abstain": true' not in messages[0]["content"]
+    assert "CAUSALITY_OVERCLAIM" in messages[1]["content"]
+    assert "observational record cannot license 'causes'" in messages[1]["content"]
+
+
+def test_shipped_repairer_v2_prompt_renders_parser_contract():
+    """Sanity check the Phase 4b parser contract in a new prompt version."""
+    prompts_root = Path(__file__).resolve().parents[2] / "prompts"
+    mgr = PromptManager(prompts_root)
+    messages = mgr.render(
+        "repairer/claim_repair@v2",
+        {
+            "failed_claim": {"claim_id": "x", "relation": "causes"},
+            "fault_code": "CAUSALITY_OVERCLAIM",
+            "reasons": ["observational record cannot license 'causes'"],
+            "evidence_records": [{"id": "example_source:0002"}],
+        },
+    )
+    assert len(messages) == 2
+    assert '"repaired_claim"' in messages[0]["content"]
+    assert '"action": "repair"' not in messages[0]["content"]
+    assert '"abstain": true' in messages[0]["content"]
     assert "CAUSALITY_OVERCLAIM" in messages[1]["content"]
     assert "observational record cannot license 'causes'" in messages[1]["content"]

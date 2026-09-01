@@ -31,7 +31,7 @@ tasks:
     timeout_s: 45
   repairer:
     provider: openai_gpt4o_mini
-    prompt_ref: repairer/claim_repair@v1
+    prompt_ref: repairer/claim_repair@v2
     max_tokens: 1500
     temperature: 0.0
     timeout_s: 30

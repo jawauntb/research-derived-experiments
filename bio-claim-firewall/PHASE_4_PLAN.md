@@ -52,7 +52,7 @@ All permissive; still record them:
 bio-claim-firewall/
 ├── prompts/
 │   ├── proposer/claim_bundle/v1/{system.j2,user.j2,config.yaml}   # shape from MIDAS prompts/reasoning/solve/v3/
-│   └── repairer/claim_repair/v1/{system.j2,user.j2,config.yaml}   # shape from MIDAS prompts/reasoning/repair/v2/
+│   └── repairer/claim_repair/{v1,v2}/{system.j2,user.j2,config.yaml} # versioned repair contracts; v2 matches the parser
 │
 ├── src/
 │   ├── config/
@@ -60,6 +60,7 @@ bio-claim-firewall/
 │   │   └── profiles.py                     # LIFT: MIDAS src/config/profiles.py
 │   ├── model_manager/
 │   │   ├── manager.py                      # ADAPT: MIDAS src/models/manager.py (drop marker branch)
+│   │   ├── adapter.py                      # Phase 4c: bridge Phase 4b's call shape to configured prompts
 │   │   ├── prompts.py                      # LIFT: MIDAS src/models/prompts.py
 │   │   └── providers/
 │   │       ├── base.py                     # LIFT: MIDAS src/models/providers/base.py
@@ -95,6 +96,7 @@ bio-claim-firewall/
 - **`test_orchestrator_status_cascade.py`** — every failure branch produces the right status: proposer-JSON-invalid → `CHECKER_ERROR`; rule-engine rejects → `REJECTED_<FAULT_CODE>`; rule cascade all-accept → `ACCEPTED_CONDITIONALLY`.
 - **`test_prompts.py`** — versioned load; caching; `StrictUndefined` catches missing template vars; `clear_cache()` works.
 - **`test_parser_alignment.py`** — parser emits `duplicate`/`missing`/`unexpected` claim-alignment errors correctly against the JSONL contract.
+- **`test_phase4_adapter.py`** — real manager uses configured, versioned proposer/repairer prompts; the adapter preserves metadata and timeout overrides.
 
 ## Prohibited moves during Phase 4
 
