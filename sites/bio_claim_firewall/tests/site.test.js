@@ -77,6 +77,7 @@ it("serves only the explicit GET/HEAD allowlist with restrictive headers", async
     const response = await request("/");
     assert.match(response.headers["content-security-policy"], /default-src 'none'/);
     assert.match(response.headers["content-security-policy"], /script-src 'self'/);
+    assert.equal(response.headers["cache-control"], "no-cache, max-age=0");
     assert.equal(response.headers["x-content-type-options"], "nosniff");
     assert.equal(response.headers["referrer-policy"], "no-referrer");
 });
@@ -120,6 +121,13 @@ it("has a no-JavaScript default receipt and pilot path", () => {
     assert.match(html, /mailto:jawaun\.brown95@gmail\.com\?subject=Bio%20Claim%20Firewall%20design%20partner/);
     assert.match(html, /<script src="fixture\.js" defer><\/script>/);
     assert.match(html, /<script src="app\.js" defer><\/script>/);
+});
+
+it("updates the claim type when switching evidence worlds", () => {
+    const app = fs.readFileSync(path.join(root, "app.js"), "utf8");
+    assert.match(app, /open_targets:\s*"TARGET_DISEASE_ASSOCIATION"/);
+    assert.match(app, /arc_vcc:\s*"PERTURBATION_DIRECTION"/);
+    assert.match(app, /getElementById\("claim-type"\)\.textContent = claimType/);
 });
 
 (async () => {

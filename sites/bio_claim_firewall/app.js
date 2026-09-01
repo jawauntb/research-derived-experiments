@@ -121,10 +121,16 @@
   function renderClaim(receipt) {
     const claim = receipt.normalized_claim || {};
     const world = worlds.find((item) => item.id === receipt.world_id);
+    const claimType = {
+      clinical_trials_sec: "TRIAL_DISCLOSURE",
+      open_targets: "TARGET_DISEASE_ASSOCIATION",
+      arc_vcc: "PERTURBATION_DIRECTION",
+    }[receipt.world_id] || "BOUNDED_CLAIM";
     let claimText;
     if (receipt.world_id === "clinical_trials_sec") claimText = `“The registered trial ${claim.registry_id} was ${claim.asserted_value?.toLowerCase()} as of ${formatDate(claim.as_of)}.”`;
     else if (receipt.world_id === "open_targets") claimText = `“${claim.target_id} has a ${claim.association_type} association with ${claim.disease_id} in release ${claim.release}.”`;
     else claimText = `“Perturbing ${claim.perturbed_gene} ${claim.direction} expression of ${claim.measured_gene} in assay ${claim.assay}.”`;
+    document.getElementById("claim-type").textContent = claimType;
     document.getElementById("claim-text").textContent = claimText;
     document.getElementById("claim-as-of").textContent = claim.as_of ? `as of ${formatDate(claim.as_of)}` : (claim.release ? `release ${claim.release}` : `assay ${claim.assay}`);
     const fields = document.getElementById("claim-fields");

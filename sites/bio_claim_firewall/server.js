@@ -95,7 +95,9 @@ const server = http.createServer((request, response) => {
     const extension = path.extname(filePath);
     response.writeHead(200, {
       "Content-Type": types[extension] || "application/octet-stream",
-      "Cache-Control": extension === ".html" ? "no-cache, max-age=0" : "public, max-age=300",
+      // Filenames are intentionally stable. Revalidation prevents mixed-version
+      // HTML, scripts, catalogs, and receipts after a deploy.
+      "Cache-Control": "no-cache, max-age=0",
     });
     response.end(request.method === "HEAD" ? undefined : body);
   });
