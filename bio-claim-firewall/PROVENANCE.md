@@ -29,11 +29,28 @@ Until then, MIDAS-derived files stay in unpublished commits or private branches 
 
 ## Data snapshots
 
-None yet. Phase 2 will populate:
+Phase 2 froze six real, hash-verified pilot-world sources on 2026-08-31:
 
-- Perturbation dataset (TBD; see `spec/non_goals.md` for selection criteria).
-- HGNC / Ensembl gene identifier snapshot.
-- Gene Ontology snapshot.
-- Pathway source snapshot (Reactome or equivalent, license permitting).
+- `hgnc.2026_pilot`: 45,045 HGNC CURIEs plus 3,449 merge aliases (CC0-1.0).
+- `ncbitaxon.2026_pilot`: seven NCBI Taxonomy terms (Public Domain).
+- `cellontology.2026_pilot`: 3,335 Cell Ontology CURIEs with an `is_a` closure (CC-BY-4.0).
+- `cellline.2026_pilot`: seven Cell Line Ontology terms (CC-BY-4.0).
+- `reactome.2026_pilot`: 2,012 human Reactome pathway CURIEs and 20,000 memberships (CC0-1.0).
+- `perturbseq.replogle_2022`: 9,400 K562 perturbation-effect records sampled from Replogle et al. 2022 (CC0-1.0).
 
-Each snapshot will get a manifest entry with source URL, retrieval date, license text, SHA-256 of the raw file, preprocessing command, schema version, and row count.
+Each JSON manifest in `data/manifests/` records its source URL, retrieval timestamp,
+license, SHA-256, preprocessing command, schema version, and row count. The complete
+sampling and substitution rationale is in `data/README.md`; the reproducible download
+and manifest build commands are in `data/scripts/`.
+
+## Evaluation receipts
+
+### Context-rule mutation coverage — 2026-09-01
+
+- **Target**: the six context guards in `src/rules/sections/_shared.py`, including the
+  formerly surviving R-CTX-02 ancestor and R-CTX-05 assay-equivalence `delete_line`
+  mutants.
+- **Command**: `cd bio-claim-firewall && uv run --no-sync python -m eval.mutation --limit 6 --report /tmp/bcf-context-mutation-2026-09-01.md`.
+- **Result**: 18/18 mutants killed; 0 survived; 0 skipped. The report is intentionally
+  local scratch output; the reproducible test assertions are committed in
+  `tests/rules/test_r_ctx.py`.

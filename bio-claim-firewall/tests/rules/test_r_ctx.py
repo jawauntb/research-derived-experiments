@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 from normalize import CanonicalClaim
 
 from rules import RuleEngine
@@ -26,8 +28,8 @@ def test_context_mismatch_valid_fixture_accepts(run_claim, expectations):
         assert any(substring in condition for condition in result.conditions)
 
 
-def _base_claim(**overrides) -> CanonicalClaim:
-    fields = dict(
+def _base_claim(**overrides: Any) -> CanonicalClaim:
+    fields: dict[str, Any] = dict(
         schema_version="0.1.0",
         claim_id="66666666-6666-6666-6666-666666666666",
         subject_id="HGNC:1097",
@@ -92,12 +94,33 @@ def test_r_ctx_01_fires_on_species_mismatch(bundle):
     assert rule_id == "R-CTX-01"
 
 
+def test_r_ctx_02_fires_when_claim_cell_type_is_not_evidence_ancestor(bundle):
+    canonical = _base_claim(
+        cell_type="CL:0000236",  # B cell; not an ancestor of the evidence's hematopoietic cell.
+        cell_type_ancestors=("CL:0000738", "CL:0000988", "CL:0000000"),
+    )
+    result = RuleEngine(bundle, checker_version="0.1.0").run(canonical)
+
+    assert result.verdict == "REJECTED"
+    assert result.fault_code == "CONTEXT_MISMATCH"
+    assert result.reasons[0].rule_id == "R-CTX-02"
+
+
 def test_r_ctx_04_fires_on_state_mismatch(bundle):
     canonical = _base_claim(state="IFNG_stimulated")
     result = RuleEngine(bundle, checker_version="0.1.0").run(canonical)
     assert result.verdict == "REJECTED"
     assert result.fault_code == "CONTEXT_MISMATCH"
     assert result.reasons[0].rule_id == "R-CTX-04"
+
+
+def test_r_ctx_05_fires_on_non_equivalent_assay(bundle):
+    canonical = _base_claim(assay="co-IP")
+    result = RuleEngine(bundle, checker_version="0.1.0").run(canonical)
+
+    assert result.verdict == "REJECTED"
+    assert result.fault_code == "CONTEXT_MISMATCH"
+    assert result.reasons[0].rule_id == "R-CTX-05"
 
 
 def test_r_ctx_06_fires_on_perturbation_mismatch(bundle):
