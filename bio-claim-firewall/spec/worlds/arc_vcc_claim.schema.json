@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://research-derived-experiments.local/spec/worlds/arc_vcc_claim.schema.json",
+  "title": "Arc VCC H1 measurement-direction claim",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["perturbed_gene", "response_gene", "summary_statistic", "direction", "threshold", "assay", "split"],
+  "properties": {
+    "world_id": {"const": "arc-vcc"},
+    "world_version": {"const": "2025-h1-measurements"},
+    "perturbed_gene": {"type": "string", "minLength": 1},
+    "response_gene": {"type": "string", "minLength": 1},
+    "summary_statistic": {"type": "string", "minLength": 1},
+    "direction": {"enum": ["increases", "decreases", "null"]},
+    "threshold": {"type": "number", "minimum": 0},
+    "assay": {"type": "string", "minLength": 1},
+    "split": {"enum": ["development", "locked_holdout"]}
+  }
+}

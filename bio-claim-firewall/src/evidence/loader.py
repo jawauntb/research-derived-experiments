@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any, Iterator
+from typing import Any, Iterable, Iterator
 
 from .errors import EvidenceError
 from .hashing import sha256_dir, sha256_file
@@ -71,7 +71,9 @@ def _read_jsonl(path: Path) -> list[dict[str, Any]]:
     try:
         text = path.read_text(encoding="utf-8")
     except OSError as exc:
-        raise EvidenceError("HASH_MISMATCH", reason="unreadable_file", path=str(path), error=str(exc)) from exc
+        raise EvidenceError(
+            "HASH_MISMATCH", reason="unreadable_file", path=str(path), error=str(exc)
+        ) from exc
 
     rows: list[dict[str, Any]] = []
     for lineno, line in enumerate(text.splitlines(), start=1):
@@ -82,23 +84,33 @@ def _read_jsonl(path: Path) -> list[dict[str, Any]]:
             row = json.loads(line)
         except json.JSONDecodeError as exc:
             raise EvidenceError(
-                "HASH_MISMATCH", reason="malformed_jsonl_line", path=str(path), lineno=lineno
+                "HASH_MISMATCH",
+                reason="malformed_jsonl_line",
+                path=str(path),
+                lineno=lineno,
             ) from exc
         if not isinstance(row, dict):
             raise EvidenceError(
-                "HASH_MISMATCH", reason="jsonl_line_not_object", path=str(path), lineno=lineno
+                "HASH_MISMATCH",
+                reason="jsonl_line_not_object",
+                path=str(path),
+                lineno=lineno,
             )
         rows.append(row)
     return rows
 
 
-def _load_ontology_source(onto_dir: Path, manifest: Manifest, source: str) -> tuple[
-    set[str], dict[str, str], dict[str, tuple[str, ...]], dict[str, str]
-]:
+def _load_ontology_source(
+    onto_dir: Path, manifest: Manifest, source: str
+) -> tuple[set[str], dict[str, str], dict[str, tuple[str, ...]], dict[str, str]]:
     actual_hash = sha256_dir(onto_dir)
     if actual_hash != manifest.sha256:
         raise EvidenceError(
-            "HASH_MISMATCH", source=source, path=str(onto_dir), expected=manifest.sha256, actual=actual_hash
+            "HASH_MISMATCH",
+            source=source,
+            path=str(onto_dir),
+            expected=manifest.sha256,
+            actual=actual_hash,
         )
 
     curies: set[str] = set()
@@ -124,7 +136,10 @@ def _load_ontology_source(onto_dir: Path, manifest: Manifest, source: str) -> tu
                 labels[row["curie"]] = row["label"]
             except KeyError as exc:
                 raise EvidenceError(
-                    "HASH_MISMATCH", reason="malformed_label_row", source=source, row=row
+                    "HASH_MISMATCH",
+                    reason="malformed_label_row",
+                    source=source,
+                    row=row,
                 ) from exc
 
     aliases: dict[str, str] = {}
@@ -135,7 +150,10 @@ def _load_ontology_source(onto_dir: Path, manifest: Manifest, source: str) -> tu
                 aliases[row["deprecated"]] = row["canonical"]
             except KeyError as exc:
                 raise EvidenceError(
-                    "HASH_MISMATCH", reason="malformed_alias_row", source=source, row=row
+                    "HASH_MISMATCH",
+                    reason="malformed_alias_row",
+                    source=source,
+                    row=row,
                 ) from exc
 
     ancestors: dict[str, tuple[str, ...]] = {}
@@ -146,35 +164,52 @@ def _load_ontology_source(onto_dir: Path, manifest: Manifest, source: str) -> tu
                 ancestors[row["curie"]] = tuple(row.get("ancestors", []))
             except KeyError as exc:
                 raise EvidenceError(
-                    "HASH_MISMATCH", reason="malformed_cell_ontology_row", source=source, row=row
+                    "HASH_MISMATCH",
+                    reason="malformed_cell_ontology_row",
+                    source=source,
+                    row=row,
                 ) from exc
 
     return curies, aliases, ancestors, labels
 
 
 def _load_evidence_source(
-    evidence_file: Path, manifest: Manifest, source: str, all_records: dict[str, dict[str, Any]]
+    evidence_file: Path,
+    manifest: Manifest,
+    source: str,
+    all_records: dict[str, dict[str, Any]],
 ) -> str:
     actual_hash = sha256_file(evidence_file)
     if actual_hash != manifest.sha256:
         raise EvidenceError(
-            "HASH_MISMATCH", source=source, path=str(evidence_file), expected=manifest.sha256, actual=actual_hash
+            "HASH_MISMATCH",
+            source=source,
+            path=str(evidence_file),
+            expected=manifest.sha256,
+            actual=actual_hash,
         )
 
     for row in _read_jsonl(evidence_file):
         evidence_id = row.get("evidence_id")
         if not evidence_id:
             raise EvidenceError(
-                "HASH_MISMATCH", reason="record_missing_evidence_id", source=source, path=str(evidence_file)
+                "HASH_MISMATCH",
+                reason="record_missing_evidence_id",
+                source=source,
+                path=str(evidence_file),
             )
         if evidence_id in all_records:
-            raise EvidenceError("HASH_MISMATCH", reason="duplicate_evidence_id", evidence_id=evidence_id)
+            raise EvidenceError(
+                "HASH_MISMATCH", reason="duplicate_evidence_id", evidence_id=evidence_id
+            )
         all_records[evidence_id] = row
 
     return actual_hash
 
 
-def load_bundle(data_root: Path) -> SnapshotBundle:
+def load_bundle(
+    data_root: Path, *, allowed_sources: Iterable[str] | None = None
+) -> SnapshotBundle:
     """Load, hash-verify, and return a SnapshotBundle for ``data_root``.
 
     Pure: given the same ``data_root`` on disk, deterministically returns
@@ -211,12 +246,23 @@ def load_bundle(data_root: Path) -> SnapshotBundle:
     # higher layer (or a future revision) rather than invented here.
     """
     data_root = Path(data_root)
+    # An allowlist is an explicit world boundary.  The historical no-argument
+    # call retains ambient loading for existing verifier fixtures; world-bound
+    # callers must pass the registered source set and get no source merging.
+    allowed = None if allowed_sources is None else frozenset(allowed_sources)
+    if allowed is not None and (
+        not allowed
+        or any(not isinstance(source, str) or not source for source in allowed)
+    ):
+        raise EvidenceError("HASH_MISMATCH", reason="invalid_source_allowlist")
     manifests_dir = data_root / "manifests"
     ontology_dir = data_root / "ontology_snapshots"
     evidence_dir = data_root / "evidence_records"
 
     if not manifests_dir.is_dir():
-        raise EvidenceError("HASH_MISMATCH", reason="missing_manifests_dir", path=str(manifests_dir))
+        raise EvidenceError(
+            "HASH_MISMATCH", reason="missing_manifests_dir", path=str(manifests_dir)
+        )
 
     manifests: dict[str, Manifest] = {}
     for candidate_paths in _iter_manifest_path_groups(manifests_dir):
@@ -229,6 +275,18 @@ def load_bundle(data_root: Path) -> SnapshotBundle:
                 path=str(candidate_paths[0]),
             )
         manifests[manifest.source] = manifest
+
+    if allowed is not None:
+        loaded_sources = frozenset(manifests)
+        extra = sorted(loaded_sources - allowed)
+        missing = sorted(allowed - loaded_sources)
+        if extra or missing:
+            raise EvidenceError(
+                "HASH_MISMATCH",
+                reason="source_not_allowlisted",
+                extra_sources=extra,
+                missing_sources=missing,
+            )
 
     all_curies: set[str] = set()
     all_aliases: dict[str, str] = {}
@@ -261,13 +319,17 @@ def load_bundle(data_root: Path) -> SnapshotBundle:
             )
 
         if is_ontology:
-            curies, aliases, ancestors, labels = _load_ontology_source(onto_source_dir, manifest, source)
+            curies, aliases, ancestors, labels = _load_ontology_source(
+                onto_source_dir, manifest, source
+            )
             all_curies.update(curies)
             all_aliases.update(aliases)
             all_ancestors.update(ancestors)
             all_labels.update(labels)
         else:
-            record_file_hashes[source] = _load_evidence_source(evidence_file, manifest, source, all_records)
+            record_file_hashes[source] = _load_evidence_source(
+                evidence_file, manifest, source, all_records
+            )
 
     ledger = EvidenceLedger(all_records, record_file_hashes)
     return SnapshotBundle(

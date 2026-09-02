@@ -6,10 +6,29 @@ from __future__ import annotations
 import json
 import shutil
 import subprocess
+from collections.abc import Iterator
+from contextlib import contextmanager
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
-from typing import Callable, Iterable
+from typing import Callable, Iterable, Protocol, cast
+
+
+class _FcntlApi(Protocol):
+    LOCK_EX: int
+    LOCK_UN: int
+
+    def flock(self, fd: int, operation: int) -> object: ...
+
+
+fcntl: _FcntlApi | None
+
+try:
+    import fcntl as _fcntl_module
+except ImportError:  # pragma: no cover - Cabal gate is unavailable on Windows.
+    fcntl = None
+else:
+    fcntl = cast(_FcntlApi, _fcntl_module)
 
 
 class HaskellGateUnavailable(RuntimeError):
@@ -56,6 +75,25 @@ def _ontology_dir() -> Path:
     return _repo_root() / "formal" / "ontology-hs"
 
 
+@contextmanager
+def _cabal_build_lock() -> Iterator[None]:
+    """Serialize Cabal builds that share one ``dist-newstyle`` directory."""
+
+    lock_api = fcntl
+    if lock_api is None:
+        raise HaskellGateUnavailable("Cabal gate requires POSIX file locking")
+    lock_directory = _ontology_dir() / "dist-newstyle"
+    lock_directory.mkdir(parents=True, exist_ok=True)
+    with (lock_directory / ".ontology-check.lock").open(
+        "a+", encoding="utf-8"
+    ) as lock_file:
+        lock_api.flock(lock_file.fileno(), lock_api.LOCK_EX)
+        try:
+            yield
+        finally:
+            lock_api.flock(lock_file.fileno(), lock_api.LOCK_UN)
+
+
 def _run_ontology_check(body_names: tuple[str, ...]) -> str:
     ontology_dir = _ontology_dir()
     if not ontology_dir.exists():
@@ -64,13 +102,14 @@ def _run_ontology_check(body_names: tuple[str, ...]) -> str:
         raise HaskellGateUnavailable("cabal is not available")
 
     try:
-        completed = subprocess.run(
-            ["cabal", "run", "ontology-check", "--", *body_names],
-            cwd=ontology_dir,
-            check=True,
-            text=True,
-            capture_output=True,
-        )
+        with _cabal_build_lock():
+            completed = subprocess.run(
+                ["cabal", "run", "ontology-check", "--", *body_names],
+                cwd=ontology_dir,
+                check=True,
+                text=True,
+                capture_output=True,
+            )
     except FileNotFoundError as exc:
         raise HaskellGateUnavailable("cabal is not available") from exc
     except subprocess.CalledProcessError as exc:
@@ -87,20 +126,21 @@ def _run_ontology_check_motifs(motifs: tuple[str, ...]) -> str:
         raise HaskellGateUnavailable("cabal is not available")
 
     try:
-        completed = subprocess.run(
-            [
-                "cabal",
-                "run",
-                "ontology-check",
-                "--",
-                "--motifs",
-                ",".join(motifs),
-            ],
-            cwd=ontology_dir,
-            check=True,
-            text=True,
-            capture_output=True,
-        )
+        with _cabal_build_lock():
+            completed = subprocess.run(
+                [
+                    "cabal",
+                    "run",
+                    "ontology-check",
+                    "--",
+                    "--motifs",
+                    ",".join(motifs),
+                ],
+                cwd=ontology_dir,
+                check=True,
+                text=True,
+                capture_output=True,
+            )
     except FileNotFoundError as exc:
         raise HaskellGateUnavailable("cabal is not available") from exc
     except subprocess.CalledProcessError as exc:

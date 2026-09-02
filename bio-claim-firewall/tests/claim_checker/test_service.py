@@ -2,18 +2,22 @@
 
 from __future__ import annotations
 
-from types import MappingProxyType
+from types import MappingProxyType, SimpleNamespace
 
 import pytest
-
+from claim_checker.__main__ import format_result
 from claim_checker.service import (
     ClaimCheckInputError,
     ClaimCheckResult,
     check_k562_claim,
 )
-from claim_checker.__main__ import format_result
 from evidence import EvidenceLedger
 from evidence.snapshot import SnapshotBundle
+from worlds import K562_WORLD
+
+_SOURCE_HASHES = {
+    contract.source: contract.sha256 for contract in K562_WORLD.source_contracts
+}
 
 
 def _record(
@@ -67,10 +71,13 @@ def _bundle(*records: dict) -> SnapshotBundle:
         "CLO:0007059": "K-562 cell",
     }
     return SnapshotBundle(
-        manifests={},
+        manifests={
+            source: SimpleNamespace(sha256=digest)
+            for source, digest in _SOURCE_HASHES.items()
+        },
         ledger=EvidenceLedger(
             {record["evidence_id"]: record for record in records},
-            {"perturbseq.replogle_2022": "a" * 64},
+            _SOURCE_HASHES,
         ),
         curies=frozenset(labels),
         alias_map=MappingProxyType({}),
@@ -89,9 +96,7 @@ def test_check_accepts_exact_hgnc_symbols_against_one_frozen_record():
     assert result.evidence["citation"] == "Replogle et al. 2022"
     assert result.claim["subject"] == {"id": "HGNC:1", "label": "MED19"}
     assert result.claim["object"] == {"id": "HGNC:2", "label": "GYPB"}
-    assert result.as_dict()["verdict"]["snapshot_hashes"] == {
-        "perturbseq.replogle_2022": "a" * 64
-    }
+    assert result.as_dict()["verdict"]["snapshot_hashes"] == _SOURCE_HASHES
 
 
 def test_check_uses_the_verifier_to_reject_a_sign_reversal():
@@ -113,7 +118,7 @@ def test_check_fails_closed_to_inconclusive_when_the_pair_is_not_frozen():
         "No exact frozen Replogle 2022 K562 CRISPRi record matches this gene pair."
     )
     assert missing.verdict["checker_version"] == "0.1.0"
-    assert missing.verdict["snapshot_hashes"] == {"perturbseq.replogle_2022": "a" * 64}
+    assert missing.verdict["snapshot_hashes"] == _SOURCE_HASHES
     assert missing.claim is None
     assert missing.evidence is None
 
@@ -128,7 +133,7 @@ def test_check_reports_a_measured_null_effect_without_claiming_the_pair_is_absen
         "The exact frozen Replogle 2022 K562 CRISPRi record for this gene "
         "pair records no directional effect."
     )
-    assert result.verdict["snapshot_hashes"] == {"perturbseq.replogle_2022": "a" * 64}
+    assert result.verdict["snapshot_hashes"] == _SOURCE_HASHES
     assert result.claim is None
     assert result.evidence is None
 
@@ -143,9 +148,28 @@ def test_check_refuses_ambiguous_frozen_evidence_instead_of_picking_one():
     assert result.verdict["reason"] == (
         "Multiple exact frozen Replogle 2022 K562 CRISPRi records match this gene pair."
     )
-    assert result.verdict["snapshot_hashes"] == {"perturbseq.replogle_2022": "a" * 64}
+    assert result.verdict["snapshot_hashes"] == _SOURCE_HASHES
     assert result.claim is None
     assert result.evidence is None
+
+
+def test_legacy_wrapper_rejects_hash_valid_foreign_source_bundle():
+    bundle = _bundle(_record())
+    manifests = dict(bundle.manifests)
+    manifests["foreign.source"] = manifests.pop("perturbseq.replogle_2022")
+    foreign_bundle = SnapshotBundle(
+        manifests=manifests,
+        ledger=bundle.ledger,
+        curies=bundle.curies,
+        alias_map=bundle.alias_map,
+        ancestor_map=bundle.ancestor_map,
+        labels=bundle.labels,
+    )
+
+    result = check_k562_claim(foreign_bundle, "MED19", "GYPB", "increases")
+
+    assert result.verdict["verdict"] == "CHECKER_ERROR"
+    assert "sources do not exactly match" in result.verdict["checker_error"]["message"]
 
 
 @pytest.mark.parametrize("value", ["raises", "", "more strongly increases"])

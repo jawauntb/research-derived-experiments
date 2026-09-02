@@ -6,6 +6,55 @@
 
 ---
 
+## 0. Current pickup state — supersedes older launch notes below
+
+The project is now **ready for a bounded design-partner pilot**. Three new real
+evidence worlds are admitted: ClinicalTrials.gov + SEC disclosure identity,
+Open Targets 26.06 associations, and Arc cell-eval2 real H1 measurements. All
+18 fatal gates and all 15 locked controls passed; NeuroVault and FlyWire/Codex
+remain visibly deferred. The generated decision is
+`experiments/evidence_worlds/results/pilot_readiness.{json,md}`.
+Those results are recomputed from an independent locked control corpus, require
+exact nonempty gate/control sets and registry source hashes, and bind the
+registry, evaluator, manifests, fixtures, preregistrations, and corpus by digest.
+Clinical Trials/SEC additionally requires a separate scope-limited review
+artifact; no mechanical string match is labeled as human confirmation.
+Registered world contracts pin the derived fixture/bundle digests as well as
+raw-source hashes, so a coordinated fixture rewrite cannot self-certify. A
+separate `source-terms-review.json` binds exact license IDs, official and terms
+references, and bounded-demo obligations. The registry also pins the exact
+Clinical Trials and Open Targets scenario locators, while a preregistered
+90-day freshness window gates both operator-review artifacts against manifest
+retrieval clocks and the locked evaluation date. Declared buyer roles and HTTPS
+locators remain metadata, not evidence of live availability, customer demand,
+or commercial usefulness.
+
+The public surface is the curated, credential-free site in
+`sites/bio_claim_firewall/`. Its eight public receipts are regenerated from the
+admitted adapters by `export_real_receipts.py`; it does not accept arbitrary
+claims or make live model calls. It is deployed as an isolated Railway project
+at `https://bio-claim-firewall-demo-production.up.railway.app`. Apollo discovery found 15 candidate
+organizations and 25 buyer-role candidates privately, sent no outreach, and
+committed aggregates only.
+
+MIDAS reuse is authorized. The private permission correspondence is deliberately
+not committed; the continuing obligation is attribution and preservation of the
+source headers described in `PROVENANCE.md`. Any older statement below that this
+permission blocks public release is historical and superseded by this section.
+
+The generic CLI now exercises every admitted world with `--world-id`,
+`--world-version`, `--fixture`, and `--claim-json`; adapter receipts are rejected
+unless their canonical payload, receipt ID, exact source hashes, and registered
+world digest all recompute. The K562 positional and natural-language routes stay
+backward compatible.
+
+The recommended commercial move is a 3–5 customer design-partner pilot around
+scientific-diligence memos. Do not market a universal fact checker, clinical
+tool, or publication-grade empirical result. A paper should follow an
+independent blinded review and broader workflow evaluation.
+
+---
+
 ## 1. What this project is (one paragraph)
 
 A deterministic, proof-carrying biological claim system. An untrusted model proposes a claim (subject, relation, object, context, cited evidence, confidence language). A rule engine verifies it against a frozen, hash-verified snapshot of ontologies + a real perturbation dataset. The verifier returns exactly one of `ACCEPTED_CONDITIONALLY` / `REJECTED_<FAULT_CODE>` / `INCONCLUSIVE` / `CHECKER_ERROR`; the last two never render as verified, and `CHECKER_ERROR` fails closed. Accepted claims carry a machine-readable derivation. LLM output is data, never executable code.
@@ -44,7 +93,7 @@ operational evidence only, not an empirical biology or safety result.**
 - `verify()` NEVER raises. Every exception path returns a schema-conformant verdict dict.
 - Every accepted claim carries a machine-readable `derivation` (evidence ids + applied rule ids + snapshot hashes).
 - Rule id in each `Reason` matches `spec/inference_rules.md` verbatim.
-- MIDAS reuse permission is verbal-through-Jawaun's-girlfriend, tracked in `PROVENANCE.md`.
+- MIDAS reuse is authorized; preserve attribution and the source headers tracked in `PROVENANCE.md`.
 
 ---
 
@@ -61,7 +110,7 @@ Ship the deterministic verifier as an importable Python package with the real bi
 2. Rename `src/*/` → `src/bio_claim_firewall/*/` (or add `pyproject.toml` `[tool.setuptools.packages.find]` config).
 3. `CHANGELOG.md` + semver.
 4. Public README with the honest limits (one narrow live smoke has run; see §7).
-5. MIDAS reuse written trace (see §5).
+5. MIDAS attribution and provenance notice (see §5).
 
 ### Path B — Live claim-firewall API service
 
@@ -149,16 +198,12 @@ The Phase 5 mechanical + adversarial suites turned into a live dashboard: which 
 
 ## 5. Blockers before you can ship — in priority order
 
-### 5.1 MIDAS legal paper trail (BLOCKS any public release)
+### 5.1 MIDAS permission and attribution (**resolved 2026-09-01**)
 
-MIDAS has no upstream LICENSE. Reuse permission for this project is verbal-through-Jawaun, relayed from his girlfriend (the MIDAS author). Before any commit that reuses MIDAS-derived code is pushed to a public artifact (PyPI, hosted API, blog post, paper), one of the following MUST be archived under `bio-claim-firewall/legal/`:
-
-- **Preferred**: a LICENSE file added to the MIDAS upstream repo. Record the commit hash in `PROVENANCE.md`.
-- **Acceptable**: a dated written note (email, Slack, iMessage screenshot with dates visible) from the MIDAS author granting reuse, saved as `bio-claim-firewall/legal/midas-permission-<date>.{eml|png|txt}`.
-
-**Files affected**: everything under `src/model_manager/` that carries the `# Sourced from MIDAS with permission` header. Grep: `grep -rl "Sourced from MIDAS" bio-claim-firewall/`.
-
-**Owner**: Jawaun (needs a real message from a real person).
+Reuse permission is confirmed by the human director. The underlying private
+correspondence is not a repository artifact and must not be published. Retain
+the attribution in `PROVENANCE.md` and every `# Sourced from MIDAS with
+permission` header. Public release is no longer blocked by this item.
 
 ### 5.2 Phase 4c — ModelManager ↔ Proposer/Repairer adapter (**resolved 2026-09-01**)
 
@@ -239,7 +284,9 @@ Score: per-attack survival rate across ≥3 model families (Claude Opus/Sonnet, 
 ### 5.7 Nice-to-haves before launch
 
 - **Second and third perturbation datasets**: Norman 2019 (Perturb-seq K562 with double perturbations), Frangieh 2021 (Perturb-CITE-seq melanoma + IFN-γ). Same schema, more context-swap fixtures.
-- **A tiny CLI**: `python -m bio_claim_firewall verify claim.json --snapshot data/`. Trivial once Path A packaging lands.
+- **PyPI packaging for the existing CLI**: the repo-local `python -m claim_checker`
+  surface now supports every admitted world, but installing a `bio-claim-firewall`
+  console command remains a separate library-shipping concern.
 - **`.env.example`** documenting every env var the model manager reads.
 - **Dockerfile** for reproducible Path B deployment.
 - **Structured pre-registration document**: markdown at `docs/preregistration/bio_claim_firewall_phase_5_<date>.md` following the pattern used elsewhere in this repo. Freeze before running.
@@ -364,14 +411,14 @@ If time-boxed to one session, in this order:
 3. **Run the full 31-site mutation sweep** before reporting any Phase 5 empirical result.
 4. **Branch + commit + PR + squash-merge each step** per `AGENTS.md`. Do not stockpile.
 
-If Jawaun has cleared §5.1 (MIDAS legal), also stub out `pyproject.toml` under `bio-claim-firewall/` for Path A packaging — trivial, high-leverage.
+If Path A becomes the chosen product, add packaging under `bio-claim-firewall/` as a separate concern; the bounded design-partner pilot does not require PyPI.
 
 ---
 
 ## 10. Contacts / provenance
 
 - **Human director**: Jawaun Brown (jawaun@generalintelligencecompany.com).
-- **MIDAS author**: Jawaun's girlfriend (name intentionally not written in this file; get from Jawaun for attribution). Reuse permission relayed verbally on 2026-08-31.
+- **MIDAS author**: identity intentionally omitted from this public handoff; attribution and authorized reuse are recorded in `PROVENANCE.md`.
 - **Session that landed all six PRs**: [https://claude.ai/code/session_01CqxcZU3FVoc1NPBmQ6uaGm](https://claude.ai/code/session_01CqxcZU3FVoc1NPBmQ6uaGm).
 - **Repo home**: `github.com/jawauntb/research-derived-experiments`.
 

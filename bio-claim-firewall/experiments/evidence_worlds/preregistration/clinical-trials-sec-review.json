@@ -1,0 +1,22 @@
+{
+  "schema_version": "clinical-trials-sec-review-0.1",
+  "world_id": "clinical-trials-sec",
+  "world_version": "2025-09-01_2026-09-01",
+  "review_id": "sec-0001104659-26-069810-ex99-1-nct06260774",
+  "reviewed_at": "2026-09-01T23:30:00Z",
+  "reviewer_role": "agent_operator_under_human_direction",
+  "review_method": "Exact locator and document-identity review against the retained SEC exhibit bytes; no efficacy assessment.",
+  "sec_source_sha256": "873c321bc7a918f4e7ad2cee5cde2de814376a864f1fece3e0c483cc8911a80e",
+  "cik": "0001829635",
+  "sec_accession": "0001104659-26-069810",
+  "nct_id": "NCT06260774",
+  "sponsor": "TransCode Therapeutics",
+  "intervention": "TTX-MC138",
+  "exhibit_locator": "EX-99.1#NCT06260774",
+  "identity_span_locator": "EX-99.1:title",
+  "identity_span_sha256": "c4d3dac4e39dc0d86718ce08e63794f9c707eefe350cfc749c7693706ecf663e",
+  "nct_span_locator": "EX-99.1:sentence[NCT06260774]",
+  "nct_span_sha256": "1ec3a0b235e0653bbced4f641d97df751f475020f5e18f72a71b5d354b973f33",
+  "relationship_confirmed": true,
+  "scope_exclusion": "This review confirms document identity and the filing-to-registry identifier relationship only; it does not establish efficacy, safety, or corporate truth."
+}

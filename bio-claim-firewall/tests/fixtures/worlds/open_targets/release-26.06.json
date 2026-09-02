@@ -1,0 +1,53 @@
+{
+  "integrity_sha256": "069f3db029b7ba3e6b21e682ae4b1c9448a227b3224853075e9b77b03704176e",
+  "provenance": {
+    "endpoint": "https://api.platform.opentargets.org/api/v4/graphql",
+    "query_sha256": "1ec168a6b7b47b8f2ff9dd59d60fd35896e186f42d344cf2147374f18fccc563",
+    "raw_response_committed": false,
+    "retrieved_at": "2026-09-01T22:31:00Z"
+  },
+  "records": [
+    {
+      "disease_id": "MONDO_0018875",
+      "disease_name": "Li-Fraumeni syndrome",
+      "evidence_source": "uniprot_variants",
+      "record_id": "ot:ENSG00000141510:MONDO_0018875:uniprot_variants",
+      "release": "26.06",
+      "score": 0.9919541334408821,
+      "score_definition": "Open Targets 26.06 source-defined datasource association score.",
+      "source": "open-targets-graphql-26-06",
+      "target_id": "ENSG00000141510",
+      "target_symbol": "TP53"
+    },
+    {
+      "disease_id": "MONDO_0007256",
+      "disease_name": "hepatocellular carcinoma",
+      "evidence_source": "intogen",
+      "record_id": "ot:ENSG00000141510:MONDO_0007256:intogen",
+      "release": "26.06",
+      "score": 0.9416907381482648,
+      "score_definition": "Open Targets 26.06 source-defined datasource association score.",
+      "source": "open-targets-graphql-26-06",
+      "target_id": "ENSG00000141510",
+      "target_symbol": "TP53"
+    },
+    {
+      "disease_id": "MONDO_0010150",
+      "disease_name": "head and neck squamous cell carcinoma",
+      "evidence_source": "clinical_precedence",
+      "record_id": "ot:ENSG00000141510:MONDO_0010150:clinical_precedence",
+      "release": "26.06",
+      "score": 0.12158615952232422,
+      "score_definition": "Open Targets 26.06 source-defined datasource association score.",
+      "source": "open-targets-graphql-26-06",
+      "target_id": "ENSG00000141510",
+      "target_symbol": "TP53"
+    }
+  ],
+  "schema_version": "open-targets-association-ledger-0.1",
+  "source_hashes": {
+    "open-targets-graphql-26-06": "8e9299d18b7c9089b0cfe8c59183d9bedf1694cb69f8357fba580ec3a43badf4"
+  },
+  "version": "26.06",
+  "world_id": "open-targets"
+}

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Bio Claim Firewall mark</title>
+  <desc id="desc">A teal shield enclosing a small amber checkpoint.</desc>
+  <rect width="64" height="64" rx="18" fill="#092b31"/>
+  <path d="M32 11 49 18v12c0 11.5-6.8 19.1-17 24-10.2-4.9-17-12.5-17-24V18l17-7Z" fill="#35d1b2"/>
+  <path d="M32 21a9 9 0 0 1 9 9v4h-4v-4a5 5 0 1 0-10 0v4h-4v-4a9 9 0 0 1 9-9Z" fill="#092b31"/>
+  <path d="M22 34h20v13H22z" fill="#ffbf69"/>
+  <path d="m27 40 3 3 7-7" fill="none" stroke="#092b31" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/>
+</svg>

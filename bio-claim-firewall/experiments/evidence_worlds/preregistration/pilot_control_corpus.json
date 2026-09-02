@@ -1,0 +1,228 @@
+{
+  "schema_version": "bio-claim-firewall-locked-pilot-controls-1",
+  "frozen_at": "2026-09-02T00:30:00Z",
+  "review_freshness": {
+    "evaluation_as_of": "2026-09-02T00:30:00Z",
+    "source_terms_max_age_days": 90,
+    "clinical_relationship_max_age_days": 90
+  },
+  "worlds": [
+    {
+      "world_id": "clinical-trials-sec",
+      "version": "2025-09-01_2026-09-01",
+      "modality": "translational_disclosure",
+      "pilot_role": "commercial_due_diligence",
+      "registered_source_hashes": {
+        "clinicaltrials-gov-api-v2": "1c04f811b0300bbba0b56caaade1dfb5c78808169c152924024594124493345e",
+        "sec-edgar-submissions-and-archives": "873c321bc7a918f4e7ad2cee5cde2de814376a864f1fece3e0c483cc8911a80e"
+      },
+      "fatal_gate_ids": [
+        "official_source_identity",
+        "license_and_custody",
+        "timestamp_cutoff_no_time_travel",
+        "complete_hashes_and_schema",
+        "organic_positive_negative_null_controls",
+        "world_isolation_and_fail_closed"
+      ],
+      "controls": [
+        {
+          "control_id": "clinical-trials-positive-timestamped-join",
+          "kind": "positive",
+          "expected": ["ACCEPTED"],
+          "expected_reason_codes": ["REGISTERED_DISCLOSURE_CONSISTENT"],
+          "claim": {
+            "nct_id": "NCT06260774",
+            "sponsor": "TransCode Therapeutics",
+            "intervention": "TTX-MC138",
+            "sec_accession": "0001104659-26-069810",
+            "cik": "0001829635",
+            "exhibit_locator": "EX-99.1#NCT06260774",
+            "asserted_span_sha256": "1ec3a0b235e0653bbced4f641d97df751f475020f5e18f72a71b5d354b973f33",
+            "as_of": "2026-06-03T08:08:45Z"
+          }
+        },
+        {
+          "control_id": "clinical-trials-negative-sponsor-mismatch",
+          "kind": "negative",
+          "expected": ["REJECTED"],
+          "expected_reason_codes": ["SPONSOR_MISMATCH"],
+          "claim": {
+            "nct_id": "NCT06260774",
+            "sponsor": "__different_sponsor__",
+            "intervention": "TTX-MC138",
+            "sec_accession": "0001104659-26-069810",
+            "cik": "0001829635",
+            "exhibit_locator": "EX-99.1#NCT06260774",
+            "asserted_span_sha256": "1ec3a0b235e0653bbced4f641d97df751f475020f5e18f72a71b5d354b973f33",
+            "as_of": "2026-06-03T08:08:45Z"
+          }
+        },
+        {
+          "control_id": "clinical-trials-null-post-cutoff",
+          "kind": "null",
+          "expected": ["INCONCLUSIVE"],
+          "expected_reason_codes": ["POST_CUTOFF_EVIDENCE"],
+          "claim": {
+            "nct_id": "NCT06260774",
+            "sponsor": "TransCode Therapeutics",
+            "intervention": "TTX-MC138",
+            "sec_accession": "0001104659-26-069810",
+            "cik": "0001829635",
+            "exhibit_locator": "EX-99.1#NCT06260774",
+            "asserted_span_sha256": "1ec3a0b235e0653bbced4f641d97df751f475020f5e18f72a71b5d354b973f33",
+            "as_of": "2025-09-01T00:00:00Z"
+          }
+        },
+        {
+          "control_id": "clinical-trials-corrupted-registry-bytes",
+          "kind": "corruption",
+          "expected": ["CHECKER_ERROR"],
+          "claim": {
+            "nct_id": "NCT06260774",
+            "sponsor": "TransCode Therapeutics",
+            "intervention": "TTX-MC138",
+            "sec_accession": "0001104659-26-069810",
+            "cik": "0001829635",
+            "exhibit_locator": "EX-99.1#NCT06260774",
+            "asserted_span_sha256": "1ec3a0b235e0653bbced4f641d97df751f475020f5e18f72a71b5d354b973f33",
+            "as_of": "2026-06-03T08:08:45Z"
+          },
+          "mutation": {"record_index": 0, "field": "sponsor", "value": "__tampered__"}
+        },
+        {
+          "control_id": "clinical-trials-cross-world-claim",
+          "kind": "cross_world",
+          "expected": ["CHECKER_ERROR"],
+          "claim": {
+            "nct_id": "NCT06260774",
+            "sponsor": "TransCode Therapeutics",
+            "intervention": "TTX-MC138",
+            "sec_accession": "0001104659-26-069810",
+            "cik": "0001829635",
+            "exhibit_locator": "EX-99.1#NCT06260774",
+            "asserted_span_sha256": "1ec3a0b235e0653bbced4f641d97df751f475020f5e18f72a71b5d354b973f33",
+            "as_of": "2026-06-03T08:08:45Z",
+            "world_id": "open-targets",
+            "world_version": "26.06"
+          }
+        }
+      ],
+      "inspectable_scenario": {
+        "control_id": "clinical-trials-positive-timestamped-join",
+        "source_locators": [
+          "https://clinicaltrials.gov/study/NCT06260774",
+          "https://www.sec.gov/Archives/edgar/data/1829635/000110465926069810/tm2616719d1_ex99-1.htm"
+        ]
+      }
+    },
+    {
+      "world_id": "open-targets",
+      "version": "26.06",
+      "modality": "translational_association",
+      "pilot_role": "target_validation",
+      "registered_source_hashes": {
+        "open-targets-graphql-26-06": "8e9299d18b7c9089b0cfe8c59183d9bedf1694cb69f8357fba580ec3a43badf4"
+      },
+      "fatal_gate_ids": [
+        "official_release_identity",
+        "license_and_redistribution",
+        "complete_hashes_and_schema",
+        "release_and_score_semantics",
+        "organic_positive_negative_null_controls",
+        "world_isolation_and_fail_closed"
+      ],
+      "controls": [
+        {
+          "control_id": "open-targets-positive-release-row",
+          "kind": "positive",
+          "expected": ["ACCEPTED"],
+          "expected_reason_codes": ["SOURCE_SPECIFIC_ASSOCIATION_PRESENT"],
+          "claim": {"target_id": "ENSG00000141510", "disease_id": "MONDO_0018875", "evidence_source": "uniprot_variants", "release": "26.06"}
+        },
+        {
+          "control_id": "open-targets-negative-score-mismatch",
+          "kind": "negative",
+          "expected": ["REJECTED"],
+          "expected_reason_codes": ["SCORE_MISMATCH"],
+          "claim": {"target_id": "ENSG00000141510", "disease_id": "MONDO_0018875", "evidence_source": "uniprot_variants", "release": "26.06", "score": 0.82}
+        },
+        {
+          "control_id": "open-targets-null-absent-disease",
+          "kind": "null",
+          "expected": ["INCONCLUSIVE"],
+          "claim": {"target_id": "ENSG00000141510", "disease_id": "MONDO_9999999", "evidence_source": "uniprot_variants", "release": "26.06"}
+        },
+        {
+          "control_id": "open-targets-corrupted-release-bytes",
+          "kind": "corruption",
+          "expected": ["CHECKER_ERROR"],
+          "claim": {"target_id": "ENSG00000141510", "disease_id": "MONDO_0018875", "evidence_source": "uniprot_variants", "release": "26.06"},
+          "mutation": {"record_index": 0, "field": "score", "delta": 0.001}
+        },
+        {
+          "control_id": "open-targets-cross-world-claim",
+          "kind": "cross_world",
+          "expected": ["CHECKER_ERROR"],
+          "claim": {"target_id": "ENSG00000141510", "disease_id": "MONDO_0018875", "evidence_source": "uniprot_variants", "release": "26.06", "world_id": "clinical-trials-sec", "world_version": "2025-09-01_2026-09-01"}
+        }
+      ],
+      "inspectable_scenario": {
+        "control_id": "open-targets-positive-release-row",
+        "source_locators": [
+          "https://platform.opentargets.org/target/ENSG00000141510/associations/MONDO_0018875"
+        ]
+      }
+    },
+    {
+      "world_id": "arc-vcc",
+      "version": "2025-h1-measurements",
+      "modality": "perturbational",
+      "pilot_role": "perturbational_validation",
+      "registered_source_hashes": {
+        "arc-cell-eval2-h1-vcc-real-subset": "eb36c766cbf76353f9981cb3a3aa32137622d1de53b29d861c483742bcd4dec7",
+        "arc-vcc-derived-ledger": "4bd9c5fef5060ca500eac08af06ad9ecae3b4957382893f46e392c6193809853"
+      },
+      "fatal_gate_ids": [
+        "dataset_license_scope",
+        "official_release_identity",
+        "split_integrity_no_leakage",
+        "complete_hashes_and_schema",
+        "organic_positive_negative_null_controls",
+        "world_isolation_and_fail_closed"
+      ],
+      "controls": [
+        {
+          "control_id": "arc-positive-heldout",
+          "kind": "positive",
+          "expected": ["ACCEPTED"],
+          "claim": {"perturbed_gene": "STAT1", "response_gene": "TAGLN", "summary_statistic": "log2_fold_change_mean_raw_counts_pseudocount_1", "direction": "increases", "threshold": 0.25, "assay": "H1", "split": "locked_holdout"}
+        },
+        {
+          "control_id": "arc-negative-sign-reversal",
+          "kind": "negative",
+          "expected": ["REJECTED"],
+          "claim": {"perturbed_gene": "STAT1", "response_gene": "TAGLN", "summary_statistic": "log2_fold_change_mean_raw_counts_pseudocount_1", "direction": "decreases", "threshold": 0.25, "assay": "H1", "split": "locked_holdout"}
+        },
+        {
+          "control_id": "arc-null-unsupported-record",
+          "kind": "null",
+          "expected": ["INCONCLUSIVE", "REJECTED"],
+          "claim": {"perturbed_gene": "STAT1", "response_gene": "HADHA", "summary_statistic": "log2_fold_change_mean_raw_counts_pseudocount_1", "direction": "increases", "threshold": 0.25, "assay": "H1", "split": "locked_holdout"}
+        },
+        {
+          "control_id": "arc-corrupted-measurement-bytes",
+          "kind": "corruption",
+          "expected": ["CHECKER_ERROR"],
+          "claim": {"perturbed_gene": "STAT1", "response_gene": "TAGLN", "summary_statistic": "log2_fold_change_mean_raw_counts_pseudocount_1", "direction": "increases", "threshold": 0.25, "assay": "H1", "split": "locked_holdout"},
+          "mutation": {"file": "measurements.jsonl", "find": "0.577988734679", "replace": "0.577988734680"}
+        },
+        {
+          "control_id": "arc-cross-world-claim",
+          "kind": "cross_world",
+          "expected": ["CHECKER_ERROR"],
+          "claim": {"perturbed_gene": "STAT1", "response_gene": "TAGLN", "summary_statistic": "log2_fold_change_mean_raw_counts_pseudocount_1", "direction": "increases", "threshold": 0.25, "assay": "H1", "split": "locked_holdout", "world_id": "open-targets", "world_version": "26.06"}
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0.0",
+  "world_id": "arc-vcc",
+  "version": "2025-h1-measurements",
+  "rank": 3,
+  "modality": "perturbational",
+  "state": "ADMITTED",
+  "decision": "Check a perturbation-to-response direction in the declared 2025 H1 measurement assay and split; do not use or redistribute State model code or weights.",
+  "claim_contract": {"object": "perturbation_expression_direction", "required_fields": ["assay", "split", "perturbed_gene", "response_gene", "summary_statistic", "direction", "threshold"], "evidence_semantics": "interventional_measurement", "units": "declared expression summary units; threshold is assay-specific"},
+  "data_clock": {"release": "cell-eval2 0.16.0 real H1 subset at ddfc5df73c997b2f113a560bd863fb068f2b453a", "retrieval_at": "2026-09-01T22:22:00Z", "as_of_rule": "Use only the hash-pinned real 600-cell H1 subset and preregistered development/locked-holdout rows.", "snapshot_policy": "Retain exact dataset bytes and hashes outside git; never substitute State artifacts."},
+  "sources": [{"source_id": "arc-cell-eval2-h1-vcc-real-subset", "official_url": "https://github.com/ArcInstitute/cell-eval2/blob/ddfc5df73c997b2f113a560bd863fb068f2b453a/docs/data/H1-VCC-2025-training.h5ad", "access_url": "https://raw.githubusercontent.com/ArcInstitute/cell-eval2/ddfc5df73c997b2f113a560bd863fb068f2b453a/docs/data/H1-VCC-2025-training.h5ad", "source_kind": "immutable_release", "release_or_snapshot": "cell-eval2-0.16.0-real-H1-subset", "license": {"id": "MIT", "status": "verified", "reference_url": "https://github.com/ArcInstitute/cell-eval2/blob/ddfc5df73c997b2f113a560bd863fb068f2b453a/LICENSE", "redistribution": "permitted", "commercial_demo": "permitted_with_attribution"}, "custody": "Ignored pinned H5AD cache; State code/weights are excluded from acquisition and custody.", "refresh_cadence": "release-driven", "staleness_horizon": "next measurement release", "artifact_paths": ["raw/arc-vcc/2025-h1/H1-VCC-2025-training.h5ad"]}],
+  "transformation": {"command": "python3 data/scripts/worlds/arc_vcc_acquire.py tests/fixtures/worlds/arc_vcc --source data/raw/arc-vcc/2025-h1/H1-VCC-2025-training.h5ad", "derived_artifact": "tests/fixtures/worlds/arc_vcc/measurements.jsonl", "schema_version": "arc-vcc-measurement-ledger-0.1", "row_count": 6, "sha256": "4bd9c5fef5060ca500eac08af06ad9ecae3b4957382893f46e392c6193809853"},
+  "material_assumptions": ["Perturbation, response, assay, split, statistic, direction, and threshold are explicit.", "Held-out validation records never tune a threshold.", "No State model inference, weights, code, or benchmark claims are in scope."],
+  "fatal_gates": [{"id": "dataset_license_scope", "status": "pass"}, {"id": "official_release_identity", "status": "pass"}, {"id": "split_integrity_no_leakage", "status": "pass"}, {"id": "complete_hashes_and_schema", "status": "pass"}, {"id": "organic_positive_negative_null_controls", "status": "pass"}, {"id": "world_isolation_and_fail_closed", "status": "pass"}],
+  "decisive_controls": {"positive": "held-out H1 perturbation/response direction within assay", "negative": "sign reversal or absent response", "null": "unsupported assay/split or below threshold", "corruption": "changed measurement-table bytes", "isolation": "Open Targets/NeuroVault records cannot satisfy this claim"},
+  "evidence_paths": {"audit_card": "experiments/evidence_worlds/preregistration/arc-vcc.yaml", "manifest": "data/manifests/worlds/arc-vcc.json", "raw": "data/raw/arc-vcc/", "derived": "data/derived/arc-vcc/", "results": "experiments/evidence_worlds/results/arc-vcc/"},
+  "public_policy": "Public receipts cite dataset measurements only; State artifacts and raw matrices remain excluded."
+}

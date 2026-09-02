@@ -6,8 +6,8 @@
 
 - **Upstream**: https://github.com/ebarnes-ry/MIDAS
 - **Local checkout used as reference**: `~/MIDAS` (as of 2026-08-31)
-- **Reuse permission**: Granted verbally by MIDAS's author to Jawaun Brown, relayed on 2026-08-31.
-- **Scope of permission (as relayed)**: source reuse for this project (`bio-claim-firewall`).
+- **Reuse permission**: Granted by MIDAS's author to Jawaun Brown for this project and reconfirmed by the human director on 2026-09-01.
+- **Scope of permission**: source reuse for this project (`bio-claim-firewall`).
 - **What we intend to lift**:
   - Typed intermediate step dataclasses.
   - Generate → Execute → Analyse verifier contract.
@@ -18,14 +18,13 @@
 - **What we will not reuse without further review**: Marker/VLM vision pipeline, SymPy execution sandbox (biology-inappropriate), student-feedback prompt (math-specific), FastAPI surface (out of scope until Phase 3+).
 - **Attribution obligation**: Retain author credit in the README, mark MIDAS-derived files with a header comment linking upstream, and cite in any paper that describes the verifier architecture.
 
-### Pending written trace
+### Private permission record and public attribution
 
-The verbal permission is enough to unblock scaffolding. Before any code that reuses MIDAS source lands in a commit intended to be published, at least one of the following must be attached to this file:
-
-- A LICENSE file added to the MIDAS upstream repository.
-- A dated email or written message from MIDAS's author granting the reuse, archived under `bio-claim-firewall/legal/`.
-
-Until then, MIDAS-derived files stay in unpublished commits or private branches only.
+The permission record is private correspondence held by the human director; it
+is intentionally not committed because it contains personal information. It is
+not a release blocker. Public artifacts must retain the MIDAS attribution and
+the source headers on derived files. This provenance note records the permission
+without publishing the underlying correspondence.
 
 ## Data snapshots
 
@@ -44,6 +43,17 @@ sampling and substitution rationale is in `data/README.md`; the reproducible dow
 and manifest build commands are in `data/scripts/`.
 
 ## Evaluation receipts
+
+### Evidence-world bounded-pilot evaluation — 2026-09-01
+
+- **Target**: three newly admitted evidence worlds: ClinicalTrials.gov + SEC
+  disclosure identity, Open Targets 26.06 target–disease associations, and the
+  Arc Institute cell-eval2 real H1 perturbation subset.
+- **Decision**: `READY_FOR_BOUNDED_PILOT`; 18/18 fatal gates and 15/15 locked
+  controls passed. NeuroVault and FlyWire/Codex remain explicitly deferred.
+- **Boundary**: adapter/source consistency against compact hash-bound fixtures,
+  not authenticity, causality, efficacy, clinical utility, or universal truth.
+- **Receipt**: `experiments/evidence_worlds/results/pilot_readiness.{json,md}`.
 
 ### Context-rule mutation coverage — 2026-09-01
 

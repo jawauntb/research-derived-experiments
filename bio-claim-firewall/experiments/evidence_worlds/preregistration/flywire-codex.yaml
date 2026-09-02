@@ -1,0 +1,12 @@
+schema_version: "1.0.0"
+world_id: "flywire-codex"
+version: "static-snapshot-pilot"
+rank: 5
+target_and_decision: "Research a directed cell-type synapse-count claim in an explicitly pinned Codex static snapshot only after product terms are archived."
+representation: "Dataset, snapshot, source/target cell types, directed aggregation, minimum synapses; static graph, not mutable live query."
+data_clock: "Codex portal is rolling; dataset and snapshot must be pinned; changed fetch is a new version."
+assumptions: ["Unknown internal-use terms stop at RESEARCHED.", "Unknown public-display terms prevent public evidence and yield WITHHELD_LICENSE only after lawful local freeze.", "Cell-type joins and edge aggregation remain source-specific."]
+fatal_gates: [internal_use_license, public_display_license, official_snapshot_identity, complete_hashes_and_schema, organic_controls, world_isolation]
+controls: [positive_directed_edge_above_threshold, negative_reversed_or_wrong_edge, null_unresolved_terms_or_snapshot, corruption_changed_static_bytes, cross_world_isolation]
+evidence_paths: {contract: "data/manifests/worlds/flywire-codex.json", acquisition: null, raw: "data/raw/flywire-codex/", derived: null, results: "experiments/evidence_worlds/results/flywire-codex/"}
+initial_state: "RESEARCHED_DEFERRED"

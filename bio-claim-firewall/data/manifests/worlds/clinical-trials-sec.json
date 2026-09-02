@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0.0",
+  "world_id": "clinical-trials-sec",
+  "version": "2025-09-01_2026-09-01",
+  "rank": 1,
+  "modality": "translational_disclosure",
+  "state": "ADMITTED",
+  "decision": "Check a separately reviewed, locator-cited disclosure identity relationship against the registered trial identity available at the disclosure timestamp; do not infer efficacy.",
+  "claim_contract": {
+    "object": "trial_disclosure_assertion",
+    "required_fields": ["nct_id", "sponsor", "intervention", "sec_accession", "exhibit_locator", "asserted_span_sha256", "as_of"],
+    "evidence_semantics": "registered_disclosure_and_asserted_span_consistency",
+    "units": "timestamps are RFC3339 UTC; identifiers are exact source identifiers"
+  },
+  "data_clock": {
+    "window": "2025-09-01/2026-09-01",
+    "as_of_rule": "Only registry records and SEC submissions accepted at or before the asserted disclosure timestamp may support a check.",
+    "retrieval_at": "2026-09-01T22:37:00Z",
+    "snapshot_policy": "Retain exact response bytes and accession/registry timestamps outside git; a changed re-fetch creates a new version."
+  },
+  "sources": [
+    {
+      "source_id": "clinicaltrials-gov-api-v2",
+      "official_url": "https://clinicaltrials.gov/data-api/api",
+      "source_kind": "rolling_snapshot",
+      "release_or_snapshot": "api-v2",
+      "license": {"id": "ClinicalTrials.gov-terms-2023-01-31", "status": "verified", "reference_url": "https://clinicaltrials.gov/about-site/terms-conditions", "redistribution": "permitted_with_attribution_processing_date_and_modification_notice", "commercial_demo": "permitted_with_attribution_processing_date_and_modification_notice"},
+      "custody": "Ignored local raw cache with retained request URL, retrieval clock, response hash, and source row identifiers.",
+      "refresh_cadence": "per pilot rebuild",
+      "staleness_horizon": "90 days",
+      "artifact_paths": ["raw/clinical-trials-sec/clinicaltrials-gov/*.json"]
+    },
+    {
+      "source_id": "sec-edgar-submissions-and-archives",
+      "official_url": "https://www.sec.gov/search-filings/edgar-application-programming-interfaces",
+      "access_url": "https://www.sec.gov/Archives/edgar/data/",
+      "source_kind": "rolling_snapshot",
+      "release_or_snapshot": "EDGAR-API-and-archive",
+      "license": {"id": "SEC-EDGAR-public-access", "status": "verified", "reference_url": "https://www.sec.gov/search-filings/edgar-search-assistance/accessing-edgar-data", "redistribution": "public_access_subject_to_SEC_fair_access_policy", "commercial_demo": "public_access_with_filing_citation"},
+      "custody": "Ignored local raw filing cache with accession, exhibit locator, SEC acceptance timestamp, response hash, and user-agent record.",
+      "refresh_cadence": "per pilot rebuild",
+      "staleness_horizon": "90 days",
+      "artifact_paths": ["raw/clinical-trials-sec/sec/*.json", "raw/clinical-trials-sec/sec/*.txt"]
+    }
+  ],
+  "transformation": {"command": "python3 data/scripts/worlds/clinical_trials_fixture.py tests/fixtures/worlds/clinical_trials/fixture.json --clinicaltrials-source data/raw/clinical-trials-sec/clinicaltrials-gov/NCT06260774.json --sec-source data/raw/clinical-trials-sec/sec/0001104659-26-069810-ex99-1.html --review-artifact experiments/evidence_worlds/preregistration/clinical-trials-sec-review.json", "derived_artifact": "tests/fixtures/worlds/clinical_trials/fixture.json", "schema_version": "clinical-trials-sec-ledger-0.2", "row_count": 2, "sha256": "e8a7f5836e9fa0aa2a38b24f51bf4e4e2db1b2c744ad61e6078c8be24e5d0e6d"},
+  "material_assumptions": ["NCT/sponsor/intervention joins are exact or inconclusive.", "A separate, hash-bound operator review is required before an identity relationship enters the ledger.", "A registry match does not establish efficacy or corporate truth."],
+  "fatal_gates": [
+    {"id": "official_source_identity", "status": "pass"},
+    {"id": "license_and_custody", "status": "pass"},
+    {"id": "timestamp_cutoff_no_time_travel", "status": "pass"},
+    {"id": "complete_hashes_and_schema", "status": "pass"},
+    {"id": "organic_positive_negative_null_controls", "status": "pass"},
+    {"id": "world_isolation_and_fail_closed", "status": "pass"}
+  ],
+  "decisive_controls": {"positive": "matching NCT and SEC assertion at or before as_of", "negative": "wrong sponsor/intervention or post-as_of result", "null": "missing accession/locator or ambiguous identity", "corruption": "modified response bytes", "isolation": "Open Targets/Arc records cannot satisfy this claim"},
+  "evidence_paths": {"audit_card": "experiments/evidence_worlds/preregistration/clinical-trials-sec.yaml", "review": "experiments/evidence_worlds/preregistration/clinical-trials-sec-review.json", "manifest": "data/manifests/worlds/clinical-trials-sec.json", "raw": "data/raw/clinical-trials-sec/", "derived": "data/derived/clinical-trials-sec/", "results": "experiments/evidence_worlds/results/clinical-trials-sec/"},
+  "public_policy": "No raw filing, quoted span, person data, or live source response is public; only sanitized receipts after all gates pass."
+}

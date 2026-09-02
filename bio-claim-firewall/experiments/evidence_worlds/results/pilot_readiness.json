@@ -1,0 +1,418 @@
+{
+  "artifact_digests": {
+    "clinical_review_sha256": "0d389e7d00a70e104056ddc831e7f2ce086257ae8cc1e4f6648c330c438b74d2",
+    "control_corpus_sha256": "30fde9a3886a6b3a0c1941edbb6998c4a0cd6e1410de5565d67bfde8f3f27ec7",
+    "evaluator_sha256": "635d999b0e87977a3fe0bb6fe38f20e79cc4c6f0d55180cbda734426e92c4f42",
+    "registry_sha256": "1e1c7e882e099a39c1bc3cccf7c12f8412c50ae538f905bba5bf81d9db033000",
+    "source_terms_review_sha256": "d8a14d383fba86e70c417180abb4b98d7f3b475fc0298bef45b833317bf787f5"
+  },
+  "decision": "READY_FOR_BOUNDED_PILOT",
+  "decision_rule": "Exactly three distinct ADMITTED worlds must satisfy their exact non-empty fatal-gate and control protocols, current preregistered review-age limits, and exact registered scenario-locator metadata; this is readiness to test usefulness with design partners, not evidence that usefulness or live-source availability has been demonstrated.",
+  "deferred_worlds": [
+    {
+      "reason": "Deferred: no committed licensed evidence fixture or adapter.",
+      "status": "DEFERRED",
+      "world_id": "flywire-codex"
+    },
+    {
+      "reason": "Deferred: no committed licensed evidence fixture or adapter.",
+      "status": "DEFERRED",
+      "world_id": "neurovault"
+    }
+  ],
+  "evaluation_as_of": "2026-09-02T00:30:00Z",
+  "evaluation_mode": "offline_deterministic_locked_controls",
+  "limitations": [
+    "A passing receipt establishes consistency with a hash-bound compact fixture, not source authenticity.",
+    "Arc results are measurements, not STATE predictions; Open Targets results are associations, not causality or efficacy.",
+    "ClinicalTrials.gov plus SEC results are disclosure consistency checks, not trial success or corporate-truth claims.",
+    "Declared pilot roles and HTTPS locators are offline metadata; they do not establish commercial usefulness, customer demand, or current live-page availability.",
+    "Operator source-terms and clinical relationship reviews are freshness-gated against each manifest data clock and the locked evaluation date; they are scope-limited reviews, not independent legal or scientific validation."
+  ],
+  "pilot_ready": true,
+  "readiness_requirements": {
+    "all_fatal_gates_and_controls_pass": true,
+    "all_manifests_admitted": true,
+    "declared_clinical_and_open_targets_registered_locators_exact": true,
+    "declared_perturbational_translational_pilot_roles_present": true,
+    "preregistered_operator_reviews_current": true,
+    "three_distinct_preregistered_worlds": true
+  },
+  "review_freshness": {
+    "clinical_relationship_max_age_days": 90,
+    "clinical_relationship_reviewed_at": "2026-09-01T23:30:00Z",
+    "source_terms_max_age_days": 90,
+    "source_terms_reviewed_at": "2026-09-02T00:20:00Z"
+  },
+  "schema_version": "bio-claim-firewall-pilot-readiness-2",
+  "worlds": [
+    {
+      "artifacts": {
+        "clinical_review_sha256": "0d389e7d00a70e104056ddc831e7f2ce086257ae8cc1e4f6648c330c438b74d2",
+        "control_corpus_sha256": "30fde9a3886a6b3a0c1941edbb6998c4a0cd6e1410de5565d67bfde8f3f27ec7",
+        "evaluator_sha256": "635d999b0e87977a3fe0bb6fe38f20e79cc4c6f0d55180cbda734426e92c4f42",
+        "fixture_corpus_sha256": "e8a7f5836e9fa0aa2a38b24f51bf4e4e2db1b2c744ad61e6078c8be24e5d0e6d",
+        "manifest_sha256": "1b4b4a3acbb82ad2521e118508fb05787598fbb2624f7e7680d939b29483276b",
+        "preregistration_sha256": "1dd1bcfb81a7500dbe80bc625af2bf479d6f3c9dc8c8b43553fe3fa466be70a8",
+        "registry_sha256": "1e1c7e882e099a39c1bc3cccf7c12f8412c50ae538f905bba5bf81d9db033000",
+        "source_terms_review_sha256": "d8a14d383fba86e70c417180abb4b98d7f3b475fc0298bef45b833317bf787f5"
+      },
+      "controls": [
+        {
+          "control_id": "clinical-trials-positive-timestamped-join",
+          "expected": [
+            "ACCEPTED"
+          ],
+          "expected_reason_codes": [
+            "REGISTERED_DISCLOSURE_CONSISTENT"
+          ],
+          "kind": "positive",
+          "message": "The separately reviewed disclosure locator and span are consistent with timestamped registry identity.",
+          "observed": "ACCEPTED",
+          "passed": true,
+          "reason_code": "REGISTERED_DISCLOSURE_CONSISTENT"
+        },
+        {
+          "control_id": "clinical-trials-negative-sponsor-mismatch",
+          "expected": [
+            "REJECTED"
+          ],
+          "expected_reason_codes": [
+            "SPONSOR_MISMATCH"
+          ],
+          "kind": "negative",
+          "message": "The declared sponsor does not match both timestamped source records.",
+          "observed": "REJECTED",
+          "passed": true,
+          "reason_code": "SPONSOR_MISMATCH"
+        },
+        {
+          "control_id": "clinical-trials-null-post-cutoff",
+          "expected": [
+            "INCONCLUSIVE"
+          ],
+          "expected_reason_codes": [
+            "POST_CUTOFF_EVIDENCE"
+          ],
+          "kind": "null",
+          "message": "Required source records were accepted after the asserted disclosure timestamp.",
+          "observed": "INCONCLUSIVE",
+          "passed": true,
+          "reason_code": "POST_CUTOFF_EVIDENCE"
+        },
+        {
+          "control_id": "clinical-trials-corrupted-registry-bytes",
+          "expected": [
+            "CHECKER_ERROR"
+          ],
+          "expected_reason_codes": [],
+          "kind": "corruption",
+          "message": "clinical-trials fixture integrity digest mismatch",
+          "observed": "CHECKER_ERROR",
+          "passed": true,
+          "reason_code": "CORRUPT_EVIDENCE"
+        },
+        {
+          "control_id": "clinical-trials-cross-world-claim",
+          "expected": [
+            "CHECKER_ERROR"
+          ],
+          "expected_reason_codes": [],
+          "kind": "cross_world",
+          "message": "claim world identity does not match the selected Clinical Trials world",
+          "observed": "CHECKER_ERROR",
+          "passed": true,
+          "reason_code": "CORRUPT_EVIDENCE"
+        }
+      ],
+      "fatal_gates": [
+        {
+          "evidence": "Manifest identity is ADMITTED and adapter hashes equal the immutable registry and preregistration contracts.",
+          "gate_id": "official_source_identity",
+          "status": "PASS"
+        },
+        {
+          "evidence": "The manifest license ID, official source URL, and terms URL exactly match the immutable registry and a scope-limited operator review that is current for the manifest data clock.",
+          "gate_id": "license_and_custody",
+          "status": "PASS"
+        },
+        {
+          "evidence": "The hash-bound fixture satisfies the preregistered world-specific semantic constraint.",
+          "gate_id": "timestamp_cutoff_no_time_travel",
+          "status": "PASS"
+        },
+        {
+          "evidence": "The derived fixture hash matches the manifest and adapter hashes exactly match the registered source contract; required review artifacts are present, hash-bound, and current for the locked evaluation date.",
+          "gate_id": "complete_hashes_and_schema",
+          "status": "PASS"
+        },
+        {
+          "evidence": "Exactly one locked positive, negative, and null control ran and matched its preregistered outcome.",
+          "gate_id": "organic_positive_negative_null_controls",
+          "status": "PASS"
+        },
+        {
+          "evidence": "Exactly one locked corruption and cross-world control ran and failed closed.",
+          "gate_id": "world_isolation_and_fail_closed",
+          "status": "PASS"
+        }
+      ],
+      "inspectable_scenario": {
+        "control_id": "clinical-trials-positive-timestamped-join",
+        "observed": "ACCEPTED",
+        "scope_note": "Locator metadata exactly matches the registered source and claim identities; this offline run does not retrieve or independently validate the live page.",
+        "source_locators": [
+          "https://clinicaltrials.gov/study/NCT06260774",
+          "https://www.sec.gov/Archives/edgar/data/1829635/000110465926069810/tm2616719d1_ex99-1.htm"
+        ],
+        "status": "DECLARED"
+      },
+      "manifest_state": "ADMITTED",
+      "modality": "translational_disclosure",
+      "protocol_exact": true,
+      "scope_note": "PASS means bounded fixture/source consistency only; it does not establish authenticity, causality, efficacy, or universal truth.",
+      "status": "PASS",
+      "version": "2025-09-01_2026-09-01",
+      "world_id": "clinical-trials-sec"
+    },
+    {
+      "artifacts": {
+        "control_corpus_sha256": "30fde9a3886a6b3a0c1941edbb6998c4a0cd6e1410de5565d67bfde8f3f27ec7",
+        "evaluator_sha256": "635d999b0e87977a3fe0bb6fe38f20e79cc4c6f0d55180cbda734426e92c4f42",
+        "fixture_corpus_sha256": "2ecef125755c05e580a1ad65a8a31e8efce2119ae0f074d1ea31e4b6ff0032c4",
+        "manifest_sha256": "c7e2c4279728d63e0b62fc3741e9b7f0ee7654058c478859867431b2cb122f5a",
+        "preregistration_sha256": "a4b0c7d11c5fe994d5c22037e60b39360627b865240a15c1dd19393ddc15b454",
+        "registry_sha256": "1e1c7e882e099a39c1bc3cccf7c12f8412c50ae538f905bba5bf81d9db033000",
+        "source_terms_review_sha256": "d8a14d383fba86e70c417180abb4b98d7f3b475fc0298bef45b833317bf787f5"
+      },
+      "controls": [
+        {
+          "control_id": "open-targets-positive-release-row",
+          "expected": [
+            "ACCEPTED"
+          ],
+          "expected_reason_codes": [
+            "SOURCE_SPECIFIC_ASSOCIATION_PRESENT"
+          ],
+          "kind": "positive",
+          "message": "The exact source-specific target-disease association exists in Open Targets release 26.06.",
+          "observed": "ACCEPTED",
+          "passed": true,
+          "reason_code": "SOURCE_SPECIFIC_ASSOCIATION_PRESENT"
+        },
+        {
+          "control_id": "open-targets-negative-score-mismatch",
+          "expected": [
+            "REJECTED"
+          ],
+          "expected_reason_codes": [
+            "SCORE_MISMATCH"
+          ],
+          "kind": "negative",
+          "message": "The declared score is not the source-defined score in the pinned row.",
+          "observed": "REJECTED",
+          "passed": true,
+          "reason_code": "SCORE_MISMATCH"
+        },
+        {
+          "control_id": "open-targets-null-absent-disease",
+          "expected": [
+            "INCONCLUSIVE"
+          ],
+          "expected_reason_codes": [],
+          "kind": "null",
+          "message": "The compact projection has no exact target, disease, and source tuple; absence from this projection cannot establish absence from the release.",
+          "observed": "INCONCLUSIVE",
+          "passed": true,
+          "reason_code": "ASSOCIATION_NOT_IN_PROJECTION"
+        },
+        {
+          "control_id": "open-targets-corrupted-release-bytes",
+          "expected": [
+            "CHECKER_ERROR"
+          ],
+          "expected_reason_codes": [],
+          "kind": "corruption",
+          "message": "Open Targets fixture integrity digest mismatch",
+          "observed": "CHECKER_ERROR",
+          "passed": true,
+          "reason_code": "CORRUPT_EVIDENCE"
+        },
+        {
+          "control_id": "open-targets-cross-world-claim",
+          "expected": [
+            "CHECKER_ERROR"
+          ],
+          "expected_reason_codes": [],
+          "kind": "cross_world",
+          "message": "claim world identity does not match the selected Open Targets world",
+          "observed": "CHECKER_ERROR",
+          "passed": true,
+          "reason_code": "CORRUPT_EVIDENCE"
+        }
+      ],
+      "fatal_gates": [
+        {
+          "evidence": "Manifest identity is ADMITTED and adapter hashes equal the immutable registry and preregistration contracts.",
+          "gate_id": "official_release_identity",
+          "status": "PASS"
+        },
+        {
+          "evidence": "The manifest license ID, official source URL, and terms URL exactly match the immutable registry and a scope-limited operator review that is current for the manifest data clock.",
+          "gate_id": "license_and_redistribution",
+          "status": "PASS"
+        },
+        {
+          "evidence": "The derived fixture hash matches the manifest and adapter hashes exactly match the registered source contract; required review artifacts are present, hash-bound, and current for the locked evaluation date.",
+          "gate_id": "complete_hashes_and_schema",
+          "status": "PASS"
+        },
+        {
+          "evidence": "The hash-bound fixture satisfies the preregistered world-specific semantic constraint.",
+          "gate_id": "release_and_score_semantics",
+          "status": "PASS"
+        },
+        {
+          "evidence": "Exactly one locked positive, negative, and null control ran and matched its preregistered outcome.",
+          "gate_id": "organic_positive_negative_null_controls",
+          "status": "PASS"
+        },
+        {
+          "evidence": "Exactly one locked corruption and cross-world control ran and failed closed.",
+          "gate_id": "world_isolation_and_fail_closed",
+          "status": "PASS"
+        }
+      ],
+      "inspectable_scenario": {
+        "control_id": "open-targets-positive-release-row",
+        "observed": "ACCEPTED",
+        "scope_note": "Locator metadata exactly matches the registered source and claim identities; this offline run does not retrieve or independently validate the live page.",
+        "source_locators": [
+          "https://platform.opentargets.org/target/ENSG00000141510/associations/MONDO_0018875"
+        ],
+        "status": "DECLARED"
+      },
+      "manifest_state": "ADMITTED",
+      "modality": "translational_association",
+      "protocol_exact": true,
+      "scope_note": "PASS means bounded fixture/source consistency only; it does not establish authenticity, causality, efficacy, or universal truth.",
+      "status": "PASS",
+      "version": "26.06",
+      "world_id": "open-targets"
+    },
+    {
+      "artifacts": {
+        "control_corpus_sha256": "30fde9a3886a6b3a0c1941edbb6998c4a0cd6e1410de5565d67bfde8f3f27ec7",
+        "evaluator_sha256": "635d999b0e87977a3fe0bb6fe38f20e79cc4c6f0d55180cbda734426e92c4f42",
+        "fixture_corpus_sha256": "774294639c32e5e5c7582fd9b1b4936c0951facffb0ced87885716c1fdf068d3",
+        "manifest_sha256": "59d1d84f7419dadf3207dce16d4e3afc5514076ee8c40015ee9d126ddcc37282",
+        "preregistration_sha256": "cbce76e6cae86aa89d0218bba249cf9ca4edc8fff0948274f8d15c20af8ca750",
+        "registry_sha256": "1e1c7e882e099a39c1bc3cccf7c12f8412c50ae538f905bba5bf81d9db033000",
+        "source_terms_review_sha256": "d8a14d383fba86e70c417180abb4b98d7f3b475fc0298bef45b833317bf787f5"
+      },
+      "controls": [
+        {
+          "control_id": "arc-positive-heldout",
+          "expected": [
+            "ACCEPTED"
+          ],
+          "expected_reason_codes": [],
+          "kind": "positive",
+          "message": "frozen measurement supports the asserted direction",
+          "observed": "ACCEPTED",
+          "passed": true,
+          "reason_code": "ARC-H1-001"
+        },
+        {
+          "control_id": "arc-negative-sign-reversal",
+          "expected": [
+            "REJECTED"
+          ],
+          "expected_reason_codes": [],
+          "kind": "negative",
+          "message": "frozen measurement reports the opposite direction",
+          "observed": "REJECTED",
+          "passed": true,
+          "reason_code": "ARC-H1-002"
+        },
+        {
+          "control_id": "arc-null-unsupported-record",
+          "expected": [
+            "INCONCLUSIVE",
+            "REJECTED"
+          ],
+          "expected_reason_codes": [],
+          "kind": "null",
+          "message": "measurement is below the frozen threshold and has no directional response",
+          "observed": "REJECTED",
+          "passed": true,
+          "reason_code": "ARC-H1-003"
+        },
+        {
+          "control_id": "arc-corrupted-measurement-bytes",
+          "expected": [
+            "CHECKER_ERROR"
+          ],
+          "expected_reason_codes": [],
+          "kind": "corruption",
+          "message": "measurement ledger hash does not match fixture metadata",
+          "observed": "CHECKER_ERROR",
+          "passed": true,
+          "reason_code": ""
+        },
+        {
+          "control_id": "arc-cross-world-claim",
+          "expected": [
+            "CHECKER_ERROR"
+          ],
+          "expected_reason_codes": [],
+          "kind": "cross_world",
+          "message": "claim world identity does not match the selected Arc VCC fixture",
+          "observed": "CHECKER_ERROR",
+          "passed": true,
+          "reason_code": ""
+        }
+      ],
+      "fatal_gates": [
+        {
+          "evidence": "The manifest license ID, official source URL, and terms URL exactly match the immutable registry and a scope-limited operator review that is current for the manifest data clock.",
+          "gate_id": "dataset_license_scope",
+          "status": "PASS"
+        },
+        {
+          "evidence": "Manifest identity is ADMITTED and adapter hashes equal the immutable registry and preregistration contracts.",
+          "gate_id": "official_release_identity",
+          "status": "PASS"
+        },
+        {
+          "evidence": "The hash-bound fixture satisfies the preregistered world-specific semantic constraint.",
+          "gate_id": "split_integrity_no_leakage",
+          "status": "PASS"
+        },
+        {
+          "evidence": "The derived fixture hash matches the manifest and adapter hashes exactly match the registered source contract; required review artifacts are present, hash-bound, and current for the locked evaluation date.",
+          "gate_id": "complete_hashes_and_schema",
+          "status": "PASS"
+        },
+        {
+          "evidence": "Exactly one locked positive, negative, and null control ran and matched its preregistered outcome.",
+          "gate_id": "organic_positive_negative_null_controls",
+          "status": "PASS"
+        },
+        {
+          "evidence": "Exactly one locked corruption and cross-world control ran and failed closed.",
+          "gate_id": "world_isolation_and_fail_closed",
+          "status": "PASS"
+        }
+      ],
+      "inspectable_scenario": null,
+      "manifest_state": "ADMITTED",
+      "modality": "perturbational",
+      "protocol_exact": true,
+      "scope_note": "PASS means bounded fixture/source consistency only; it does not establish authenticity, causality, efficacy, or universal truth.",
+      "status": "PASS",
+      "version": "2025-h1-measurements",
+      "world_id": "arc-vcc"
+    }
+  ]
+}

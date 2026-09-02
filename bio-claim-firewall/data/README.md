@@ -1,5 +1,27 @@
 # Phase 2 pilot world: frozen real-biology snapshot
 
+## Ranked evidence-world contracts
+
+The ranked evidence-world registry lives at `data/worlds/registry.yaml`.
+Machine-readable source contracts are tracked under `data/manifests/worlds/`;
+their compact preregistration/audit cards are under
+`experiments/evidence_worlds/preregistration/`. These are contracts and
+preflight metadata, not downloaded source data.
+
+Run the no-network preflight from the Bio Claim Firewall directory:
+
+```bash
+PYTHONPATH=data/scripts/worlds python3 data/scripts/worlds/preflight.py
+```
+
+The five ranked worlds are intentionally independent. Clinical Trials/SEC,
+Open Targets, and Arc VCC are researched candidates; NeuroVault is
+`RESEARCHED_DEFERRED` pending a pinned spatial/atlas policy; FlyWire/Codex is
+`RESEARCHED` while internal-use and public-display terms remain unresolved.
+No world is admitted by the registry alone. Raw source bytes, imaging files,
+graphs, filings, and derived ledgers remain ignored and must be retained only
+in lawful local custody with hashes and retrieval clocks.
+
 A small, real, hash-verified evidence world for `bio-claim-firewall`'s verifier: five
 identifier-ontology snapshots plus one perturbation-evidence ledger sampled from real,
 permissively-licensed public sources. Nothing here is invented — see "Sampling &

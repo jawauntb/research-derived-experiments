@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://research-derived-experiments.local/spec/worlds/arc_vcc_measurement.schema.json",
+  "title": "Arc VCC H1 compact measurement row",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["measurement_id", "perturbed_gene", "response_gene", "assay", "split", "summary_statistic", "value", "direction", "source_row", "perturbed_cells", "control_cells"],
+  "properties": {
+    "measurement_id": {"type": "string", "minLength": 1},
+    "perturbed_gene": {"type": "string", "minLength": 1},
+    "response_gene": {"type": "string", "minLength": 1},
+    "assay": {"const": "H1"},
+    "split": {"enum": ["development", "locked_holdout"]},
+    "summary_statistic": {"const": "log2_fold_change_mean_raw_counts_pseudocount_1"},
+    "value": {"type": "number"},
+    "direction": {"enum": ["increases", "decreases", "null"]},
+    "source_row": {"type": "string", "minLength": 1},
+    "perturbed_cells": {"type": "integer", "minimum": 2},
+    "control_cells": {"type": "integer", "minimum": 2}
+  }
+}

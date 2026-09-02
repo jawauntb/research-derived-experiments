@@ -1,0 +1,24 @@
+{
+  "account_count": 15,
+  "accounts_with_domain": 15,
+  "counts_by_wedge": {
+    "clinical-trial-diligence": 5,
+    "target-validation": 5,
+    "virtual-cell-platforms": 5
+  },
+  "organization_count_queried_for_roles": 15,
+  "outreach_performed": false,
+  "person_level_data_included": false,
+  "provider": "Apollo company and people search",
+  "query_date": "2026-09-01",
+  "role_candidate_count": 25,
+  "role_categories": [
+    "clinical intelligence",
+    "computational biology",
+    "scientific diligence",
+    "scientific platform",
+    "translational informatics"
+  ],
+  "status": "PRIVATE_DISCOVERY_COMPLETE_MANUAL_QUALIFICATION_REQUIRED",
+  "wedges_queried": 3
+}
