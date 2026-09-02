@@ -630,7 +630,7 @@ python3 -m experiments.concerned_syntax.benchmark --trials 200 --seed 20260616 \
 | `learned_executable_modules.py` | Executable module bodies vs held-out v2 transfer |
 | `searched_executable_modules.py` | Mutate/search executable module sets vs label-free slot-semantics gate |
 | `object_slot_executable_modules.py` | Bodies vs learned-object-slot + discovered-profile path |
-| `haskell_gate.py` | Python bridge to `formal/ontology-hs` |
+| `haskell_gate.py` | Python bridge to `formal/ontology-hs`; serializes Cabal access across worker processes sharing `dist-newstyle/` |
 | `modal_body_evolution_sweep.py` | Modal for symbolic `search.py` |
 | `modal_program_body_search.py` | Modal v1 program-body search |
 | `modal_rich_program_body_search.py` | Modal v2 rich-program body search |
@@ -1221,7 +1221,9 @@ Claim-bounded grounded-harness writeups also live under `docs/papers/`:
 | `test/Main.hs` | Cabal tests |
 | `concerned-ontology.cabal` | Package manifest |
 
-Python bridge: `experiments/viable_computational_bodies/haskell_gate.py`.
+Python bridge: `experiments/viable_computational_bodies/haskell_gate.py`. Both
+body and motif paths use one exclusive POSIX lock so concurrent pytest workers
+cannot corrupt Cabal's shared `dist-newstyle/` build artifacts.
 
 ```bash
 cd formal/ontology-hs && cabal test all && cabal run ontology-check

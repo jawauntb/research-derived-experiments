@@ -1,8 +1,14 @@
 from __future__ import annotations
 
+import threading
+import time
 import unittest
+from collections.abc import Callable
+from tempfile import TemporaryDirectory
 from typing import Any
+from unittest import mock
 
+from experiments.viable_computational_bodies import haskell_gate
 from experiments.concerned_syntax.vector_shapes import module_body_summary
 from experiments.viable_computational_bodies.haskell_gate import (
     HaskellGateUnavailable,
@@ -294,6 +300,104 @@ class ViableComputationalBodiesTest(unittest.TestCase):
         self.assertEqual(seen["motifs"], ("reward_head", "vector_surface_encoder"))
         self.assertTrue(verdict.formal_valid)
         self.assertEqual(verdict.formal_source, "haskell")
+
+    def test_live_haskell_gate_serializes_cabal_build_and_run(self) -> None:
+        calls: list[tuple[str, int | None]] = []
+
+        class FakeFcntl:
+            LOCK_EX = 1
+            LOCK_UN = 2
+
+            @staticmethod
+            def flock(_fd: int, operation: int) -> None:
+                calls.append(("lock", operation))
+
+        def fake_run(*_args: object, **_kwargs: object) -> mock.Mock:
+            calls.append(("run", None))
+            self.assertEqual(calls, [("lock", FakeFcntl.LOCK_EX), ("run", None)])
+            return mock.Mock(stdout="ontology output")
+
+        with TemporaryDirectory() as temporary_directory:
+            with (
+                mock.patch.object(
+                    haskell_gate,
+                    "_ontology_dir",
+                    return_value=haskell_gate.Path(temporary_directory),
+                ),
+                mock.patch.object(haskell_gate, "fcntl", FakeFcntl, create=True),
+                mock.patch.object(haskell_gate.shutil, "which", return_value="cabal"),
+                mock.patch.object(haskell_gate.subprocess, "run", side_effect=fake_run),
+            ):
+                for run_gate in (
+                    lambda: haskell_gate._run_ontology_check(("body",)),
+                    lambda: haskell_gate._run_ontology_check_motifs(("motif",)),
+                ):
+                    calls.clear()
+                    self.assertEqual(run_gate(), "ontology output")
+                    self.assertEqual(
+                        calls,
+                        [
+                            ("lock", FakeFcntl.LOCK_EX),
+                            ("run", None),
+                            ("lock", FakeFcntl.LOCK_UN),
+                        ],
+                    )
+
+    def test_live_haskell_gate_serializes_concurrent_cabal_calls(self) -> None:
+        start = threading.Barrier(3)
+        active_lock = threading.Lock()
+        active_calls = 0
+        max_active_calls = 0
+        failures: list[BaseException] = []
+
+        def fake_run(*_args: object, **_kwargs: object) -> mock.Mock:
+            nonlocal active_calls, max_active_calls
+            with active_lock:
+                active_calls += 1
+                max_active_calls = max(max_active_calls, active_calls)
+            time.sleep(0.05)
+            with active_lock:
+                active_calls -= 1
+            return mock.Mock(stdout="ontology output")
+
+        def invoke(run_gate: Callable[[], object]) -> None:
+            try:
+                start.wait()
+                run_gate()
+            except BaseException as exc:  # pragma: no cover - asserted below
+                failures.append(exc)
+
+        with TemporaryDirectory() as temporary_directory:
+            with (
+                mock.patch.object(
+                    haskell_gate,
+                    "_ontology_dir",
+                    return_value=haskell_gate.Path(temporary_directory),
+                ),
+                mock.patch.object(haskell_gate.shutil, "which", return_value="cabal"),
+                mock.patch.object(haskell_gate.subprocess, "run", side_effect=fake_run),
+            ):
+                threads = [
+                    threading.Thread(
+                        target=invoke,
+                        args=(lambda: haskell_gate._run_ontology_check(("body",)),),
+                    ),
+                    threading.Thread(
+                        target=invoke,
+                        args=(
+                            lambda: haskell_gate._run_ontology_check_motifs(("motif",)),
+                        ),
+                    ),
+                ]
+                for thread in threads:
+                    thread.start()
+                start.wait()
+                for thread in threads:
+                    thread.join(timeout=2)
+
+        self.assertEqual(failures, [])
+        self.assertTrue(all(not thread.is_alive() for thread in threads))
+        self.assertEqual(max_active_calls, 1)
 
     def test_vector_body_summary_records_haskell_verdict_provenance(self) -> None:
         agent_stats = {

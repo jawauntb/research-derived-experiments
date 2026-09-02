@@ -647,6 +647,9 @@ attribution or pre-registration binding.
 
 Haskell Cabal project that validates typed computational-body motifs for Arc 2B.
 Python calls it via `experiments/viable_computational_bodies/haskell_gate.py`.
+Body and motif invocations take the same exclusive POSIX file lock under the
+gitignored `dist-newstyle/` directory, serializing Cabal's shared build state
+when pytest-xdist workers exercise the gate concurrently.
 
 ```bash
 cd formal/ontology-hs && cabal test all && cabal run ontology-check
