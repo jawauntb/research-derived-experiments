@@ -2,6 +2,7 @@
 StrictUndefined on missing template vars, clear_cache(). Requires jinja2
 and pyyaml (prompts.py imports both unconditionally, lifted verbatim from
 MIDAS — see prompts.py's header); skipped where either is unavailable."""
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -135,6 +136,25 @@ def test_shipped_proposer_prompt_renders():
     assert messages[0]["role"] == "system"
     assert "JSON" in messages[0]["content"]
     assert "example_source:0001" in messages[1]["content"]
+
+
+def test_shipped_claim_parser_v2_preserves_symbols_and_rejects_scope_overclaims():
+    """The live baseline showed that free symbol-to-CURIE conversion corrupts identity."""
+    prompts_root = Path(__file__).resolve().parents[2] / "prompts"
+    mgr = PromptManager(prompts_root)
+
+    messages = mgr.render(
+        "claim_parser/k562_gene_effect@v2",
+        {"question": "Within K562, MED19 knockdown increases GYPB expression."},
+    )
+
+    assert len(messages) == 2
+    system = messages[0]["content"]
+    assert "Copy each gene token exactly" in system
+    assert "Never convert a gene symbol to a CURIE" in system
+    assert "multiple gene-to-gene claims" in system
+    assert "non-human or non-K562" in system
+    assert "causal or universal" in system
 
 
 def test_shipped_repairer_v1_prompt_preserves_legacy_contract():

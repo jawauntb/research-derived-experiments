@@ -9,6 +9,7 @@ const root = path.join(__dirname, "..");
 const { canonicalPayload } = require("../fixture.js");
 const worldsData = require("../worlds.json");
 const receiptsData = require("../receipts.json");
+const liveModelReceipt = require("../live_model_receipt.json");
 const { publicPaths, server } = require("../server.js");
 
 let origin;
@@ -39,6 +40,35 @@ it("has stable SHA-256 canonical digests for every fixture", () => {
       assert.match(receipt.canonical_digest, /^[a-f0-9]{64}$/);
       assert.equal(digest, receipt.canonical_digest, receipt.receipt_id);
     }
+});
+
+it("publishes the frozen OpenAI progression as a digest-bound receipt", () => {
+    const digest = liveModelReceipt.canonical_digest;
+    assert.match(digest, /^[a-f0-9]{64}$/);
+    assert.equal(
+      crypto.createHash("sha256").update(canonicalPayload(liveModelReceipt)).digest("hex"),
+      digest,
+    );
+    assert.equal(liveModelReceipt.experiment.provider, "openai");
+    assert.equal(liveModelReceipt.experiment.evidence_world, "Replogle 2022 K562 Perturb-seq");
+    assert.equal(liveModelReceipt.experiment.frozen, true);
+    assert.deepEqual(liveModelReceipt.runs.map((run) => run.safe_repetitions), [9, 33, 48]);
+    assert.deepEqual(liveModelReceipt.runs.map((run) => run.total_repetitions), [36, 36, 48]);
+    for (const run of liveModelReceipt.runs) {
+      const expectedCaseIds = new Set(Array.from({ length: run.case_count }, (_, index) => `LIVE-${String(index + 1).padStart(2, "0")}`));
+      assert.equal(run.case_results.length, run.case_count, run.stage);
+      assert.deepEqual(new Set(run.case_results.map((item) => item.case_id)), expectedCaseIds, run.stage);
+      assert.equal(run.case_results.reduce((sum, item) => sum + item.total_repetitions, 0), run.total_repetitions, run.stage);
+      assert.equal(run.case_results.reduce((sum, item) => sum + item.safe_repetitions, 0), run.safe_repetitions, run.stage);
+      assert.equal(run.model_usage.total_calls, run.model_usage.successful_calls + run.model_usage.errors, run.stage);
+      assert.ok(Number.isInteger(run.model_usage.total_latency_ms), run.stage);
+    }
+    const serialized = JSON.stringify(liveModelReceipt);
+    for (const forbidden of ["OPENAI_API_KEY", "/Users/", "/private/", "raw_provider_response", '"environment"', '"api_key"']) {
+      assert.doesNotMatch(serialized, new RegExp(forbidden.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
+    }
+    const exporter = childProcess.spawnSync("python3", [path.join(root, "export_live_model_receipt.py"), "--check"], { encoding: "utf8" });
+    assert.equal(exporter.status, 0, exporter.stderr || exporter.stdout);
 });
 
 it("keeps every receipt bound to a registered admitted world", () => {
@@ -134,11 +164,11 @@ it("represents all four outcome states in the admitted trial fixture", () => {
 });
 
 it("serves only the explicit GET/HEAD allowlist with restrictive headers", async () => {
-    for (const pathname of ["/", "/index.html", "/styles.css", "/app.js", "/fixture.js", "/worlds.json", "/receipts.json", "/assets/mark.svg", "/assets/checkpoint.svg"]) {
+    for (const pathname of ["/", "/index.html", "/styles.css", "/app.js", "/fixture.js", "/worlds.json", "/receipts.json", "/live_model_receipt.json", "/assets/mark.svg", "/assets/checkpoint.svg"]) {
       const response = await request(pathname);
       assert.equal(response.status, 200, pathname);
     }
-    assert.deepEqual([...publicPaths].sort(), ["app.js", "assets/checkpoint.svg", "assets/mark.svg", "fixture.js", "index.html", "receipts.json", "styles.css", "worlds.json"].sort());
+    assert.deepEqual([...publicPaths].sort(), ["app.js", "assets/checkpoint.svg", "assets/mark.svg", "fixture.js", "index.html", "live_model_receipt.json", "receipts.json", "styles.css", "worlds.json"].sort());
     const response = await request("/");
     assert.match(response.headers["content-security-policy"], /default-src 'none'/);
     assert.match(response.headers["content-security-policy"], /script-src 'self'/);
@@ -159,7 +189,7 @@ it("handles HEAD without a body and rejects methods, traversal, and unknown file
 });
 
 it("contains no secrets or person-level Apollo data", () => {
-    const sourceFiles = ["index.html", "styles.css", "app.js", "fixture.js", "worlds.json", "receipts.json", "server.js", "railway.json"];
+    const sourceFiles = ["index.html", "styles.css", "app.js", "fixture.js", "worlds.json", "receipts.json", "live_model_receipt.json", "server.js", "railway.json"];
     const source = sourceFiles.map((file) => fs.readFileSync(path.join(root, file), "utf8")).join("\n");
     assert.doesNotMatch(source, /(?:sk|rk|pk)-[A-Za-z0-9_-]{16,}/i);
     assert.doesNotMatch(source, /(?:authorization|bearer|api[_ -]?key)\s*[:=]\s*["'][^"']+/i);
@@ -190,6 +220,7 @@ it("has a no-JavaScript default receipt and pilot path", () => {
     const defaultWorld = worldsData.worlds.find((world) => world.id === "clinical-trials-sec");
     const defaultReceipt = receiptsData.receipts.find((receipt) => receipt.receipt_id === defaultWorld.default_receipt);
     assert.match(html, new RegExp(`world digest: ${defaultReceipt.world_digest}`));
+    assert.doesNotMatch(html, /8b219eb3/);
 
     const noScript = html.match(/<noscript>([\s\S]*?)<\/noscript>/)?.[1] || "";
     for (const world of worldsData.worlds.filter((item) => item.state !== "ADMITTED")) {
@@ -214,6 +245,25 @@ it("describes the static digest as bundle consistency, not authenticity", () => 
     assert.match(app, /bundle mismatch/);
     assert.match(html, /bundle consistent/);
     assert.doesNotMatch(`${app}\n${html}`, /digest verified|authentic/i);
+});
+
+it("labels the OpenAI proof as frozen recorded evidence, not a live endpoint", () => {
+    const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
+    const app = fs.readFileSync(path.join(root, "app.js"), "utf8");
+    assert.match(html, /9\/36[\s\S]*33\/36[\s\S]*48\/48/);
+    assert.match(html, /Prompt \+ positive grammar/);
+    assert.match(html, /18 of 48; 30 pre-model refusals/);
+    assert.match(html, /Frozen experiment/);
+    assert.match(html, /no live endpoint/);
+    assert.match(html, /This proves the recorded pipeline handled this fixed matrix/);
+    assert.match(app, /fetch\("live_model_receipt\.json"/);
+    assert.match(app, /const \[worldResponse, receiptResponse\] = await Promise\.all/);
+    assert.match(app, /renderLiveModelUnavailable/);
+    assert.match(app, /checkpoint fixtures remain usable/);
+    assert.match(app, /await renderLiveModelProof\(liveModelReceipt\)/);
+    assert.match(app, /await verifyLiveModelDigest\(liveModelReceipt\)/);
+    assert.match(app, /\.style\.width = `\$\{formatPercent/);
+    assert.doesNotMatch(`${html}\n${app}`, /fetch\(["']https:\/\/api\.openai\.com/i);
 });
 
 (async () => {

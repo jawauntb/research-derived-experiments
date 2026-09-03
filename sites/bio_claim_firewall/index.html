@@ -17,6 +17,7 @@
     </a>
     <nav aria-label="Primary navigation">
       <a href="#checkpoint">Checkpoint</a>
+      <a href="#live-proof">Proof</a>
       <a href="#worlds">Worlds</a>
       <a href="#method">Method</a>
       <a class="nav-cta" href="mailto:jawaun.brown95@gmail.com?subject=Bio%20Claim%20Firewall%20design%20partner">Request a pilot</a>
@@ -98,8 +99,60 @@
       </div>
     </section>
 
+    <section id="live-proof" class="live-proof section" aria-labelledby="live-proof-title">
+      <div class="section-kicker"><span>02</span> Recorded live-model proof</div>
+      <div class="proof-heading">
+        <div>
+          <h2 id="live-proof-title">The model failed first. Then the boundary closed the gap.</h2>
+          <p>We kept the failed 12-case runs, then expanded the final preregistered gate with four reviewer-derived attacks. Every run used the same frozen K562 evidence snapshot.</p>
+        </div>
+        <div class="proof-stamp"><span class="proof-lock" aria-hidden="true">◇</span><span>Frozen experiment<small>OpenAI · no live endpoint</small></span></div>
+      </div>
+
+      <div class="proof-layout">
+        <ol id="live-progress" class="proof-progress" aria-label="Recorded safety progression">
+          <li class="proof-run baseline" data-live-stage="baseline">
+            <div class="proof-run-top"><span class="run-step">01</span><span class="run-state failed">FAILED GATE</span></div>
+            <h3>Original parser</h3>
+            <div class="proof-score"><strong class="live-score">9/36</strong><span class="live-percent">25%</span></div>
+            <div class="proof-meter" role="meter" aria-label="Original parser safe repetitions" aria-valuemin="0" aria-valuemax="36" aria-valuenow="9"><span class="proof-fill"></span></div>
+            <p>The model rewrote exact gene symbols into invented identifiers and mishandled boundary cases.</p>
+          </li>
+          <li class="proof-run prompt-only" data-live-stage="prompt_only">
+            <div class="proof-run-top"><span class="run-step">02</span><span class="run-state failed">FAILED GATE</span></div>
+            <h3>Hardened prompt</h3>
+            <div class="proof-score"><strong class="live-score">33/36</strong><span class="live-percent">91.7%</span></div>
+            <div class="proof-meter" role="meter" aria-label="Hardened prompt safe repetitions" aria-valuemin="0" aria-valuemax="36" aria-valuenow="33"><span class="proof-fill"></span></div>
+            <p>Exact tokens were preserved, but one compound claim still crossed the language-model boundary.</p>
+          </li>
+          <li class="proof-run final-boundary" data-live-stage="final_boundary">
+            <div class="proof-run-top"><span class="run-step">03</span><span class="run-state passed">PASSED GATE</span></div>
+            <h3>Prompt + positive grammar</h3>
+            <div class="proof-score"><strong class="live-score">48/48</strong><span class="live-percent">100%</span></div>
+            <div class="proof-meter" role="meter" aria-label="Final boundary safe repetitions" aria-valuemin="0" aria-valuemax="48" aria-valuenow="48"><span class="proof-fill"></span></div>
+            <p>The deterministic boundary accepts only one complete K562 knockdown clause, then requires the model to preserve its direction and gene roles exactly.</p>
+          </li>
+        </ol>
+
+        <aside class="proof-receipt" aria-labelledby="proof-receipt-title">
+          <p class="detail-label">Experiment receipt</p>
+          <h3 id="proof-receipt-title">What this proves—and what it does not.</h3>
+          <dl class="proof-facts">
+            <div><dt>Evidence world</dt><dd id="live-world">Replogle 2022 K562 Perturb-seq</dd></div>
+            <div><dt>Model</dt><dd id="live-model">OpenAI · gpt-4o-mini-2024-07-18</dd></div>
+            <div><dt>Test shape</dt><dd id="live-shape">16 cases × 3 repetitions</dd></div>
+            <div><dt>Model calls</dt><dd id="live-calls">18 of 48; 30 pre-model refusals</dd></div>
+            <div><dt>Coverage</dt><dd>Controls, sign reversals, missing entities, negation, scope and role errors, ambiguity, and prompt injection</dd></div>
+          </dl>
+          <p class="proof-boundary">This proves the recorded pipeline handled this fixed matrix. It does not prove general biological truth, performance outside K562, or a live public service.</p>
+          <div class="proof-digest"><span>Public receipt</span><code id="live-receipt-digest">pending…</code></div>
+          <p id="live-proof-status" class="proof-status">Loading the digest-bound public receipt…</p>
+        </aside>
+      </div>
+    </section>
+
     <section id="worlds" class="worlds section" aria-labelledby="worlds-title">
-      <div class="section-kicker"><span>02</span> Portfolio status</div>
+      <div class="section-kicker"><span>03</span> Portfolio status</div>
       <div class="section-heading"><div><h2 id="worlds-title">Five worlds, honest states</h2><p>A world earns public evidence only after its source, integrity, and scientific gates pass.</p></div><span class="catalog-badge">world catalog v1</span></div>
       <div id="world-catalog" class="world-catalog">
         <article class="catalog-card admitted"><div class="catalog-top"><span class="world-mark clinical">CT</span><span class="state-badge">ADMITTED</span></div><h3>Clinical Trials / SEC</h3><p>Trial disclosure integrity</p><small>translational / commercial</small></article>
@@ -112,7 +165,7 @@
     </section>
 
     <section id="method" class="method section" aria-labelledby="method-title">
-      <div class="section-kicker"><span>03</span> The boundary</div>
+      <div class="section-kicker"><span>04</span> The boundary</div>
       <div class="method-grid"><div><h2 id="method-title">A receipt is useful because it says where it stops.</h2><p>Bio Claim Firewall is designed for the moment before a scientific-diligence memo hardens an assertion into a decision. It makes the evidence contract inspectable, not invisible.</p><a class="text-link" href="mailto:jawaun.brown95@gmail.com?subject=Bio%20Claim%20Firewall%20design%20partner">Talk through a design-partner workflow <span aria-hidden="true">→</span></a></div><div class="principles"><div><span class="principle-no">01</span><strong>World-bound</strong><p>Selecting a world is explicit. No parser or prompt can switch it.</p></div><div><span class="principle-no">02</span><strong>Fail-closed</strong><p>Missing, corrupt, stale, or out-of-scope evidence cannot pass.</p></div><div><span class="principle-no">03</span><strong>Reproducible</strong><p>The same structured claim and world digest produce the same receipt.</p></div></div></div>
       <div class="limitations"><span class="detail-label">Read the limitations</span><p>This demo does not provide clinical decision support, investment advice, efficacy claims, or a general public checking API. It uses compact sanitized fixtures; source acquisition and model-assisted parsing happen offline. A public badge means “consistent with this declared evidence contract,” nothing more.</p></div>
     </section>
@@ -120,7 +173,7 @@
     <section class="cta panel"><div><p class="eyebrow">Built for the next careful question</p><h2>Bring one decision memo you do not want to overstate.</h2></div><a class="button button-primary" href="mailto:jawaun.brown95@gmail.com?subject=Bio%20Claim%20Firewall%20design%20partner">Request a design-partner conversation <span aria-hidden="true">↗</span></a></section>
   </main>
 
-  <noscript><section class="noscript-fallback" aria-label="Receipt without JavaScript"><p class="eyebrow">Static fallback · exact fixture</p><h2>Clinical Trials / SEC — ACCEPTED</h2><p>“The SEC exhibit identifies TTX-MC138 as trial NCT06260774, consistent with the registry as of 03 Jun 2026.” The selected identity claim matches the frozen evidence record.</p><p><strong>Scope:</strong> Identity consistency only—not efficacy, safety, investment advice, or corporate truth.</p><p><strong>Citation:</strong> ClinicalTrials.gov + SEC EDGAR · NCT06260774 · accession 0001104659-26-069810 · EX-99.1</p><p><strong>Receipt:</strong> trial-positive · world digest: f9a3c368585e982824cb6c180267b782f6c3b14c1793f95379686f3bdbbcfdd1</p><p>Other world states: Open Targets and Arc VCC are admitted fixtures. NeuroVault and FlyWire / Codex are deferred and publish no evidence-derived fields.</p><a class="button button-primary" href="mailto:jawaun.brown95@gmail.com?subject=Bio%20Claim%20Firewall%20design%20partner">Request a pilot</a></section></noscript>
+  <noscript><section class="noscript-fallback" aria-label="Receipt without JavaScript"><p class="eyebrow">Static fallback · exact fixture</p><h2>Clinical Trials / SEC — ACCEPTED</h2><p>“The SEC exhibit identifies TTX-MC138 as trial NCT06260774, consistent with the registry as of 03 Jun 2026.” The selected identity claim matches the frozen evidence record.</p><p><strong>Recorded OpenAI experiment:</strong> the frozen K562 gate progressed from 9/36 safe repetitions to 33/36, then 48/48 after the final matrix added four reviewer-derived attacks and the reviewed boundary accepted only a complete K562 knockdown clause. The final run made 18 model calls and refused 30 hostile repetitions before a call. This is a frozen receipt, not a live endpoint.</p><p><strong>Scope:</strong> Identity consistency only—not efficacy, safety, investment advice, or corporate truth.</p><p><strong>Citation:</strong> ClinicalTrials.gov + SEC EDGAR · NCT06260774 · accession 0001104659-26-069810 · EX-99.1</p><p><strong>Receipt:</strong> trial-positive · world digest: f9a3c368585e982824cb6c180267b782f6c3b14c1793f95379686f3bdbbcfdd1</p><p>Other world states: Open Targets and Arc VCC are admitted fixtures. NeuroVault and FlyWire / Codex are deferred and publish no evidence-derived fields.</p><a class="button button-primary" href="mailto:jawaun.brown95@gmail.com?subject=Bio%20Claim%20Firewall%20design%20partner">Request a pilot</a></section></noscript>
 
   <footer><span>Bio Claim Firewall</span><span>Bounded evidence, inspectable receipts.</span><a href="mailto:jawaun.brown95@gmail.com">jawaun.brown95@gmail.com</a></footer>
   <script src="fixture.js" defer></script>

@@ -288,7 +288,7 @@ def test_parser_receives_only_question_and_selected_schema_and_rejects_injection
             SimpleNamespace(),
             "example",
             "1",
-            "A increases B",
+            "A knockdown increases B expression in K562 cells.",
             Manager(),
             registry=registry,
         )

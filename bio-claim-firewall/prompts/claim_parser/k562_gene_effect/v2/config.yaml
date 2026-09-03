@@ -1,0 +1,3 @@
+task: claim_parser
+version: v2
+description: 'Copy one in-scope K562 gene-effect claim into an exact three-field JSON object.'

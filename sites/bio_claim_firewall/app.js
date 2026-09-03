@@ -30,6 +30,61 @@
     renderWorldPicker();
     renderCatalog();
     selectWorld(selectedWorldId);
+    try {
+      const liveResponse = await fetch("live_model_receipt.json", { cache: "no-store" });
+      if (!liveResponse.ok) throw new Error("live-model receipt unavailable");
+      const liveModelReceipt = await liveResponse.json();
+      await renderLiveModelProof(liveModelReceipt);
+    } catch {
+      renderLiveModelUnavailable();
+    }
+  }
+
+  function renderLiveModelUnavailable() {
+    const status = document.getElementById("live-proof-status");
+    if (!status) return;
+    status.classList.add("bad");
+    status.textContent = "Recorded experiment unavailable · the checkpoint fixtures remain usable.";
+  }
+
+  async function renderLiveModelProof(liveModelReceipt) {
+    const experiment = liveModelReceipt?.experiment;
+    const runs = Array.isArray(liveModelReceipt?.runs) ? liveModelReceipt.runs : [];
+    if (!experiment || experiment.frozen !== true || experiment.live_endpoint !== false || runs.length !== 3) {
+      throw new Error("live-model receipt contract unavailable");
+    }
+    for (const card of document.querySelectorAll("[data-live-stage]")) {
+      const run = runs.find((item) => item.stage === card.dataset.liveStage);
+      if (!run) throw new Error("live-model run unavailable");
+      card.querySelector(".live-score").textContent = `${run.safe_repetitions}/${run.total_repetitions}`;
+      card.querySelector(".live-percent").textContent = `${formatPercent(run.safe_repetitions / run.total_repetitions)}%`;
+      const meter = card.querySelector(".proof-meter");
+      meter.setAttribute("aria-valuemax", String(run.total_repetitions));
+      meter.setAttribute("aria-valuenow", String(run.safe_repetitions));
+      meter.querySelector(".proof-fill").style.width = `${formatPercent(run.safe_repetitions / run.total_repetitions)}%`;
+    }
+    document.getElementById("live-world").textContent = experiment.evidence_world;
+    document.getElementById("live-model").textContent = `${providerLabel(experiment.provider)} · ${experiment.model}`;
+    document.getElementById("live-shape").textContent = `${experiment.case_count} cases × ${experiment.repetitions} repetitions`;
+    const finalRun = runs.find((item) => item.stage === "final_boundary");
+    const modelCalls = Number(finalRun?.model_usage?.total_calls);
+    const preModelRefusals = Number(experiment.total_repetitions) - modelCalls;
+    if (!Number.isInteger(modelCalls) || !Number.isInteger(preModelRefusals) || preModelRefusals < 0) {
+      throw new Error("live-model usage contract unavailable");
+    }
+    document.getElementById("live-calls").textContent = `${modelCalls} of ${experiment.total_repetitions}; ${preModelRefusals} pre-model refusals`;
+    document.getElementById("live-receipt-digest").textContent = `${liveModelReceipt.canonical_digest.slice(0, 12)}…`;
+    await verifyLiveModelDigest(liveModelReceipt);
+  }
+
+  async function verifyLiveModelDigest(liveModelReceipt) {
+    const expected = await globalThis.BioFirewallFixture?.digestReceipt(liveModelReceipt);
+    const verified = expected && expected === liveModelReceipt.canonical_digest;
+    const status = document.getElementById("live-proof-status");
+    status.classList.toggle("bad", !verified);
+    status.textContent = verified
+      ? "Receipt bundle consistent · source runs are pinned by SHA-256."
+      : "Receipt bundle mismatch · do not rely on this recorded result.";
   }
 
   function renderWorldPicker() {
@@ -188,6 +243,8 @@
   }
 
   function formatDate(value) { const date = new Date(String(value).includes("T") ? value : `${value}T00:00:00Z`); return Number.isNaN(date.getTime()) ? text(value) : date.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric", timeZone: "UTC" }); }
+  function formatPercent(value) { const percent = Number(value) * 100; return Number.isInteger(percent) ? String(percent) : percent.toFixed(1); }
+  function providerLabel(value) { return value === "openai" ? "OpenAI" : text(value); }
   function worldMark(id) { return { "clinical-trials-sec": "CT", "open-targets": "OT", "arc-vcc": "AV", neurovault: "NV", flywire_connectome: "FC" }[id] || "·"; }
   function worldClass(id) { return { "clinical-trials-sec": "clinical", "open-targets": "targets", "arc-vcc": "arc", neurovault: "neuro", flywire_connectome: "fly" }[id] || "clinical"; }
   function catalogClass(state) { return state === "ADMITTED" ? "admitted" : state.includes("DEFERRED") ? "deferred" : "withheld"; }
@@ -195,8 +252,13 @@
   function catalogState(state) { return state === "ADMITTED" ? state : state.includes("DEFERRED") ? "DEFERRED" : "WITHHELD"; }
   function outcomeIcon(outcome) { const icon = make("span", `preset-icon ${outcome.toLowerCase().replace("checker_error", "error")}`, { ACCEPTED: "✓", REJECTED: "×", INCONCLUSIVE: "?", CHECKER_ERROR: "!" }[outcome] || "?"); return icon; }
 
-  boot().catch((error) => {
+  boot().catch(() => {
     document.getElementById("fixture-status").classList.add("bad");
-    document.getElementById("fixture-status").textContent = `Fixture unavailable · ${error.message}`;
+    document.getElementById("fixture-status").textContent = "Fixture unavailable · the static proof bundle did not load.";
+    const proofStatus = document.getElementById("live-proof-status");
+    if (proofStatus) {
+      proofStatus.classList.add("bad");
+      proofStatus.textContent = "Recorded experiment unavailable · the public receipt did not load.";
+    }
   });
 })();

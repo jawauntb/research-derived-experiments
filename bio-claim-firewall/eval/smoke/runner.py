@@ -13,11 +13,11 @@ import importlib.util
 import json
 import os
 import sys
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Mapping, Sequence
-
+from typing import Any
 
 _FIREWALL_ROOT = Path(__file__).resolve().parents[2]
 _SRC_ROOT = _FIREWALL_ROOT / "src"
@@ -142,7 +142,12 @@ def _missing_data_sources(data_root: Path) -> list[str]:
     return missing
 
 
-def _provider_preflight(config_path: Path, environ: Mapping[str, str]) -> list[str]:
+def _provider_preflight(
+    config_path: Path,
+    environ: Mapping[str, str],
+    *,
+    task_name: str = "proposer",
+) -> list[str]:
     errors: list[str] = []
     if not config_path.is_file():
         return [f"model config does not exist: {config_path}"]
@@ -153,11 +158,11 @@ def _provider_preflight(config_path: Path, environ: Mapping[str, str]) -> list[s
 
     try:
         config = yaml.safe_load(config_path.read_text(encoding="utf-8"))
-        task = config["tasks"]["proposer"]
+        task = config["tasks"][task_name]
         provider = config["providers"][task["provider"]]
         provider_type = provider["type"]
     except (KeyError, OSError, TypeError, yaml.YAMLError) as exc:
-        return [f"cannot read proposer provider from {config_path}: {exc}"]
+        return [f"cannot read {task_name} provider from {config_path}: {exc}"]
 
     required_packages = {"jinja2", "pydantic"}
     if provider_type == "openai_sdk":
@@ -183,11 +188,17 @@ def _provider_preflight(config_path: Path, environ: Mapping[str, str]) -> list[s
 
 
 def preflight(
-    *, data_root: Path, config_path: Path, environ: Mapping[str, str] | None = None
+    *,
+    data_root: Path,
+    config_path: Path,
+    environ: Mapping[str, str] | None = None,
+    task_name: str = "proposer",
 ) -> list[str]:
     """Return every missing local prerequisite without making a network call."""
     errors = _provider_preflight(
-        config_path, os.environ if environ is None else environ
+        config_path,
+        os.environ if environ is None else environ,
+        task_name=task_name,
     )
     missing_sources = _missing_data_sources(data_root)
     if missing_sources:
@@ -198,7 +209,7 @@ def preflight(
         from evidence import load_bundle
 
         load_bundle(data_root)
-    except Exception as exc:  # loader must remain the hash-verification authority
+    except Exception as exc:  # noqa: BLE001 - loader owns all hash failures
         errors.append(f"frozen pilot snapshot did not load hash-verified: {exc}")
     return errors
 
