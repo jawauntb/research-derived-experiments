@@ -1,6 +1,6 @@
 # Handoff — bio-claim-firewall
 
-**Last updated:** 2026-09-01
+**Last updated:** 2026-09-02
 **Prepared by:** the previous agent session (see `PROVENANCE.md` and the commit trail on `main`).
 **Audience:** a cold-start agent picking this up. Read this file FIRST, then `README.md`, then `spec/`.
 
@@ -52,6 +52,23 @@ The recommended commercial move is a 3–5 customer design-partner pilot around
 scientific-diligence memos. Do not market a universal fact checker, clinical
 tool, or publication-grade empirical result. A paper should follow an
 independent blinded review and broader workflow evaluation.
+
+The optional K562 natural-language path now has a preregistered hostile-input
+result, not just the earlier five-case formatting smoke. The original parser
+passed 9/36 repetitions because it invented incorrect HGNC CURIEs, accepted
+out-of-scope requests, and selected one claim from an ambiguous sentence.
+Prompt-only v2 improved to 33/36. An initial deterministic single-claim
+precheck passed 36/36, but review found its parser output was not independently
+bound to the input direction and gene symbols. Subsequent reviews added
+subject/object role binding, then exposed negation, context, perturbation, and
+repeated-entity ambiguities. Follow-up review showed blacklist-style scope
+checks still admitted alternate cell lines and causal morphology, so the final
+positive whole-sentence grammar added four locked attacks and passed 48/48,
+with 18 successful OpenAI calls, zero provider errors, and 30 pre-model
+refusals. The full progression, hashes, and
+limits are retained in `eval/live_claims/RESULTS_2026-09-02.md`.
+This is a narrow OpenAI/K562 boundary result, not cross-model or general-biology
+proof.
 
 ---
 
@@ -227,7 +244,7 @@ The mutation-test framework's first real run found two surviving `delete_line` m
 
 **Follow-up**: retain these regressions whenever the context comparator or assay-equivalence table changes; re-run the full 31-site sweep before reporting a Phase 5 empirical result.
 
-### 5.4 Live LLM smoke test (initial operational gate passed; empirical claim still blocked)
+### 5.4 Live LLM evaluation (single-model adversarial gate passed; broader claim blocked)
 
 The first real end-to-end run completed on 2026-09-01: OpenAI
 `gpt-4o-mini-2024-07-18` produced one schema-valid claim for each fixed case,
@@ -250,10 +267,26 @@ trajectory and summary receipts stay local under `eval/smoke_trajectories/`.
 
 Record trajectory under `bio-claim-firewall/eval/smoke_trajectories/<date>.jsonl`.
 
-**Remaining work**: preserve the one run as a smoke result; preregister the
-adversarial and multi-model suites before any empirical promotion.
+The preregistered experiment exercised the customer-facing natural-language
+parser on supported and hostile inputs, three repetitions each, while keeping
+the model blind to evidence and expected answers. The v1
+baseline passed only 9/36 because it hallucinated gene CURIEs and accepted
+ambiguous or out-of-scope inputs. Prompt-only v2 reached 33/36. A conservative
+deterministic gate that refuses inputs without exactly one directional predicate
+closed the observed ambiguity failure before the provider call. Code review
+then required exact parser-to-input direction, gene-token, and active-voice
+role binding. Final reviews added negation, repeated-role, alternate-cell-line,
+and causal-morphology cases, replacing blacklist checks with a positive grammar
+for one complete K562 knockdown sentence. The 16-case matrix passed 48/48 with
+18 successful model calls, 30 pre-model refusals, and zero provider errors. See
+`eval/live_claims/RESULTS_2026-09-02.md` and the linked audit cards in
+`docs/preregistration/`.
 
-### 5.5 Adversarial suite (BLOCKS the "eliminates unsupported claims" claim)
+**Remaining work**: preserve the full result sequence; run the same frozen class
+of tests against other model families and broaden the held-out claim/world set
+before any general empirical promotion.
+
+### 5.5 Multi-model adversarial suite (still blocks the "eliminates unsupported claims" claim)
 
 Pre-register these attacks BEFORE running:
 - Invented gene id (`HGNC:9999999`) → must be caught by R-ENT-02.
@@ -267,7 +300,14 @@ Pre-register these attacks BEFORE running:
 - Real edge, over-strong wording (`confidence_language=causal`) with only observational evidence → R-CERT-02 or R-CAUS-03.
 - Cross-species swap (mouse target claimed in human context) → R-CTX-01.
 
-Score: per-attack survival rate across ≥3 model families (Claude Opus/Sonnet, GPT-4o, Gemini 2.5 Flash, Llama 3.1 8B). Report calibration.
+The single-model K562 matrix now covers invented genes, fake citations, sign
+reversals, missing pairs, wrong context, causal/universal overclaims,
+multi-claim ambiguity, schema injection, and checker bypass. It is a bounded
+pass, not evidence that these attacks are eliminated generally.
+
+Next score: per-attack survival rate across at least three model families and a
+held-out expansion of evidence worlds. Report calibration and preserve every
+failed run.
 
 **Owner**: any agent; 1 day.
 
@@ -426,4 +466,4 @@ Good luck. Everything the mission cared about — "prevent specific declared cla
 
 ### Bro
 
-This file is the "here's what's done and here's what's left" guide for the next agent. If someone new opens this project, they should read this first, then the spec files, then use the recorded five-case live smoke as the narrow operational baseline. The next technical steps are the remaining broad mutation sweep, adversarial suite, and a larger live evaluation; launch decisions still need you.
+This file is the "here's what's done and here's what's left" guide for the next agent. If someone new opens this project, they should read this first, then the spec files, then the recorded 9/36 → 33/36 → 48/48 live result. The next scientific steps are the broad mutation sweep, multi-model and cross-world evaluation, and an independent blinded reviewer; the bounded design-partner demo can be piloted now.

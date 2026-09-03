@@ -20,6 +20,7 @@ const publicPaths = new Set([
   "fixture.js",
   "worlds.json",
   "receipts.json",
+  "live_model_receipt.json",
   "assets/mark.svg",
   "assets/checkpoint.svg",
 ]);

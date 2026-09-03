@@ -9,17 +9,88 @@ every biological result returned to the caller.
 from __future__ import annotations
 
 import json
+import re
+from collections.abc import Mapping
 from dataclasses import dataclass
-from typing import Any, Mapping, Protocol
+from typing import Any, Protocol
 
-from .service import ClaimCheckInputError, ClaimCheckResult, check_k562_claim
-from .service import _attach_receipt, check_claim
 from worlds import WORLD_REGISTRY, WorldRegistry, WorldRegistryError
 
+from .service import (
+    ClaimCheckInputError,
+    ClaimCheckResult,
+    _attach_receipt,
+    check_claim,
+    check_k562_claim,
+)
 
 _PARSER_TASK = "claim_parser"
 _REQUIRED_KEYS = frozenset(("subject", "object", "direction"))
 _MAX_QUESTION_CHARS = 2_000
+_DIRECTIONAL_PREDICATE_PATTERN = (
+    r"(?:increase|increases|increased|raise|raises|raised|"
+    r"upregulate|upregulates|upregulated|elevate|elevates|elevated|"
+    r"decrease|decreases|decreased|reduce|reduces|reduced|"
+    r"lower|lowers|lowered|downregulate|downregulates|downregulated|"
+    r"suppress|suppresses|suppressed)"
+)
+_DIRECTIONAL_PREDICATE = re.compile(
+    rf"\b{_DIRECTIONAL_PREDICATE_PATTERN}\b", re.IGNORECASE
+)
+_INCREASE_PREDICATES = frozenset(
+    {
+        "increase",
+        "increases",
+        "increased",
+        "raise",
+        "raises",
+        "raised",
+        "upregulate",
+        "upregulates",
+        "upregulated",
+        "elevate",
+        "elevates",
+        "elevated",
+    }
+)
+_DECREASE_PREDICATES = frozenset(
+    {
+        "decrease",
+        "decreases",
+        "decreased",
+        "reduce",
+        "reduces",
+        "reduced",
+        "lower",
+        "lowers",
+        "lowered",
+        "downregulate",
+        "downregulates",
+        "downregulated",
+        "suppress",
+        "suppresses",
+        "suppressed",
+    }
+)
+_KNOCKDOWN_TOKEN = re.compile(r"\bknockdown\b", re.IGNORECASE)
+_GENE_SYMBOL_PATTERN = r"[A-Za-z][A-Za-z0-9-]*"
+_SUPPORTED_K562_CLAUSES = tuple(
+    re.compile(pattern, re.IGNORECASE)
+    for pattern in (
+        rf"\A\s*Within\s+K562\s+cells?,\s*"
+        rf"(?P<subject>{_GENE_SYMBOL_PATTERN})\s+knockdown\s+"
+        rf"(?P<direction>{_DIRECTIONAL_PREDICATE_PATTERN})\s+"
+        rf"(?P<object>{_GENE_SYMBOL_PATTERN})\s+expression[.?!]?\s*\Z",
+        rf"\A\s*(?P<subject>{_GENE_SYMBOL_PATTERN})\s+knockdown\s+"
+        rf"(?P<direction>{_DIRECTIONAL_PREDICATE_PATTERN})\s+"
+        rf"(?P<object>{_GENE_SYMBOL_PATTERN})\s+expression\s+in\s+"
+        rf"K562(?:\s+cells?)?[.?!]?\s*\Z",
+        rf"\A\s*Does\s+(?P<subject>{_GENE_SYMBOL_PATTERN})\s+knockdown\s+"
+        rf"(?P<direction>{_DIRECTIONAL_PREDICATE_PATTERN})\s+"
+        rf"(?P<object>{_GENE_SYMBOL_PATTERN})\s+expression\s+in\s+"
+        rf"K562(?:\s+cells?)?\?\s*\Z",
+    )
+)
 
 
 class ClaimParserManager(Protocol):
@@ -62,8 +133,10 @@ def check_natural_language_k562_claim(
         raise ClaimCheckInputError(
             f"natural-language claim exceeds {_MAX_QUESTION_CHARS:,} character limit"
         )
-
+    _validate_directional_predicate_count(question)
+    input_claim = _validate_k562_input_scope(question)
     parsed, interpretation = _parse_question(question.strip(), manager)
+    _validate_k562_question(question, parsed, bundle, input_claim)
     result = check_k562_claim(
         bundle,
         parsed["subject"],
@@ -103,9 +176,17 @@ def check_natural_language_claim(
         raise ClaimCheckInputError(
             f"natural-language claim exceeds {_MAX_QUESTION_CHARS:,} character limit"
         )
+    if world.adapter == "k562":
+        _validate_directional_predicate_count(question)
+        input_claim = _validate_k562_input_scope(question)
+    else:
+        input_claim = None
     parsed, interpretation = _parse_world_question(
         question.strip(), manager, world.claim_fields, world.parser_schema
     )
+    if world.adapter == "k562":
+        assert input_claim is not None
+        _validate_k562_question(question, parsed, bundle, input_claim)
     result = check_claim(
         bundle,
         world.world_id,
@@ -125,6 +206,142 @@ def check_natural_language_claim(
         strict_bundle=True,
     )
     return NaturalLanguageClaimCheckResult(interpretation=interpretation, result=result)
+
+
+def _validate_k562_question(
+    question: str,
+    parsed: Mapping[str, str],
+    bundle: Any,
+    input_claim: Mapping[str, str],
+) -> None:
+    """Bind the untrusted K562 parse to the words the caller submitted.
+
+    A parser response is not allowed to introduce a second claim, change the
+    direction, or cite entities absent from the input.  The final deterministic
+    checker still owns entity resolution and evidence lookup; this helper only
+    closes the parser trust boundary before its output is used.
+    """
+    predicates = _validate_directional_predicate_count(question)
+
+    input_direction = _direction_family(predicates[0])
+    parsed_direction = _direction_family(parsed.get("direction", ""))
+    if input_direction is None or parsed_direction != input_direction:
+        raise ClaimCheckInputError(
+            "natural-language parser direction does not match the submitted claim"
+        )
+
+    if any(
+        parsed.get(field, "").strip().casefold()
+        != input_claim[field].strip().casefold()
+        for field in ("subject", "object")
+    ):
+        raise ClaimCheckInputError(
+            "natural-language parser gene roles do not match the supported claim"
+        )
+
+    parsed_entities = set()
+    entity_spans: dict[str, tuple[tuple[int, int], ...]] = {}
+    for field in ("subject", "object"):
+        value = parsed.get(field)
+        if not isinstance(value, str) or not value.strip():
+            raise ClaimCheckInputError(
+                "natural-language parser must return non-empty subject and object"
+            )
+        value = value.strip()
+        parsed_entities.add(value.casefold())
+        spans = _whole_token_spans(question, value)
+        entity_spans[field] = spans
+        if len(spans) != 1:
+            raise ClaimCheckInputError(
+                f"natural-language parser {field} must occur exactly once in the "
+                "submitted claim"
+            )
+
+    if len(parsed_entities) != 2:
+        raise ClaimCheckInputError(
+            "natural-language parser subject and object must be distinct"
+        )
+
+    predicate_match = next(_DIRECTIONAL_PREDICATE.finditer(question))
+    knockdown_match = next(_KNOCKDOWN_TOKEN.finditer(question))
+    subject_span = entity_spans["subject"][0]
+    object_span = entity_spans["object"][0]
+    supported_order = (
+        subject_span[1] <= knockdown_match.start()
+        and knockdown_match.end() <= predicate_match.start()
+        and predicate_match.end() <= object_span[0]
+    )
+    if not supported_order:
+        raise ClaimCheckInputError(
+            "natural-language parser subject/object roles do not match the "
+            "supported active-voice claim"
+        )
+
+    known_labels = _known_hgnc_labels(bundle)
+    mentioned_labels = {
+        label for label in known_labels if _contains_whole_token(question, label)
+    }
+    extras = sorted(mentioned_labels - parsed_entities)
+    if extras:
+        raise ClaimCheckInputError(
+            "natural-language input mentions known HGNC entities outside the parsed "
+            f"subject/object pair: {', '.join(extras)}"
+        )
+
+
+def _validate_k562_input_scope(question: str) -> dict[str, str]:
+    """Parse only the complete positive grammar accepted by the K562 route."""
+    for pattern in _SUPPORTED_K562_CLAUSES:
+        match = pattern.fullmatch(question)
+        if match is not None:
+            return {key: value for key, value in match.groupdict().items()}
+    raise ClaimCheckInputError(
+        "natural-language K562 claim is outside the supported single-clause grammar"
+    )
+
+
+def _validate_directional_predicate_count(question: str) -> list[str]:
+    predicates = _DIRECTIONAL_PREDICATE.findall(question)
+    if len(predicates) != 1:
+        raise ClaimCheckInputError(
+            "natural-language input must contain exactly one directional claim"
+        )
+    return predicates
+
+
+def _direction_family(value: str) -> str | None:
+    normalized = value.strip().casefold()
+    if normalized in _INCREASE_PREDICATES:
+        return "increase"
+    if normalized in _DECREASE_PREDICATES:
+        return "decrease"
+    return None
+
+
+def _contains_whole_token(question: str, value: str) -> bool:
+    return bool(_whole_token_spans(question, value))
+
+
+def _whole_token_spans(question: str, value: str) -> tuple[tuple[int, int], ...]:
+    pattern = r"(?<!\w)" + re.escape(value.strip()) + r"(?!\w)"
+    return tuple(
+        (match.start(), match.end())
+        for match in re.finditer(pattern, question, re.IGNORECASE)
+    )
+
+
+def _known_hgnc_labels(bundle: Any) -> frozenset[str]:
+    labels = getattr(bundle, "labels", None)
+    if not isinstance(labels, Mapping):
+        return frozenset()
+    return frozenset(
+        label.strip().casefold()
+        for curie, label in labels.items()
+        if isinstance(curie, str)
+        and curie.startswith("HGNC:")
+        and isinstance(label, str)
+        and label.strip()
+    )
 
 
 def _parse_question(

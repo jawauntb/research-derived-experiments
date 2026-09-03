@@ -5,9 +5,9 @@ from __future__ import annotations
 import json
 from pathlib import Path
 from types import SimpleNamespace
+from typing import ClassVar
 
 import pytest
-
 from eval.smoke import runner
 from eval.smoke.runner import (
     SmokeCase,
@@ -131,7 +131,7 @@ def _install_mocked_pipeline(
             self.manager = manager
 
     class FakeOrchestrator:
-        instances = []
+        instances: ClassVar[list[FakeOrchestrator]] = []
 
         def __init__(self, proposer_, repairer_, verifier_config, snapshot, config):
             self.proposer = proposer_
@@ -382,6 +382,46 @@ def test_provider_preflight_handles_unsupported_and_malformed_configs(
     assert runner._provider_preflight(config_path, {})[0].startswith(
         "cannot read proposer provider"
     )
+
+
+def test_provider_preflight_resolves_the_requested_task(tmp_path, monkeypatch):
+    config_path = tmp_path / "config.yaml"
+    config_path.write_text(
+        json.dumps(
+            {
+                "tasks": {
+                    "proposer": {"provider": "proposer-provider"},
+                    "claim_parser": {"provider": "parser-provider"},
+                },
+                "providers": {
+                    "proposer-provider": {
+                        "type": "ollama",
+                    },
+                    "parser-provider": {
+                        "type": "openai_sdk",
+                        "api_key_env": "PARSER_TOKEN",
+                    },
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(runner.importlib.util, "find_spec", lambda package: object())
+
+    assert (
+        runner._provider_preflight(
+            config_path, {"PARSER_TOKEN": "present"}, task_name="claim_parser"
+        )
+        == []
+    )
+    assert runner._provider_preflight(config_path, {}, task_name="claim_parser") == [
+        "configured provider credential is absent: PARSER_TOKEN"
+    ]
+
+    parser_errors = runner._provider_preflight(
+        config_path, {}, task_name="missing-task"
+    )
+    assert parser_errors[0].startswith("cannot read missing-task provider")
 
 
 def test_preflight_reports_hash_failure_without_networking(tmp_path, monkeypatch):

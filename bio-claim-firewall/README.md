@@ -105,7 +105,12 @@ For a one-sentence input, add the optional untrusted OpenAI parser. It needs
 `OPENAI_API_KEY` in the environment and its optional runtime dependencies;
 the parser may only extract `subject`, `object`, and `direction`. The frozen
 ledger and deterministic verifier still decide the result.
-It refuses input longer than 2,000 characters before any provider call.
+It refuses input longer than 2,000 characters or input with anything other
+than one explicit directional predicate before any provider call. The
+deterministic boundary requires one K562 knockdown, rejects negation, other
+contexts or perturbations, causal/universal language, and repeated known gene
+mentions, then binds the parser's literal tokens and roles to the accepted
+active-voice clause.
 
 ```bash
 PYTHONPATH=bio-claim-firewall/src uv run \
@@ -127,15 +132,32 @@ when the checker is unavailable, and `4` for fail-closed `CHECKER_ERROR`.
 input, and availability errors. No-claim `INCONCLUSIVE` outcomes retain the
 checker version and the hashes of the frozen snapshots inspected.
 
+The preregistered live adversarial matrix records the complete improvement
+sequence rather than hiding failed attempts: the original parser passed 9/36
+repetitions, prompt-only v2 passed 33/36, and v2 plus the deterministic
+single-claim boundary passed 36/36. Independent code review then found that the
+parser's returned direction and gene symbols were not bound to the submitted
+text. The final reviewed boundary also binds subject/object roles under its
+narrow active-voice grammar and re-passed 36/36. A final release review exposed
+negation, scope, and repeated-role ambiguity; a follow-up review then showed
+that blacklist-style scope checks still admitted alternate cell lines and
+causal morphology. The preregistered positive-grammar confirmation added all
+four attacks and passed 48/48. Its 18 successful OpenAI calls had zero provider
+errors; 30 hostile repetitions were rejected before a model call. See
+[`eval/live_claims/RESULTS_2026-09-02.md`](eval/live_claims/RESULTS_2026-09-02.md).
+This proves only the pinned OpenAI/K562 boundary on the locked final 16-case,
+three-repetition matrix—not general biological truth or cross-model safety.
+
 ## Phase status
 
 - [x] **Phase 1 — Spec.** Claim / evidence / verdict schemas, fault taxonomy, inference rules, non-goals. (#538)
 - [x] **Phase 2 — Frozen pilot world.** HGNC (45,045 genes), Cell Ontology, Cell Line Ontology, NCBI Taxonomy, Reactome, Replogle 2022 Perturb-seq (9,400 records). All hash-verified. (#543)
 - [x] **Phase 3 — Deterministic verifier.** Audit ledger, normalize, evidence loader, 30-rule cascade, top-level `verify()` composer. Fail-closed. (#539, #540, #541)
-- [x] **Phase 4 preview — Untrusted model interfaces.** `Proposer` + `Repairer` + `Orchestrator` + `TrajectoryLogger`; MIDAS-derived `ModelManager` now connects through its prompt-rendering compatibility adapter. One configured OpenAI model has traversed the fixed five-case smoke path. (#542, #548)
+- [x] **Phase 4 — Untrusted model interfaces.** `Proposer` + `Repairer` + `Orchestrator` + `TrajectoryLogger`; MIDAS-derived `ModelManager` connects through its prompt-rendering compatibility adapter. The K562 question boundary now uses a literal-copy parser prompt, JSON response mode, a positive whole-sentence grammar for exactly one K562 knockdown claim, and exact parser-to-input direction and role binding.
 - [x] **Phase 5a — Mutation-test framework.** 31 mutation sites discovered; direct R-CTX-02 and R-CTX-05 regressions close the two first-run coverage gaps, with all 18 `_shared.py` context mutants killed. (#542)
 - [x] **Evidence-world bounded pilot.** Clinical Trials/SEC, Open Targets, and Arc VCC are admitted after 18/18 fatal gates and 15/15 locked controls; NeuroVault and FlyWire/Codex are preserved as deferred.
 - [x] **Public curated demo + private buyer discovery.** Eight adapter-generated receipts, five honest world states, a no-collection email CTA, and an aggregate-only Apollo result (15 organizations, 25 role candidates, no outreach).
+- [x] **Live adversarial OpenAI gate.** The final frozen 16-case matrix covers supported, contradicted, missing, invented, ambiguous, negated, alternate-context, repeated-role, causal-morphology, citation, schema, and checker-bypass inputs; the positive-grammar boundary passed 48/48 after preserved 9/36 and 33/36 failures plus four superseded passing engineering checkpoints exposed by review.
 - [ ] **Publication gate.** Independent blinded review, broader real-workflow evaluation, multi-model adversarial evaluation, and calibrated empirical usefulness remain required before a paper-level general claim.
 
 **New agent picking this up: read [`HANDOFF.md`](HANDOFF.md) first.**

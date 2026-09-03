@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "PORT=3040 node server.js",
-    "test": "node tests/site.test.js"
+    "test": "python3 -m unittest tests/test_export_live_model_receipt.py && node tests/site.test.js"
   },
   "engines": {
     "node": ">=18"
